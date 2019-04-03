@@ -18,17 +18,17 @@ To run with docker you can use our Dockerfile which only requires that you have 
 
 ### Example of the Connecting to an API:
 
-![](https://raw.githubusercontent.com/KMouratidis/EDA_miner/master/images/screenshots/API_connect.png)
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/API_connect.png)
 
 ### Example of previewing data:
 
-![](https://raw.githubusercontent.com/KMouratidis/EDA_miner/master/images/screenshots/Preview_Data.png)
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Preview_Data.png)
 
 ### Example of the Explore & Visualize Tab:
 
-![Interface options 2](https://raw.githubusercontent.com/KMouratidis/EDA_miner/master/images/screenshots/Baseline.png)
+![Interface options 2](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Baseline.png)
 
 ### Example of the Analyze & Predict Tab:
 
-![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner/master/images/screenshots/FittingRegression.png)
+![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/FittingRegression.png)
 
