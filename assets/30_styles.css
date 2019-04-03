@@ -1,0 +1,21 @@
+.row {
+    outline: 1px dashed black;
+    /* margin: 20px; */
+}
+
+#report_img {
+    height: 56px;
+}
+
+#header_text>h1 {
+    padding-left: 30px;
+    font-weight: 400;
+}
+
+.col_header {
+    background-color: red;
+}
+
+.svg-container {
+    margin-right: 10px !important;
+}

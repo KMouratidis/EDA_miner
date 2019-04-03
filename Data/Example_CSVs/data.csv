@@ -1,0 +1,223 @@
+,COUNTRY,GDP (BILLIONS),CODE
+0,Afghanistan,21.71,AFG
+1,Albania,13.4,ALB
+2,Algeria,227.8,DZA
+3,American Samoa,0.75,ASM
+4,Andorra,4.8,AND
+5,Angola,131.4,AGO
+6,Anguilla,0.18,AIA
+7,Antigua and Barbuda,1.24,ATG
+8,Argentina,536.2,ARG
+9,Armenia,10.88,ARM
+10,Aruba,2.52,ABW
+11,Australia,1483.0,AUS
+12,Austria,436.1,AUT
+13,Azerbaijan,77.91,AZE
+14,"Bahamas, The",8.65,BHM
+15,Bahrain,34.05,BHR
+16,Bangladesh,186.6,BGD
+17,Barbados,4.28,BRB
+18,Belarus,75.25,BLR
+19,Belgium,527.8,BEL
+20,Belize,1.67,BLZ
+21,Benin,9.24,BEN
+22,Bermuda,5.2,BMU
+23,Bhutan,2.09,BTN
+24,Bolivia,34.08,BOL
+25,Bosnia and Herzegovina,19.55,BIH
+26,Botswana,16.3,BWA
+27,Brazil,2244.0,BRA
+28,British Virgin Islands,1.1,VGB
+29,Brunei,17.43,BRN
+30,Bulgaria,55.08,BGR
+31,Burkina Faso,13.38,BFA
+32,Burma,65.29,MMR
+33,Burundi,3.04,BDI
+34,Cabo Verde,1.98,CPV
+35,Cambodia,16.9,KHM
+36,Cameroon,32.16,CMR
+37,Canada,1794.0,CAN
+38,Cayman Islands,2.25,CYM
+39,Central African Republic,1.73,CAF
+40,Chad,15.84,TCD
+41,Chile,264.1,CHL
+42,China,10360.0,CHN
+43,Colombia,400.1,COL
+44,Comoros,0.72,COM
+45,"Congo, Democratic Republic of the",32.67,COD
+46,"Congo, Republic of the",14.11,COG
+47,Cook Islands,0.18,COK
+48,Costa Rica,50.46,CRI
+49,Cote d'Ivoire,33.96,CIV
+50,Croatia,57.18,HRV
+51,Cuba,77.15,CUB
+52,Curacao,5.6,CUW
+53,Cyprus,21.34,CYP
+54,Czech Republic,205.6,CZE
+55,Denmark,347.2,DNK
+56,Djibouti,1.58,DJI
+57,Dominica,0.51,DMA
+58,Dominican Republic,64.05,DOM
+59,Ecuador,100.5,ECU
+60,Egypt,284.9,EGY
+61,El Salvador,25.14,SLV
+62,Equatorial Guinea,15.4,GNQ
+63,Eritrea,3.87,ERI
+64,Estonia,26.36,EST
+65,Ethiopia,49.86,ETH
+66,Falkland Islands (Islas Malvinas),0.16,FLK
+67,Faroe Islands,2.32,FRO
+68,Fiji,4.17,FJI
+69,Finland,276.3,FIN
+70,France,2902.0,FRA
+71,French Polynesia,7.15,PYF
+72,Gabon,20.68,GAB
+73,"Gambia, The",0.92,GMB
+74,Georgia,16.13,GEO
+75,Germany,3820.0,DEU
+76,Ghana,35.48,GHA
+77,Gibraltar,1.85,GIB
+78,Greece,246.4,GRC
+79,Greenland,2.16,GRL
+80,Grenada,0.84,GRD
+81,Guam,4.6,GUM
+82,Guatemala,58.3,GTM
+83,Guernsey,2.74,GGY
+84,Guinea-Bissau,1.04,GNB
+85,Guinea,6.77,GIN
+86,Guyana,3.14,GUY
+87,Haiti,8.92,HTI
+88,Honduras,19.37,HND
+89,Hong Kong,292.7,HKG
+90,Hungary,129.7,HUN
+91,Iceland,16.2,ISL
+92,India,2048.0,IND
+93,Indonesia,856.1,IDN
+94,Iran,402.7,IRN
+95,Iraq,232.2,IRQ
+96,Ireland,245.8,IRL
+97,Isle of Man,4.08,IMN
+98,Israel,305.0,ISR
+99,Italy,2129.0,ITA
+100,Jamaica,13.92,JAM
+101,Japan,4770.0,JPN
+102,Jersey,5.77,JEY
+103,Jordan,36.55,JOR
+104,Kazakhstan,225.6,KAZ
+105,Kenya,62.72,KEN
+106,Kiribati,0.16,KIR
+107,"Korea, North",28.0,PRK
+108,"Korea, South",1410.0,KOR
+109,Kosovo,5.99,KSV
+110,Kuwait,179.3,KWT
+111,Kyrgyzstan,7.65,KGZ
+112,Laos,11.71,LAO
+113,Latvia,32.82,LVA
+114,Lebanon,47.5,LBN
+115,Lesotho,2.46,LSO
+116,Liberia,2.07,LBR
+117,Libya,49.34,LBY
+118,Liechtenstein,5.11,LIE
+119,Lithuania,48.72,LTU
+120,Luxembourg,63.93,LUX
+121,Macau,51.68,MAC
+122,Macedonia,10.92,MKD
+123,Madagascar,11.19,MDG
+124,Malawi,4.41,MWI
+125,Malaysia,336.9,MYS
+126,Maldives,2.41,MDV
+127,Mali,12.04,MLI
+128,Malta,10.57,MLT
+129,Marshall Islands,0.18,MHL
+130,Mauritania,4.29,MRT
+131,Mauritius,12.72,MUS
+132,Mexico,1296.0,MEX
+133,"Micronesia, Federated States of",0.34,FSM
+134,Moldova,7.74,MDA
+135,Monaco,6.06,MCO
+136,Mongolia,11.73,MNG
+137,Montenegro,4.66,MNE
+138,Morocco,112.6,MAR
+139,Mozambique,16.59,MOZ
+140,Namibia,13.11,NAM
+141,Nepal,19.64,NPL
+142,Netherlands,880.4,NLD
+143,New Caledonia,11.1,NCL
+144,New Zealand,201.0,NZL
+145,Nicaragua,11.85,NIC
+146,Nigeria,594.3,NGA
+147,Niger,8.29,NER
+148,Niue,0.01,NIU
+149,Northern Mariana Islands,1.23,MNP
+150,Norway,511.6,NOR
+151,Oman,80.54,OMN
+152,Pakistan,237.5,PAK
+153,Palau,0.65,PLW
+154,Panama,44.69,PAN
+155,Papua New Guinea,16.1,PNG
+156,Paraguay,31.3,PRY
+157,Peru,208.2,PER
+158,Philippines,284.6,PHL
+159,Poland,552.2,POL
+160,Portugal,228.2,PRT
+161,Puerto Rico,93.52,PRI
+162,Qatar,212.0,QAT
+163,Romania,199.0,ROU
+164,Russia,2057.0,RUS
+165,Rwanda,8.0,RWA
+166,Saint Kitts and Nevis,0.81,KNA
+167,Saint Lucia,1.35,LCA
+168,Saint Martin,0.56,MAF
+169,Saint Pierre and Miquelon,0.22,SPM
+170,Saint Vincent and the Grenadines,0.75,VCT
+171,Samoa,0.83,WSM
+172,San Marino,1.86,SMR
+173,Sao Tome and Principe,0.36,STP
+174,Saudi Arabia,777.9,SAU
+175,Senegal,15.88,SEN
+176,Serbia,42.65,SRB
+177,Seychelles,1.47,SYC
+178,Sierra Leone,5.41,SLE
+179,Singapore,307.9,SGP
+180,Sint Maarten,304.1,SXM
+181,Slovakia,99.75,SVK
+182,Slovenia,49.93,SVN
+183,Solomon Islands,1.16,SLB
+184,Somalia,2.37,SOM
+185,South Africa,341.2,ZAF
+186,South Sudan,11.89,SSD
+187,Spain,1400.0,ESP
+188,Sri Lanka,71.57,LKA
+189,Sudan,70.03,SDN
+190,Suriname,5.27,SUR
+191,Swaziland,3.84,SWZ
+192,Sweden,559.1,SWE
+193,Switzerland,679.0,CHE
+194,Syria,64.7,SYR
+195,Taiwan,529.5,TWN
+196,Tajikistan,9.16,TJK
+197,Tanzania,36.62,TZA
+198,Thailand,373.8,THA
+199,Timor-Leste,4.51,TLS
+200,Togo,4.84,TGO
+201,Tonga,0.49,TON
+202,Trinidad and Tobago,29.63,TTO
+203,Tunisia,49.12,TUN
+204,Turkey,813.3,TUR
+205,Turkmenistan,43.5,TKM
+206,Tuvalu,0.04,TUV
+207,Uganda,26.09,UGA
+208,Ukraine,134.9,UKR
+209,United Arab Emirates,416.4,ARE
+210,United Kingdom,2848.0,GBR
+211,United States,17420.0,USA
+212,Uruguay,55.6,URY
+213,Uzbekistan,63.08,UZB
+214,Vanuatu,0.82,VUT
+215,Venezuela,209.2,VEN
+216,Vietnam,187.8,VNM
+217,Virgin Islands,5.08,VGB
+218,West Bank,6.64,WBG
+219,Yemen,45.45,YEM
+220,Zambia,25.61,ZMB
+221,Zimbabwe,13.74,ZWE
