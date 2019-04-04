@@ -4,7 +4,15 @@
 
 A visualization and analytics dashboard that is able to connect to APIs, receive your data,
 and allow you to run Machine Learning models from a server. Started as a university project.
+
+
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
+
+Just looking around? Then:
+1. Download
+2. Run `pip install -r requirements.txt`
+3. Run `python app.py`
+4. Go to your browser, `http://127.0.0.1:8050`
 
 <br>
 
