@@ -5,9 +5,11 @@
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_daq as daq
 
 from server import app
 from utils import r, create_dropdown, mapping, get_data
+from apps.exploration.graphs.graphs2d import scatterplot
 
 import plotly.graph_objs as go
 import numpy as np
@@ -38,6 +40,14 @@ def Clustering_Options(options, results):
         # Available choices for fitting
         html.Div(id="variable_choices_clustering"),
 
+        #Available number of clusters
+        html.P("Number of clusters:"),
+        daq.NumericInput(
+            id='clusters_input',
+            min=0,
+            value=3,
+            max=10
+        ),
         # The results
         html.Div(id="training_results_clustering"),
 
@@ -82,11 +92,12 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
     [Output("training_results_clustering", "children"),
      Output("results", "figure")],
     [Input("xvars_clustering", "value"),
-     Input("yvars_clustering", "value")],
+     Input("yvars_clustering", "value"),
+     Input("clusters_input", "value")],
     [State('algo_choice_clustering', "value"),
      State("user_id", "children"),
      State("dataset_choice_clustering", "value")])
-def fit_clustering_model(xvars, yvars, algo_choice_clustering,
+def fit_clustering_model(xvars, yvars, n_clusters,algo_choice_clustering,
                   user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
@@ -103,7 +114,7 @@ def fit_clustering_model(xvars, yvars, algo_choice_clustering,
     # TODO: Make this interface cleaner
     # We have the dictionary that maps keys to models so use that
     if algo_choice_clustering == "kmc":
-        model = mapping[algo_choice_clustering](n_clusters=3)
+        model = mapping[algo_choice_clustering](n_clusters=n_clusters)
     else:
         model = mapping[algo_choice_clustering]()
 
@@ -126,8 +137,6 @@ def fit_clustering_model(xvars, yvars, algo_choice_clustering,
                              )
         )
 
-
-
         layout += [{
             'data': [trace1],
             'layout': go.Layout(
@@ -137,6 +146,21 @@ def fit_clustering_model(xvars, yvars, algo_choice_clustering,
                 legend={'x': 0, 'y': 1},
                 hovermode='closest'
             )
+        }]
+
+    elif len(xvars) == 2:
+
+        trace = scatterplot(df[xvars[0]], df[xvars[1]], marker = {'color': labels.astype(np.float)})
+
+        layout  += [{
+            'data': trace,
+            'layout': go.Layout(
+                xaxis={'title': xvars[0]},
+                yaxis={'title': xvars[1]},
+                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+                legend={'x': 0, 'y': 1},
+                hovermode='closest'
+        )
         }]
 
 

@@ -51,16 +51,16 @@ graph_configs = {
 ## Functions below here implement the various graphs
 ## These should return plotly traces (i.e. lists of `go` objects)
 
-def scatterplot(x, y):
-    return [_simple_scatter(x, y, mode="markers")]
+def scatterplot(x, y, **kwargs):
+    return [_simple_scatter(x, y, mode="markers", **kwargs)]
 
-def line_chart(x, y):
-    return [_simple_scatter(x, y, mode="line")]
+def line_chart(x, y, **kwargs):
+    return [_simple_scatter(x, y, mode="line", **kwargs)]
 
-def histogram(x):
-    return [go.Histogram(x=x)]
+def histogram(x, **kwargs):
+    return [go.Histogram(x=x, **kwargs)]
 
-def heatmap(x, y):
+def heatmap(x, y, **kwargs):
 
     if not (len(x.shape)>1 and x.shape[1] <2):
         x = np.atleast_2d(x).T
@@ -70,20 +70,20 @@ def heatmap(x, y):
 
 
     data = np.concatenate([x,y], 1)
-    return [go.Heatmap(z=np.corrcoef(data.T))]
+    return [go.Heatmap(z=np.corrcoef(data.T), **kwargs)]
 
-def bubble_chart(x, y, size):
+def bubble_chart(x, y, size, **kwargs):
     marker = dict(size=size,
                   sizemode='area',
                   sizeref=2.*max(size)/(40.**2),
                   sizemin=4)
 
-    return [_simple_scatter(x,y, mode="markers", marker=marker)]
+    return [_simple_scatter(x,y, mode="markers", marker=marker, **kwargs)]
 
-def filledarea(x, y):
-    return [_simple_scatter(x, y, mode=None, fill='tonexty')]
+def filledarea(x, y, **kwargs):
+    return [_simple_scatter(x, y, mode=None, fill='tonexty', **kwargs)]
 
-def errorbar(x, y):
+def errorbar(x, y, **kwargs):
     std = np.zeros(y.shape) + y.std()
 
     error_y = dict(
@@ -93,9 +93,9 @@ def errorbar(x, y):
         arrayminus=std
     )
 
-    return [_simple_scatter(x, y, mode=None, error_y=error_y)]
+    return [_simple_scatter(x, y, mode=None, error_y=error_y, **kwargs)]
 
-def density2d(x, y):
+def density2d(x, y, **kwargs):
     marker = {
         "color": 'rgb(102,0,0)',
         "size": 2,
@@ -111,5 +111,5 @@ def density2d(x, y):
 
     return [
         _simple_scatter(x, y, mode='markers', marker=marker),
-        go.Histogram2dContour(x=x, y=y, **histogram_params),
+        go.Histogram2dContour(x=x, y=y, **histogram_params, **kwargs),
     ]
