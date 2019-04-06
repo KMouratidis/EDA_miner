@@ -13,10 +13,14 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown, get_data
+from apps.analyze.models.utils import baseline
+from apps.exploration.graphs import graphs2d
 
 import plotly.graph_objs as go
-from apps.analyze.models.utils import baseline
+
 import numpy as np
 
 
@@ -30,18 +34,12 @@ def KPI_Options(options, results):
 
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_kpi"),
-                                 style={'width': '30%',
-                                        'display': 'inline-block',
-                                        'margin':"10px"}
-        ),
+                                 style=styles.dropdown_2d()),
 
         # TODO: use this for graph selection
         html.Div(create_dropdown("Choose graph type", options,
                                  multi=False, id="graph_choice_kpi"),
-                 style={'width': '30%',
-                        'display': 'inline-block',
-                        'margin':"10px"}
-        ),
+                 style=styles.dropdown_2d()),
 
         html.Div(id="variable_choices_kpi"),
 
@@ -63,16 +61,13 @@ def render_variable_choices_kpi(dataset_choice, user_id):
     return [
         html.Div(create_dropdown("X variables", options,
                          multi=False, id="xvars_kpi"),
-                         style={'width': '30%', 'display': 'inline-block',
-                                'margin':"10px"}),
+                         style=styles.dropdown_2d()),
         html.Div(create_dropdown("Y variable", options,
                          multi=True, id="yvars_kpi"),
-                         style={'width': '30%', 'display': 'inline-block',
-                                'margin':"10px"}),
+                         style=styles.dropdown_2d()),
         html.Div(create_dropdown("Bar Chart variable", options,
                          multi=False, id="secondary_yvars_kpi"),
-                         style={'width': '30%', 'display': 'inline-block',
-                                'margin':"10px"}),
+                         style=styles.dropdown_2d()),
     ]
 
 
@@ -136,11 +131,5 @@ def plot_graph_kpi(xvars, yvars, secondary_yvars,
 
     return {
         'data': traces,
-        'layout': go.Layout(
-            xaxis={'title': xvars},
-            yaxis={'title': yvars[0]}, # yvars is a list (multi=True)
-            margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-            legend={'x': 0, 'y': 1},
-            hovermode='closest',
-        )
+        'layout': layouts.default_2d(xvars, yvars[0])
     }

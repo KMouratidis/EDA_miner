@@ -12,9 +12,11 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown
 from apps.data.View import get_data
-from apps.exploration.graphs import graphs2d, layouts, styles
+from apps.exploration.graphs import graphs2d
 
 import numpy as np
 import pandas as pd

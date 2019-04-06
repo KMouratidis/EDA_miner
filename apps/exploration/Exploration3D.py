@@ -12,8 +12,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown, get_data
-from apps.exploration.graphs import graphs2d, graphs3d, layouts, styles
+from apps.exploration.graphs import graphs2d, graphs3d
 
 import plotly.graph_objs as go
 

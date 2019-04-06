@@ -8,6 +8,8 @@ import dash_html_components as html
 import dash_daq as daq
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown, mapping, get_data
 from apps.exploration.graphs.graphs2d import scatterplot
 
@@ -22,10 +24,7 @@ def Clustering_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_clustering"),
-                 style={'width': '30%',
-                        'display': 'inline-block',
-                        'margin':"10px"}
-        ),
+                 style=styles.dropdown()),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type",
@@ -33,9 +32,7 @@ def Clustering_Options(options, results):
                     {'label': 'DBSCAN', 'value': 'dbscan'},
                     {'label': 'K-Means Clustering', 'value': 'kmc'},
                 ], multi=False, id="algo_choice_clustering"),
-                 style={'width': '30%', 'display': 'inline-block',
-                        'margin':"10px"}
-        ),
+                 style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -78,12 +75,10 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                        multi=True, id="xvars_clustering"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
         html.Div(create_dropdown("Target not applicable", options,
                                        multi=False, id="yvars_clustering"),
-                       style={'width': '30%', 'display': 'none',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
     ]
 
     return layout
@@ -140,30 +135,18 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
 
         layout += [{
             'data': [trace1],
-            'layout': go.Layout(
-                xaxis={'title': xvars[0]},
-                yaxis={'title': xvars[1]},
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                legend={'x': 0, 'y': 1},
-                hovermode='closest'
-            )
+            'layout': layouts.default_2d(xvars[0], xvars[1])
         }]
 
     elif len(xvars) == 2:
 
-        trace = scatterplot(df[xvars[0]], df[xvars[1]], marker = {'color': labels.astype(np.float)})
+        trace = scatterplot(df[xvars[0]], df[xvars[1]],
+                            marker = {'color': labels.astype(np.float)})
 
         layout  += [{
             'data': trace,
-            'layout': go.Layout(
-                xaxis={'title': xvars[0]},
-                yaxis={'title': xvars[1]},
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                legend={'x': 0, 'y': 1},
-                hovermode='closest'
-        )
+            'layout': layouts.default_2d(xvars[0], xvars[1])
         }]
-
 
     else:
         layout += [{}]

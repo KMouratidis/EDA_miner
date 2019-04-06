@@ -31,19 +31,11 @@ import pickle
 
 
 def redis_startup():
-
     r = redis.Redis(host="localhost", port=6379, db=0)
-
-    with open("redisData.pkl", "rb") as f:
-        redisData = pickle.load(f)
-
-    for k, v in redisData.items():
-        r.set(k, v)
 
     return r
 
 r = redis_startup()
-
 
 
 mapping = {
@@ -59,6 +51,7 @@ mapping = {
 
 
 def create_dropdown(name, options, **kwargs):
+    """Simple utility that makes titled dropdowns"""
     return [
         html.H5(name+":"),
         dcc.Dropdown(

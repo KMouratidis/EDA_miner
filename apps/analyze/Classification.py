@@ -7,6 +7,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown, mapping, get_data
 from apps.exploration.graphs.graphs2d import scatterplot
 
@@ -20,9 +22,7 @@ def Classification_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_classification"),
-                 style={'width': '30%',
-                        'display': 'inline-block',
-                        'margin':"10px"}
+                 style=styles.dropdown()
         ),
 
         # Choose an algorithm
@@ -31,9 +31,7 @@ def Classification_Options(options, results):
                     {'label': 'Logistic Regression', 'value': 'logr'},
                     {'label': 'XGBoost', 'value': 'xgb'},
                 ], multi=False, id="algo_choice_classification"),
-                 style={'width': '30%', 'display': 'inline-block',
-                        'margin':"10px"}
-        ),
+                 style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -67,12 +65,10 @@ def render_variable_choices_classification(dataset_choice, algo_choice_classific
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                        multi=True, id="xvars_classification"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
         html.Div(create_dropdown("Y variable", options,
                                        multi=False, id="yvars_classification"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
     ]
 
     return layout
@@ -104,7 +100,7 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
     model = mapping[algo_choice_classification]()
     y = pd.factorize(df[yvars])
     model.fit(df[xvars], y[0])
-    
+
     labels = model.predict(df[xvars])
 
     layout = [html.H4(f"Classification model scored: {model.score(df[xvars], y[0])}"),]
@@ -124,30 +120,17 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
 
         layout += [{
             'data': [trace1],
-            'layout': go.Layout(
-                xaxis={'title': xvars[0]},
-                yaxis={'title': xvars[1]},
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                legend={'x': 0, 'y': 1},
-                hovermode='closest'
-            )
+            'layout': layouts.default_2d(xvars[0], yvars[0])
         }]
 
     elif len(xvars) == 2:
-
-        trace = scatterplot(df[xvars[0]], df[xvars[1]], marker = {'color': labels.astype(np.float)})
+        traces = scatterplot(df[xvars[0]], df[xvars[1]],
+                            marker = {'color': labels.astype(np.float)})
 
         layout  += [{
-            'data': trace,
-            'layout': go.Layout(
-                xaxis={'title': xvars[0]},
-                yaxis={'title': xvars[1]},
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                legend={'x': 0, 'y': 1},
-                hovermode='closest'
-        )
+            'data': traces,
+            'layout': layouts.default_2d(xvars[0], yvars[0])
         }]
-
 
     else:
         layout += [{}]

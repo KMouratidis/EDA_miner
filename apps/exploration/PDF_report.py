@@ -7,13 +7,14 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown
 
 import plotly.graph_objs as go
 import visdcc
 import dill
 import dash_daq as daq
-
 
 
 def PDF_report_options(options, results):
@@ -35,133 +36,53 @@ def PDF_report_options(options, results):
                     dcc.Textarea(id="row1_header_input"),
                 ], className="col-sm-12 col_header", id="row1_header_text"),
 
-                # first six columns of row
+                # first four columns of row
                 html.Div([
                         dcc.Textarea(id="row1col1_input"),
                     ], className="col-sm-4", id="row1col1"),
 
-                # second six columns of row
+                # second eight columns of row
                 html.Div([
                     dcc.Graph(id="graph12",
-
                               figure={
                                     'data': [],
-                                    'layout': go.Layout(
-                                        autosize = False,
-                                        bargap = 0.35,
-                                        font = {
-                                          "family": "Raleway",
-                                          "size": 10
-                                        },
-                                        height = 300,
-                                        hovermode = "closest",
-                                        legend = {
-                                          "x": -0.0228945952895,
-                                          "y": -0.189563896463,
-                                          "orientation": "h",
-                                          "yanchor": "top"
-                                        },
-                                        margin = {
-                                          "r": 0,
-                                          "t": 20,
-                                          "b": 10,
-                                          "l": 10
-                                        },
-                                        showlegend = True,
-                                        title = "",
-                                        width = 600,
-                                        xaxis = {
-                                          "autorange": True,
-                                          "range": [-0.5, 4.5],
-                                          "showline": True,
-                                          "title": "",
-                                          "type": "category"
-                                        },
-                                        yaxis = {
-                                          "autorange": True,
-                                          "range": [0, 22.9789473684],
-                                          "showgrid": True,
-                                          "showline": True,
-                                          "title": "",
-                                          "type": "linear",
-                                          "zeroline": False
-                                        }
-                                    )
-                                    },
-
+                                    'layout': layouts.PDF_Layout1.first_figure,
+                                },
                               # hide upper plotly menu
                               config={'displayModeBar': False}),
                 ], className="col-sm-8"),
 
             ], className="row"),
 
-
             # second row
             html.Div([
                 html.H3("Row2 header", className="col-sm-12 col_header"),
 
+                # first sub-row
+                # first eight columns of row
                 html.Div([
                     dcc.Graph(id="graph21",
-
                               figure={
                                     'data': [],
-                                    'layout': go.Layout(
-                                        autosize = False,
-                                        bargap = 0.35,
-                                        font = {
-                                          "family": "Raleway",
-                                          "size": 10
-                                        },
-                                        height = 300,
-                                        hovermode = "closest",
-                                        legend = {
-                                          "x": -0.0228945952895,
-                                          "y": -0.189563896463,
-                                          "orientation": "h",
-                                          "yanchor": "top"
-                                        },
-                                        margin = {
-                                          "r": 0,
-                                          "t": 20,
-                                          "b": 10,
-                                          "l": 10
-                                        },
-                                        showlegend = True,
-                                        title = "",
-                                        width = 600,
-                                        xaxis = {
-                                          "autorange": True,
-                                          "range": [-0.5, 4.5],
-                                          "showline": True,
-                                          "title": "",
-                                          "type": "category"
-                                        },
-                                        yaxis = {
-                                          "autorange": True,
-                                          "range": [0, 22.9789473684],
-                                          "showgrid": True,
-                                          "showline": True,
-                                          "title": "",
-                                          "type": "linear",
-                                          "zeroline": False
-                                        }
-                                    )
-                                    },
-
+                                    'layout': layouts.PDF_Layout1.second_figure,
+                                },
                               # hide upper plotly menu
                               config={'displayModeBar': False}),
                 ], className="col-sm-8"),
 
+                # last four columns of row, (1st subrow)
                 html.Div([
                         html.P("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
                     ], className="col-sm-4"),
 
+                # second sub-row
                 html.Br(),
-
+                # first eight columns of row, (1st subrow)
                 html.Div([
                         html.P("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
                     ], className="col-sm-8"),
 
+                # last four columns of row
                 html.Div([
                     daq.Knob(
                       id='my-daq-knob',
@@ -205,22 +126,7 @@ def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
             x_axis = exported_fig["layout"]["xaxis"]
             y_axis = exported_fig["layout"]["yaxis"]
 
-            new_fig["layout"] = go.Layout(
-                autosize = False,
-                bargap = 0.35,
-                font = {
-                  "family": "Raleway",
-                  "size": 10
-                },
-                height = 300,
-                hovermode = "closest",
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-                showlegend = True,
-                title = "",
-                width = 600,
-                xaxis = x_axis,
-                yaxis = y_axis
-            )
+            new_fig["layout"] = layouts.PDF_Layout1.render(x_axis, y_axis)
 
             new_figs.append(new_fig)
 

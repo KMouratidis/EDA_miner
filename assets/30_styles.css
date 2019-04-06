@@ -1,7 +1,11 @@
-.row {
+/* UNCOMMENT IF YOU NEED TO DEBUG LAYOUT */
+/* .row {
     outline: 1px dashed black;
-    /* margin: 20px; */
 }
+
+.js-plotly-plot, .plot-container {
+    outline: 2px dashed black !important;
+} */
 
 #report_img {
     height: 56px;
@@ -30,10 +34,6 @@
     font-size: 24px;
     vertical-align: middle;
     padding-left: 5px;
-}
-
-.js-plotly-plot, .plot-container {
-    outline: 2px dashed black !important;
 }
 
 #button_collapse>span {
