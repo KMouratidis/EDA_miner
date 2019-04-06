@@ -19,7 +19,6 @@ import uuid
 
 
 
-
 SideBar = [
 
     html.Img(id="app_logo", src=encode_image("assets/images/y2d.png")),
@@ -94,7 +93,6 @@ def serve_layout():
 
     return html.Div(children=[
 
-        
 
         html.H2(session_id, id="user_id", style={"display":"none"}),
 
@@ -104,5 +102,5 @@ def serve_layout():
         # main Div
         html.Div(children=MainMenu, className="nine columns", id="mainmenu"),
 
-    ], className="row", 
+    ], className="row",
                     id="main_page")

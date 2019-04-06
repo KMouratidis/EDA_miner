@@ -16,10 +16,8 @@ import dash_callback_chain as chainvis
 
 from server import app
 from utils import cleanup, r
-
 from menus import SideBar, MainMenu, serve_layout
 from apps import data_view, exploration_view, analyze_view
-################## Private end imports ##################
 from apps import exploration
 
 
@@ -32,17 +30,14 @@ import signal
 import redis
 
 
-
 app.layout = html.Div([
 
     # for exporting figures aimed at PDF report generation
     dcc.Graph(id="saved_graph_configs1", style={"display":"none"}),
     dcc.Graph(id="saved_graph_configs2", style={"display":"none"}),
 
-    
     serve_layout(),
 ])
-
 
 
 
@@ -58,9 +53,7 @@ def high_level_tabs(tab):
     """
 
     if tab == 'EDA':
-        ################## Private start imports ##################
         return exploration_view.layout
-        
     elif tab == "modelling":
         return analyze_view.layout
     elif tab == "data":

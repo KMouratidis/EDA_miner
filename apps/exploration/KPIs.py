@@ -20,6 +20,9 @@ import peakutils
 import numpy as np
 
 
+SideBar_KPIs = [
+    ]
+
 
 def KPI_Options(options, results):
 

@@ -22,7 +22,6 @@ def PDF_report_options(options, results):
 
 
         html.Button("Render & Finalise!", id="render_PDF"),
-        
 
         html.Div([
 
@@ -246,5 +245,4 @@ def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
             [dcc.Textarea(id="header_input")],
             [dcc.Textarea(id="row1_header_text")]
         ]
-
 
