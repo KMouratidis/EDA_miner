@@ -14,7 +14,6 @@ import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
 
-
 def Classification_Options(options, results):
 
     return html.Div(children=[
@@ -42,6 +41,8 @@ def Classification_Options(options, results):
 
         # The results
         html.Div(id="training_results_classification"),
+
+        dcc.Graph(id="classification_results")
     ])
 
 @app.callback(Output("variable_choices_classification", "children"),
@@ -78,7 +79,8 @@ def render_variable_choices_classification(dataset_choice, algo_choice_classific
 
 
 @app.callback(
-    Output("training_results_classification", "children"),
+    [Output("training_results_classification", "children"),
+    Output("classification_results", "figure")],
     [Input("xvars_classification", "value"),
      Input("yvars_classification", "value")],
     [State('algo_choice_classification', "value"),
@@ -96,11 +98,58 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, yvars, df, dataset_choice,
                                algo_choice_classification]):
-        return [[html.H4("Select both values and dataset.")], {}]
+        return [[html.H4("Select dataset and algorithm first.")], {}]
 
     # We have the dictionary that maps keys to models so use that
     model = mapping[algo_choice_classification]()
+    y = pd.factorize(df[yvars])
+    model.fit(df[xvars], y[0])
+    
+    labels = model.predict(df[xvars])
 
-    model.fit(df[xvars], df[yvars])
+    layout = [html.H4(f"Classification model scored: {model.score(df[xvars], y[0])}"),]
 
-    return [html.H4(f"Classification model scored: {model.score(df[xvars], df[yvars])}")]
+    if len(xvars) >= 3:
+
+        trace1 = go.Scatter3d(x=df[xvars[0]],
+                            y=df[xvars[1]],
+                            z=df[xvars[2]],
+                            showlegend=False,
+                            mode='markers',
+                            marker=dict(
+                                color=labels.astype(np.float),
+                                line=dict(color='black', width=1)
+                            )
+        )
+
+        layout += [{
+            'data': [trace1],
+            'layout': go.Layout(
+                xaxis={'title': xvars[0]},
+                yaxis={'title': xvars[1]},
+                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+                legend={'x': 0, 'y': 1},
+                hovermode='closest'
+            )
+        }]
+
+    elif len(xvars) == 2:
+
+        trace = scatterplot(df[xvars[0]], df[xvars[1]], marker = {'color': labels.astype(np.float)})
+
+        layout  += [{
+            'data': trace,
+            'layout': go.Layout(
+                xaxis={'title': xvars[0]},
+                yaxis={'title': xvars[1]},
+                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+                legend={'x': 0, 'y': 1},
+                hovermode='closest'
+        )
+        }]
+
+
+    else:
+        layout += [{}]
+
+    return layout
