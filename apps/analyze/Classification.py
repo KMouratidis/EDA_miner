@@ -8,6 +8,11 @@ import dash_html_components as html
 
 from server import app
 from utils import r, create_dropdown, mapping, get_data
+from apps.exploration.graphs.graphs2d import scatterplot
+
+import plotly.graph_objs as go
+import numpy as np
+import pandas as pd
 
 
 def Classification_Options(options, results):
@@ -91,7 +96,7 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, yvars, df, dataset_choice,
                                algo_choice_classification]):
-        return {}
+        return [[html.H4("Select both values and dataset.")], {}]
 
     # We have the dictionary that maps keys to models so use that
     model = mapping[algo_choice_classification]()

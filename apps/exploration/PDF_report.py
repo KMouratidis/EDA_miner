@@ -20,7 +20,6 @@ def PDF_report_options(options, results):
 
     return html.Div([
 
-
         html.Button("Render & Finalise!", id="render_PDF"),
 
         html.Div([
@@ -29,7 +28,6 @@ def PDF_report_options(options, results):
             html.Div([
                 dcc.Textarea(id="header_input"),
             ], className="row", id="header_text"),
-
 
             # first row
             html.Div([
@@ -174,7 +172,6 @@ def PDF_report_options(options, results):
 
             ], className="row"),
 
-
             # footer
             html.Div([
                 html.H4("Nothing in the footer",
@@ -183,7 +180,6 @@ def PDF_report_options(options, results):
 
         ], className="container", id="printablePDF")
     ])
-
 
 
 @app.callback([Output("graph12", "figure"),

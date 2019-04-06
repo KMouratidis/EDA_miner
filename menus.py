@@ -93,7 +93,6 @@ def serve_layout():
 
     return html.Div(children=[
 
-
         html.H2(session_id, id="user_id", style={"display":"none"}),
 
         # Sidebar / menu

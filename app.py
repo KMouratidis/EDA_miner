@@ -18,8 +18,7 @@ from server import app
 from utils import cleanup, r
 from menus import SideBar, MainMenu, serve_layout
 from apps import data_view, exploration_view, analyze_view
-from apps import exploration
-
+from apps.exploration import KPIs
 
 from functools import partial
 import pandas as pd
@@ -74,7 +73,7 @@ def update_sidebar_menus(tab):
     if tab == 'exploration':
         return [html.H4(f"Tab is {tab}")]
     if tab == 'kpi':
-        return exploration.KPIs.SideBar_KPIs
+        return KPIs.SideBar_KPIs
     if tab == 'graphs3d':
         return [html.H4(f"Tab is {tab}")]
     if tab == 'networks':

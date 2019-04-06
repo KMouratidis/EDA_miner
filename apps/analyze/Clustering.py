@@ -51,7 +51,7 @@ def Clustering_Options(options, results):
         # The results
         html.Div(id="training_results_clustering"),
 
-        dcc.Graph(id="results"),
+        dcc.Graph(id="clustering_results"),
     ])
 
 
@@ -90,7 +90,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
 
 @app.callback(
     [Output("training_results_clustering", "children"),
-     Output("results", "figure")],
+     Output("clustering_results", "figure")],
     [Input("xvars_clustering", "value"),
      Input("yvars_clustering", "value"),
      Input("clusters_input", "value")],
@@ -109,7 +109,7 @@ def fit_clustering_model(xvars, yvars, n_clusters,algo_choice_clustering,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, df, dataset_choice,
                                algo_choice_clustering]):
-        return {}
+        return [[html.H4("Select both values and dataset.")], {}]
 
     # TODO: Make this interface cleaner
     # We have the dictionary that maps keys to models so use that
@@ -122,7 +122,7 @@ def fit_clustering_model(xvars, yvars, n_clusters,algo_choice_clustering,
 
     labels = model.labels_
 
-    layout = [html.H4(f"Clustering model scored: {model.score(df[xvars])}")]
+    layout = [[html.H4(f"Clustering model scored: {model.score(df[xvars])}")]]
 
     if len(xvars) >= 3:
 
