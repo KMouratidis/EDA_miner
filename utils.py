@@ -30,7 +30,20 @@ import redis
 import pickle
 
 
-r = redis.Redis(host="localhost", port=6379, db=0)
+def redis_startup():
+
+    r = redis.Redis(host="localhost", port=6379, db=0)
+
+    with open("redisData.pkl", "rb") as f:
+        redisData = pickle.load(f)
+
+    for k, v in redisData.items():
+        r.set(k, v)
+
+    return r
+
+r = redis_startup()
+
 
 
 mapping = {
@@ -47,11 +60,11 @@ mapping = {
 
 def create_dropdown(name, options, **kwargs):
     return [
-        html.H4(name+":"),
+        html.H5(name+":"),
         dcc.Dropdown(
-        options=options,
-        **kwargs
-    )]
+            options=options,
+            **kwargs
+        )]
 
 
 def get_data(api_choice, user_id):
@@ -82,7 +95,7 @@ def cleanup(redisConn):
 
         Flush every key stored in the Redis database. If there
         are users that have logged in and uploaded data, store
-        those in a database on disk.
+        those on disk.
 
         Arguments:
         redisConn -- A `redis.Redis` connection.
@@ -90,6 +103,8 @@ def cleanup(redisConn):
 
     print("Cleaning up...")
     redisConn.flushdb()
+
+
 
 
 def encode_image(image_path):

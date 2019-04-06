@@ -16,12 +16,9 @@ import dash_callback_chain as chainvis
 
 from server import app
 from utils import cleanup, r
-
 from menus import SideBar, MainMenu, serve_layout
 from apps import data_view, exploration_view, analyze_view
-################## Private end imports ##################
-from apps import exploration
-
+from apps.exploration import KPIs
 
 from functools import partial
 import pandas as pd
@@ -32,17 +29,14 @@ import signal
 import redis
 
 
-
 app.layout = html.Div([
 
     # for exporting figures aimed at PDF report generation
     dcc.Graph(id="saved_graph_configs1", style={"display":"none"}),
     dcc.Graph(id="saved_graph_configs2", style={"display":"none"}),
 
-    
     serve_layout(),
 ])
-
 
 
 
@@ -58,9 +52,7 @@ def high_level_tabs(tab):
     """
 
     if tab == 'EDA':
-        ################## Private start imports ##################
         return exploration_view.layout
-        
     elif tab == "modelling":
         return analyze_view.layout
     elif tab == "data":
@@ -80,13 +72,14 @@ def update_sidebar_menus(tab):
     """
     if tab == 'exploration':
         return [html.H4(f"Tab is {tab}")]
-    if tab == 'kpi':
-        return exploration.KPIs.SideBar_KPIs
-    if tab == 'graphs3d':
+    elif tab == 'kpi':
+        return KPIs.SideBar_KPIs
+    elif tab == 'graphs3d':
         return [html.H4(f"Tab is {tab}")]
-    if tab == 'networks':
+    elif tab == 'networks':
         return [html.H4(f"Tab is {tab}")]
-
+    else:
+        return []
 
 @app.callback(Output('low_level_tabs_submenu', 'style'),
               [Input('high_level_tabs', 'value')])

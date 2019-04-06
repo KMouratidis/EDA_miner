@@ -19,7 +19,6 @@ import uuid
 
 
 
-
 SideBar = [
 
     html.Img(id="app_logo", src=encode_image("assets/images/y2d.png")),
@@ -31,19 +30,15 @@ SideBar = [
     # Collapsible button with external links
     html.Button([
         html.Span('External links'),
-        html.I("", className="fa fa-caret-down", style={"fontSize":"24px",
-                                                 "verticalAlign":"middle",
-                                                 "paddingLeft":"5px"}),
+        html.I("", className="fa fa-caret-down", id="external_links_caret"),
     ], id='button_collapse', n_clicks=0),
+    # Stuff inside the collapsible
     html.Div(id='sidebar_collapsible_button', children=[
         html.Ul([
             html.Li(html.A([
-                    html.Span("GitHub repo  "),
-                    html.I(className="fab fa-github", style={"fontSize":"28px",
-                                                             "verticalAlign":"bottom",
-                                                             "paddingTop":"5px"}),
-
-                    ], href="https://github.com/KMouratidis/EDA_miner",
+                        html.Span("GitHub repo  "),
+                        html.I(className="fab fa-github", id="github_link"),
+                    ], href="https://github.com/KMouratidis/EDA_miner_public",
                    target="_blank"),
                 ),
             html.Li('I am just padded text'),
@@ -89,12 +84,9 @@ def serve_layout():
         session_id is generated.
     """
 
-    # TODO: append above uuid to a Redis list.
-    session_id = str(uuid.uuid4())
+    session_id = f"python_generated_ssid_{uuid.uuid4()}"
 
     return html.Div(children=[
-
-        
 
         html.H2(session_id, id="user_id", style={"display":"none"}),
 
@@ -104,5 +96,5 @@ def serve_layout():
         # main Div
         html.Div(children=MainMenu, className="nine columns", id="mainmenu"),
 
-    ], className="row", 
+    ], className="row",
                     id="main_page")

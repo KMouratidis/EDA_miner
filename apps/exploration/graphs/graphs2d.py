@@ -55,7 +55,7 @@ def scatterplot(x, y, **kwargs):
     return [_simple_scatter(x, y, mode="markers", **kwargs)]
 
 def line_chart(x, y, **kwargs):
-    return [_simple_scatter(x, y, mode="line", **kwargs)]
+    return [_simple_scatter(x, y, mode="lines", **kwargs)]
 
 def histogram(x, **kwargs):
     return [go.Histogram(x=x, **kwargs)]

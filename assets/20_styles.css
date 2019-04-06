@@ -1,15 +1,6 @@
 #app_logo {
-    /* height: 150px; */
     max-width: 185px;
     display: block;
-}
-
-li {
-    padding-left: 30px;
-}
-
-.Select-control {
-    width: 33%;
 }
 
 button {
@@ -17,6 +8,11 @@ button {
     padding-left: 10px;
     padding-right: 10px;
     text-align: left;
+}
+
+li {
+    padding-left: 30px;
+    color: #000;
 }
 
 li>a {
@@ -36,7 +32,7 @@ li>a {
     padding-top: 10px;
 }
 
-#dark_theme {
+#dark_theme, #external_links_caret {
     color: #000;
 }
 

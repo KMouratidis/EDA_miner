@@ -16,9 +16,12 @@ from server import app
 from utils import r, create_dropdown, get_data
 
 import plotly.graph_objs as go
-import peakutils
+from apps.analyze.models.utils import baseline
 import numpy as np
 
+
+SideBar_KPIs = [
+    ]
 
 
 def KPI_Options(options, results):
@@ -101,7 +104,7 @@ def plot_graph_kpi(xvars, yvars, secondary_yvars,
     traces = [
         go.Scatter(
             x=df[xvars],
-            y=peakutils.baseline(df[yvar].apply(hard_cast_to_float)),
+            y=baseline(df[yvar].apply(hard_cast_to_float)),
             mode='lines',
             opacity=0.7,
             marker={

@@ -18,7 +18,6 @@ from utils import r
 from apps.data import Upload_Options, View_Options, API_Options
 
 
-
 layout = html.Div(children=[
     html.Div(children=[
         dcc.Tabs(id="data_tabs", value='upload_data', children=[
