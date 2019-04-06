@@ -30,7 +30,7 @@ def Exploration_Options(options,results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_2d"),
-                 style=styles.dropdown_2d()),
+                 style=styles.dropdown()),
 
         # Choose a graph
         html.Div(create_dropdown("Choose graph type",
@@ -45,13 +45,13 @@ def Exploration_Options(options,results):
                     {'label': 'Error Bar Graph', 'value': 'errorbar'},
                     {'label': '2D Density Plot', 'value': 'density2d'}
                 ], multi=False, id="graph_choice_exploration"),
-                   style=styles.dropdown_2d()),
+                   style=styles.dropdown()),
 
         # Export graph config
         html.Div([
             html.Button("Export graph config 1", id="export_graph1"),
             html.Button("Export graph config 2", id="export_graph2"),
-        ], style=styles.dropdown_2d()),
+        ], style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
         # Available buttons and choices for plotting
@@ -95,14 +95,14 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     layout = [
         html.Div(create_dropdown("X variable", options,
                                        multi=False, id="xvars_2d"),
-                       style=styles.dropdown_2d()),
+                       style=styles.dropdown()),
 
         # This still needs to be returned for other callbacks to work,
         # but will be hidden if we don't need Y variables
         html.Div(create_dropdown("Y variable", options,
                                  multi=allows_multi,
                                  id="yvars_2d"),
-                 style=styles.dropdown_2d(display=needs_yvar)),
+                 style=styles.dropdown(display=needs_yvar)),
     ]
 
     return layout

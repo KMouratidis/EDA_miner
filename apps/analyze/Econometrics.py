@@ -7,6 +7,8 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 from server import app
+import layouts
+import styles
 from utils import r, create_dropdown, mapping, get_data
 
 import dash_bootstrap_components as dbc
@@ -65,12 +67,10 @@ def render_variable_choices_econometrics(dataset_choice,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                        multi=True, id="xvars_econometrics"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
         html.Div(create_dropdown("Target not applicable", options,
                                        multi=False, id="yvars_econometrics"),
-                       style={'width': '30%', 'display': 'none',
-                              'margin':"10px"}),
+                       style=styles.dropdown()),
     ]
 
     return layout
