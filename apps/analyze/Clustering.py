@@ -15,6 +15,7 @@ import plotly.graph_objs as go
 import numpy as np
 
 
+
 def Clustering_Options(options, results):
 
     return html.Div(children=[
@@ -70,7 +71,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
 
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice, algo_choice_clustering]):
-        return [html.H4("Select dataset and algorithm first.")]
+        return [[html.H4("Select dataset and algorithm first.")], {}]
 
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
@@ -97,7 +98,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
     [State('algo_choice_clustering', "value"),
      State("user_id", "children"),
      State("dataset_choice_clustering", "value")])
-def fit_clustering_model(xvars, yvars, n_clusters,algo_choice_clustering,
+def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
                   user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
