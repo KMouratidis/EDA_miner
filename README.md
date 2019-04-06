@@ -9,16 +9,20 @@ and allow you to run Machine Learning models from a server. Started as a univers
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
 
 Just looking around? Then:
-1. Download
+1. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
 2. Run `pip install -r requirements.txt`
 3. Run `python app.py`
 4. Go to your browser, `http://127.0.0.1:8050`
 
 <br>
 
-### Example of the Connecting to an API:
+### Example of the Analyze & Predict Tab:
 
-![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/API_connect.png)
+![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/FittingModels.png)
+
+### Example of Model Builder
+
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/ModelBuilder.png)
 
 ### Example of previewing data:
 
@@ -28,7 +32,8 @@ Just looking around? Then:
 
 ![Interface options 2](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Baseline.png)
 
-### Example of the Analyze & Predict Tab:
+### Example of the Connecting to an API:
 
-![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/FittingRegression.png)
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/API_connect.png)
+
 
