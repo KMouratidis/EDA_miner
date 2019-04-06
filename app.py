@@ -72,13 +72,14 @@ def update_sidebar_menus(tab):
     """
     if tab == 'exploration':
         return [html.H4(f"Tab is {tab}")]
-    if tab == 'kpi':
+    elif tab == 'kpi':
         return KPIs.SideBar_KPIs
-    if tab == 'graphs3d':
+    elif tab == 'graphs3d':
         return [html.H4(f"Tab is {tab}")]
-    if tab == 'networks':
+    elif tab == 'networks':
         return [html.H4(f"Tab is {tab}")]
-
+    else:
+        return []
 
 @app.callback(Output('low_level_tabs_submenu', 'style'),
               [Input('high_level_tabs', 'value')])

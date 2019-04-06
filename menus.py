@@ -88,8 +88,7 @@ def serve_layout():
         session_id is generated.
     """
 
-    # TODO: append above uuid to a Redis list.
-    session_id = str(uuid.uuid4())
+    session_id = f"python_generated_ssid_{uuid.uuid4()}"
 
     return html.Div(children=[
 
