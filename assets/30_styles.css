@@ -19,3 +19,23 @@
 .svg-container {
     margin-right: 10px !important;
 }
+
+#github_link {
+    font-size: 28px;
+    vertical-align: bottom;
+    padding-top: 5px;
+}
+
+#external_links_caret {
+    font-size: 24px;
+    vertical-align: middle;
+    padding-left: 5px;
+}
+
+.js-plotly-plot, .plot-container {
+    outline: 2px dashed black !important;
+}
+
+#button_collapse>span {
+    color: #000;
+}
