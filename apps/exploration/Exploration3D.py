@@ -28,7 +28,7 @@ def Exploration3D_Options(options, results):
             # Choose a dataset
             html.Div(create_dropdown("Available datasets", options,
                                      multi=False, id="dataset_choice_3d"),
-                     style=styles.dropdown_3d()),
+                     style=styles.dropdown(horizontal=False)),
 
             ## Two empty divs to be filled by callbacks
             # Available buttons and choices for plotting
@@ -39,7 +39,7 @@ def Exploration3D_Options(options, results):
                 html.Br(),
                 html.Button("Export graph config 1", id="export_graph1"),
                 html.Button("Export graph config 2", id="export_graph2"),
-            ], style=styles.dropdown_3d()),
+            ], style=styles.dropdown(horizontal=False)),
 
         ], className="col-sm-4"),
 
@@ -75,7 +75,7 @@ def render_variable_choices_3d(dataset_choice, user_id):
     layout = [
         html.Div(create_dropdown(f"{dim} variable", options,
                                  multi=False, id=f"{dim}vars_3d"),
-                       style=styles.dropdown_3d())
+                       style=styles.dropdown(horizontal=False))
      for dim in ["x", "y", "z"]]
 
 

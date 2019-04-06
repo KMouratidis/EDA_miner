@@ -34,12 +34,12 @@ def KPI_Options(options, results):
 
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_kpi"),
-                                 style=styles.dropdown_2d()),
+                                 style=styles.dropdown()),
 
         # TODO: use this for graph selection
         html.Div(create_dropdown("Choose graph type", options,
                                  multi=False, id="graph_choice_kpi"),
-                 style=styles.dropdown_2d()),
+                 style=styles.dropdown()),
 
         html.Div(id="variable_choices_kpi"),
 
@@ -61,13 +61,13 @@ def render_variable_choices_kpi(dataset_choice, user_id):
     return [
         html.Div(create_dropdown("X variables", options,
                          multi=False, id="xvars_kpi"),
-                         style=styles.dropdown_2d()),
+                         style=styles.dropdown()),
         html.Div(create_dropdown("Y variable", options,
                          multi=True, id="yvars_kpi"),
-                         style=styles.dropdown_2d()),
+                         style=styles.dropdown()),
         html.Div(create_dropdown("Bar Chart variable", options,
                          multi=False, id="secondary_yvars_kpi"),
-                         style=styles.dropdown_2d()),
+                         style=styles.dropdown()),
     ]
 
 
