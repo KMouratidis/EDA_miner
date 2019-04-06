@@ -13,37 +13,39 @@ import dash_html_components as html
 
 from server import app
 from utils import r, create_dropdown, get_data
+from apps.exploration.graphs import graphs2d, graphs3d, layouts, styles
 
 import plotly.graph_objs as go
-import peakutils
 
 
 def Exploration3D_Options(options, results):
 
     return html.Div(children=[
 
-        # Choose a dataset
-        html.Div(create_dropdown("Available datasets", options,
-                                 multi=False, id="dataset_choice_3d"),
-                 style={'width': '30%',
-                        'display': 'inline-block',
-                        'margin':"10px"}
-        ),
-
-        # Export graph config
         html.Div([
-            html.Button("Export graph config 1",id="export_graph1"),
-            html.Button("Export graph config 2",id="export_graph2"),
-        ], style={'width': '30%', 'display': 'inline-block',
-                  'margin':"10px"}
-        ),
+            # Choose a dataset
+            html.Div(create_dropdown("Available datasets", options,
+                                     multi=False, id="dataset_choice_3d"),
+                     style=styles.dropdown_3d()),
 
-        ## Two empty divs to be filled by callbacks
-        # Available buttons and choices for plotting
-        html.Div(id="variable_choices_3d"),
-        # The graph itself
-        dcc.Graph(id="graph_3d"),
-    ])
+            ## Two empty divs to be filled by callbacks
+            # Available buttons and choices for plotting
+            html.Div(id="variable_choices_3d"),
+
+            # Export graph config
+            html.Div([
+                html.Br(),
+                html.Button("Export graph config 1", id="export_graph1"),
+                html.Button("Export graph config 2", id="export_graph2"),
+            ], style=styles.dropdown_3d()),
+
+        ], className="col-sm-4"),
+
+        html.Div([
+            # The graph itself
+            dcc.Graph(id="graph_3d"),
+        ], className="col-sm-8"),
+    ], className="row")
 
 
 @app.callback(Output("variable_choices_3d", "children"),
@@ -70,9 +72,8 @@ def render_variable_choices_3d(dataset_choice, user_id):
 
     layout = [
         html.Div(create_dropdown(f"{dim} variable", options,
-                                       multi=False, id=f"{dim}vars_3d"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"})
+                                 multi=False, id=f"{dim}vars_3d"),
+                       style=styles.dropdown_3d())
      for dim in ["x", "y", "z"]]
 
 
@@ -93,26 +94,9 @@ def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):
 
     df = get_data(dataset_choice_3d, user_id)
 
-    trace1 = go.Scatter3d(
-        x=df[xvars],
-        y=df[yvars],
-        z=df[zvars],
-        mode='markers',
-        marker=dict(
-            size=12,
-            color=df[zvars],        # set color to an array/list of desired values
-            colorscale='Viridis',   # choose a colorscale
-            opacity=0.8
-        )
-    )
+    traces = graphs3d.scatterplot(df[xvars], df[yvars], df[zvars])
 
     return {
-        'data': [trace1],
-        'layout': go.Layout(
-            xaxis={'title': xvars},
-            yaxis={'title': yvars},
-            margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-            legend={'x': 0, 'y': 1},
-            hovermode='closest'
-        )
+        'data': traces,
+        'layout': layouts.default_3d(xvars, yvars, zvars)
     }

@@ -14,7 +14,7 @@ import dash_html_components as html
 from server import app
 from utils import r, create_dropdown
 from apps.data.View import get_data
-from apps.exploration.graphs import graphs2d
+from apps.exploration.graphs import graphs2d, layouts, styles
 
 import numpy as np
 import pandas as pd
@@ -28,10 +28,8 @@ def Exploration_Options(options,results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_2d"),
-                 style={'width': '30%',
-                        'display': 'inline-block',
-                        'margin':"10px"}
-        ),
+                 style=styles.dropdown_2d()),
+
         # Choose a graph
         html.Div(create_dropdown("Choose graph type",
                 options = [
@@ -45,17 +43,13 @@ def Exploration_Options(options,results):
                     {'label': 'Error Bar Graph', 'value': 'errorbar'},
                     {'label': '2D Density Plot', 'value': 'density2d'}
                 ], multi=False, id="graph_choice_exploration"),
-                   style={'width': '30%',
-                          'display': 'inline-block',
-                          'margin':"10px"}
-        ),
+                   style=styles.dropdown_2d()),
+
         # Export graph config
         html.Div([
-            html.Button("Export graph config 1",id="export_graph1"),
-            html.Button("Export graph config 2",id="export_graph2"),
-        ], style={'width': '30%', 'display': 'inline-block',
-                  'margin':"10px"}
-        ),
+            html.Button("Export graph config 1", id="export_graph1"),
+            html.Button("Export graph config 2", id="export_graph2"),
+        ], style=styles.dropdown_2d()),
 
         ## Two empty divs to be filled by callbacks
         # Available buttons and choices for plotting
@@ -99,18 +93,14 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     layout = [
         html.Div(create_dropdown("X variable", options,
                                        multi=False, id="xvars_2d"),
-                       style={'width': '30%', 'display': 'inline-block',
-                              'margin':"10px"}),
+                       style=styles.dropdown_2d()),
 
         # This still needs to be returned for other callbacks to work,
         # but will be hidden if we don't need Y variables
         html.Div(create_dropdown("Y variable", options,
                                  multi=allows_multi,
                                  id="yvars_2d"),
-                 style={'width': '30%',
-                        'display': 'inline-block' if needs_yvar else "none",
-                        'margin':"10px"}),
-
+                 style=styles.dropdown_2d(display=needs_yvar)),
     ]
 
     return layout
@@ -176,17 +166,11 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     else:
         traces = []
 
-
     return {
         'data': traces,
-        'layout': go.Layout(
-            xaxis={'title': xvars},
-            yaxis={'title': yvars},
-            margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-            legend={'x': 0, 'y': 1},
-            hovermode='closest'
-        )
+        'layout': layouts.default_2d(xvars, yvars),
     }
+
 
 # Create callbacks for every figure we need saved
 for exported_figure in range(1,3):

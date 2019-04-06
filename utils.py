@@ -60,11 +60,11 @@ mapping = {
 
 def create_dropdown(name, options, **kwargs):
     return [
-        html.H4(name+":"),
+        html.H5(name+":"),
         dcc.Dropdown(
-        options=options,
-        **kwargs
-    )]
+            options=options,
+            **kwargs
+        )]
 
 
 def get_data(api_choice, user_id):
