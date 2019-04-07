@@ -9,6 +9,9 @@ from dash import Dash
 import dash_bootstrap_components as dbc
 
 
+DEBUG_MODE = True
+
+
 external_stylesheets = ["https://use.fontawesome.com/releases/v5.8.1/css/all.css",
                         "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"]
 
