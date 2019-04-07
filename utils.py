@@ -23,6 +23,7 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 import pandas as pd
+import numpy as np
 import base64
 import json
 import io
@@ -99,6 +100,13 @@ def cleanup(redisConn):
     redisConn.flushdb()
 
 
+def hard_cast_to_float(x):
+    try:
+        ret = np.float32(x)
+    except:
+        ret = 0
+
+    return ret
 
 
 def encode_image(image_path):

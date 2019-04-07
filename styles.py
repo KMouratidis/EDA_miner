@@ -13,3 +13,15 @@ def dropdown(display=True, horizontal=True):
         base["display"] = "block"
 
     return base
+
+def upload_button():
+    return {
+        'width': '30%',
+        'height': '60px',
+        'lineHeight': '60px',
+        'borderWidth': '1px',
+        'borderStyle': 'dashed',
+        'borderRadius': '5px',
+        'textAlign': 'center',
+        'margin': '10px'
+    }

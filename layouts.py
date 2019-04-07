@@ -5,7 +5,7 @@ def default_2d(xvars, yvars):
     return go.Layout(
         xaxis={'title': xvars},
         yaxis={'title': yvars},
-        margin={'l': 80, 'b': 20, 't': 10, 'r': 20},
+        margin={'l': 80, 'b': 40, 't': 10, 'r': 20},
         legend={'x': 0, 'y': 1},
         hovermode='closest'
     )

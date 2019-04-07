@@ -19,6 +19,7 @@ import pickle
 import quandl
 
 from server import app
+import styles
 from utils import r, pretty_print_tweets, create_table, get_data
 
 
@@ -53,8 +54,7 @@ def View_Options(user_id):
     options, results = get_available_choices(r, user_id)
     available_choices = html.Div(dcc.Dropdown(options=options,
                                               id="api_choice"),
-                                 style={"display":"inline-block",
-                                        "width":"30%"})
+                                 style=styles.dropdown())
 
     return [
         html.Br(),

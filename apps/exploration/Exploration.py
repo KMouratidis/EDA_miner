@@ -55,13 +55,23 @@ def Exploration_Options(options,results):
 
         ## Two empty divs to be filled by callbacks
         # Available buttons and choices for plotting
-        html.Div(id="variable_choices_2d"),
+        html.Div(id="variable_choices_2d", children=[
+            html.Div(create_dropdown("X variable", options=[],
+                                     multi=False, id="xvars_2d"),
+                     style=styles.dropdown()),
+
+            html.Div(create_dropdown("Y variable", options=[],
+                                     multi=False,
+                                     id="yvars_2d"),
+                     style=styles.dropdown()),
+        ]),
         # The graph itself
         dcc.Graph(id="graph_2d"),
     ])
 
 
-@app.callback(Output("variable_choices_2d", "children"),
+@app.callback([Output("xvars_2d", "options"),
+               Output("yvars_2d", "options")],
               [Input("dataset_choice_2d", "value"),
                Input("graph_choice_exploration", "value")],
               [State("user_id", "children")])
@@ -77,14 +87,9 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice,
                                graph_choice_exploration]):
-        return [html.H4("Select both dataset and graph type.")]
+        return [[], []]
 
-
-    # TODO: This probably is not needed anymore, the check is performed above
-    options = [{'label': "No dataset selected yet", 'value': "no_data"}]
-    if df is not None:
-        options=[{'label': col[:35], 'value': col} for col in df.columns]
-
+    options=[{'label': col[:35], 'value': col} for col in df.columns]
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
 
@@ -92,28 +97,17 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     # till then, set this to false
     allows_multi = False
 
-    layout = [
-        html.Div(create_dropdown("X variable", options,
-                                       multi=False, id="xvars_2d"),
-                       style=styles.dropdown()),
-
-        # This still needs to be returned for other callbacks to work,
-        # but will be hidden if we don't need Y variables
-        html.Div(create_dropdown("Y variable", options,
-                                 multi=allows_multi,
-                                 id="yvars_2d"),
-                 style=styles.dropdown(display=needs_yvar)),
-    ]
-
-    return layout
+    return [options, options if needs_yvar else []]
 
 
 @app.callback(
-    Output("graph_2d", "figure"),
+    [Output("graph_2d", "figure"),
+     Output("yvars_2d", "disabled"),
+     Output("yvars_2d", "allows_multi")],
     [Input("xvars_2d", "value"),
-     Input("yvars_2d", "value")],
-    [State('graph_choice_exploration', "value"),
-     State("user_id", "children"),
+     Input("yvars_2d", "value"),
+     Input("graph_choice_exploration", "value")],
+    [State("user_id", "children"),
      State("dataset_choice_2d", "value")])
 def plot_graph_2d(xvars, yvars, graph_choice_exploration,
                   user_id, dataset_choice):
@@ -124,17 +118,16 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
     df = get_data(dataset_choice, user_id)
 
-
     ## Make sure all variables have a value before plotting
-    ## To test the right variables, we need to see if yvars is needed
-    needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
-
+    ## To test the right variables, we also need to see if
+    ## yvars is needed
     test_conditions = [xvars, df, dataset_choice, graph_choice_exploration]
+    needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
     if needs_yvar:
         test_conditions.append(yvars)
 
     if any(x is None for x in test_conditions):
-        return {}
+        return [{}, not needs_yvar, allows_multi]
 
 
     if graph_choice_exploration == 'line_chart':
@@ -168,10 +161,10 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     else:
         traces = []
 
-    return {
+    return [{
         'data': traces,
         'layout': layouts.default_2d(xvars, yvars),
-    }
+    }, not needs_yvar, allows_multi]
 
 
 # Create callbacks for every figure we need saved
