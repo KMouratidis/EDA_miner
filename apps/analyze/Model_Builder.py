@@ -11,7 +11,7 @@ import dash_html_components as html
 
 import dash_cytoscape as cyto
 
-from server import app
+from server import app, DEBUG
 from utils import r, create_dropdown
 
 import re
@@ -38,7 +38,7 @@ def ever_incrasing_ids():
         ## This probably needs work, but I leave it here for
         ## development. We need to force the user to not abuse the
         ## node system or else the browser might get overburdened
-        if i > 200 and DEBUG_MODE:
+        if i > 200 and DEBUG:
             raise StopIteration
 
 class InputFile(LinearRegression):
@@ -364,7 +364,3 @@ def convert_model(n_clicks, elements, layout):
         ] + [
             html.H4(step[0]) for step in pipeline.steps
         ]
-
-
-if __name__ == "__main__":
-    app.run_server(port=8000, debug=True)

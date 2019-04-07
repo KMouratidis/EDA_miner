@@ -1,11 +1,11 @@
-/* UNCOMMENT IF YOU NEED TO DEBUG LAYOUT */
-/* .row {
+/* (UN)COMMENT IF YOU NEED TO DEBUG LAYOUT */
+.row {
     outline: 1px dashed black;
 }
 
-.js-plotly-plot, .plot-container {
+.js-plotly-plot, .plot-container, #cytoscape-graph {
     outline: 2px dashed black !important;
-} */
+}
 
 #report_img {
     height: 56px;

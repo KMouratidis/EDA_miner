@@ -9,7 +9,7 @@ from dash import Dash
 import dash_bootstrap_components as dbc
 
 
-DEBUG_MODE = True
+DEBUG = True
 
 
 external_stylesheets = ["https://use.fontawesome.com/releases/v5.8.1/css/all.css",
