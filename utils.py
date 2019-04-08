@@ -23,6 +23,7 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 import pandas as pd
+import feather
 import numpy as np
 import base64
 import json
@@ -30,6 +31,7 @@ import io
 import redis
 import pickle
 import os
+import tempfile
 
 
 def redis_startup():
@@ -71,7 +73,7 @@ def get_data(api_choice, user_id):
         df = pickle.loads(r.get(f"{user_id}_{api_choice}_data"))
 
     # uploaded data
-    elif api_choice == "user_data":
+    elif api_choice.startswith("user_data"):
         df = pd.read_msgpack(r.get(f"{user_id}_{api_choice}"))
 
     elif api_choice.startswith("quandl_api"):
@@ -195,15 +197,25 @@ def parse_contents(contents, filename, date, user_id):
             except ValueError:
                 # JSON file is probably only one row, so convert it to list
                 df = pd.DataFrame.from_dict([json.loads(decoded.decode('utf-8'))])
+        elif "feather" in filename:
+            # Assume that the user uploaded a feather file
+            # Since this only reads from a file, we careate
+            # a temporary named file
+            with tempfile.NamedTemporaryFile() as tmp:
+                tmp.write(decoded)
+                # Pandas read_feather doesn't seem to work
+                df = feather.read_dataframe(tmp.name)
+
+        else:
+            return html.Div(['Format not yet supported.'])
 
     except Exception as e:
         print(e)
-        return html.Div([
-            'There was an error processing this file.'
-        ])
+        return html.Div(['There was an error processing this file.'])
 
+    name = os.path.splitext(filename)[0]
     # Store to redis for caching
-    r.set(f"{user_id}_user_data", df.to_msgpack(compress='zlib'))
+    r.set(f"{user_id}_user_data_{name}", df.to_msgpack(compress='zlib'))
 
     return html.Div([
         "Data uploaded sucessfully."
