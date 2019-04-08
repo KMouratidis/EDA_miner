@@ -19,4 +19,4 @@ spotipy==2.4.4
 dash-daq==0.1.0
 dill==0.2.9
 dash-cytoscape==0.0.5
-feather==0.4.0
+feather-format==0.4.0
