@@ -2,6 +2,7 @@ import plotly.graph_objs as go
 
 
 def default_2d(xvars, yvars):
+
     return go.Layout(
         xaxis={'title': xvars},
         yaxis={'title': yvars},

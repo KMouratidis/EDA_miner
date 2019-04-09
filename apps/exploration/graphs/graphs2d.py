@@ -7,9 +7,13 @@
     You can freely write code in this module, without worries.
 """
 
-import plotly.graph_objs as go
 import numpy as np
-
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import plotly.tools as tls
+import plotly.graph_objs as go
 
 # TODO: add layout parameters
 
@@ -44,6 +48,7 @@ graph_configs = {
     'filledarea': (True, True),
     'errorbar': (True, True),
     'density2d': (True, False),
+    'pairplot': (True, True)
  }
 
 
@@ -113,3 +118,20 @@ def density2d(x, y, **kwargs):
         _simple_scatter(x, y, mode='markers', marker=marker),
         go.Histogram2dContour(x=x, y=y, **histogram_params, **kwargs),
     ]
+
+def pairplot(x):
+    size = x.shape[1]
+    fig, axes = plt.subplots(size, size)
+    
+    for i in range(size):
+        for j in range(size):
+            ax = axes[i][j]
+            if i == j:
+                ax.hist(x.iloc[:,j])
+            else:
+                ax.scatter(x.iloc[:,i], x.iloc[:,j])
+
+    plotly_fig = tls.mpl_to_plotly(fig)
+    plt.clf()
+
+    return [plotly_fig]

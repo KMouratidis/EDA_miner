@@ -43,7 +43,8 @@ def Exploration_Options(options,results):
                     {'label': 'Pie Chart', 'value': 'pie'},
                     {'label': 'Filled Area Graph', 'value': 'filledarea'},
                     {'label': 'Error Bar Graph', 'value': 'errorbar'},
-                    {'label': '2D Density Plot', 'value': 'density2d'}
+                    {'label': '2D Density Plot', 'value': 'density2d'},
+                    {'label': 'PairPlot (Matplotlib)', 'value': 'pairplot'},
                 ], multi=False, id="graph_choice_exploration"),
                    style=styles.dropdown()),
 
@@ -71,7 +72,8 @@ def Exploration_Options(options,results):
 
 
 @app.callback([Output("xvars_2d", "options"),
-               Output("yvars_2d", "options")],
+               Output("yvars_2d", "options"),
+               Output("yvars_2d", "multi")],
               [Input("dataset_choice_2d", "value"),
                Input("graph_choice_exploration", "value")],
               [State("user_id", "children")])
@@ -87,23 +89,21 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice,
                                graph_choice_exploration]):
-        return [[], []]
+        return [[], [], False]
 
     options=[{'label': col[:35], 'value': col} for col in df.columns]
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
-
     # TODO: Handle multiple yvars in appropriate graphs
-    # till then, set this to false
-    allows_multi = False
+    # till then, set this to false (already implemented for pairplot).
+    allows_multi = True if graph_choice_exploration == "pairplot" else False
 
-    return [options, options if needs_yvar else []]
+    return [options, options if needs_yvar else [], allows_multi]
 
 
 @app.callback(
     [Output("graph_2d", "figure"),
-     Output("yvars_2d", "disabled"),
-     Output("yvars_2d", "allows_multi")],
+     Output("yvars_2d", "disabled")],
     [Input("xvars_2d", "value"),
      Input("yvars_2d", "value"),
      Input("graph_choice_exploration", "value")],
@@ -118,16 +118,16 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
     df = get_data(dataset_choice, user_id)
 
-    ## Make sure all variables have a value before plotting
-    ## To test the right variables, we also need to see if
-    ## yvars is needed
+    ## Make sure all variables have a value before moving further
     test_conditions = [xvars, df, dataset_choice, graph_choice_exploration]
-    needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
-    if needs_yvar:
-        test_conditions.append(yvars)
-
     if any(x is None for x in test_conditions):
-        return [{}, not needs_yvar, allows_multi]
+        return [{}, True]
+
+    needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
+
+    # Also, if we needs_yvar and they are empty, return.
+    if needs_yvar and yvars is None:
+        return [{}, False]
 
 
     if graph_choice_exploration == 'line_chart':
@@ -158,13 +158,20 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     elif graph_choice_exploration == 'density2d':
         traces = graphs2d.density2d(df[xvars], df[yvars])
 
+    elif graph_choice_exploration == 'pairplot':
+        # We need more than 1 variable for a pairplot
+        if len(yvars) >= 1:
+            # This returns a whole figure, not a trace
+            return graphs2d.pairplot(df[[xvars]+yvars]) + [not needs_yvar]
+        else:
+            traces = []
     else:
         traces = []
 
     return [{
         'data': traces,
         'layout': layouts.default_2d(xvars, yvars),
-    }, not needs_yvar, allows_multi]
+    }, not needs_yvar]
 
 
 # Create callbacks for every figure we need saved
