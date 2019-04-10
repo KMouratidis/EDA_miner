@@ -94,10 +94,7 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     options=[{'label': col[:35], 'value': col} for col in df.columns]
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
-    # TODO: Handle multiple yvars in appropriate graphs
-    # till then, set this to false (already implemented for pairplot).
-    allows_multi = True if graph_choice_exploration == "pairplot" else False
-
+    
     return [options, options if needs_yvar else [], allows_multi]
 
 
@@ -129,34 +126,45 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     if needs_yvar and yvars is None:
         return [{}, False]
 
+    # Fix bugs occurring due to Dash not ordering callbacks
+    if not allows_multi and isinstance(yvars, list):
+        yvars = yvars[0]
+    elif allows_multi and isinstance(yvars, str):
+        yvars = [yvars]
+
 
     if graph_choice_exploration == 'line_chart':
-        traces = graphs2d.line_chart(df[xvars], df[yvars])
+        traces = [graphs2d.line_chart(df[xvars], df[yvar], name=yvar)
+                  for yvar in yvars]
 
     elif graph_choice_exploration == 'scatterplot':
-        traces = graphs2d.scatterplot(df[xvars], df[yvars])
+        traces = [graphs2d.scatterplot(df[xvars], df[yvar], name=yvar)
+                  for yvar in yvars]
 
     elif graph_choice_exploration == 'histogram':
-        traces = graphs2d.histogram(df[xvars])
+        traces = [graphs2d.histogram(df[xvars])]
 
     elif graph_choice_exploration == 'heatmap':
-        traces = graphs2d.heatmap(df[xvars], df[yvars])
+        traces = [graphs2d.heatmap(df[xvars], df[yvars])]
 
     elif graph_choice_exploration == 'bubble_chart':
         size = [20, 40, 60, 80, 100, 80, 60, 40, 20, 40]
-        traces = graphs2d.bubble_chart(df[xvars], df[yvars], size)
+        traces = [graphs2d.bubble_chart(df[xvars], df[yvar], size, name=yvar)
+                  for yvar in yvars]
 
     elif graph_choice_exploration == 'pie':
-        traces = [go.Pie(labels = df[xvars], values = df[yvars])]
+        traces = [go.Pie(labels=df[xvars], values=df[yvars])]
 
     elif graph_choice_exploration == 'filledarea':
-        traces = graphs2d.filledarea(df[xvars], df[yvars])
+        traces = [graphs2d.filledarea(df[xvars], df[yvar], name=yvar)
+                  for yvar in yvars]
 
     elif graph_choice_exploration == 'errorbar':
-        traces = graphs2d.errorbar(df[xvars], df[yvars])
+        traces = [graphs2d.errorbar(df[xvars], df[yvar], name=yvar)
+                  for yvar in yvars]
 
     elif graph_choice_exploration == 'density2d':
-        traces = graphs2d.density2d(df[xvars], df[yvars])
+        traces = graphs2d.density2d(df[xvars], df[yvars], name=yvars)
 
     elif graph_choice_exploration == 'pairplot':
         # We need more than 1 variable for a pairplot
@@ -170,7 +178,7 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
     return [{
         'data': traces,
-        'layout': layouts.default_2d(xvars, yvars),
+        'layout': layouts.default_2d(xvars, ""),
     }, not needs_yvar]
 
 

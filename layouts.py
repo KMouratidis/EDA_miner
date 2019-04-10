@@ -3,10 +3,13 @@ import plotly.graph_objs as go
 
 def default_2d(xvars, yvars):
 
+    if isinstance(yvars, list):
+        yvars = yvars[0]
+
     return go.Layout(
         xaxis={'title': xvars},
         yaxis={'title': yvars},
-        margin={'l': 80, 'b': 40, 't': 10, 'r': 20},
+        margin={'l': 60, 'b': 40, 't': 10, 'r': 20},
         legend={'x': 0, 'y': 1},
         hovermode='closest'
     )
