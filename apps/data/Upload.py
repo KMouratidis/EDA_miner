@@ -12,6 +12,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
+import styles
 from utils import parse_contents
 
 Upload_Options = [
@@ -20,16 +21,7 @@ Upload_Options = [
         children=html.Div([
             'Drag and Drop or ',
             html.A('Select Files')
-        ]), style={
-            'width': '30%',
-            'height': '60px',
-            'lineHeight': '60px',
-            'borderWidth': '1px',
-            'borderStyle': 'dashed',
-            'borderRadius': '5px',
-            'textAlign': 'center',
-            'margin': '10px'
-        },
+        ]), style=styles.upload_button(),
         # Allow multiple files to be uploaded
         multiple=True
     ),

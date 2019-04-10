@@ -19,6 +19,7 @@ import pickle
 import quandl
 
 from server import app
+import styles
 from utils import r, pretty_print_tweets, create_table, get_data
 
 
@@ -29,14 +30,24 @@ def get_available_choices(redisConn, user_id):
     results = {
         "twitter_api": redisConn.get(f"{user_id}_twitter_api_handle"),
         "gsheets_api": redisConn.get(f"{user_id}_gsheets_api_data"),
-        "user_data": redisConn.get(f"{user_id}_user_data"),
         "reddit_api": redisConn.get(f"{user_id}_reddit_api_handle"),
         "spotify_api": redisConn.get(f"{user_id}_spotify_api_handle"),
     }
 
+    # Since non-logged in users have this string preappended we need to
+    # remove not the first but the three-first words
+    if user_id.startswith("python_generated_ssid_"):
+        splitter = 4
+
+    # Quandl-retrieved datasets (may be many, thus we pattern-match redis keys)
     quandl_datasets = [x.decode() for x in redisConn.keys(f"{user_id}_quandl_api_*")]
-    results.update({"_".join(q.split("_")[1:]):q
+    results.update({"_".join(q.split("_")[splitter:]):q
                     for q in quandl_datasets})
+
+    # user-uploaded datasets (may be many, thus we pattern-match redis keys)
+    user_datasets = [x.decode() for x in redisConn.keys(f"{user_id}_user_data_*")]
+    results.update({"_".join(q.split("_")[splitter:]):q
+                    for q in user_datasets})
 
     options=[
         {'label': k, 'value': k}
@@ -53,8 +64,7 @@ def View_Options(user_id):
     options, results = get_available_choices(r, user_id)
     available_choices = html.Div(dcc.Dropdown(options=options,
                                               id="api_choice"),
-                                 style={"display":"inline-block",
-                                        "width":"30%"})
+                                 style=styles.dropdown())
 
     return [
         html.Br(),

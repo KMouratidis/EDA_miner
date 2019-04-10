@@ -32,7 +32,11 @@ def Exploration3D_Options(options, results):
 
             ## Two empty divs to be filled by callbacks
             # Available buttons and choices for plotting
-            html.Div(id="variable_choices_3d"),
+            html.Div(id="variable_choices_3d", children=[
+                html.Div(create_dropdown(f"{dim} variable", options=[],
+                                         multi=False, id=f"{dim}vars_3d"),
+                               style=styles.dropdown(horizontal=False))
+                for dim in ["x", "y", "z"]]),
 
             # Export graph config
             html.Div([
@@ -50,9 +54,11 @@ def Exploration3D_Options(options, results):
     ], className="row")
 
 
-@app.callback(Output("variable_choices_3d", "children"),
-          [Input("dataset_choice_3d", "value")],
-          [State("user_id", "children")])
+@app.callback([Output("xvars_3d", "options"),
+               Output("yvars_3d", "options"),
+               Output("zvars_3d", "options")],
+              [Input("dataset_choice_3d", "value")],
+              [State("user_id", "children")])
 def render_variable_choices_3d(dataset_choice, user_id):
     """
         This callback is used in order to create a menu of dcc components
@@ -63,29 +69,18 @@ def render_variable_choices_3d(dataset_choice, user_id):
 
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice]):
-        return [html.H4("Select dataset.")]
+        return [[], [], []]
 
+    options=[{'label': col[:35], 'value': col} for col in df.columns]
 
-    # TODO: This probably is not needed anymore, the check is performed above
-    options = [{'label': "No dataset selected yet", 'value': "no_data"}]
-    if df is not None:
-        options=[{'label': col[:35], 'value': col} for col in df.columns]
-
-
-    layout = [
-        html.Div(create_dropdown(f"{dim} variable", options,
-                                 multi=False, id=f"{dim}vars_3d"),
-                       style=styles.dropdown(horizontal=False))
-     for dim in ["x", "y", "z"]]
-
-
-    return layout
+    return [options, options, options]
 
 
 @app.callback(
     Output("graph_3d", "figure"),
-    [Input(f"{dim}vars_3d", "value")
-        for dim in ['x', 'y', 'z']],
+    [Input("xvars_3d", "value"),
+     Input("yvars_3d", "value"),
+     Input("zvars_3d", "value"),],
     [State("user_id", "children"),
      State("dataset_choice_3d", "value")])
 def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):

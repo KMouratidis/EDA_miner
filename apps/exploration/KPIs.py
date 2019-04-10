@@ -16,8 +16,7 @@ from server import app
 import layouts
 import styles
 from utils import r, create_dropdown, get_data
-from apps.analyze.models.utils import baseline
-from apps.exploration.graphs import graphs2d
+from apps.exploration.graphs import graphs2d, kpis
 
 import plotly.graph_objs as go
 
@@ -38,46 +37,42 @@ def KPI_Options(options, results):
 
         # TODO: use this for graph selection
         html.Div(create_dropdown("Choose graph type", options,
-                                 multi=False, id="graph_choice_kpi"),
+                                 multi=False, id="graph_choice_kpi",
+                                 disabled=True),
                  style=styles.dropdown()),
 
-        html.Div(id="variable_choices_kpi"),
+        html.Div(id="variable_choices_kpi", children=[
+            html.Div(create_dropdown("X variables", options=[],
+                             multi=False, id="xvars_kpi"),
+                             style=styles.dropdown()),
+            html.Div(create_dropdown("Y variable", options=[],
+                             multi=True, id="yvars_kpi"),
+                             style=styles.dropdown()),
+            html.Div(create_dropdown("Bar Chart variable", options=[],
+                             multi=False, id="secondary_yvars_kpi"),
+                             style=styles.dropdown()),
+        ]),
 
         dcc.Graph(id="graph_kpi"),
     ])
 
 
-@app.callback(Output("variable_choices_kpi", "children"),
+@app.callback([Output("xvars_kpi", "options"),
+               Output("yvars_kpi", "options"),
+               Output("secondary_yvars_kpi", "options"),],
               [Input("dataset_choice_kpi", "value")],
               [State("user_id", "children")])
 def render_variable_choices_kpi(dataset_choice, user_id):
 
-    data = get_data(dataset_choice, user_id)
+    df = get_data(dataset_choice, user_id)
 
-    options = [{'label': "No dataset selected yet", 'value': "no_data"}]
-    if data is not None:
-        options=[{'label': col[:35], 'value': col} for col in data.columns]
+    # Make sure all variables have a value before returning choices
+    if any(x is None for x in [df, dataset_choice]):
+        return [[], [], []]
 
-    return [
-        html.Div(create_dropdown("X variables", options,
-                         multi=False, id="xvars_kpi"),
-                         style=styles.dropdown()),
-        html.Div(create_dropdown("Y variable", options,
-                         multi=True, id="yvars_kpi"),
-                         style=styles.dropdown()),
-        html.Div(create_dropdown("Bar Chart variable", options,
-                         multi=False, id="secondary_yvars_kpi"),
-                         style=styles.dropdown()),
-    ]
+    options=[{'label': col[:35], 'value': col} for col in df.columns]
 
-
-def hard_cast_to_float(x):
-    try:
-        ret = np.float32(x)
-    except:
-        ret = 0
-
-    return ret
+    return [options, options, options]
 
 
 @app.callback(
@@ -92,42 +87,13 @@ def plot_graph_kpi(xvars, yvars, secondary_yvars,
 
     df = get_data(dataset_choice, user_id)
 
-    if any(x is None for x in [xvars, yvars, secondary_yvars, df]):
+    if any(x is None for x in [xvars, yvars, secondary_yvars,
+                               df, dataset_choice]):
         return {}
 
     # baseline graph
-    traces = [
-        go.Scatter(
-            x=df[xvars],
-            y=baseline(df[yvar].apply(hard_cast_to_float)),
-            mode='lines',
-            opacity=0.7,
-            marker={
-                'size': 15,
-                'line': {'width': 0.5, 'color': (0,100,255)}
-            },
-            name=f"Baseline for {' '.join(yvar.split()[:2])}",
-        ) for yvar in yvars] + [
-        # one scatter for each y variable
-        go.Scatter(x=df[xvars],
-                   y=df[yvar].apply(hard_cast_to_float),
-                   mode='lines+markers',
-                   marker={
-                       'size': 8,
-                       'line': {
-                           'width': 0.5,
-                           'color': 'rgb(210, 40, 180)'
-                        },
-                       'color': 'rgb(180, 35, 180)'
-                   },
-                   name=yvar
-            ) for yvar in yvars] + [
-        # Bar plot for the second variable
-        go.Bar(
-            x=df[xvars],
-            y=df[secondary_yvars].apply(hard_cast_to_float),
-        )
-        ]
+    traces = kpis.baseline_graph(df, xvars, yvars, secondary_yvars)
+
 
     return {
         'data': traces,
