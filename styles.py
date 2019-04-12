@@ -25,3 +25,21 @@ def upload_button():
         'textAlign': 'center',
         'margin': '10px'
     }
+
+cyto_stylesheet = [
+    {
+        'selector': 'node',
+        'style': {
+            'label': 'data(label)'
+        }
+    },
+    {
+        "selector": "edge",
+        "style": {
+            'curve-style': 'bezier',
+            'target-arrow-color': 'red',
+            'target-arrow-shape': 'triangle',
+            'line-color': 'red'
+        }
+    }
+]
