@@ -141,7 +141,7 @@ class NodeCollection:
 
             self.node_maxID[node.node_type] = max(self.node_maxID[node.node_type],
                                                   node.id)
-            # print(node.id)
+
             self.nodes.append(node)
 
     def add_node(self, node_type):
@@ -155,6 +155,14 @@ class NodeCollection:
     def remove_node(self, node_id):
         to_be_removed = [n for n in self.nodes if n.id == node_id]
         self.nodes.remove(to_be_removed[0])
+
+        # Also removed edges that this node is connected to (but don't)
+        # reconnect, let the user do it (for now at least)
+        self.graph.edge_collection.edges = [edge
+                                for edge in self.graph.edge_collection.edges
+                                if ((to_be_removed[0].id != edge["data"]["source"]) and
+                                    (to_be_removed[0].id != edge["data"]["target"]))]
+
 
     def render(self):
         return [node.render() for node in self.nodes]
@@ -350,11 +358,14 @@ def inspect_node(elements, user_id):
                State("user_id", "children")])
 def convert_model(n_clicks, elements, layout, user_id):
 
+    if user_id.startswith("python_generated_ssid"):
+        # Trim id
+        user_id = user_id.split("-")[-1]
+
     if n_clicks is None:
         return [html.H5("No specs defined yet")]
 
     else:
-
         pipelines, classifiers = pipeline_creator.create_pipelines(elements,
                                                         node_options)
 

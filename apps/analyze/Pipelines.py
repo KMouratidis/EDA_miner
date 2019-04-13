@@ -16,6 +16,10 @@ import dill
 
 def Pipeline_Options(options, results, user_id):
 
+    if user_id.startswith("python_generated_ssid"):
+        # Trim id
+        user_id = user_id.split("-")[-1]
+
     available_pipelines = {k.decode():r.get(k)
                  for k in r.keys(f'{user_id}_pipeline_*')}
 
@@ -96,8 +100,6 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
 
     # We have the dictionary that maps keys to models so use that
     model = dill.loads(r.get(algo_choice_pipeline))
-
-    print(model)
 
     model.fit(df[xvars], df[yvars])
 
