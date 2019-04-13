@@ -42,6 +42,7 @@ orders = {
 }
 
 ml_options = [
+    # Inputs
     {"label": "Twitter API", "node_type": "twitter_api",
      "parent": "input", "func": TwitterAPI},
     {"label": "Input file", "node_type": "input_file",
@@ -114,6 +115,7 @@ class Node:
                             "label": self.label,
                             "node_type": self.node_type,
                             "id": self.id,
+                            "parent": self.parent
                         },
                         "position": {
                             'x': 100 + self.order*200,
@@ -125,6 +127,19 @@ class Node:
 
 
 class NodeCollection:
+
+    # Make them non-selectable so that the user cannot connect
+    # a node to a group directly (might be revised later)
+    parent_nodes = [
+        {"data": {"label": "Inputs", "id": "input"},
+         'selectable': False},
+        {"data": {"label": "Cleaning", "id": "cleaning"},
+         'selectable': False},
+        {"data": {"label": "Preprocessing", "id": "preprocessing"},
+         'selectable': False},
+        {"data": {"label": "Estimators", "id": "models"},
+         'selectable': False},
+    ]
 
     def __init__(self, nodes=[], graph=None):
         self.node_maxID = {node_type:f"{node_type}_000"
@@ -165,7 +180,7 @@ class NodeCollection:
 
 
     def render(self):
-        return [node.render() for node in self.nodes]
+        return [node.render() for node in self.nodes] + self.parent_nodes
 
 
 class EdgeCollection():
@@ -206,7 +221,9 @@ class Graph:
 
     def __init__(self, elems):
         edges = [elem for elem in elems if "source" in elem["data"]]
-        nodes = [elem for elem in elems if "source" not in elem["data"]]
+        # Don't add parent nodes, they will be added by default
+        nodes = [elem for elem in elems if (("source" not in elem["data"]) and
+                                            ("parent") in elem["data"])]
 
         self.node_collection = NodeCollection(nodes, self)
         self.edge_collection = EdgeCollection(edges, self)
@@ -366,6 +383,11 @@ def convert_model(n_clicks, elements, layout, user_id):
         return [html.H5("No specs defined yet")]
 
     else:
+        # Keep elements that are either edges (have a source)
+        # or elements that have a parent (nodes, not groups)
+        elements = [elem for elem in elements if (("source" in elem["data"]) or
+                                                  ("parent") in elem["data"])]
+
         pipelines, classifiers = pipeline_creator.create_pipelines(elements,
                                                         node_options)
 
