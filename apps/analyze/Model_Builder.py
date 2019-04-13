@@ -22,6 +22,7 @@ from apps.analyze.models.pipeline_classes import CustomClassifer
 
 import re
 import random
+import dill
 from itertools import combinations
 from collections import defaultdict
 import plotly.graph_objs as go
@@ -238,7 +239,7 @@ Model_Builder_Layout = html.Div([
     cyto.Cytoscape(
         id='cytoscape-graph',
         layout={'name': "preset"},
-        style={"width":"90%", "height":"600px"},
+        style={"width":"95%", "height":"600px"},
         elements=initial_graph,
         stylesheet=cyto_stylesheet,
     ),
@@ -324,16 +325,18 @@ def removeNode(remove_clicked_time, added_clicked_time,
 
 
 @app.callback(Output("inspector", "children"),
-              [Input("cytoscape-graph", "mouseoverNodeData")])
-def inspect_node(selected):
+              [Input("cytoscape-graph", "mouseoverNodeData")],
+              [State("user_id", "children")])
+def inspect_node(selected, user_id):
     return [
         html.Br(),
         html.Pre(str(selected))
     ]
 
 @app.callback(Output("delete_options", "options"),
-              [Input("cytoscape-graph", "elements")])
-def inspect_node(elements):
+              [Input("cytoscape-graph", "elements")],
+              [State("user_id", "children")])
+def inspect_node(elements, user_id):
     return [{
         "value":elem["data"]["id"],
         "label": elem["data"]["label"]
@@ -343,23 +346,20 @@ def inspect_node(elements):
 @app.callback(Output("model_specs", "children"),
               [Input("convert", "n_clicks")],
               [State("cytoscape-graph", "elements"),
-               State("cytoscape-graph", "stylesheet")])
-def convert_model(n_clicks, elements, layout):
+               State("cytoscape-graph", "stylesheet"),
+               State("user_id", "children")])
+def convert_model(n_clicks, elements, layout, user_id):
 
     if n_clicks is None:
         return [html.H5("No specs defined yet")]
 
     else:
 
-        for elem in elements:
-            # this will skip edges
-            if "node_type" in elem["data"]:
+        pipelines, classifiers = pipeline_creator.create_pipelines(elements,
+                                                        node_options)
 
-                node_info = node_options[elem['data']['node_type']]
-                exec(f"{elem['data']['id']} = {node_info['func']()}")
-
-        pipelines = pipeline_creator.create_pipelines(elements, node_options)
-
-        print(pipelines)
+        # Save pipelines to Redis (to be used in other modules)
+        for pipe, clf in zip(pipelines, classifiers):
+            r.set(f"{user_id}_pipeline_{clf}", dill.dumps(pipe))
 
         return [html.P(str(pipeline)) for pipeline in pipelines]

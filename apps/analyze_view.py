@@ -14,7 +14,7 @@ from server import app
 from utils import mapping, r
 from apps.analyze import Model_Builder_Layout, Regression_Options
 from apps.analyze import Classification_Options, Clustering_Options
-from apps.analyze import Econometrics_Options
+from apps.analyze import Econometrics_Options, Pipeline_Options
 from apps.data.View import get_available_choices
 
 import pandas as pd
@@ -29,6 +29,8 @@ layout = html.Div(children=[
         dcc.Tabs(id="analyze_tabs", value="regression", children=[
             dcc.Tab(label='Model builder', value='model_builder',
                     id="model_builder"),
+            dcc.Tab(label='Pipelines trainer', value='pipelines',
+                    id="pipelines"),
             dcc.Tab(label='Regression', value='regression',
                     id="regression"),
             dcc.Tab(label='Classification', value='classification',
@@ -63,6 +65,9 @@ def tab_subpages(tab, user_id):
 
     if tab == "model_builder":
         return Model_Builder_Layout
+
+    elif tab == "pipelines":
+        return Pipeline_Options(options, results, user_id)
 
     elif tab == 'regression':
         return Regression_Options(options, results)

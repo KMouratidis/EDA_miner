@@ -29,7 +29,8 @@ def create_pipelines(data, node_options):
     """
         This function takes the data from the cytoscape graph and the node
         options (dicts as in `Model_Builder.py`) and returns a list of
-        sklearn pipelines. This uses networkx for easier traversal.
+        sklearn pipelines along with their terminal nodes. This uses
+        networkx for easier traversal.
     """
 
     G = nx.DiGraph()
@@ -57,4 +58,4 @@ def create_pipelines(data, node_options):
     for terminal_node in terminal_nodes:
         pipelines.append(_traverse_graph(terminal_node, G, mapper))
 
-    return pipelines
+    return pipelines, terminal_nodes
