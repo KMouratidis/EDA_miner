@@ -13,45 +13,43 @@ import dash_html_components as html
 import dash_table
 import dash_bootstrap_components as dbc
 
-import pandas as pd
-import datetime
-import pickle
-import quandl
-
 from server import app
 import styles
 from utils import r, pretty_print_tweets, create_table, get_data
 
+import pickle
+
 
 # TODO: This might need to get moved to a higher module
-def get_available_choices(redisConn, user_id):
-
+def get_available_choices(redis_conn, user_id):
 
     results = {
-        "twitter_api": redisConn.get(f"{user_id}_twitter_api_handle"),
-        "gsheets_api": redisConn.get(f"{user_id}_gsheets_api_data"),
-        "reddit_api": redisConn.get(f"{user_id}_reddit_api_handle"),
-        "spotify_api": redisConn.get(f"{user_id}_spotify_api_handle"),
+        "twitter_api": redis_conn.get(f"{user_id}_twitter_api_handle"),
+        "gsheets_api": redis_conn.get(f"{user_id}_gsheets_api_data"),
+        "reddit_api": redis_conn.get(f"{user_id}_reddit_api_handle"),
+        "spotify_api": redis_conn.get(f"{user_id}_spotify_api_handle"),
     }
 
-    # Since non-logged in users have this string preappended we need to
+    # Since non-logged in users have this string pre-appended we need to
     # remove not the first but the three-first words
     if user_id.startswith("python_generated_ssid_"):
         splitter = 4
 
     # Quandl-retrieved datasets (may be many, thus we pattern-match redis keys)
-    quandl_datasets = [x.decode() for x in redisConn.keys(f"{user_id}_quandl_api_*")]
-    results.update({"_".join(q.split("_")[splitter:]):q
+    quandl_datasets = [x.decode() for x
+                       in redis_conn.keys(f"{user_id}_quandl_api_*")]
+    results.update({"_".join(q.split("_")[splitter:]): q
                     for q in quandl_datasets})
 
     # user-uploaded datasets (may be many, thus we pattern-match redis keys)
-    user_datasets = [x.decode() for x in redisConn.keys(f"{user_id}_user_data_*")]
-    results.update({"_".join(q.split("_")[splitter:]):q
+    user_datasets = [x.decode() for x
+                     in redis_conn.keys(f"{user_id}_user_data_*")]
+    results.update({"_".join(q.split("_")[splitter:]): q
                     for q in user_datasets})
 
-    options=[
+    options = [
         {'label': k, 'value': k}
-        for k,v in results.items() if v is not None
+        for k, v in results.items() if v is not None
     ]
     if len(options) < 1:
         options = [{'label': "No uploaded data yet", 'value': "no_data"}]
@@ -82,11 +80,11 @@ def View_Options(user_id):
 @app.callback(Output("dataset_name", "style"),
               [Input("api_choice", "value")],
               [State("user_id", "children")])
-def display_subdataset_choices(api_choice, user_id,):
+def display_subdataset_choices(api_choice, user_id):
     if api_choice == "quandl_api":
-        return {"display":"inline"}
+        return {"display": "inline"}
     else:
-        return {"display":"none"}
+        return {"display": "none"}
 
 
 @app.callback(Output("table_view", "children"),
@@ -103,7 +101,6 @@ def render_table(api_choice, user_id):
         return pretty_print_tweets(api, 5)
 
     elif api_choice == "reddit_api":
-
         api = r.get(f"{user_id}_{api_choice}_handle")
 
         return [
@@ -117,7 +114,6 @@ def render_table(api_choice, user_id):
         ]
 
     elif api_choice == "spotify_api":
-
         spotify = pickle.loads(r.get(f"{user_id}_{api_choice}_handle"))
         top_playlists = spotify.category_playlists("toplists")["playlists"]["items"]
 
@@ -137,9 +133,7 @@ def render_table(api_choice, user_id):
                 html.Br(),
             ]) for playlist in top_playlists
         ]
-
         return posts
-
 
     elif api_choice == "quandl_api":
         df = get_data(api_choice, user_id)
@@ -150,13 +144,11 @@ def render_table(api_choice, user_id):
     if df is None:
         return [html.H4("Nothing to display")]
 
-
     df = df[df.columns[:10]]
     return [
         html.Br(),
         create_table(df),
     ]
-
 
 
 @app.callback(Output("subreddit_posts", "children"),
@@ -166,7 +158,6 @@ def render_table(api_choice, user_id):
 def display_reddit_posts(n_clicks, subreddit_choice, user_id):
 
     if n_clicks is not None and n_clicks >=1:
-
         if subreddit_choice is not None:
 
             api = pickle.loads(r.get(f"{user_id}_reddit_api_handle"))
@@ -180,19 +171,18 @@ def display_reddit_posts(n_clicks, subreddit_choice, user_id):
                             html.A("view at reddit", href=post.permalink),
                         ]),
                         dbc.CardBody([
-                            dbc.CardTitle(f"Written by {post.author.name}, score: {post.score}"),
+                            dbc.CardTitle(f"Written by {post.author.name}, "
+                                          f"score: {post.score}"),
                             dbc.CardText(dcc.Markdown(post.selftext),),
                         ]),
                     ]),
                     html.Br(),
                 ]) for post in subreddit.hot(limit=5)
             ]
-
             return posts
 
         else:
             return [html.H4("No subreddit choice")]
 
     else:
-
         return [html.H4("No reddit data to display.")]

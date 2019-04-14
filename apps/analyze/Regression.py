@@ -7,9 +7,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
-import layouts
 import styles
-from utils import r, create_dropdown, mapping, get_data
+from utils import create_dropdown, mapping, get_data
 
 
 def Regression_Options(options, results):
@@ -21,13 +20,12 @@ def Regression_Options(options, results):
                  style=styles.dropdown()),
 
         # Choose an algorithm
-        html.Div(create_dropdown("Choose algorithm type",
-                options = [
-                    {'label': 'Linear Regression', 'value': 'linr'},
-                    {'label': 'Support Vector Regressor', 'value': 'svr'},
-                    {'label': 'Decision Tree Regressor', 'value': 'dtr'}
-                ], multi=False, id="algo_choice_regression"),
-                 style=styles.dropdown()),
+        html.Div(create_dropdown("Choose algorithm type", options=[
+            {'label': 'Linear Regression', 'value': 'linr'},
+            {'label': 'SVM Regression', 'value': 'svr'},
+            {'label': 'Decision Tree Regression', 'value': 'dtr'}
+        ], multi=False, id="algo_choice_regression"),
+         style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -59,11 +57,11 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
 
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
-                                       multi=True, id="xvars_regression"),
-                       style=styles.dropdown()),
+                                 multi=True, id="xvars_regression"),
+                 style=styles.dropdown()),
         html.Div(create_dropdown("Y variable", options,
-                                       multi=False, id="yvars_regression"),
-                       style=styles.dropdown()),
+                                 multi=False, id="yvars_regression"),
+                 style=styles.dropdown()),
     ]
 
     return layout
@@ -77,7 +75,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
      State("user_id", "children"),
      State("dataset_choice_regression", "value")])
 def fit_regression_model(xvars, yvars, algo_choice_regression,
-                  user_id, dataset_choice):
+                         user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
@@ -95,4 +93,6 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
 
     model.fit(df[xvars], df[yvars])
 
-    return [html.H4(f"Regression model scored: {model.score(df[xvars], df[yvars])}")]
+    return [
+        html.H4(f"Regression model scored: {model.score(df[xvars], df[yvars])}")
+    ]

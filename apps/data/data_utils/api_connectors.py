@@ -3,7 +3,6 @@ from utils import r
 import twitter
 import praw
 import gspread
-import quandl
 from oauth2client.service_account import ServiceAccountCredentials
 import spotipy
 from spotipy import util
@@ -27,21 +26,19 @@ def reddit_connect(client_id, client_secret, user_id):
     """Connect to Reddit and store the handle in Redis."""
 
     reddit = praw.Reddit(client_id=client_id,
-                     client_secret=client_secret,
-                     user_agent='EDA miner')
+                         client_secret=client_secret,
+                         user_agent='EDA miner')
 
     r.set(f"{user_id}_reddit_api", "true")
     r.set(f"{user_id}_reddit_api_handle", pickle.dumps(reddit))
 
 
-
-def twitter_connect(API_key, API_secret_key,
-                    access_token, access_token_secret,
+def twitter_connect(key, secret_key, access_token, access_token_secret,
                     user_id, sleep_on_rate_limit=True):
     """Connect to Twitter API and store the handle in Redis."""
 
-    api = twitter.Api(consumer_key=API_key,
-                      consumer_secret=API_secret_key,
+    api = twitter.Api(consumer_key=key,
+                      consumer_secret=secret_key,
                       access_token_key=access_token,
                       access_token_secret=access_token_secret,
                       sleep_on_rate_limit=sleep_on_rate_limit)
@@ -83,6 +80,7 @@ def google_sheets_connect(credentials_file, gspread_key, user_id):
 
 def facebook_connect():
     raise NotImplementedError
+
 
 def google_docs_connect():
     raise NotImplementedError

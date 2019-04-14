@@ -3,6 +3,7 @@
 """
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
+import numpy as np
 
 
 class InputFile(BaseEstimator, TransformerMixin):
@@ -12,12 +13,14 @@ class InputFile(BaseEstimator, TransformerMixin):
     def transform(self, X):
         return X
 
+
 class DataCleaner(InputFile):
     def fit(self, X, y=None):
         return self
 
     def transform(self, X):
         return X
+
 
 class DataImputater(InputFile):
     def fit(self, X, y=None):
@@ -26,6 +29,7 @@ class DataImputater(InputFile):
     def transform(self, X):
         return X
 
+
 class TwitterAPI(InputFile):
     def fit(self, X, y=None):
         return self
@@ -33,7 +37,8 @@ class TwitterAPI(InputFile):
     def transform(self, X):
         return X
 
-class CustomClassifer(BaseEstimator, ClassifierMixin):
+
+class CustomClassifier(BaseEstimator, ClassifierMixin):
     def fit(self, X, y=None):
         return self
 

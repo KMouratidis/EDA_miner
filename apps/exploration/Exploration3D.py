@@ -14,10 +14,8 @@ import dash_html_components as html
 from server import app
 import layouts
 import styles
-from utils import r, create_dropdown, get_data
-from apps.exploration.graphs import graphs2d, graphs3d
-
-import plotly.graph_objs as go
+from utils import create_dropdown, get_data
+from apps.exploration.graphs import graphs3d
 
 
 def Exploration3D_Options(options, results):
@@ -30,12 +28,11 @@ def Exploration3D_Options(options, results):
                                      multi=False, id="dataset_choice_3d"),
                      style=styles.dropdown(horizontal=False)),
 
-            ## Two empty divs to be filled by callbacks
             # Available buttons and choices for plotting
             html.Div(id="variable_choices_3d", children=[
                 html.Div(create_dropdown(f"{dim} variable", options=[],
                                          multi=False, id=f"{dim}vars_3d"),
-                               style=styles.dropdown(horizontal=False))
+                         style=styles.dropdown(horizontal=False))
                 for dim in ["x", "y", "z"]]),
 
             # Export graph config
@@ -47,8 +44,8 @@ def Exploration3D_Options(options, results):
 
         ], className="col-sm-4"),
 
+        # The graph itself
         html.Div([
-            # The graph itself
             dcc.Graph(id="graph_3d"),
         ], className="col-sm-8"),
     ], className="row")
@@ -71,7 +68,7 @@ def render_variable_choices_3d(dataset_choice, user_id):
     if any(x is None for x in [df, dataset_choice]):
         return [[], [], []]
 
-    options=[{'label': col[:35], 'value': col} for col in df.columns]
+    options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     return [options, options, options]
 
@@ -80,7 +77,7 @@ def render_variable_choices_3d(dataset_choice, user_id):
     Output("graph_3d", "figure"),
     [Input("xvars_3d", "value"),
      Input("yvars_3d", "value"),
-     Input("zvars_3d", "value"),],
+     Input("zvars_3d", "value")],
     [State("user_id", "children"),
      State("dataset_choice_3d", "value")])
 def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):

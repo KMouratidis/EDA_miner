@@ -15,6 +15,7 @@ from server import app
 import styles
 from utils import parse_contents
 
+
 Upload_Options = [
     dcc.Upload(
         id='upload_data',
@@ -29,8 +30,6 @@ Upload_Options = [
 ]
 
 
-# TODO: Any inconsistency rises from the fact
-# that the guide was meant for multiple-file uploads
 @app.callback(Output('output-data-upload', 'children'),
               [Input('upload_data', 'contents'),],
               [State('upload_data', 'filename'),
@@ -40,7 +39,7 @@ def parse_uploads(list_of_contents, list_of_names,
                   list_of_dates, user_id):
 
     if list_of_contents is not None:
-        response = [parse_contents(c, n, d, user_id) for c, n, d in
-            zip(list_of_contents, list_of_names, list_of_dates)]
+        response = [parse_contents(c, n, d, user_id) for c, n, d
+                    in zip(list_of_contents, list_of_names, list_of_dates)]
 
         return response

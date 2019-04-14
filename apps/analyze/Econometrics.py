@@ -9,9 +9,7 @@ from dash.dependencies import Input, Output, State
 from server import app
 import layouts
 import styles
-from utils import r, create_dropdown, mapping, get_data
-
-import dash_bootstrap_components as dbc
+from utils import create_dropdown, get_data
 
 
 def Econometrics_Options(options, results):
@@ -23,11 +21,10 @@ def Econometrics_Options(options, results):
                  style=styles.dropdown()),
 
         # Choose an algorithm
-        html.Div(create_dropdown("Choose algorithm type",
-                options=[
-                    {'label': 'Econ1', 'value': 'econ1'},
-                    {'label': 'Econ2', 'value': 'econ2'},
-                ], multi=False, id="algo_choice_econometrics"),
+        html.Div(create_dropdown("Choose algorithm type", options=[
+            {'label': 'Econ1', 'value': 'econ1'},
+            {'label': 'Econ2', 'value': 'econ2'},
+        ], multi=False, id="algo_choice_econometrics"),
                  style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
@@ -62,10 +59,10 @@ def render_variable_choices_econometrics(dataset_choice,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_econometrics"),
-                       style=styles.dropdown()),
+                 style=styles.dropdown()),
         html.Div(create_dropdown("Target not applicable", options,
                                  multi=False, id="yvars_econometrics"),
-                       style=styles.dropdown()),
+                 style=styles.dropdown()),
     ]
 
     return layout
@@ -91,7 +88,5 @@ def fit_clustering_model(xvars, yvars, algo_choice_econometrics,
     if any(x is None for x in [xvars, df, dataset_choice,
                                algo_choice_econometrics]):
         return {}
-
-    # We have the dictionary that maps keys to models so use that
 
     return [html.H4("Not implemented")]

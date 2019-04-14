@@ -11,8 +11,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
-from utils import r, pretty_print_tweets
-from apps.data import View_Options
+from utils import r
 from apps.data.data_utils import api_layouts, api_connectors
 
 import pickle
@@ -115,7 +114,7 @@ def api_connect(api_choice, n_clicks, user_id,
     elif api_choice == "spotify_api":
         if n_clicks >= 1:
             api_connectors.spotify_connect(input1, input2, user_id)
-            return api_layout.success_message("Spotify")
+            return api_layouts.success_message("Spotify")
 
         else:
             return api_layouts.spotify_layout

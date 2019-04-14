@@ -22,15 +22,13 @@ def Classification_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_classification"),
-                 style=styles.dropdown()
-        ),
+                 style=styles.dropdown()),
 
         # Choose an algorithm
-        html.Div(create_dropdown("Choose algorithm type",
-                options=[
-                    {'label': 'Logistic Regression', 'value': 'logr'},
-                    {'label': 'XGBoost', 'value': 'xgb'},
-                ], multi=False, id="algo_choice_classification"),
+        html.Div(create_dropdown("Choose algorithm type", options=[
+            {'label': 'Logistic Regression', 'value': 'logr'},
+            {'label': 'XGBoost', 'value': 'xgb'},
+        ], multi=False, id="algo_choice_classification"),
                  style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
@@ -43,12 +41,13 @@ def Classification_Options(options, results):
         dcc.Graph(id="classification_results")
     ])
 
+
 @app.callback(Output("variable_choices_classification", "children"),
               [Input("dataset_choice_classification", "value"),
                Input("algo_choice_classification", "value")],
               [State("user_id", "children")])
-def render_variable_choices_classification(dataset_choice, algo_choice_classification,
-                                       user_id):
+def render_variable_choices_classification(dataset_choice,
+                                           algo_choice_classification, user_id):
     """
         This callback is used in order to create a menu of dcc components
         for the user to choose for altering across datasets.
@@ -64,11 +63,11 @@ def render_variable_choices_classification(dataset_choice, algo_choice_classific
 
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
-                                       multi=True, id="xvars_classification"),
-                       style=styles.dropdown()),
+                                 multi=True, id="xvars_classification"),
+                 style=styles.dropdown()),
         html.Div(create_dropdown("Y variable", options,
-                                       multi=False, id="yvars_classification"),
-                       style=styles.dropdown()),
+                                 multi=False, id="yvars_classification"),
+                 style=styles.dropdown()),
     ]
 
     return layout
@@ -76,7 +75,7 @@ def render_variable_choices_classification(dataset_choice, algo_choice_classific
 
 @app.callback(
     [Output("training_results_classification", "children"),
-    Output("classification_results", "figure")],
+     Output("classification_results", "figure")],
     [Input("xvars_classification", "value"),
      Input("yvars_classification", "value")],
     [State('algo_choice_classification', "value"),
@@ -103,20 +102,21 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
 
     labels = model.predict(df[xvars])
 
-    layout = [html.H4(f"Classification model scored: {model.score(df[xvars], y[0])}"),]
+    layout = [
+        html.H4(f"Classification model scored: {model.score(df[xvars], y[0])}")
+    ]
 
     if len(xvars) >= 3:
 
         trace1 = go.Scatter3d(x=df[xvars[0]],
-                            y=df[xvars[1]],
-                            z=df[xvars[2]],
-                            showlegend=False,
-                            mode='markers',
-                            marker=dict(
-                                color=labels.astype(np.float),
-                                line=dict(color='black', width=1)
-                            )
-        )
+                              y=df[xvars[1]],
+                              z=df[xvars[2]],
+                              showlegend=False,
+                              mode='markers',
+                              marker={
+                                  'color': labels.astype(np.float),
+                                  'line': dict(color='black', width=1)
+                              })
 
         layout += [{
             'data': [trace1],
@@ -125,9 +125,9 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
 
     elif len(xvars) == 2:
         traces = scatterplot(df[xvars[0]], df[xvars[1]],
-                            marker = {'color': labels.astype(np.float)})
+                             marker={'color': labels.astype(np.float)})
 
-        layout  += [{
+        layout += [{
             'data': traces,
             'layout': layouts.default_2d(xvars[0], yvars[0])
         }]

@@ -3,8 +3,8 @@ def dropdown(display=True, horizontal=True):
 
     base = {
         'display': 'inline-block' if display else "none",
-        'margin':"10px",
-        'verticalAlign':"bottom",
+        'margin': "10px",
+        'verticalAlign': "bottom",
     }
 
     if horizontal:
@@ -13,6 +13,7 @@ def dropdown(display=True, horizontal=True):
         base["display"] = "block"
 
     return base
+
 
 def upload_button():
     return {
@@ -25,6 +26,7 @@ def upload_button():
         'textAlign': 'center',
         'margin': '10px'
     }
+
 
 cyto_stylesheet = [
     {

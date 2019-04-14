@@ -10,11 +10,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
-import dash_table
-import dash_callback_chain as chainvis
-
 from server import app
-from utils import r
 from apps.data import Upload_Options, View_Options, API_Options
 
 
@@ -49,7 +45,7 @@ def tab_subpages(tab, user_id):
 
     if tab == 'upload_data':
         # TODO: This might need change, depending on whether we specify
-        # different privileges for logged-in users.
+        #       different privileges for logged-in users.
         return Upload_Options
 
     elif tab == "view_data":

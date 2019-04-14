@@ -15,12 +15,8 @@ import dash_html_components as html
 from server import app
 import layouts
 import styles
-from utils import r, create_dropdown, get_data
-from apps.exploration.graphs import graphs2d, kpis
-
-import plotly.graph_objs as go
-
-import numpy as np
+from utils import create_dropdown, get_data
+from apps.exploration.graphs import kpis
 
 
 SideBar_KPIs = [
@@ -33,7 +29,7 @@ def KPI_Options(options, results):
 
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_kpi"),
-                                 style=styles.dropdown()),
+                 style=styles.dropdown()),
 
         # TODO: use this for graph selection
         html.Div(create_dropdown("Choose graph type", options,
@@ -43,14 +39,14 @@ def KPI_Options(options, results):
 
         html.Div(id="variable_choices_kpi", children=[
             html.Div(create_dropdown("X variables", options=[],
-                             multi=False, id="xvars_kpi"),
-                             style=styles.dropdown()),
+                                     multi=False, id="xvars_kpi"),
+                     style=styles.dropdown()),
             html.Div(create_dropdown("Y variable", options=[],
-                             multi=True, id="yvars_kpi"),
-                             style=styles.dropdown()),
+                                     multi=True, id="yvars_kpi"),
+                     style=styles.dropdown()),
             html.Div(create_dropdown("Bar Chart variable", options=[],
-                             multi=False, id="secondary_yvars_kpi"),
-                             style=styles.dropdown()),
+                                     multi=False, id="secondary_yvars_kpi"),
+                     style=styles.dropdown()),
         ]),
 
         dcc.Graph(id="graph_kpi"),
@@ -59,7 +55,7 @@ def KPI_Options(options, results):
 
 @app.callback([Output("xvars_kpi", "options"),
                Output("yvars_kpi", "options"),
-               Output("secondary_yvars_kpi", "options"),],
+               Output("secondary_yvars_kpi", "options")],
               [Input("dataset_choice_kpi", "value")],
               [State("user_id", "children")])
 def render_variable_choices_kpi(dataset_choice, user_id):
@@ -70,7 +66,7 @@ def render_variable_choices_kpi(dataset_choice, user_id):
     if any(x is None for x in [df, dataset_choice]):
         return [[], [], []]
 
-    options=[{'label': col[:35], 'value': col} for col in df.columns]
+    options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     return [options, options, options]
 
@@ -93,7 +89,6 @@ def plot_graph_kpi(xvars, yvars, secondary_yvars,
 
     # baseline graph
     traces = kpis.baseline_graph(df, xvars, yvars, secondary_yvars)
-
 
     return {
         'data': traces,

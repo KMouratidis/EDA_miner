@@ -18,16 +18,16 @@ def _base_graph(x, y, **params):
     raise NotImplementedError
 
 
-## Similar to graphs2d, but might need
-## three or more values in the tuple
+# Similar to graphs2d, but might need
+# three or more values in the tuple
 graph_configs = {
     'baseline': (True, True),
  }
 
 
 ########## Graph functions ##########
-## Functions below here implement the various graphs
-## These should return plotly traces (i.e. lists of `go` objects)
+# Functions below here implement the various graphs
+# These should return plotly traces (i.e. lists of `go` objects)
 
 def baseline_graph(df, xvars, yvars, secondary_yvars):
     return [
@@ -56,14 +56,14 @@ def baseline_graph(df, xvars, yvars, secondary_yvars):
                    },
                    name=yvar
             ) for yvar in yvars] + [
-                # Bar plot for the second variable
-                go.Bar(
-                    x=df[xvars],
-                    y=df[secondary_yvars].apply(hard_cast_to_float),
-                    name="Bars"
-                )
-            ]
+        # Bar plot for the second variable
+        go.Bar(
+            x=df[xvars],
+            y=df[secondary_yvars].apply(hard_cast_to_float),
+            name="Bars"
+        )
+    ]
+
 
 def other_graph(x, y):
     raise NotImplementedError
-    return [_base_graph(x, y, mode="markers")]

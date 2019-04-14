@@ -14,16 +14,14 @@ import dash_html_components as html
 from server import app
 import layouts
 import styles
-from utils import r, create_dropdown
+from utils import create_dropdown
 from apps.data.View import get_data
 from apps.exploration.graphs import graphs2d
 
-import numpy as np
-import pandas as pd
 import plotly.graph_objs as go
 
 
-def Exploration_Options(options,results):
+def Exploration_Options(options, results):
 
     return html.Div(children=[
 
@@ -33,20 +31,19 @@ def Exploration_Options(options,results):
                  style=styles.dropdown()),
 
         # Choose a graph
-        html.Div(create_dropdown("Choose graph type",
-                options = [
-                    {'label': 'Line Graph', 'value': 'line_chart'},
-                    {'label': 'Scatter Plot', 'value': 'scatterplot'},
-                    {'label': 'Histogram Graph', 'value': 'histogram'},
-                    {'label': 'Correlation Graph', 'value': 'heatmap'},
-                    {'label': 'Bubble Graph', 'value': 'bubble_chart'},
-                    {'label': 'Pie Chart', 'value': 'pie'},
-                    {'label': 'Filled Area Graph', 'value': 'filledarea'},
-                    {'label': 'Error Bar Graph', 'value': 'errorbar'},
-                    {'label': '2D Density Plot', 'value': 'density2d'},
-                    {'label': 'PairPlot (Matplotlib)', 'value': 'pairplot'},
-                ], multi=False, id="graph_choice_exploration"),
-                   style=styles.dropdown()),
+        html.Div(create_dropdown("Choose graph type", options=[
+            {'label': 'Line Graph', 'value': 'line_chart'},
+            {'label': 'Scatter Plot', 'value': 'scatterplot'},
+            {'label': 'Histogram Graph', 'value': 'histogram'},
+            {'label': 'Correlation Graph', 'value': 'heatmap'},
+            {'label': 'Bubble Graph', 'value': 'bubble_chart'},
+            {'label': 'Pie Chart', 'value': 'pie'},
+            {'label': 'Filled Area Graph', 'value': 'filledarea'},
+            {'label': 'Error Bar Graph', 'value': 'errorbar'},
+            {'label': '2D Density Plot', 'value': 'density2d'},
+            {'label': 'PairPlot (matplotlib)', 'value': 'pairplot'},
+        ], multi=False, id="graph_choice_exploration"),
+                 style=styles.dropdown()),
 
         # Export graph config
         html.Div([
@@ -54,7 +51,6 @@ def Exploration_Options(options,results):
             html.Button("Export graph config 2", id="export_graph2"),
         ], style=styles.dropdown()),
 
-        ## Two empty divs to be filled by callbacks
         # Available buttons and choices for plotting
         html.Div(id="variable_choices_2d", children=[
             html.Div(create_dropdown("X variable", options=[],
@@ -66,6 +62,7 @@ def Exploration_Options(options,results):
                                      id="yvars_2d"),
                      style=styles.dropdown()),
         ]),
+
         # The graph itself
         dcc.Graph(id="graph_2d"),
     ])
@@ -91,7 +88,7 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
                                graph_choice_exploration]):
         return [[], [], False]
 
-    options=[{'label': col[:35], 'value': col} for col in df.columns]
+    options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
     
@@ -115,7 +112,7 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
     df = get_data(dataset_choice, user_id)
 
-    ## Make sure all variables have a value before moving further
+    # Make sure all variables have a value before moving further
     test_conditions = [xvars, df, dataset_choice, graph_choice_exploration]
     if any(x is None for x in test_conditions):
         return [{}, True]
@@ -132,7 +129,7 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     elif allows_multi and isinstance(yvars, str):
         yvars = [yvars]
 
-
+    # Graph choices
     if graph_choice_exploration == 'line_chart':
         traces = [graphs2d.line_chart(df[xvars], df[yvar], name=yvar)
                   for yvar in yvars]
@@ -183,12 +180,12 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
 
 # Create callbacks for every figure we need saved
-for exported_figure in range(1,3):
+for exported_figure in range(1, 3):
     @app.callback(Output(f"saved_graph_configs{exported_figure}", "figure"),
-                 [Input(f"export_graph{exported_figure}", "n_clicks")],
-                 [State("graph_2d", "figure")])
+                  [Input(f"export_graph{exported_figure}", "n_clicks")],
+                  [State("graph_2d", "figure")])
     def export_graph_callback(n_clicks, figure):
-        if n_clicks is not None and n_clicks>=1:
+        if n_clicks is not None and n_clicks >= 1:
             return figure
         else:
             return {}

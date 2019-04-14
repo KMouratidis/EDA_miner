@@ -7,9 +7,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
-import layouts
 import styles
-from utils import r, create_dropdown, mapping, get_data
+from utils import r, create_dropdown, get_data
 
 import dill
 
@@ -20,8 +19,8 @@ def Pipeline_Options(options, results, user_id):
         # Trim id
         user_id = user_id.split("-")[-1]
 
-    available_pipelines = {k.decode():r.get(k)
-                 for k in r.keys(f'{user_id}_pipeline_*')}
+    available_pipelines = {k.decode(): r.get(k)
+                           for k in r.keys(f'{user_id}_pipeline_*')}
 
     return html.Div(children=[
         # Choose a dataset
@@ -30,14 +29,12 @@ def Pipeline_Options(options, results, user_id):
                  style=styles.dropdown()),
 
         # Choose an algorithm
-        html.Div(create_dropdown("Choose algorithm type",
-                options = [
-                    {'label': f'Pipeline --> {pipe_name}', 'value': pipe_name}
-                    for pipe_name in available_pipelines
-                ], multi=False, id="algo_choice_pipeline"),
+        html.Div(create_dropdown("Choose algorithm type", options=[
+            {'label': f'Pipeline --> {pipe_name}', 'value': pipe_name}
+            for pipe_name in available_pipelines
+        ], multi=False, id="algo_choice_pipeline"),
                  style=styles.dropdown()),
 
-        ## Two empty divs to be filled by callbacks
         # Available choices for fitting
         html.Div(id="variable_choices_pipeline"),
 
@@ -67,11 +64,11 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
 
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
-                                       multi=True, id="xvars_pipeline"),
-                       style=styles.dropdown()),
+                                 multi=True, id="xvars_pipeline"),
+                 style=styles.dropdown()),
         html.Div(create_dropdown("Y variable", options,
-                                       multi=False, id="yvars_pipeline"),
-                       style=styles.dropdown()),
+                                 multi=False, id="yvars_pipeline"),
+                 style=styles.dropdown()),
     ]
 
     return layout
@@ -85,7 +82,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
      State("user_id", "children"),
      State("dataset_choice_pipeline", "value")])
 def fit_regression_model(xvars, yvars, algo_choice_pipeline,
-                  user_id, dataset_choice):
+                         user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
@@ -103,4 +100,6 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
 
     model.fit(df[xvars], df[yvars])
 
-    return [html.H4(f"Pipeline model scored: {model.score(df[xvars], df[yvars])}")]
+    return [
+        html.H4(f"Pipeline model scored: {model.score(df[xvars], df[yvars])}")
+    ]

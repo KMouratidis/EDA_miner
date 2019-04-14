@@ -8,10 +8,7 @@ import dash_html_components as html
 
 from server import app
 import layouts
-import styles
-from utils import r, create_dropdown
 
-import plotly.graph_objs as go
 import visdcc
 import dill
 import dash_daq as daq
@@ -72,14 +69,34 @@ def PDF_report_options(options, results):
 
                 # last four columns of row, (1st subrow)
                 html.Div([
-                        html.P("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                        html.P("Lorem ipsum dolor sit amet, consectetur "
+                               " adipisicing elit, sed do eiusmod tempor "
+                               "incididunt ut labore et dolore magna aliqua. "
+                               " Ut enim ad minim veniam, quis nostrud "
+                               "exercitation ullamco laboris nisi ut aliquip "
+                               "ex ea commodo consequat. Duis aute irure "
+                               "dolor in reprehenderit in voluptate velit "
+                               "esse cillum dolore eu fugiat nulla "
+                               "pariatur. Excepteur sint occaecat cupidatat "
+                               "non proident, sunt in culpa qui officia "
+                               "deserunt mollit anim id est laborum."),
                     ], className="col-sm-4"),
 
                 # second sub-row
                 html.Br(),
                 # first eight columns of row, (1st subrow)
                 html.Div([
-                        html.P("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                        html.P("Lorem ipsum dolor sit amet, consectetur "
+                               "adipisicing elit, sed do eiusmod tempor "
+                               "incididunt ut labore et dolore magna aliqua. "
+                               "Ut enim ad minim veniam, quis nostrud "
+                               "exercitation ullamco laboris nisi ut aliquip "
+                               "ex ea commodo consequat. Duis aute irure "
+                               "dolor in reprehenderit in voluptate velit esse "
+                               " cillum dolore eu fugiat nulla "
+                               "pariatur. Excepteur sint occaecat cupidatat "
+                               "non proident, sunt in culpa qui officia "
+                               "deserunt mollit anim id est laborum."),
                     ], className="col-sm-8"),
 
                 # last four columns of row
@@ -97,8 +114,7 @@ def PDF_report_options(options, results):
             html.Div([
                 html.H4("Nothing in the footer",
                         className="col-sm-12 col_header")
-            ], className="row", style={"backgroundColor":"red"}),
-
+            ], className="row", style={"backgroundColor": "red"}),
         ], className="container", id="printablePDF")
     ])
 
@@ -117,7 +133,7 @@ def PDF_report_options(options, results):
 def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
                     row1col1_text, header_input, row1_header_input):
 
-    if n_clicks is not None and n_clicks>= 1:
+    if n_clicks is not None and n_clicks >= 1:
 
         new_figs = []
         for exported_fig in [exported_figure1, exported_figure2]:
@@ -130,7 +146,6 @@ def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
 
             new_figs.append(new_fig)
 
-
         return [
             new_figs[0],
             new_figs[1],
@@ -138,6 +153,7 @@ def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
             [html.H1(header_input)],
             [html.H3(row1_header_input)]
         ]
+
     else:
         # when dash layout is initially loaded
         return [
@@ -147,4 +163,5 @@ def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
             [dcc.Textarea(id="header_input")],
             [dcc.Textarea(id="row1_header_text")]
         ]
+
 

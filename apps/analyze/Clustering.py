@@ -10,7 +10,7 @@ import dash_daq as daq
 from server import app
 import layouts
 import styles
-from utils import r, create_dropdown, mapping, get_data
+from utils import create_dropdown, mapping, get_data
 from apps.exploration.graphs.graphs2d import scatterplot
 
 import plotly.graph_objs as go
@@ -27,11 +27,10 @@ def Clustering_Options(options, results):
                  style=styles.dropdown()),
 
         # Choose an algorithm
-        html.Div(create_dropdown("Choose algorithm type",
-                options=[
-                    {'label': 'DBSCAN', 'value': 'dbscan'},
-                    {'label': 'K-Means Clustering', 'value': 'kmc'},
-                ], multi=False, id="algo_choice_clustering"),
+        html.Div(create_dropdown("Choose algorithm type", options=[
+            {'label': 'DBSCAN', 'value': 'dbscan'},
+            {'label': 'K-Means Clustering', 'value': 'kmc'},
+        ], multi=False, id="algo_choice_clustering"),
                  style=styles.dropdown()),
 
         ## Two empty divs to be filled by callbacks
@@ -49,6 +48,7 @@ def Clustering_Options(options, results):
         # The results
         html.Div(id="training_results_clustering"),
 
+        # The graph
         dcc.Graph(id="clustering_results"),
     ])
 
@@ -74,11 +74,11 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
 
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
-                                       multi=True, id="xvars_clustering"),
-                       style=styles.dropdown()),
+                                 multi=True, id="xvars_clustering"),
+                 style=styles.dropdown()),
         html.Div(create_dropdown("Target not applicable", options,
-                                       multi=False, id="yvars_clustering"),
-                       style=styles.dropdown()),
+                                 multi=False, id="yvars_clustering"),
+                 style=styles.dropdown()),
     ]
 
     return layout
@@ -94,7 +94,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
      State("user_id", "children"),
      State("dataset_choice_clustering", "value")])
 def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
-                  user_id, dataset_choice):
+                         user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
@@ -123,15 +123,14 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
     if len(xvars) >= 3:
 
         trace1 = go.Scatter3d(x=df[xvars[0]],
-                             y=df[xvars[1]],
-                             z=df[xvars[2]],
-                             showlegend=False,
-                             mode='markers',
-                             marker=dict(
-                                   color=labels.astype(np.float),
-                                   line=dict(color='black', width=1)
-                             )
-        )
+                              y=df[xvars[1]],
+                              z=df[xvars[2]],
+                              showlegend=False,
+                              mode='markers',
+                              marker=dict(
+                                  color=labels.astype(np.float),
+                                  line={'color': 'black', 'width': 1}
+                              ))
 
         layout += [{
             'data': [trace1],
@@ -139,11 +138,10 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
         }]
 
     elif len(xvars) == 2:
-
         trace = scatterplot(df[xvars[0]], df[xvars[1]],
-                            marker = {'color': labels.astype(np.float)})
+                            marker={'color': labels.astype(np.float)})
 
-        layout  += [{
+        layout += [{
             'data': trace,
             'layout': layouts.default_2d(xvars[0], xvars[1])
         }]

@@ -14,12 +14,13 @@ import dash_html_components as html
 # but if they disappear from one view then the callback stops
 # working so they are inserted as hidden in every layout
 debuger_layout = [
-    dcc.Input(id="input1", type="text", value="", style={"display":"none"}),
-    dcc.Input(id="input2", type="text", value="", style={"display":"none"}),
-    dcc.Input(id="input3", type="text", value="", style={"display":"none"}),
-    dcc.Input(id="input4", type="text", value="", style={"display":"none"}),
-    html.Button("Connect!", id="connect_button", style={"display":"none"}),
+    dcc.Input(id="input1", type="text", value="", style={"display": "none"}),
+    dcc.Input(id="input2", type="text", value="", style={"display": "none"}),
+    dcc.Input(id="input3", type="text", value="", style={"display": "none"}),
+    dcc.Input(id="input4", type="text", value="", style={"display": "none"}),
+    html.Button("Connect!", id="connect_button", style={"display": "none"}),
 ]
+
 
 def success_message(api):
     return [
@@ -27,6 +28,7 @@ def success_message(api):
         html.Br(),
         *debuger_layout,
     ]
+
 
 twitter_layout = [
     html.H5("Key"),
@@ -39,7 +41,7 @@ twitter_layout = [
     dcc.Input(id="input4", type="text"),
 
     html.Button("Connect!", id="connect_button",
-                style={"display":"inline"})
+                style={"display": "inline"})
 ]
 
 gsheets_layout = [
@@ -49,11 +51,11 @@ gsheets_layout = [
     dcc.Input(id="input2", type="text"),
 
     # debuggers
-    dcc.Input(id="input3", type="text", style={"display":"none"}),
-    dcc.Input(id="input4", type="text", style={"display":"none"}),
+    dcc.Input(id="input3", type="text", style={"display": "none"}),
+    dcc.Input(id="input4", type="text", style={"display": "none"}),
 
     html.Button("Connect!", id="connect_button",
-                style={"display":"inline"})
+                style={"display": "inline"})
 ]
 
 reddit_layout = [
@@ -63,37 +65,37 @@ reddit_layout = [
     dcc.Input(id="input2", type="text"),
 
     # debuggers
-    dcc.Input(id="input3", type="text", style={"display":"none"}),
-    dcc.Input(id="input4", type="text", style={"display":"none"}),
+    dcc.Input(id="input3", type="text", style={"display": "none"}),
+    dcc.Input(id="input4", type="text", style={"display": "none"}),
 
     html.Button("Connect!", id="connect_button",
-                style={"display":"inline"})
+                style={"display": "inline"})
 ]
 
-quandl_layout  = [
+quandl_layout = [
     html.H5("Quandl key"),
     dcc.Input(id="input1", type="text"),
     html.H5("Quandl tag"),
     dcc.Input(id="input2", type="text"),
 
     # debuggers
-    dcc.Input(id="input3", type="text", style={"display":"none"}),
-    dcc.Input(id="input4", type="text", style={"display":"none"}),
+    dcc.Input(id="input3", type="text", style={"display": "none"}),
+    dcc.Input(id="input4", type="text", style={"display": "none"}),
 
     html.Button("Connect!", id="connect_button",
-                style={"display":"inline"})
+                style={"display": "inline"})
 ]
 
-spotify_layout  = [
+spotify_layout = [
     html.H5("Client id"),
     dcc.Input(id="input1", type="text"),
     html.H5("Client secret"),
     dcc.Input(id="input2", type="text"),
 
     # debuggers
-    dcc.Input(id="input3", type="text", style={"display":"none"}),
-    dcc.Input(id="input4", type="text", style={"display":"none"}),
+    dcc.Input(id="input3", type="text", style={"display": "none"}),
+    dcc.Input(id="input4", type="text", style={"display": "none"}),
 
     html.Button("Connect!", id="connect_button",
-                style={"display":"inline"}),
+                style={"display": "inline"}),
 ]

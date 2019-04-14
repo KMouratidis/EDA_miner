@@ -8,14 +8,11 @@
 """
 
 import numpy as np
-import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import plotly.tools as tls
 import plotly.graph_objs as go
-
-# TODO: add layout parameters
 
 
 ########## Helper functions ##########
@@ -24,10 +21,10 @@ def _simple_scatter(x, y, **params):
     default_options = {
         "opacity": 0.7,
         "marker": {'size': 15,
-                'line': {'width': 0.5,
-                         'color': 'white'}
-            },
-        "mode":"markers",
+                   'line': {'width': 0.5,
+                            'color': 'white'}
+                   },
+        "mode": "markers",
     }
 
     default_options.update(params)
@@ -53,29 +50,32 @@ graph_configs = {
 
 
 ########## Graph functions ##########
-## Functions below here implement the various graphs
-## These should return plotly traces (i.e. lists of `go` objects)
+# Functions below here implement the various graphs
+# These should return plotly traces (i.e. lists of `go` objects)
 
 def scatterplot(x, y, **kwargs):
     return _simple_scatter(x, y, mode="markers", **kwargs)
 
+
 def line_chart(x, y, **kwargs):
     return _simple_scatter(x, y, mode="lines", **kwargs)
+
 
 def histogram(x, **kwargs):
     return go.Histogram(x=x, **kwargs)
 
+
 def heatmap(x, y, **kwargs):
 
-    if not (len(x.shape)>1 and x.shape[1] <2):
+    # Make sure they are in the appropriate shape
+    if not (len(x.shape) > 1 and x.shape[1] < 2):
         x = np.atleast_2d(x).T
-
-    if not (len(y.shape)>1 and y.shape[1] <2):
+    if not (len(y.shape) > 1 and y.shape[1] < 2):
         y = np.atleast_2d(y).T
 
-
-    data = np.concatenate([x,y], 1)
+    data = np.concatenate([x, y], 1)
     return go.Heatmap(z=np.corrcoef(data.T), **kwargs)
+
 
 def bubble_chart(x, y, size, **kwargs):
     marker = dict(size=size,
@@ -83,10 +83,12 @@ def bubble_chart(x, y, size, **kwargs):
                   sizeref=2.*max(size)/(40.**2),
                   sizemin=4)
 
-    return _simple_scatter(x,y, mode="markers", marker=marker, **kwargs)
+    return _simple_scatter(x, y, mode="markers", marker=marker, **kwargs)
+
 
 def filledarea(x, y, **kwargs):
     return _simple_scatter(x, y, mode=None, fill='tonexty', **kwargs)
+
 
 def errorbar(x, y, **kwargs):
     std = np.zeros(y.shape) + y.std()
@@ -99,6 +101,7 @@ def errorbar(x, y, **kwargs):
     )
 
     return _simple_scatter(x, y, mode=None, error_y=error_y, **kwargs)
+
 
 def density2d(x, y, **kwargs):
     marker = {
@@ -121,6 +124,7 @@ def density2d(x, y, **kwargs):
         go.Histogram2dContour(x=x, y=y, **histogram_params),
     ]
 
+
 def pairplot(x):
     size = x.shape[1]
     fig, axes = plt.subplots(size, size)
@@ -129,9 +133,9 @@ def pairplot(x):
         for j in range(size):
             ax = axes[i][j]
             if i == j:
-                ax.hist(x.iloc[:,j])
+                ax.hist(x.iloc[:, j])
             else:
-                ax.scatter(x.iloc[:,i], x.iloc[:,j])
+                ax.scatter(x.iloc[:, i], x.iloc[:, j])
 
     plotly_fig = tls.mpl_to_plotly(fig)
     plt.clf()

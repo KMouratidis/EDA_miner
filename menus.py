@@ -11,8 +11,7 @@ import dash_html_components as html
 
 import dash_table
 
-from server import app
-from utils import mapping, cleanup, r, encode_image
+from utils import encode_image
 
 import uuid
 
@@ -72,7 +71,7 @@ MainMenu = [
     # must be present in the first layout
     html.Div(id="table_container", children=[
         dash_table.DataTable(id='table',),
-    ], style={"display":"none"}),
+    ], style={"display": "none"}),
 
 ]
 
@@ -88,7 +87,7 @@ def serve_layout():
 
     return html.Div(children=[
 
-        html.H2(session_id, id="user_id", style={"display":"none"}),
+        html.H2(session_id, id="user_id", style={"display": "none"}),
 
         # Sidebar / menu
         html.Div(children=SideBar, className="two columns", id="sidebar"),

@@ -11,8 +11,8 @@ import dash_html_components as html
 
 import dash_cytoscape as cyto
 
-from server import app, DEBUG
-from utils import r, create_dropdown
+from server import app
+from utils import r
 from styles import cyto_stylesheet
 from apps.analyze.models import pipeline_creator
 # import custom models
@@ -20,12 +20,9 @@ from apps.analyze.models.pipeline_classes import TwitterAPI, InputFile
 from apps.analyze.models.pipeline_classes import DataCleaner, DataImputater
 from apps.analyze.models.pipeline_classes import CustomClassifer
 
-import re
 import random
 import dill
 from itertools import combinations
-from collections import defaultdict
-import plotly.graph_objs as go
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVR
@@ -70,7 +67,7 @@ ml_options = [
      "parent": "models", "func": XGBClassifier},
 ]
 
-node_options = {options["node_type"]:options
+node_options = {options["node_type"]: options
                 for options in ml_options}
 
 
@@ -142,7 +139,7 @@ class NodeCollection:
     ]
 
     def __init__(self, nodes=[], graph=None):
-        self.node_maxID = {node_type:f"{node_type}_000"
+        self.node_max = {node_type: f"{node_type}_000"
                            for node_type in node_options}
         self.nodes = []
         self.graph = graph
@@ -152,17 +149,17 @@ class NodeCollection:
         # (nodes originally are dictionaries of attributes)
         for n in nodes:
             node = Node(options=n)
-            # keep the maximum id (e.g. 'linr_002')
 
-            self.node_maxID[node.node_type] = max(self.node_maxID[node.node_type],
-                                                  node.id)
+            # keep the maximum id (e.g. 'linr_002')
+            self.node_max[node.node_type] = max(self.node_max[node.node_type],
+                                                   node.id)
 
             self.nodes.append(node)
 
     def add_node(self, node_type):
         # Generate the ID based on previous max
-        maxID = self.node_maxID[node_type]
-        node_id = f"{node_type}_{str(int(maxID[-3:]) + 1).zfill(3)}"
+        max_id = self.node_max[node_type]
+        node_id = f"{node_type}_{str(int(max_id[-3:]) + 1).zfill(3)}"
 
         new_node = Node(node_type=node_type, node_id=node_id)
         self.nodes.append(new_node)
@@ -173,17 +170,16 @@ class NodeCollection:
 
         # Also removed edges that this node is connected to (but don't)
         # reconnect, let the user do it (for now at least)
-        self.graph.edge_collection.edges = [edge
-                                for edge in self.graph.edge_collection.edges
-                                if ((to_be_removed[0].id != edge["data"]["source"]) and
-                                    (to_be_removed[0].id != edge["data"]["target"]))]
-
+        self.graph.edge_collection.edges = [
+            edge for edge in self.graph.edge_collection.edges
+            if ((to_be_removed[0].id != edge["data"]["source"]) and
+                (to_be_removed[0].id != edge["data"]["target"]))]
 
     def render(self):
         return [node.render() for node in self.nodes] + self.parent_nodes
 
 
-class EdgeCollection():
+class EdgeCollection:
     def __init__(self, edges=[], graph=None):
         self.edges = edges
         self.graph = graph
@@ -223,7 +219,7 @@ class Graph:
         edges = [elem for elem in elems if "source" in elem["data"]]
         # Don't add parent nodes, they will be added by default
         nodes = [elem for elem in elems if (("source" not in elem["data"]) and
-                                            ("parent") in elem["data"])]
+                                            ("parent" in elem["data"]))]
 
         self.node_collection = NodeCollection(nodes, self)
         self.edge_collection = EdgeCollection(edges, self)
@@ -246,10 +242,7 @@ class GraphUtils:
         return self.G.render_graph()
 
 
-
-
-
-# Lauout definition for the initial setup
+# Layout definition for the initial setup
 default_steps = [
     (0, "input_file", "Input data"),
     (1, "data_cleaner", "Data cleaning"),
@@ -264,7 +257,7 @@ Model_Builder_Layout = html.Div([
     cyto.Cytoscape(
         id='cytoscape-graph',
         layout={'name': "preset"},
-        style={"width":"95%", "height":"600px"},
+        style={"width": "95%", "height": "600px"},
         elements=initial_graph,
         stylesheet=cyto_stylesheet,
     ),
@@ -279,7 +272,7 @@ Model_Builder_Layout = html.Div([
                                   for elem in initial_graph[:-3]],
                          className="eight columns",
                          id="delete_options"),
-        ], className="three columns", style={"display":"inline-block"}),
+        ], className="three columns", style={"display": "inline-block"}),
 
         html.Div([
             html.Button("Add a new node", id="add_node",
@@ -289,19 +282,19 @@ Model_Builder_Layout = html.Div([
                                   for option in ml_options],
                          className="eight columns",
                          id="ml_options"),
-        ], className="three columns", style={"display":"inline-block"}),
+        ], className="three columns", style={"display": "inline-block"}),
 
         html.Div([
             html.Button("Connect selected nodes",
                         n_clicks_timestamp=0,
                         id="connect_selected_nodes"),
-        ], className="three columns", style={"display":"inline-block"}),
+        ], className="three columns", style={"display": "inline-block"}),
 
         html.Div([
             html.Button("Convert to model",
                         id="convert"),
             html.Div(id="model_specs"),
-        ], className="three columns", style={"display":"inline-block"}),
+        ], className="three columns", style={"display": "inline-block"}),
 
     ], className="row"),
     html.Div(id="inspector"),
@@ -316,9 +309,8 @@ Model_Builder_Layout = html.Div([
                State("ml_options", "value"),
                State("delete_options", "value"),
                State("cytoscape-graph", "selectedNodeData")])
-def removeNode(remove_clicked_time, added_clicked_time,
-                connect_selected_time,
-               elems, add_node_type, to_be_deleted, selected):
+def modify_graph(remove_clicked_time, added_clicked_time, connect_selected_time,
+                 elems, add_node_type, to_be_deleted, selected):
 
     if all(x is None for x in [remove_clicked_time, added_clicked_time,
                                connect_selected_time]):
@@ -336,7 +328,7 @@ def removeNode(remove_clicked_time, added_clicked_time,
         (connect_selected_time, "connect")
     ], reverse=True)
 
-
+    # Graph operations
     if buttons_and_clicks[0][1] == "remove":
         G.node_collection.remove_node(to_be_deleted)
 
@@ -358,12 +350,13 @@ def inspect_node(selected, user_id):
         html.Pre(str(selected))
     ]
 
+
 @app.callback(Output("delete_options", "options"),
               [Input("cytoscape-graph", "elements")],
               [State("user_id", "children")])
 def inspect_node(elements, user_id):
     return [{
-        "value":elem["data"]["id"],
+        "value": elem["data"]["id"],
         "label": elem["data"]["label"]
         } for elem in elements if elem["data"].get("source") is None]
 
@@ -386,10 +379,10 @@ def convert_model(n_clicks, elements, layout, user_id):
         # Keep elements that are either edges (have a source)
         # or elements that have a parent (nodes, not groups)
         elements = [elem for elem in elements if (("source" in elem["data"]) or
-                                                  ("parent") in elem["data"])]
+                                                  ("parent" in elem["data"]))]
 
         pipelines, classifiers = pipeline_creator.create_pipelines(elements,
-                                                        node_options)
+                                                                   node_options)
 
         # Save pipelines to Redis (to be used in other modules)
         for pipe, clf in zip(pipelines, classifiers):

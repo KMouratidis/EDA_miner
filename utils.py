@@ -35,9 +35,10 @@ import tempfile
 
 
 def redis_startup():
-    r = redis.Redis(host="localhost", port=6379, db=0)
+    redis_conn = redis.Redis(host="localhost", port=6379, db=0)
 
-    return r
+    return redis_conn
+
 
 r = redis_startup()
 
@@ -79,6 +80,9 @@ def get_data(api_choice, user_id):
     elif api_choice.startswith("quandl_api"):
         df = pickle.loads(r.get(f"{user_id}_{api_choice}"))
 
+    else:
+        df = None
+
     return df
 
 
@@ -86,7 +90,7 @@ def get_data(api_choice, user_id):
 # create a Redis entry with all `user_id`s that
 # joined the session and cleanup for each of them
 # TODO: Persist data from logged in users
-def cleanup(redisConn):
+def cleanup(redis_conn):
     """
         Clean up after the Dash app exits.
 
@@ -99,7 +103,7 @@ def cleanup(redisConn):
     """
 
     print("Cleaning up...")
-    redisConn.flushdb()
+    redis_conn.flushdb()
 
 
 def hard_cast_to_float(x):
@@ -123,6 +127,7 @@ def pretty_print_tweets(api, n_tweets):
         html.H5(str(tweet.text))
         for tweet in api.GetUserTimeline()[:n_tweets]
     ]
+
 
 def create_table(df, table_id="table"):
 
@@ -191,7 +196,7 @@ def parse_contents(contents, filename, date, user_id):
             # Assume that the user uploaded an excel file
             df = pd.read_excel(io.BytesIO(decoded))
         elif 'json' in filename:
-            # Assume that the user uploaded an excel file
+            # Assume that the user uploaded an json file
             try:
                 df = pd.DataFrame.from_dict(json.loads(decoded.decode('utf-8')))
             except ValueError:
@@ -218,5 +223,5 @@ def parse_contents(contents, filename, date, user_id):
     r.set(f"{user_id}_user_data_{name}", df.to_msgpack(compress='zlib'))
 
     return html.Div([
-        "Data uploaded sucessfully."
+        "Data uploaded successfully."
     ])
