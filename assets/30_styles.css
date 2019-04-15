@@ -1,6 +1,8 @@
 /* (UN)COMMENT IF YOU NEED TO DEBUG LAYOUT */
 .row {
     outline: 1px dashed black;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .js-plotly-plot, .plot-container, #cytoscape-graph {

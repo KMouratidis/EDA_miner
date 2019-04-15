@@ -105,6 +105,11 @@ def cleanup(redis_conn):
     print("Cleaning up...")
     redis_conn.flushdb()
 
+    # Remove user images
+    for img in os.listdir("static/images"):
+        if img.startswith("python_generated_ssid"):
+            os.remove(f"static/images/{img}")
+
 
 def hard_cast_to_float(x):
     try:

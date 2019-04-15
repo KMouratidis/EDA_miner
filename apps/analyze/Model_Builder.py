@@ -18,7 +18,7 @@ from apps.analyze.models import pipeline_creator
 # import custom models
 from apps.analyze.models.pipeline_classes import TwitterAPI, InputFile
 from apps.analyze.models.pipeline_classes import DataCleaner, DataImputater
-from apps.analyze.models.pipeline_classes import CustomClassifer
+from apps.analyze.models.pipeline_classes import CustomClassifier
 
 import random
 import dill
@@ -140,7 +140,7 @@ class NodeCollection:
 
     def __init__(self, nodes=[], graph=None):
         self.node_max = {node_type: f"{node_type}_000"
-                           for node_type in node_options}
+                         for node_type in node_options}
         self.nodes = []
         self.graph = graph
 
@@ -152,7 +152,7 @@ class NodeCollection:
 
             # keep the maximum id (e.g. 'linr_002')
             self.node_max[node.node_type] = max(self.node_max[node.node_type],
-                                                   node.id)
+                                                node.id)
 
             self.nodes.append(node)
 

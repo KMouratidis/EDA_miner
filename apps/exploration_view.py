@@ -13,7 +13,7 @@ import dash_html_components as html
 from server import app
 from utils import r
 from apps.exploration import Exploration_Options, KPI_Options, PDF_report_options
-from apps.exploration import Exploration3D_Options, Network_Options
+from apps.exploration import Exploration3D_Options, Network_Options, TextViz_Options
 from apps.data.View import get_available_choices
 
 
@@ -28,6 +28,8 @@ layout = html.Div(children=[
                     id="graphs3d"),
             dcc.Tab(label='Network graphs', value='networks',
                     id="networks"),
+            dcc.Tab(label='Text visualizations', value='textviz',
+                    id="textviz"),
             dcc.Tab(label='PDF report', value='pdf_report',
                     id="pdf_report"),
         ]),
@@ -58,6 +60,9 @@ def tab_subpages(tab, user_id):
 
     elif tab == "networks":
         return Network_Options(options, results)
+
+    elif tab == "textviz":
+        return TextViz_Options(options, results)
 
     elif tab == "pdf_report":
         return PDF_report_options(options, results)
