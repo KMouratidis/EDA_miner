@@ -25,19 +25,31 @@ import dill
 from itertools import combinations
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import Ridge, Lasso
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.cluster import KMeans, DBSCAN
+from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.cluster import KMeans, DBSCAN, Birch, AgglomerativeClustering
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA, NMF, TruncatedSVD
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.impute import SimpleImputer, MissingIndicator
+from sklearn.naive_bayes import BernoulliNB, GaussianNB, MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
 orders = {
     "input": 0,
     "cleaning": 1,
     "preprocessing": 2,
-    "models": 3,
+    "dim_red": 3,
+    "models": 4,
 }
 
+# TODO: add ensemble models as last-step models (voting, ensembles, etc)
+# DO NOT ADD NEURAL NETWORK MODELS YET
 ml_options = [
     # Inputs
     {"label": "Twitter API", "node_type": "twitter_api",
@@ -48,23 +60,77 @@ ml_options = [
     # Cleaners
     {"label": "Data Cleaner", "node_type": "data_cleaner",
      "parent": "cleaning", "func": DataCleaner},
+    {"label": "Fill missing: impute", "node_type": "simple_missing",
+     "parent": "cleaning", "func": SimpleImputer},
+    {"label": "Fill missing: indicator", "node_type": "ind_missing",
+     "parent": "cleaning", "func": MissingIndicator},
+
     # Preprocessors
     {"label": "Standardization", "node_type": "stdsc",
      "parent": "preprocessing", "func": StandardScaler},
+    {"label": "Bag of Words", "node_type": "bow",
+     "parent": "preprocessing", "func": CountVectorizer},
+    {"label": "TF-IDF", "node_type": "tfidf",
+     "parent": "preprocessing", "func": TfidfVectorizer},
+    {"label": "Min-Max scaling", "node_type": "minmax_scale",
+     "parent": "preprocessing", "func": MinMaxScaler},
+    {"label": "Label Binarizer", "node_type": "lbinarizer",
+     "parent": "preprocessing", "func": LabelBinarizer},
+
+    # Decomposition / Dimensionality reduction
+    {"label": "Principal Component Analysis", "node_type": "pca",
+     "parent": "dim_red", "func": PCA},
+    {"label": "Non-negative Matrix Factorization", "node_type": "nmf",
+     "parent": "dim_red", "func": NMF},
+    {"label": "Truncated SVD", "node_type": "tsvd",
+     "parent": "dim_red", "func": TruncatedSVD},
 
     # models
+    # Regression
     {"label": "Linear Regression", "node_type": "linr",
      "parent": "models", "func": LinearRegression},
-    {"label": "Logistic Regression", "node_type": "logr",
-     "parent": "models", "func": LogisticRegression},
-    {"label": "K-Means Clustering", "node_type": "kmc",
-     "parent": "models", "func": KMeans},
     {"label": "SVM Regression", "node_type": "svr",
      "parent": "models", "func": SVR},
+    {"label": "KNN Regression", "node_type": "knnr",
+     "parent": "models", "func": KNeighborsRegressor},
     {"label": "Decision Tree Regression", "node_type": "dtr",
      "parent": "models", "func": DecisionTreeRegressor},
-    {"label": "XGBoost Regression", "node_type": "xgb",
+    {"label": "Dummy model: regression", "node_type": "dummyreg",
+     "parent": "models", "func": DummyRegressor},
+    {"label": "Random Forests Regression", "node_type": "rfr",
+     "parent": "models", "func": RandomForestRegressor},
+    {"label": "Ridge Regression", "node_type": "ridge",
+     "parent": "models", "func": Ridge},
+    {"label": "Lasso Regression", "node_type": "lasso",
+     "parent": "models", "func": Lasso},
+    # Classification
+    {"label": "Logistic Regression", "node_type": "logr",
+     "parent": "models", "func": LogisticRegression},
+    {"label": "KNN Classifier", "node_type": "knnc",
+     "parent": "models", "func": KNeighborsClassifier},
+    {"label": "XGBoost Classifier", "node_type": "xgb",
      "parent": "models", "func": XGBClassifier},
+    {"label": "Random Forest Classifier", "node_type": "rfc",
+     "parent": "models", "func": RandomForestClassifier},
+    {"label": "Dummy model: classification", "node_type": "dummyclf",
+     "parent": "models", "func": DummyClassifier},
+    # Clustering
+    {"label": "K-Means Clustering", "node_type": "kmc",
+     "parent": "models", "func": KMeans},
+    {"label": "DBSCAN Clustering", "node_type": "dbscan",
+     "parent": "models", "func": DBSCAN},
+    {"label": "Birch Clustering", "node_type": "birch",
+     "parent": "models", "func": Birch},
+    {"label": "Agglomerative Clustering", "node_type": "agglomerative",
+     "parent": "models", "func": AgglomerativeClustering},
+    # Naive Bayes models
+    {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
+     "parent": "models", "func": BernoulliNB},
+    {"label": "Naive Bayes: Gaussian", "node_type": "gauss_nb",
+     "parent": "models", "func": GaussianNB},
+    {"label": "Naive Bayes: Multinomial", "node_type": "multi_nb",
+     "parent": "models", "func": MultinomialNB},
+
 ]
 
 node_options = {options["node_type"]: options
@@ -134,6 +200,8 @@ class NodeCollection:
          'selectable': False},
         {"data": {"label": "Preprocessing", "id": "preprocessing"},
          'selectable': False},
+        {"data": {"label": "Dimensionality Reduction", "id": "dim_red"},
+         'selectable': False},
         {"data": {"label": "Estimators", "id": "models"},
          'selectable': False},
     ]
@@ -166,14 +234,16 @@ class NodeCollection:
 
     def remove_node(self, node_id):
         to_be_removed = [n for n in self.nodes if n.id == node_id]
-        self.nodes.remove(to_be_removed[0])
 
-        # Also removed edges that this node is connected to (but don't)
-        # reconnect, let the user do it (for now at least)
-        self.graph.edge_collection.edges = [
-            edge for edge in self.graph.edge_collection.edges
-            if ((to_be_removed[0].id != edge["data"]["source"]) and
-                (to_be_removed[0].id != edge["data"]["target"]))]
+        if len(to_be_removed):
+            self.nodes.remove(to_be_removed[0])
+
+            # Also removed edges that this node is connected to (but don't)
+            # reconnect, let the user do it (for now at least)
+            self.graph.edge_collection.edges = [
+                edge for edge in self.graph.edge_collection.edges
+                if ((to_be_removed[0].id != edge["data"]["source"]) and
+                    (to_be_removed[0].id != edge["data"]["target"]))]
 
     def render(self):
         return [node.render() for node in self.nodes] + self.parent_nodes
@@ -184,12 +254,16 @@ class EdgeCollection:
         self.edges = edges
         self.graph = graph
 
+    # TODO: This needs a better implementation to allow
+    #       chaining of models in the same step
     def add_edges(self, selected):
 
         for combination in combinations(selected, 2):
             node1 = Node(options=combination[0])
             node2 = Node(options=combination[1])
 
+            # TODO: It is these 3 ifs that need changing.
+            #       We need a new way to define order
             if node1.order == node2.order:
                 continue
 
@@ -247,7 +321,8 @@ default_steps = [
     (0, "input_file", "Input data"),
     (1, "data_cleaner", "Data cleaning"),
     (2, "stdsc", "Standardization"),
-    (3, "linr", "Linear Regression")
+    (3, "nmf", "Non-negative Matrix Factorization"),
+    (4, "linr", "Linear Regression"),
 ]
 
 initial_graph = GraphUtils(default_steps).render_graph()
@@ -269,7 +344,7 @@ Model_Builder_Layout = html.Div([
                         n_clicks_timestamp=0,),
             dcc.Dropdown(options=[{"value": elem["data"]["id"],
                                    "label": elem["data"]["label"]}
-                                  for elem in initial_graph[:-3]],
+                                  for elem in initial_graph[:-4]],
                          className="eight columns",
                          id="delete_options"),
         ], className="three columns", style={"display": "inline-block"}),

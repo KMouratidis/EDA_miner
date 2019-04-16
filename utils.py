@@ -42,7 +42,7 @@ def redis_startup():
 
 r = redis_startup()
 
-
+# TODO: this needs to be replaced by the one in Model_Builder
 mapping = {
     "logr": LogisticRegression,
     "linr": LinearRegression,

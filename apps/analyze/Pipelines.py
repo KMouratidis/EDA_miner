@@ -100,6 +100,7 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
 
     model.fit(df[xvars], df[yvars])
 
+    # TODO: Implement score function for all models, including clustering
     return [
         html.H4(f"Pipeline model scored: {model.score(df[xvars], df[yvars])}")
     ]
