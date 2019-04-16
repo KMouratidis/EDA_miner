@@ -6,12 +6,14 @@
     You should probably not write code here.
 """
 
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
-import dash_table
-
+from server import app
 from utils import encode_image
+
+import dash_table
 
 import uuid
 
@@ -23,7 +25,6 @@ SideBar = [
     html.Img(id="app_logo", src=encode_image("assets/images/y2d.png")),
     html.Br(),
 
-    html.H2("Sidemenu1"),
     html.Button('Dark/Light theme', id="dark_theme"),
 
     # Collapsible button with external links
@@ -45,9 +46,19 @@ SideBar = [
     ]),
 
     # Placeholder for low-level submenus, if needed
-    html.H2("Sidemenu2"),
+    html.H3("Sidemenu2"),
     html.Div(children=[], id="low_level_tabs_submenu")
 ]
+
+
+# When the sidebar button is clicked, collapse the div
+@app.callback(Output('sidebar_collapsible_button', 'style'),
+              [Input('button_collapse', 'n_clicks')],)
+def button_toggle(n_clicks):
+    if n_clicks % 2 == 1:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
 
 
 MainMenu = [

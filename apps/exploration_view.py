@@ -19,7 +19,7 @@ from apps.data.View import get_available_choices
 
 layout = html.Div(children=[
     html.Div(children=[
-        dcc.Tabs(id="viz_tabs", value='exploration', children=[
+        dcc.Tabs(id="level2_tabs", value='exploration', children=[
             dcc.Tab(label='Exploratory analysis', value='exploration',
                     id="exploration"),
             dcc.Tab(label='Key performance indicators', value='kpi',
@@ -39,7 +39,7 @@ layout = html.Div(children=[
 
 
 @app.callback(Output('visuals-content', 'children'),
-              [Input('viz_tabs', 'value')],
+              [Input('level2_tabs', 'value')],
               [State("user_id", "children")])
 def tab_subpages(tab, user_id):
 

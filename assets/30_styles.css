@@ -41,3 +41,16 @@
 #button_collapse>span {
     color: #000;
 }
+
+.mb-3.dropdown {
+    margin-top: 3px !important;
+    margin-bottom: 2px !important;
+}
+
+.dropdown-menu {
+    left: 70% !important;
+}
+
+#add_nodes_submenu, #connect_nodes_submenu, #remove_node_submenu {
+    margin-top: 13px !important;
+}

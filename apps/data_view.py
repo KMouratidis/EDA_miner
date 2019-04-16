@@ -16,7 +16,7 @@ from apps.data import Upload_Options, View_Options, API_Options
 
 layout = html.Div(children=[
     html.Div(children=[
-        dcc.Tabs(id="data_tabs", value='upload_data', children=[
+        dcc.Tabs(id="level2_tabs", value='upload_data', children=[
             dcc.Tab(label='Upload Data', value='upload_data',
                     id="upload_data"),
             dcc.Tab(label='Connect to API', value='api_data',
@@ -30,7 +30,7 @@ layout = html.Div(children=[
 
 
 @app.callback(Output('data-content', 'children'),
-              [Input('data_tabs', 'value')],
+              [Input('level2_tabs', 'value')],
               [State("user_id", "children")])
 def tab_subpages(tab, user_id):
     """

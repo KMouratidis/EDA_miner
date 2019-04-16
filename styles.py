@@ -43,5 +43,20 @@ cyto_stylesheet = [
             'target-arrow-shape': 'triangle',
             'line-color': 'red'
         }
-    }
+    },
+    {
+        "selector": ".parents",
+        "style": {
+            "shape": "rectangle"
+        }
+    },
+    {
+        'selector': '.withimage',
+        'style': {
+            'width': 50,
+            'height': 50,
+            'background-fit': 'cover',
+            'background-image': 'data(url)'
+        }
+    },
 ]

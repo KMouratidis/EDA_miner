@@ -16,6 +16,7 @@ from utils import cleanup, r
 from menus import serve_layout
 from apps import data_view, exploration_view, analyze_view
 from apps.exploration import KPIs
+from apps.analyze import Model_Builder
 
 
 app.layout = html.Div([
@@ -52,21 +53,23 @@ def high_level_tabs(tab):
 
 # Input and Output for the Sidebar, for each lower level tab
 @app.callback(Output('low_level_tabs_submenu', 'children'),
-              [Input('viz_tabs', 'value')])
-def update_sidebar_menus(tab):
-    """
-        For the second level of tabs, show different sidebar menu. Choises are:
-        Baseline Modelling, Built KPIs.
-        This is implemented only for KPI tab
-    """
-    if tab == 'exploration':
-        return [html.H4(f"Tab is {tab}")]
-    elif tab == 'kpi':
-        return KPIs.SideBar_KPIs
-    elif tab == 'graphs3d':
-        return [html.H4(f"Tab is {tab}")]
-    elif tab == 'networks':
-        return [html.H4(f"Tab is {tab}")]
+              [Input('level2_tabs', 'value')])
+def update_sidebar_menus(level2_tabs):
+    """For the second level of tabs, show different sidebar menu."""
+
+    if level2_tabs is not None:
+        if level2_tabs == 'kpi':
+            return KPIs.SideBar_KPIs
+
+        elif level2_tabs == 'model_builder':
+            return Model_Builder.SideBar_modelBuilder
+
+        elif level2_tabs == 'pipelines':
+            return [html.H4(f"Tab is {level2_tabs}")]
+
+        else:
+            return [html.H4(f"Tab is {level2_tabs}")]
+
     else:
         return []
 
@@ -75,19 +78,10 @@ def update_sidebar_menus(tab):
 @app.callback(Output('low_level_tabs_submenu', 'style'),
               [Input('high_level_tabs', 'value')])
 def high_level_tabs(tab):
-    if tab != "EDA":
+    if tab not in ["EDA", "modelling"]:
         return {"display": "none"}
     else:
         return {"display": "inline"}
-
-# When the sidebar button is clicked, collapse the div
-@app.callback(Output('sidebar_collapsible_button', 'style'),
-              [Input('button_collapse', 'n_clicks')],)
-def button_toggle(n_clicks):
-    if n_clicks % 2 == 1:
-        return {'display': 'none'}
-    else:
-        return {'display': 'block'}
 
 
 if __name__ == "__main__":

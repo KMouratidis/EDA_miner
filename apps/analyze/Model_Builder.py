@@ -10,385 +10,128 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 import dash_cytoscape as cyto
+import dash_bootstrap_components as dbc
 
 from server import app
 from utils import r
 from styles import cyto_stylesheet
 from apps.analyze.models import pipeline_creator
-# import custom models
-from apps.analyze.models.pipeline_classes import TwitterAPI, InputFile
-from apps.analyze.models.pipeline_classes import DataCleaner, DataImputater
-from apps.analyze.models.pipeline_classes import CustomClassifier
+from apps.analyze.models.graph_structures import Graph, GraphUtils, orders
+from apps.analyze.models.graph_structures import node_options, ml_options
 
-import random
 import dill
-from itertools import combinations
-from xgboost import XGBClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.linear_model import Ridge, Lasso
-from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.cluster import KMeans, DBSCAN, Birch, AgglomerativeClustering
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA, NMF, TruncatedSVD
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.impute import SimpleImputer, MissingIndicator
-from sklearn.naive_bayes import BernoulliNB, GaussianNB, MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
-orders = {
-    "input": 0,
-    "cleaning": 1,
-    "preprocessing": 2,
-    "dim_red": 3,
-    "models": 4,
-}
-
-# TODO: add ensemble models as last-step models (voting, ensembles, etc)
-# DO NOT ADD NEURAL NETWORK MODELS YET
-ml_options = [
-    # Inputs
-    {"label": "Twitter API", "node_type": "twitter_api",
-     "parent": "input", "func": TwitterAPI},
-    {"label": "Input file", "node_type": "input_file",
-     "parent": "input", "func": InputFile},
-
-    # Cleaners
-    {"label": "Data Cleaner", "node_type": "data_cleaner",
-     "parent": "cleaning", "func": DataCleaner},
-    {"label": "Fill missing: impute", "node_type": "simple_missing",
-     "parent": "cleaning", "func": SimpleImputer},
-    {"label": "Fill missing: indicator", "node_type": "ind_missing",
-     "parent": "cleaning", "func": MissingIndicator},
-
-    # Preprocessors
-    {"label": "Standardization", "node_type": "stdsc",
-     "parent": "preprocessing", "func": StandardScaler},
-    {"label": "Bag of Words", "node_type": "bow",
-     "parent": "preprocessing", "func": CountVectorizer},
-    {"label": "TF-IDF", "node_type": "tfidf",
-     "parent": "preprocessing", "func": TfidfVectorizer},
-    {"label": "Min-Max scaling", "node_type": "minmax_scale",
-     "parent": "preprocessing", "func": MinMaxScaler},
-    {"label": "Label Binarizer", "node_type": "lbinarizer",
-     "parent": "preprocessing", "func": LabelBinarizer},
-
-    # Decomposition / Dimensionality reduction
-    {"label": "Principal Component Analysis", "node_type": "pca",
-     "parent": "dim_red", "func": PCA},
-    {"label": "Non-negative Matrix Factorization", "node_type": "nmf",
-     "parent": "dim_red", "func": NMF},
-    {"label": "Truncated SVD", "node_type": "tsvd",
-     "parent": "dim_red", "func": TruncatedSVD},
-
-    # models
-    # Regression
-    {"label": "Linear Regression", "node_type": "linr",
-     "parent": "models", "func": LinearRegression},
-    {"label": "SVM Regression", "node_type": "svr",
-     "parent": "models", "func": SVR},
-    {"label": "KNN Regression", "node_type": "knnr",
-     "parent": "models", "func": KNeighborsRegressor},
-    {"label": "Decision Tree Regression", "node_type": "dtr",
-     "parent": "models", "func": DecisionTreeRegressor},
-    {"label": "Dummy model: regression", "node_type": "dummyreg",
-     "parent": "models", "func": DummyRegressor},
-    {"label": "Random Forests Regression", "node_type": "rfr",
-     "parent": "models", "func": RandomForestRegressor},
-    {"label": "Ridge Regression", "node_type": "ridge",
-     "parent": "models", "func": Ridge},
-    {"label": "Lasso Regression", "node_type": "lasso",
-     "parent": "models", "func": Lasso},
-    # Classification
-    {"label": "Logistic Regression", "node_type": "logr",
-     "parent": "models", "func": LogisticRegression},
-    {"label": "KNN Classifier", "node_type": "knnc",
-     "parent": "models", "func": KNeighborsClassifier},
-    {"label": "XGBoost Classifier", "node_type": "xgb",
-     "parent": "models", "func": XGBClassifier},
-    {"label": "Random Forest Classifier", "node_type": "rfc",
-     "parent": "models", "func": RandomForestClassifier},
-    {"label": "Dummy model: classification", "node_type": "dummyclf",
-     "parent": "models", "func": DummyClassifier},
-    # Clustering
-    {"label": "K-Means Clustering", "node_type": "kmc",
-     "parent": "models", "func": KMeans},
-    {"label": "DBSCAN Clustering", "node_type": "dbscan",
-     "parent": "models", "func": DBSCAN},
-    {"label": "Birch Clustering", "node_type": "birch",
-     "parent": "models", "func": Birch},
-    {"label": "Agglomerative Clustering", "node_type": "agglomerative",
-     "parent": "models", "func": AgglomerativeClustering},
-    # Naive Bayes models
-    {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
-     "parent": "models", "func": BernoulliNB},
-    {"label": "Naive Bayes: Gaussian", "node_type": "gauss_nb",
-     "parent": "models", "func": GaussianNB},
-    {"label": "Naive Bayes: Multinomial", "node_type": "multi_nb",
-     "parent": "models", "func": MultinomialNB},
-
+# TODO: Add divider for categories with huge lists
+items = [
+    [dbc.DropdownMenuItem(model["label"], id=f"add_{model['node_type']}",
+                          n_clicks_timestamp=0)
+     for model in ml_options
+     if model["parent"] == category]
+    for category in orders
 ]
-
-node_options = {options["node_type"]: options
-                for options in ml_options}
-
-
-class Node:
-    """This class just holds data for nodes, nothing else"""
-    ## TODO: Consider using slots
-
-    def __init__(self, *, options=None, node_type=None, node_id=None):
-        """
-            When called with options={} it expects a dictionary
-            as the ones returned by cytoscape.
-        """
-
-        if (options is None) and (node_type is None):
-            raise ValueError("Provide at least one!")
-        elif (options is not None) and (node_type is not None):
-            raise ValueError("Provide at most one!")
-
-        elif (node_type is not None) and (node_id is not None):
-            # no options given, create a default node
-            options = node_options[node_type]
-            self.id = node_id
-            self.func = options["func"]
-            self.parent = options["parent"]
-
-        elif options is not None:
-            # if the data are nested, get only them
-            options = options.get("data", options)
-            self.id = options["id"]
-            self.func = node_options[options["node_type"]]["func"]
-            self.parent = node_options[options["node_type"]]["parent"]
-
-        else:
-            raise ValueError("Something went wrong, and we need to investigate")
-
-        self.label = options["label"]
-
-        self.node_type = options["node_type"]
-        self.order = orders[self.parent]
-
-        self.options = {"data": {
-                            "label": self.label,
-                            "node_type": self.node_type,
-                            "id": self.id,
-                            "parent": self.parent
-                        },
-                        "position": {
-                            'x': 100 + self.order*200,
-                            'y': 150 + random.randint(-50, 200)
-                        }}
-
-    def render(self):
-        return self.options
-
-
-class NodeCollection:
-
-    # Make them non-selectable so that the user cannot connect
-    # a node to a group directly (might be revised later)
-    parent_nodes = [
-        {"data": {"label": "Inputs", "id": "input"},
-         'selectable': False},
-        {"data": {"label": "Cleaning", "id": "cleaning"},
-         'selectable': False},
-        {"data": {"label": "Preprocessing", "id": "preprocessing"},
-         'selectable': False},
-        {"data": {"label": "Dimensionality Reduction", "id": "dim_red"},
-         'selectable': False},
-        {"data": {"label": "Estimators", "id": "models"},
-         'selectable': False},
-    ]
-
-    def __init__(self, nodes=[], graph=None):
-        self.node_max = {node_type: f"{node_type}_000"
-                         for node_type in node_options}
-        self.nodes = []
-        self.graph = graph
-
-        # If nodes are given, parse them into an internal
-        # representation and increase the relevant counts
-        # (nodes originally are dictionaries of attributes)
-        for n in nodes:
-            node = Node(options=n)
-
-            # keep the maximum id (e.g. 'linr_002')
-            self.node_max[node.node_type] = max(self.node_max[node.node_type],
-                                                node.id)
-
-            self.nodes.append(node)
-
-    def add_node(self, node_type):
-        # Generate the ID based on previous max
-        max_id = self.node_max[node_type]
-        node_id = f"{node_type}_{str(int(max_id[-3:]) + 1).zfill(3)}"
-
-        new_node = Node(node_type=node_type, node_id=node_id)
-        self.nodes.append(new_node)
-
-    def remove_node(self, node_id):
-        to_be_removed = [n for n in self.nodes if n.id == node_id]
-
-        if len(to_be_removed):
-            self.nodes.remove(to_be_removed[0])
-
-            # Also removed edges that this node is connected to (but don't)
-            # reconnect, let the user do it (for now at least)
-            self.graph.edge_collection.edges = [
-                edge for edge in self.graph.edge_collection.edges
-                if ((to_be_removed[0].id != edge["data"]["source"]) and
-                    (to_be_removed[0].id != edge["data"]["target"]))]
-
-    def render(self):
-        return [node.render() for node in self.nodes] + self.parent_nodes
-
-
-class EdgeCollection:
-    def __init__(self, edges=[], graph=None):
-        self.edges = edges
-        self.graph = graph
-
-    # TODO: This needs a better implementation to allow
-    #       chaining of models in the same step
-    def add_edges(self, selected):
-
-        for combination in combinations(selected, 2):
-            node1 = Node(options=combination[0])
-            node2 = Node(options=combination[1])
-
-            # TODO: It is these 3 ifs that need changing.
-            #       We need a new way to define order
-            if node1.order == node2.order:
-                continue
-
-            elif node1.order > node2.order:
-                new_edge = {"data": {
-                    "source": node2.id,
-                    "target": node1.id
-                }}
-
-                self.edges.append(new_edge)
-
-            elif node1.order < node2.order:
-                new_edge = {"data": {
-                    "source": node1.id,
-                    "target": node2.id
-                }}
-
-                self.edges.append(new_edge)
-
-    def render(self):
-        return self.edges
-
-
-class Graph:
-
-    def __init__(self, elems):
-        edges = [elem for elem in elems if "source" in elem["data"]]
-        # Don't add parent nodes, they will be added by default
-        nodes = [elem for elem in elems if (("source" not in elem["data"]) and
-                                            ("parent" in elem["data"]))]
-
-        self.node_collection = NodeCollection(nodes, self)
-        self.edge_collection = EdgeCollection(edges, self)
-
-    def render_graph(self):
-        return self.node_collection.render() + self.edge_collection.render()
-
-
-class GraphUtils:
-    """To be used for default layouts"""
-    def __init__(self, steps):
-        self.G = Graph([])
-        for step in steps:
-            self.G.node_collection.add_node(step[1])
-        for s1, s2 in zip(self.G.node_collection.nodes[:-1],
-                          self.G.node_collection.nodes[1:]):
-            self.G.edge_collection.add_edges([s1.render(), s2.render()])
-
-    def render_graph(self):
-        return self.G.render_graph()
-
 
 # Layout definition for the initial setup
 default_steps = [
     (0, "input_file", "Input data"),
     (1, "data_cleaner", "Data cleaning"),
     (2, "stdsc", "Standardization"),
-    (3, "nmf", "Non-negative Matrix Factorization"),
+    (3, "pca", "Principal Components Analysis"),
     (4, "linr", "Linear Regression"),
 ]
 
 initial_graph = GraphUtils(default_steps).render_graph()
 
 
+SideBar_modelBuilder = [
+
+    # Convert model
+    html.Div([
+        html.Button("Convert to model",
+                    id="convert"),
+    ], id="export_pipe_submenu"),
+
+    # Remove nodes
+    html.Div([
+        html.Button("Remove a node", id="remove_node",
+                    n_clicks_timestamp=0, ),
+        dcc.Dropdown(options=[{"value": elem["data"]["id"],
+                               "label": elem["data"]["label"]}
+                              for elem in initial_graph[:-4]
+                              if "parent" in elem["data"]],
+                     id="delete_options"),
+    ], id="remove_node_submenu"),
+
+    # Connect selected nodes
+    html.Div([
+        html.Button("Connect selected nodes",
+                    n_clicks_timestamp=0,
+                    id="connect_selected_nodes"),
+    ], id="connect_nodes_submenu"),
+
+
+    # Add nodes (collapsible)
+    html.Div([
+        html.Button([
+            html.Span('Add node'),
+            html.I("", className="fa fa-caret-down"),
+        ], id='button_collapse_add_node', n_clicks=0),
+        # Stuff inside the collapsible
+        html.Div(id='sidebar_collapsible_button_add_node', children=[
+            dbc.DropdownMenu(
+                label=f"Category: {category}", children=item,
+                className="mb-3"
+            ) for (category, item) in zip(orders, items)
+        ]),
+    ], id="add_nodes_submenu"),
+]
+
+
 Model_Builder_Layout = html.Div([
     cyto.Cytoscape(
         id='cytoscape-graph',
         layout={'name': "preset"},
-        style={"width": "95%", "height": "600px"},
+        style={"width": "98%", "height": "600px"},
         elements=initial_graph,
         stylesheet=cyto_stylesheet,
     ),
 
-    html.Div(id="output_div", children=[
-
-        html.Div([
-            html.Button("Remove a node", id="remove_node",
-                        n_clicks_timestamp=0,),
-            dcc.Dropdown(options=[{"value": elem["data"]["id"],
-                                   "label": elem["data"]["label"]}
-                                  for elem in initial_graph[:-4]],
-                         className="eight columns",
-                         id="delete_options"),
-        ], className="three columns", style={"display": "inline-block"}),
-
-        html.Div([
-            html.Button("Add a new node", id="add_node",
-                        n_clicks_timestamp=0,),
-            dcc.Dropdown(options=[{"label": option["label"],
-                                   "value": option["node_type"]}
-                                  for option in ml_options],
-                         className="eight columns",
-                         id="ml_options"),
-        ], className="three columns", style={"display": "inline-block"}),
-
-        html.Div([
-            html.Button("Connect selected nodes",
-                        n_clicks_timestamp=0,
-                        id="connect_selected_nodes"),
-        ], className="three columns", style={"display": "inline-block"}),
-
-        html.Div([
-            html.Button("Convert to model",
-                        id="convert"),
-            html.Div(id="model_specs"),
-        ], className="three columns", style={"display": "inline-block"}),
-
-    ], className="row"),
     html.Div(id="inspector"),
+
+    html.Div(id="model_specs"),
 ])
+
+
+# When the sidebar button is clicked, collapse the div
+@app.callback(Output('sidebar_collapsible_button_add_node', 'style'),
+              [Input('button_collapse_add_node', 'n_clicks')],)
+def button_toggle(n_clicks):
+    if n_clicks % 2 == 0:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
 
 
 @app.callback(Output("cytoscape-graph", "elements"),
               [Input("remove_node", "n_clicks_timestamp"),
-               Input("add_node", "n_clicks_timestamp"),
-               Input("connect_selected_nodes", "n_clicks_timestamp")],
+               Input("connect_selected_nodes", "n_clicks_timestamp")]+[
+                  Input(f"add_{node_options[model]['node_type']}",
+                        "n_clicks_timestamp")
+                  for model in node_options
+              ],
               [State("cytoscape-graph", "elements"),
-               State("ml_options", "value"),
                State("delete_options", "value"),
                State("cytoscape-graph", "selectedNodeData")])
-def modify_graph(remove_clicked_time, added_clicked_time, connect_selected_time,
-                 elems, add_node_type, to_be_deleted, selected):
+def modify_graph(remove_clicked_time, connect_selected_time,
+                 *add_nodes):
 
-    if all(x is None for x in [remove_clicked_time, added_clicked_time,
-                               connect_selected_time]):
+    # This is necessary since Python cannot accept *args in the middle
+    # of the function parameter list
+    elems, to_be_deleted, selected = add_nodes[-3:]
+    add_nodes = add_nodes[:-4]
+
+    if all(x is None for x in [remove_clicked_time, connect_selected_time,
+                               *add_nodes]):
         if elems is not None:
             return elems
         else:
@@ -396,22 +139,26 @@ def modify_graph(remove_clicked_time, added_clicked_time, connect_selected_time,
 
     G = Graph(elems)
 
+    # Create list of tuples, e.g.: (time_clicked, add_xgb)
+    add_node_list = [(add_node, f"add_{model}")
+                     for (add_node, model) in zip(add_nodes, node_options)]
+
     # Sort buttons based on clicked time (most recent first)
     buttons_and_clicks = sorted([
         (remove_clicked_time, "remove"),
-        (added_clicked_time, "add"),
-        (connect_selected_time, "connect")
-    ], reverse=True)
+        (connect_selected_time, "connect"),
+    ] + add_node_list, reverse=True)
 
     # Graph operations
     if buttons_and_clicks[0][1] == "remove":
         G.node_collection.remove_node(to_be_deleted)
 
-    elif buttons_and_clicks[0][1] == "add":
-        G.node_collection.add_node(add_node_type)
-
     elif buttons_and_clicks[0][1] == "connect":
         G.edge_collection.add_edges(selected)
+
+    elif buttons_and_clicks[0][1].startswith("add_"):
+        # e.g.: (time_clicked, add_xgb) --> xgb
+        G.node_collection.add_node(buttons_and_clicks[0][1][4:])
 
     return G.render_graph()
 
@@ -433,7 +180,8 @@ def inspect_node(elements, user_id):
     return [{
         "value": elem["data"]["id"],
         "label": elem["data"]["label"]
-        } for elem in elements if elem["data"].get("source") is None]
+        } for elem in elements if (elem["data"].get("source") is None) and
+                                  ("parent" in elem["data"])]
 
 
 @app.callback(Output("model_specs", "children"),
