@@ -35,14 +35,16 @@ orders = {
 ml_options = [
     # Inputs
     {"label": "Twitter API", "node_type": "twitter_api",
-     "parent": "input", "func": TwitterAPI},
+     "parent": "input", "func": TwitterAPI,
+     "url": "https://i.imgur.com/4yTJ3Vm.png"},
     {"label": "Input file", "node_type": "input_file",
-     "parent": "input", "func": InputFile},
+     "parent": "input", "func": InputFile,
+     "url": "https://i.imgur.com/UTmR1OM.png"},
 
     # Cleaners
     {"label": "Data Cleaner", "node_type": "data_cleaner",
      "parent": "cleaning", "func": DataCleaner,
-     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Broom.svg/200px-Broom.svg.png"},
+     "url": "https://i.imgur.com/1zMK4Gp.png"},
     {"label": "Fill missing: impute", "node_type": "simple_missing",
      "parent": "cleaning", "func": SimpleImputer},
     {"label": "Fill missing: indicator", "node_type": "ind_missing",
@@ -72,41 +74,51 @@ ml_options = [
     # Regression
     {"label": "Linear Regression", "node_type": "linr",
      "parent": "models", "func": LinearRegression,
-     "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Linear_regression.svg/200px-Linear_regression.svg.png"},
+     "url": "https://i.imgur.com/654kGq8.png"},
     {"label": "SVM Regression", "node_type": "svr",
-     "parent": "models", "func": SVR},
+     "parent": "models", "func": SVR,
+     "url": "https://i.imgur.com/gIUtwdA.png"},
     {"label": "KNN Regression", "node_type": "knnr",
      "parent": "models", "func": KNeighborsRegressor},
     {"label": "Decision Tree Regression", "node_type": "dtr",
-     "parent": "models", "func": DecisionTreeRegressor},
+     "parent": "models", "func": DecisionTreeRegressor,
+     "url": "https://i.imgur.com/RVFhsHi.png"},
     {"label": "Dummy model: regression", "node_type": "dummyreg",
      "parent": "models", "func": DummyRegressor},
     {"label": "Random Forests Regression", "node_type": "rfr",
-     "parent": "models", "func": RandomForestRegressor},
+     "parent": "models", "func": RandomForestRegressor,
+     "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Ridge Regression", "node_type": "ridge",
-     "parent": "models", "func": Ridge},
+     "parent": "models", "func": Ridge,
+     "url": "https://i.imgur.com/Fq5f2JR.png"},
     {"label": "Lasso Regression", "node_type": "lasso",
      "parent": "models", "func": Lasso},
     # Classification
     {"label": "Logistic Regression", "node_type": "logr",
-     "parent": "models", "func": LogisticRegression},
+     "parent": "models", "func": LogisticRegression,
+     "url": "https://i.imgur.com/y2iOi2A.png"},
     {"label": "KNN Classifier", "node_type": "knnc",
-     "parent": "models", "func": KNeighborsClassifier},
+     "parent": "models", "func": KNeighborsClassifier,
+     "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "XGBoost Classifier", "node_type": "xgb",
-     "parent": "models", "func": XGBClassifier},
+     "parent": "models", "func": XGBClassifier,
+     "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Random Forest Classifier", "node_type": "rfc",
-     "parent": "models", "func": RandomForestClassifier},
+     "parent": "models", "func": RandomForestClassifier,
+     "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Dummy model: classification", "node_type": "dummyclf",
      "parent": "models", "func": DummyClassifier},
     # Clustering
     {"label": "K-Means Clustering", "node_type": "kmc",
-     "parent": "models", "func": KMeans},
+     "parent": "models", "func": KMeans,
+     "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "DBSCAN Clustering", "node_type": "dbscan",
      "parent": "models", "func": DBSCAN},
     {"label": "Birch Clustering", "node_type": "birch",
      "parent": "models", "func": Birch},
     {"label": "Agglomerative Clustering", "node_type": "agglomerative",
-     "parent": "models", "func": AgglomerativeClustering},
+     "parent": "models", "func": AgglomerativeClustering,
+     "url": "https://i.imgur.com/Ac6VaNo.png"},
     # Naive Bayes models
     {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
      "parent": "models", "func": BernoulliNB},
@@ -153,7 +165,7 @@ class Node:
             raise ValueError("Something went wrong, and we need to investigate")
 
         self.url = node_options[options["node_type"]].get("url",
-                        "https://lh3.googleusercontent.com/lRUKBMe6NXaKbXifj6lL3IFml1gqgY8etG2ylMC5OoVVHllgAh-_NXVca182gvoXN4U")
+                                            "https://i.imgur.com/hhSthEf.png")
 
         self.label = options["label"]
 

@@ -39,9 +39,9 @@ cyto_stylesheet = [
         "selector": "edge",
         "style": {
             'curve-style': 'bezier',
-            'target-arrow-color': 'red',
+            'target-arrow-color': 'black',
             'target-arrow-shape': 'triangle',
-            'line-color': 'red'
+            'line-color': 'black'
         }
     },
     {
