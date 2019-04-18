@@ -16,23 +16,25 @@ Just looking around? Then:
 
 <br>
 
-### Example of the Analyze & Predict Tab:
-
-![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/FittingModels.png)
-
 ### Example of Model Builder
 
 ![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/ModelBuilder.png)
-
-### Example of previewing data:
-
-![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Preview_Data.png)
 
 ### Example of the Explore & Visualize Tab:
 
 ![Interface options 2](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Baseline.png)
 
+### Example of the Analyze & Predict Tab:
+
+![Interface options 3](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/FittingModels.png)
+
 ### Example of the Connecting to an API:
 
 ![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/API_connect.png)
 
+### Example of PDF report generation
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/PDF_Reports.png)
+
+### Example of previewing data:
+
+![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Preview_Data.png)
