@@ -4,6 +4,9 @@ from apps.analyze.models.pipeline_classes import DataCleaner, DataImputater
 from apps.analyze.models.pipeline_classes import CustomClassifier
 
 import random
+import numpy as np
+import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout
 from itertools import combinations
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
@@ -79,7 +82,8 @@ ml_options = [
      "parent": "models", "func": SVR,
      "url": "https://i.imgur.com/gIUtwdA.png"},
     {"label": "KNN Regression", "node_type": "knnr",
-     "parent": "models", "func": KNeighborsRegressor},
+     "parent": "models", "func": KNeighborsRegressor,
+     "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "Decision Tree Regression", "node_type": "dtr",
      "parent": "models", "func": DecisionTreeRegressor,
      "url": "https://i.imgur.com/RVFhsHi.png"},
@@ -301,6 +305,50 @@ class Graph:
         self.edge_collection = EdgeCollection(edges, self)
 
     def render_graph(self):
+
+        # TODO: find a better way to estimate positions
+        # Convert to networkx so we can use its functionality
+        # for determining positions
+        nx_graph = nx.DiGraph()
+        for node in self.node_collection.nodes:
+            nx_graph.add_node(node.id)
+        for edge in self.edge_collection.edges:
+            nx_graph.add_edge(edge["data"]["source"], edge["data"]["target"])
+
+        # We then use it to get min/max values.
+        # The intended use to use it for more, but
+        # it seems to be causing many overlaps
+        positions = graphviz_layout(nx_graph)
+        x_values, y_values = zip(*positions.values())
+        x_max = max(x_values)
+        x_min = min(x_values)
+
+        # A dictionary that holds value counts of elements sharing
+        # the same level / parent
+        Ys = {}
+        # linspace for how many different parents exist
+        n_levels = 5
+        widths = np.linspace(20, 800, n_levels + 1)
+        for node in self.node_collection.nodes:
+            # the horizontal position depends only
+            # on which is the parent
+            x = widths[node.order]
+
+            # the vertical position depends only
+            # on how many elements share the same parent
+            Ys[node.order] = Ys.get(node.order, 0) + 1
+            y = (n_levels - Ys[node.order]) * (x_max - x_min)
+
+            # for every second parent make all elements go
+            # a bit higher to avoid arrows to pass through
+            # unconnected nodes
+            if node.order % 2 == 0:
+                y += 50
+
+            # this fix is necessary due to our viewport
+            node.options["position"] = {"x": x * 2,
+                                        "y": y / 2}
+
         return self.node_collection.render() + self.edge_collection.render()
 
 
