@@ -24,12 +24,37 @@ li>a {
     /* list-style-type: disc; */
 }
 
-#sidebar {
+#sidebar, #sidebar2 {
     max-width: 185px;
+    min-width: 185px;
 }
 
-#sidebar, #main_page, #mainmenu {
+#sidebar, #sidebar2, #main_page, #mainmenu {
     padding-top: 10px;
+}
+
+
+@media only screen and (max-width: 3050px) {
+    #main_page, #mainmenu {
+        max-width: 75%;
+    }
+}
+
+@media only screen and (max-width: 1550px) {
+    #main_page, #mainmenu {
+        max-width: 65%;
+    }
+}
+
+
+#sidebar, #sidebar2 {
+    padding: 0px;
+}
+
+#sidebar {
+    margin-top: 10px;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 #dark_theme, #external_links_caret {

@@ -45,8 +45,12 @@ SideBar = [
         ])
     ]),
 
+
+]
+
+SideBar2 = [
     # Placeholder for low-level submenus, if needed
-    html.H3("Sidemenu2"),
+    html.H3("Tab menu"),
     html.Div(children=[], id="low_level_tabs_submenu")
 ]
 
@@ -100,11 +104,23 @@ def serve_layout():
 
         html.H2(session_id, id="user_id", style={"display": "none"}),
 
-        # Sidebar / menu
-        html.Div(children=SideBar, className="two columns", id="sidebar"),
 
-        # main Div
-        html.Div(children=MainMenu, className="nine columns", id="mainmenu"),
+        html.Div([
+            # Sidebar / menu
+            html.Div(children=SideBar, className="col-sm-2 ml-auto", id="sidebar",
+                     style={"display": "inline-block"}),
 
-    ], className="row",
+            # main Div
+            html.Div(children=MainMenu, className="col-sm-9 ml-auto",
+                     id="mainmenu",
+                     style={"display": "inline-block"}),
+
+            # Sidebar / menu
+            html.Div(children=SideBar2, className="col-sm-1 ml-auto", id="sidebar2",
+                     style={"display": "inline-block"}),
+
+        ], className="row")
+
+
+    ], className="container",
                     id="main_page")
