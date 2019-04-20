@@ -89,6 +89,9 @@ if __name__ == "__main__":
     # create a Redis entry with all `user_id`s that
     # joined the session and cleanup for each of them
 
+    # TODO: Consider making this an executable
+    #       https://community.plot.ly/t/convert-dash-to-executable-file-exe/14222
+
     try:
         app.run_server(debug=True, host='0.0.0.0')
 

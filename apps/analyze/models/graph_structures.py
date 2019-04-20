@@ -1,28 +1,11 @@
 # import custom models
-from apps.analyze.models.pipeline_classes import TwitterAPI, InputFile
-from apps.analyze.models.pipeline_classes import DataCleaner, DataImputater
-from apps.analyze.models.pipeline_classes import CustomClassifier
+from apps.analyze.models import pipeline_classes
 
 import random
 import numpy as np
 import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout
 from itertools import combinations
-from xgboost import XGBClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.linear_model import Ridge, Lasso
-from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.cluster import KMeans, DBSCAN, Birch, AgglomerativeClustering
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA, NMF, TruncatedSVD
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.impute import SimpleImputer, MissingIndicator
-from sklearn.naive_bayes import BernoulliNB, GaussianNB, MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
 orders = {
@@ -38,98 +21,98 @@ orders = {
 ml_options = [
     # Inputs
     {"label": "Twitter API", "node_type": "twitter_api",
-     "parent": "input", "func": TwitterAPI,
+     "parent": "input", "func": pipeline_classes.TwitterAPI,
      "url": "https://i.imgur.com/4yTJ3Vm.png"},
     {"label": "Input file", "node_type": "input_file",
-     "parent": "input", "func": InputFile,
+     "parent": "input", "func": pipeline_classes.InputFile,
      "url": "https://i.imgur.com/UTmR1OM.png"},
 
     # Cleaners
     {"label": "Data Cleaner", "node_type": "data_cleaner",
-     "parent": "cleaning", "func": DataCleaner,
+     "parent": "cleaning", "func": pipeline_classes.DataCleaner,
      "url": "https://i.imgur.com/1zMK4Gp.png"},
     {"label": "Fill missing: impute", "node_type": "simple_missing",
-     "parent": "cleaning", "func": SimpleImputer},
+     "parent": "cleaning", "func": pipeline_classes.SimpleImputer},
     {"label": "Fill missing: indicator", "node_type": "ind_missing",
-     "parent": "cleaning", "func": MissingIndicator},
+     "parent": "cleaning", "func": pipeline_classes.MissingIndicator},
 
     # Preprocessors
     {"label": "Standardization", "node_type": "stdsc",
-     "parent": "preprocessing", "func": StandardScaler},
+     "parent": "preprocessing", "func": pipeline_classes.StandardScaler},
     {"label": "Bag of Words", "node_type": "bow",
-     "parent": "preprocessing", "func": CountVectorizer},
+     "parent": "preprocessing", "func": pipeline_classes.CountVectorizer},
     {"label": "TF-IDF", "node_type": "tfidf",
-     "parent": "preprocessing", "func": TfidfVectorizer},
+     "parent": "preprocessing", "func": pipeline_classes.TfidfVectorizer},
     {"label": "Min-Max scaling", "node_type": "minmax_scale",
-     "parent": "preprocessing", "func": MinMaxScaler},
+     "parent": "preprocessing", "func": pipeline_classes.MinMaxScaler},
     {"label": "Label Binarizer", "node_type": "lbinarizer",
-     "parent": "preprocessing", "func": LabelBinarizer},
+     "parent": "preprocessing", "func": pipeline_classes.LabelBinarizer},
 
     # Decomposition / Dimensionality reduction
     {"label": "Principal Component Analysis", "node_type": "pca",
-     "parent": "dim_red", "func": PCA},
+     "parent": "dim_red", "func": pipeline_classes.PCA},
     {"label": "Non-negative Matrix Factorization", "node_type": "nmf",
-     "parent": "dim_red", "func": NMF},
+     "parent": "dim_red", "func": pipeline_classes.NMF},
     {"label": "Truncated SVD", "node_type": "tsvd",
-     "parent": "dim_red", "func": TruncatedSVD},
+     "parent": "dim_red", "func": pipeline_classes.TruncatedSVD},
 
     # models
     # Regression
     {"label": "Linear Regression", "node_type": "linr",
-     "parent": "models", "func": LinearRegression,
+     "parent": "models", "func": pipeline_classes.LinearRegression,
      "url": "https://i.imgur.com/654kGq8.png"},
     {"label": "SVM Regression", "node_type": "svr",
-     "parent": "models", "func": SVR,
+     "parent": "models", "func": pipeline_classes.SVR,
      "url": "https://i.imgur.com/gIUtwdA.png"},
     {"label": "KNN Regression", "node_type": "knnr",
-     "parent": "models", "func": KNeighborsRegressor,
+     "parent": "models", "func": pipeline_classes.KNeighborsRegressor,
      "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "Decision Tree Regression", "node_type": "dtr",
-     "parent": "models", "func": DecisionTreeRegressor,
+     "parent": "models", "func": pipeline_classes.DecisionTreeRegressor,
      "url": "https://i.imgur.com/RVFhsHi.png"},
     {"label": "Dummy model: regression", "node_type": "dummyreg",
-     "parent": "models", "func": DummyRegressor},
+     "parent": "models", "func": pipeline_classes.DummyRegressor},
     {"label": "Random Forests Regression", "node_type": "rfr",
-     "parent": "models", "func": RandomForestRegressor,
+     "parent": "models", "func": pipeline_classes.RandomForestRegressor,
      "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Ridge Regression", "node_type": "ridge",
-     "parent": "models", "func": Ridge,
+     "parent": "models", "func": pipeline_classes.Ridge,
      "url": "https://i.imgur.com/Fq5f2JR.png"},
     {"label": "Lasso Regression", "node_type": "lasso",
-     "parent": "models", "func": Lasso},
+     "parent": "models", "func": pipeline_classes.Lasso},
     # Classification
     {"label": "Logistic Regression", "node_type": "logr",
-     "parent": "models", "func": LogisticRegression,
+     "parent": "models", "func": pipeline_classes.LogisticRegression,
      "url": "https://i.imgur.com/y2iOi2A.png"},
     {"label": "KNN Classifier", "node_type": "knnc",
-     "parent": "models", "func": KNeighborsClassifier,
+     "parent": "models", "func": pipeline_classes.KNeighborsClassifier,
      "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "XGBoost Classifier", "node_type": "xgb",
-     "parent": "models", "func": XGBClassifier,
+     "parent": "models", "func": pipeline_classes.XGBClassifier,
      "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Random Forest Classifier", "node_type": "rfc",
-     "parent": "models", "func": RandomForestClassifier,
+     "parent": "models", "func": pipeline_classes.RandomForestClassifier,
      "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Dummy model: classification", "node_type": "dummyclf",
-     "parent": "models", "func": DummyClassifier},
+     "parent": "models", "func": pipeline_classes.DummyClassifier},
     # Clustering
     {"label": "K-Means Clustering", "node_type": "kmc",
-     "parent": "models", "func": KMeans,
+     "parent": "models", "func": pipeline_classes.KMeans,
      "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "DBSCAN Clustering", "node_type": "dbscan",
-     "parent": "models", "func": DBSCAN},
+     "parent": "models", "func": pipeline_classes.DBSCAN},
     {"label": "Birch Clustering", "node_type": "birch",
-     "parent": "models", "func": Birch},
+     "parent": "models", "func": pipeline_classes.Birch},
     {"label": "Agglomerative Clustering", "node_type": "agglomerative",
-     "parent": "models", "func": AgglomerativeClustering,
+     "parent": "models", "func": pipeline_classes.AgglomerativeClustering,
      "url": "https://i.imgur.com/Ac6VaNo.png"},
     # Naive Bayes models
     {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
-     "parent": "models", "func": BernoulliNB},
+     "parent": "models", "func": pipeline_classes.BernoulliNB},
     {"label": "Naive Bayes: Gaussian", "node_type": "gauss_nb",
-     "parent": "models", "func": GaussianNB},
+     "parent": "models", "func": pipeline_classes.GaussianNB},
     {"label": "Naive Bayes: Multinomial", "node_type": "multi_nb",
-     "parent": "models", "func": MultinomialNB},
+     "parent": "models", "func": pipeline_classes.MultinomialNB},
 
 ]
 
@@ -183,6 +166,7 @@ class Node:
                 "id": self.id,
                 "parent": self.parent,
                 "url": self.url,
+                "func_params": {}
             },
             "position": {
                 'x': 100 + self.order * 250,

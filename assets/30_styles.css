@@ -48,9 +48,10 @@
 }
 
 .dropdown-menu {
-    left: 70% !important;
+    width: 270px !important;
+    left: -160px !important;
 }
 
-#add_nodes_submenu, #connect_nodes_submenu, #remove_node_submenu {
+#add_nodes_submenu, #connect_nodes_submenu, #remove_node_submenu, #modify_nodes_submenu {
     margin-top: 13px !important;
 }

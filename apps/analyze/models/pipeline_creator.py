@@ -3,11 +3,7 @@
 """
 
 import networkx as nx
-import matplotlib.pyplot as plt
-import numpy as np
-
 from sklearn.pipeline import Pipeline, FeatureUnion
-import json
 
 
 def _traverse_graph(curr_node, G, mapper):
@@ -50,7 +46,7 @@ def create_pipelines(data, node_options):
             terminal_nodes.append(node["data"]["id"])
 
         node_info = node_options[node["data"]["node_type"]]
-        mapper[node["data"]["id"]] = node_info["func"]()
+        mapper[node["data"]["id"]] = node_info["func"](**node["data"]["func_params"])
 
     for edge in edges:
         G.add_edge(edge["data"]["source"], edge["data"]["target"])

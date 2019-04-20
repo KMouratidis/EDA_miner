@@ -14,7 +14,7 @@ import dash_cytoscape as cyto
 import dash_bootstrap_components as dbc
 
 from server import app
-from utils import r
+from utils import r, create_dropdown
 from styles import cyto_stylesheet
 from apps.analyze.models import pipeline_creator
 from apps.analyze.models.graph_structures import Graph, GraphUtils, orders
@@ -42,6 +42,19 @@ default_steps = [
 ]
 
 initial_graph = GraphUtils(default_steps).render_graph()
+
+
+Model_Builder_Layout = html.Div([
+    cyto.Cytoscape(
+        id='cytoscape-graph',
+        layout={'name': "preset"},
+        style={"width": "98%", "height": "600px"},
+        elements=initial_graph,
+        stylesheet=cyto_stylesheet,
+    ),
+
+    html.Div(id="model_specs"),
+])
 
 
 SideBar_modelBuilder = [
@@ -85,24 +98,41 @@ SideBar_modelBuilder = [
             ) for (category, item) in zip(orders, items)
         ]),
     ], id="add_nodes_submenu"),
+
+
+    # Modify nodes (collapsible)
+    html.Div([
+        html.Button([
+            html.Span('Node options'),
+            html.I("", className="fa fa-caret-down"),
+        ], id='button_collapse_modify_node', n_clicks=0),
+        # Stuff inside the collapsible
+        html.Div(id='sidebar_collapsible_button_modify_node', children=[
+            html.Div(id="inspector", children=[
+                html.Div([
+                    *create_dropdown("Options", [
+                        {"label": "No node selected", "value": "none"}
+                    ], id="modify_option_dropdown"),
+                    dcc.RadioItems(options=[
+                        {"label": "No node selected", "value": "none"}
+                    ], id="modify_node_params",
+                       labelStyle={
+                           'display': 'inline-block',
+                           'margin': '5px'
+                       }
+                    )
+                ])
+            ]),
+            html.Button("Update node", id="modify_node", n_clicks=0,
+                        n_clicks_timestamp=0),
+        ]),
+    ], id="modify_nodes_submenu"),
+
+
 ]
 
 
-Model_Builder_Layout = html.Div([
-    cyto.Cytoscape(
-        id='cytoscape-graph',
-        layout={'name': "preset"},
-        style={"width": "98%", "height": "600px"},
-        elements=initial_graph,
-        stylesheet=cyto_stylesheet,
-    ),
-
-    html.Div(id="inspector"),
-
-    html.Div(id="model_specs"),
-])
-
-
+# TODO: These two callbacks can probably be condensed in a loop or combined
 # When the sidebar button is clicked, collapse the div
 @app.callback(Output('sidebar_collapsible_button_add_node', 'style'),
               [Input('button_collapse_add_node', 'n_clicks')],)
@@ -113,27 +143,46 @@ def button_toggle(n_clicks):
     else:
         return {'display': 'block'}
 
+# Same as above
+@app.callback(Output('sidebar_collapsible_button_modify_node', 'style'),
+              [Input('button_collapse_modify_node', 'n_clicks')])
+def button_toggle(n_clicks):
+    if n_clicks is not None and n_clicks % 2 == 1:
+        # Start with the menu open
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
+
 
 @app.callback(Output("cytoscape-graph", "elements"),
               [Input("remove_node", "n_clicks_timestamp"),
-               Input("connect_selected_nodes", "n_clicks_timestamp")]+[
+               Input("connect_selected_nodes", "n_clicks_timestamp"),
+               Input("modify_node", "n_clicks_timestamp")]+[
                   Input(f"add_{node_options[model]['node_type']}",
                         "n_clicks_timestamp")
                   for model in node_options
               ],
               [State("cytoscape-graph", "elements"),
                State("delete_options", "value"),
-               State("cytoscape-graph", "selectedNodeData")])
+               State("cytoscape-graph", "selectedNodeData"),
+               State("modify_option_dropdown", "value"),
+               State("modify_node_params", "value"),
+               State("cytoscape-graph", "tapNodeData")])
 def modify_graph(remove_clicked_time, connect_selected_time,
-                 *add_nodes):
+                 modify_node_time, *add_nodes):
 
     # This is necessary since Python cannot accept *args in the middle
-    # of the function parameter list
-    elems, to_be_deleted, selected = add_nodes[-3:]
-    add_nodes = add_nodes[:-4]
+    # of the function parameter list. The tapped node is used only for
+    # altering parameters on the last-clicked node, while the selected
+    # is used for connecting nodes. The modify_node_attribute refers to
+    # the dropdown (sklearn kwarg) and modify_node_params is the value
+    (elems, to_be_deleted, selected, modify_node_attribute,
+            modify_node_params, tapped) = add_nodes[-6:]
+
+    add_nodes = add_nodes[:-6]
 
     if all(x is None for x in [remove_clicked_time, connect_selected_time,
-                               *add_nodes]):
+                               modify_node_time, *add_nodes]):
         if elems is not None:
             return elems
         else:
@@ -149,6 +198,7 @@ def modify_graph(remove_clicked_time, connect_selected_time,
     buttons_and_clicks = sorted([
         (remove_clicked_time, "remove"),
         (connect_selected_time, "connect"),
+        (modify_node_time, "modify")
     ] + add_node_list, reverse=True)
 
     # Graph operations
@@ -162,11 +212,20 @@ def modify_graph(remove_clicked_time, connect_selected_time,
         # e.g.: (time_clicked, add_xgb) --> xgb
         G.node_collection.add_node(buttons_and_clicks[0][1][4:])
 
+    elif buttons_and_clicks[0][1] == "modify":
+        if tapped is not None:
+            for node in G.node_collection.nodes:
+                # iterate over all the nodes to find the appropriate one
+                # TODO: The fact that is is necessary means that `Graph`
+                #       should implement a __get__ method (or w/e it is)
+                if node.id == tapped["id"]:
+                    node.options["data"]["func_params"].update({modify_node_attribute: modify_node_params})
+
     return G.render_graph()
 
 
 @app.callback(Output("inspector", "children"),
-              [Input("cytoscape-graph", "mouseoverNodeData")],
+              [Input("cytoscape-graph", "tapNodeData")],
               [State("user_id", "children")])
 def inspect_node(selected, user_id):
 
@@ -175,9 +234,56 @@ def inspect_node(selected, user_id):
         # they are there just for show
         raise PreventUpdate()
 
+    if len(selected):
+        func = node_options[selected["node_type"]]["func"]
+        arguments = list(func.modifiable_params.keys())
+
     return [
-        html.Br(),
-        html.Pre(str(selected))
+        html.Div([
+            *create_dropdown("Options", [
+                {"label": arg, "value": arg}
+                for arg in arguments
+            ], id="modify_option_dropdown"),
+            dcc.RadioItems(options=[
+                {"label": "No node selected", "value": "none"}
+            ], id="modify_node_params",
+               labelStyle={
+                   'display': 'inline-block',
+                   'margin': '5px'
+               })
+        ]),
+    ]
+
+
+
+def stringify(val):
+    # Since some values are either bool or none
+    # we need to explicitly convert them
+    if val is None:
+        return "None"
+    elif val is True:
+        return "True"
+    elif val is False:
+        return "False"
+    else:
+        return str(val)
+
+@app.callback(Output("modify_node_params", "options"),
+              [Input("modify_option_dropdown", "value")],
+              [State("cytoscape-graph", "tapNodeData")])
+def update_radio_buttons_modify_params(value, selected):
+
+    if selected is None or value is None:
+        return [
+            {"label": "No node selected", "value": "none"}
+        ]
+
+    if len(selected):
+        func = node_options[selected["node_type"]]["func"]
+
+    return [
+        {"label": stringify(val), "value": val}
+        for val in func.modifiable_params[value]
     ]
 
 
@@ -219,5 +325,7 @@ def convert_model(n_clicks, elements, layout, user_id):
         for pipe, clf in zip(pipelines, classifiers):
             r.set(f"{user_id}_pipeline_{clf}", dill.dumps(pipe))
 
+        # TODO: Make this a modal
+        #       https://dash-bootstrap-components.opensource.faculty.ai/l/components/modal
         return [html.P(f"{i+1}) {str(pipeline)}")
                 for (i, pipeline) in enumerate(pipelines)]
