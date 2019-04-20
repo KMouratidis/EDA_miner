@@ -20,6 +20,7 @@ def _traverse_graph(curr_node, G, mapper):
             ("union", FeatureUnion([
                 (f"name_{name}", _traverse_graph(name, G, mapper))
                 for name in parents
+                if name in mapper
             ])),
             (curr_node, mapper[curr_node])
         ])

@@ -8,6 +8,7 @@
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 import dash_cytoscape as cyto
 import dash_bootstrap_components as dbc
@@ -106,7 +107,8 @@ Model_Builder_Layout = html.Div([
 @app.callback(Output('sidebar_collapsible_button_add_node', 'style'),
               [Input('button_collapse_add_node', 'n_clicks')],)
 def button_toggle(n_clicks):
-    if n_clicks % 2 == 0:
+    if n_clicks is not None and n_clicks % 2 == 1:
+        # Start with the menu open
         return {'display': 'none'}
     else:
         return {'display': 'block'}
@@ -167,6 +169,12 @@ def modify_graph(remove_clicked_time, connect_selected_time,
               [Input("cytoscape-graph", "mouseoverNodeData")],
               [State("user_id", "children")])
 def inspect_node(selected, user_id):
+
+    if selected is None or "parent" not in selected:
+        # No need to show info for parent nodes as
+        # they are there just for show
+        raise PreventUpdate()
+
     return [
         html.Br(),
         html.Pre(str(selected))
@@ -211,4 +219,5 @@ def convert_model(n_clicks, elements, layout, user_id):
         for pipe, clf in zip(pipelines, classifiers):
             r.set(f"{user_id}_pipeline_{clf}", dill.dumps(pipe))
 
-        return [html.P(str(pipeline)) for pipeline in pipelines]
+        return [html.P(f"{i+1}) {str(pipeline)}")
+                for (i, pipeline) in enumerate(pipelines)]
