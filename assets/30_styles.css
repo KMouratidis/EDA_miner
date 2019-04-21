@@ -52,10 +52,67 @@
     left: -160px !important;
 }
 
-#add_nodes_submenu, #connect_nodes_submenu, #remove_node_submenu, #modify_nodes_submenu {
+#add_nodes_submenu, #connect_nodes_submenu,
+#remove_node_submenu, #modify_nodes_submenu {
     margin-top: 13px !important;
 }
 
 #modal {
     min-width: 600px !important;
+}
+
+#upload_data_button {
+    width: 30%;
+    height: 60px;
+    line-height: 60px;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+}
+
+#wordcloud_img {
+    height: 500px;
+    width: 700px;
+}
+
+#text_area {
+    height: 300px;
+    width: 300px;
+}
+
+#text_area, #make_wordcloud {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+
+.vertical_dropdowns {
+    display: block;
+    margin: 10px;
+    vertical-align: bottom;
+}
+
+.horizontal_dropdowns {
+    display: inline-block;
+    margin: 10px;
+    vertical-align: bottom;
+    width: 30%;
+}
+
+#export_graph1, #export_graph1 {
+    display: inline-block;
+}
+
+.export_graphs_card {
+    display: inline-block;
+}
+
+.export_graphs_card>.card-body {
+    padding: 1%;
+}
+
+.card-body>button {
+    margin: 1%;
 }

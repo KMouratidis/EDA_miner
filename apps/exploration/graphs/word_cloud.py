@@ -1,8 +1,9 @@
 from wordcloud import WordCloud
 
 
-def create_wordcloud(text, user_id, *, background_color="white", additional_stopwords=[],
-                  max_words=2000, save=False, ret=True, **kwargs):
+def create_wordcloud(text, user_id, *, background_color="white",
+                     additional_stopwords=[], max_words=2000,
+                     save=False, ret=True, **kwargs):
 
     wc = WordCloud(width=700,
                    height=500,

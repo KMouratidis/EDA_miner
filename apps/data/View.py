@@ -14,7 +14,6 @@ import dash_table
 import dash_bootstrap_components as dbc
 
 from server import app
-import styles
 from utils import r, pretty_print_tweets, create_table, get_data
 
 import pickle
@@ -62,13 +61,13 @@ def View_Options(user_id):
     options, results = get_available_choices(r, user_id)
     available_choices = html.Div(dcc.Dropdown(options=options,
                                               id="api_choice"),
-                                 style=styles.dropdown())
+                                 className="horizontal_dropdown")
 
     return [
         html.Br(),
         available_choices,
 
-        dcc.Input(id="dataset_name", style={"display":"none"}),
+        dcc.Input(id="dataset_name", style={"display": "none"}),
 
         html.Div(id="table_view", children=[
             dash_table.DataTable(id='table'),

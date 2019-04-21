@@ -15,31 +15,23 @@ def TextViz_Options(options, results):
     return html.Div(children=[
 
         html.Div([
-
             html.Div([
-                dcc.Textarea(id="text_area",
-                             rows="100",
-                             cols="25"),
+                dcc.Textarea(id="text_area"),
                 html.Button("Create wordcloud", id="make_wordcloud"),
-            ], className="three columns offset-by-one.column"),
-
+            ], className="three columns"),
 
             html.Div([
                 # The graph itself
-                html.Img(id='returned_image',
-                         src=encode_image("default_wordcloud.png"),
-                         height=500,
-                         width=700),
+                html.Img(id='wordcloud_img',
+                         src=encode_image("default_wordcloud.png")),
             ], className="seven columns")
-
         ], className="row"),
-
     ])
 
 
 
 @app.callback(
-    Output("returned_image", "src"),
+    Output("wordcloud_img", "src"),
     [Input("make_wordcloud", "n_clicks")],
     [State("text_area", "value"),
      State("user_id", "children")])

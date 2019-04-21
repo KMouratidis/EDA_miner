@@ -1,14 +1,12 @@
 """
     To be implemented.
 """
-import dash
+
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
 
 from server import app
-import layouts
-import styles
 from utils import create_dropdown, get_data
 
 
@@ -18,14 +16,14 @@ def Econometrics_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_econometrics"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
             {'label': 'Econ1', 'value': 'econ1'},
             {'label': 'Econ2', 'value': 'econ2'},
         ], multi=False, id="algo_choice_econometrics"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -59,10 +57,10 @@ def render_variable_choices_econometrics(dataset_choice,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_econometrics"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
         html.Div(create_dropdown("Target not applicable", options,
                                  multi=False, id="yvars_econometrics"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
     ]
 
     return layout

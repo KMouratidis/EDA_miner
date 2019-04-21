@@ -11,9 +11,10 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
+import dash_bootstrap_components as dbc
+
 from server import app
 import layouts
-import styles
 from utils import create_dropdown
 from apps.data.View import get_data
 from apps.exploration.graphs import graphs2d
@@ -28,7 +29,7 @@ def Exploration_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_2d"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdowns"),
 
         # Choose a graph
         html.Div(create_dropdown("Choose graph type", options=[
@@ -43,29 +44,50 @@ def Exploration_Options(options, results):
             {'label': '2D Density Plot', 'value': 'density2d'},
             {'label': 'PairPlot (matplotlib)', 'value': 'pairplot'},
         ], multi=False, id="graph_choice_exploration"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdowns"),
 
-        # Export graph config
-        html.Div([
-            html.Button("Export graph config 1", id="export_graph1"),
-            html.Button("Export graph config 2", id="export_graph2"),
-        ], style=styles.dropdown()),
+
 
         # Available buttons and choices for plotting
         html.Div(id="variable_choices_2d", children=[
             html.Div(create_dropdown("X variable", options=[],
                                      multi=False, id="xvars_2d"),
-                     style=styles.dropdown()),
+                     className="horizontal_dropdowns"),
 
             html.Div(create_dropdown("Y variable", options=[],
                                      multi=False,
                                      id="yvars_2d"),
-                     style=styles.dropdown()),
+                     className="horizontal_dropdowns"),
         ]),
 
         # The graph itself
         dcc.Graph(id="graph_2d"),
     ])
+
+
+Graphs_Export = [
+    # Export graph config
+    dbc.Card([
+        dbc.CardHeader("Export graphs"),
+        dbc.CardBody([
+            dbc.Button("Export graph config 1", id="export_graph1",
+                       color="dark", n_clicks_timestamp=0),
+            dbc.Button("Export graph config 2", id="export_graph2",
+                       color="dark", n_clicks_timestamp=0),
+        ]),
+    ], className="export_graphs_card"),
+
+
+    dbc.Modal([
+        dbc.ModalHeader("Graph exports:"),
+        dbc.ModalBody("Nothing exported yet", id="modal_export_text"),
+        dbc.ModalFooter(
+            dbc.Button("Close", id="close_export_graph", className="ml-auto")
+        )
+    ], id="modal_export_graph"),
+]
+
+Sidebar = []
 
 
 @app.callback([Output("xvars_2d", "options"),
@@ -179,13 +201,37 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     }, not needs_yvar]
 
 
+@app.callback([Output("modal_export_graph", "is_open"),
+               Output("modal_export_text", "children")],
+              [Input("close_export_graph", "n_clicks")]+[
+               Input(f"export_graph{exported_figure}", "n_clicks_timestamp")
+               for exported_figure in range(1, 3)],
+              [State("modal_export_graph", "is_open"),
+               State("graph_2d", "figure")])
+def toggle_modal(close, *args):
+    graph1, graph2, is_open, figure = args
+
+    # TODO: Maybe return a better message?
+    if close or graph1 or graph2:
+        if graph1 > graph2 and figure:
+            text = "Exported configurations as graph 1"
+        elif graph2 > graph1 and figure:
+            text = "Exported configurations as graph 2"
+        else:
+            text = "Nothing exported yet"
+
+        return [not is_open, text]
+
+    return [is_open, "Nothing exported yet."]
+
+
 # Create callbacks for every figure we need saved
 for exported_figure in range(1, 3):
     @app.callback(Output(f"saved_graph_configs{exported_figure}", "figure"),
                   [Input(f"export_graph{exported_figure}", "n_clicks")],
                   [State("graph_2d", "figure")])
     def export_graph_callback(n_clicks, figure):
-        if n_clicks is not None and n_clicks >= 1:
+        if (n_clicks is not None) and (n_clicks >= 1) and (figure is not None):
             return figure
         else:
             return {}

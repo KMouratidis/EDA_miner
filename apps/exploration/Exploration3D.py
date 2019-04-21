@@ -13,9 +13,11 @@ import dash_html_components as html
 
 from server import app
 import layouts
-import styles
 from utils import create_dropdown, get_data
 from apps.exploration.graphs import graphs3d
+
+
+Sidebar = []
 
 
 def Exploration3D_Options(options, results):
@@ -26,13 +28,13 @@ def Exploration3D_Options(options, results):
             # Choose a dataset
             html.Div(create_dropdown("Available datasets", options,
                                      multi=False, id="dataset_choice_3d"),
-                     style=styles.dropdown(horizontal=False)),
+                     className="vertical_dropdowns"),
 
             # Available buttons and choices for plotting
             html.Div(id="variable_choices_3d", children=[
                 html.Div(create_dropdown(f"{dim} variable", options=[],
                                          multi=False, id=f"{dim}vars_3d"),
-                         style=styles.dropdown(horizontal=False))
+                         className="vertical_dropdowns")
                 for dim in ["x", "y", "z"]]),
 
             # Export graph config
@@ -40,7 +42,7 @@ def Exploration3D_Options(options, results):
                 html.Br(),
                 html.Button("Export graph config 1", id="export_graph1"),
                 html.Button("Export graph config 2", id="export_graph2"),
-            ], style=styles.dropdown(horizontal=False)),
+            ], className="vertical_dropdowns"),
 
         ], className="col-sm-4"),
 

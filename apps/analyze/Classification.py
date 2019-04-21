@@ -8,7 +8,6 @@ import dash_html_components as html
 
 from server import app
 import layouts
-import styles
 from utils import r, create_dropdown, mapping, get_data
 from apps.exploration.graphs.graphs2d import scatterplot
 
@@ -22,14 +21,14 @@ def Classification_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_classification"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
             {'label': 'Logistic Regression', 'value': 'logr'},
             {'label': 'XGBoost', 'value': 'xgb'},
         ], multi=False, id="algo_choice_classification"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -64,10 +63,10 @@ def render_variable_choices_classification(dataset_choice,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_classification"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
         html.Div(create_dropdown("Y variable", options,
                                  multi=False, id="yvars_classification"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdown"),
     ]
 
     return layout

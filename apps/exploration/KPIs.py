@@ -14,12 +14,11 @@ import dash_html_components as html
 
 from server import app
 import layouts
-import styles
 from utils import create_dropdown, get_data
 from apps.exploration.graphs import kpis
 
 
-SideBar_KPIs = [
+Sidebar = [
     ]
 
 
@@ -29,24 +28,24 @@ def KPI_Options(options, results):
 
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_kpi"),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdowns"),
 
-        # TODO: use this for graph selection
+        # TODO: use this for kpi/graph selection ?
         html.Div(create_dropdown("Choose graph type", options,
                                  multi=False, id="graph_choice_kpi",
                                  disabled=True),
-                 style=styles.dropdown()),
+                 className="horizontal_dropdowns"),
 
         html.Div(id="variable_choices_kpi", children=[
             html.Div(create_dropdown("X variables", options=[],
                                      multi=False, id="xvars_kpi"),
-                     style=styles.dropdown()),
+                     className="horizontal_dropdowns"),
             html.Div(create_dropdown("Y variable", options=[],
                                      multi=True, id="yvars_kpi"),
-                     style=styles.dropdown()),
+                     className="horizontal_dropdowns"),
             html.Div(create_dropdown("Bar Chart variable", options=[],
                                      multi=False, id="secondary_yvars_kpi"),
-                     style=styles.dropdown()),
+                     className="horizontal_dropdowns"),
         ]),
 
         dcc.Graph(id="graph_kpi"),

@@ -15,7 +15,7 @@ from server import app
 from utils import cleanup, r
 from menus import serve_layout
 from apps import data_view, exploration_view, analyze_view
-from apps.exploration import KPIs
+from apps.exploration import Exploration, KPIs, Exploration3D
 from apps.analyze import Model_Builder
 
 
@@ -59,7 +59,13 @@ def update_sidebar_menus(level2_tabs):
 
     if level2_tabs is not None:
         if level2_tabs == 'kpi':
-            return KPIs.SideBar_KPIs
+            return Exploration.Graphs_Export + KPIs.Sidebar
+
+        elif level2_tabs == "exploration":
+            return Exploration.Graphs_Export + Exploration.Sidebar
+
+        elif level2_tabs == "graphs3d":
+            return Exploration.Graphs_Export + Exploration3D.Sidebar
 
         elif level2_tabs == 'model_builder':
             return Model_Builder.SideBar_modelBuilder

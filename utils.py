@@ -181,7 +181,7 @@ def create_table(df, table_id="table"):
 
 
 # TODO: this function needs to be reviewed because
-# it doesn't work correctly on error (i.e. returns a Div).
+#       it doesn't work correctly on error (i.e. returns a Div).
 def parse_contents(contents, filename, date, user_id):
     """
         After decoding the uploaded file, handle any
