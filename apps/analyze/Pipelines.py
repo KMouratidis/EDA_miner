@@ -25,14 +25,14 @@ def Pipeline_Options(options, results, user_id):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_pipeline"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
             {'label': f'Pipeline --> {pipe_name}', 'value': pipe_name}
             for pipe_name in available_pipelines
         ], multi=False, id="algo_choice_pipeline"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         # Available choices for fitting
         html.Div(id="variable_choices_pipeline"),
@@ -64,10 +64,10 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_pipeline"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
         html.Div(create_dropdown("Y variable", options,
                                  multi=False, id="yvars_pipeline"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
     ]
 
     return layout

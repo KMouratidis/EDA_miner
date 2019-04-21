@@ -61,7 +61,7 @@ def View_Options(user_id):
     options, results = get_available_choices(r, user_id)
     available_choices = html.Div(dcc.Dropdown(options=options,
                                               id="api_choice"),
-                                 className="horizontal_dropdown")
+                                 className="horizontal_dropdowns")
 
     return [
         html.Br(),

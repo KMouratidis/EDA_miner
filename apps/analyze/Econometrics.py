@@ -16,14 +16,14 @@ def Econometrics_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_econometrics"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
             {'label': 'Econ1', 'value': 'econ1'},
             {'label': 'Econ2', 'value': 'econ2'},
         ], multi=False, id="algo_choice_econometrics"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -57,10 +57,10 @@ def render_variable_choices_econometrics(dataset_choice,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_econometrics"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
         html.Div(create_dropdown("Target not applicable", options,
                                  multi=False, id="yvars_econometrics"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
     ]
 
     return layout

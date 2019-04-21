@@ -23,14 +23,14 @@ def Clustering_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_clustering"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
             {'label': 'DBSCAN', 'value': 'dbscan'},
             {'label': 'K-Means Clustering', 'value': 'kmc'},
         ], multi=False, id="algo_choice_clustering"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -74,10 +74,10 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_clustering"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
         html.Div(create_dropdown("Target not applicable", options,
                                  multi=False, id="yvars_clustering"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
     ]
 
     return layout

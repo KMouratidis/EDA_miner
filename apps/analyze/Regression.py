@@ -16,7 +16,7 @@ def Regression_Options(options, results):
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
                                  multi=False, id="dataset_choice_regression"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
 
         # Choose an algorithm
         html.Div(create_dropdown("Choose algorithm type", options=[
@@ -24,7 +24,7 @@ def Regression_Options(options, results):
             {'label': 'SVM Regression', 'value': 'svr'},
             {'label': 'Decision Tree Regression', 'value': 'dtr'}
         ], multi=False, id="algo_choice_regression"),
-         className="horizontal_dropdown"),
+         className="horizontal_dropdowns"),
 
         ## Two empty divs to be filled by callbacks
         # Available choices for fitting
@@ -57,10 +57,10 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
     layout = [
         html.Div(create_dropdown("X variable(s)", options,
                                  multi=True, id="xvars_regression"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
         html.Div(create_dropdown("Y variable", options,
                                  multi=False, id="yvars_regression"),
-                 className="horizontal_dropdown"),
+                 className="horizontal_dropdowns"),
     ]
 
     return layout

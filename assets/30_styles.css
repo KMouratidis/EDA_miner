@@ -57,7 +57,7 @@
     margin-top: 13px !important;
 }
 
-#modal {
+#modal, #modal_export_graph {
     min-width: 600px !important;
 }
 
