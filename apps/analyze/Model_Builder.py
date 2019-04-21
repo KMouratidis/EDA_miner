@@ -53,7 +53,15 @@ Model_Builder_Layout = html.Div([
         stylesheet=cyto_stylesheet,
     ),
 
-    html.Div(id="model_specs"),
+
+    dbc.Modal([
+        dbc.ModalHeader("Pipelines exported:"),
+        dbc.ModalBody("No pipeline exported.", id="model_specs"),
+        dbc.ModalFooter(
+            dbc.Button("Close", id="close", className="ml-auto")
+        ),
+    ], id="modal"),
+
 ])
 
 
@@ -123,8 +131,18 @@ SideBar_modelBuilder = [
                     )
                 ])
             ]),
+
+
             html.Button("Update node", id="modify_node", n_clicks=0,
                         n_clicks_timestamp=0),
+            dbc.Modal([
+                dbc.ModalHeader("Model update:"),
+                dbc.ModalBody("Model parameters were successfully updated."),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close2", className="ml-auto")
+                ),
+            ], id="modal2"),
+
         ]),
     ], id="modify_nodes_submenu"),
 
@@ -255,6 +273,17 @@ def inspect_node(selected, user_id):
     ]
 
 
+@app.callback(
+    Output("modal2", "is_open"),
+    [Input("modify_node", "n_clicks"),
+     Input("close2", "n_clicks")],
+    [State("modal2", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
 
 def stringify(val):
     # Since some values are either bool or none
@@ -298,19 +327,22 @@ def inspect_node(elements, user_id):
                                   ("parent" in elem["data"])]
 
 
-@app.callback(Output("model_specs", "children"),
-              [Input("convert", "n_clicks")],
+@app.callback([Output("modal", "is_open"),
+               Output("model_specs", "children")],
+              [Input("convert", "n_clicks"),
+               Input("close", "n_clicks")],
               [State("cytoscape-graph", "elements"),
                State("cytoscape-graph", "stylesheet"),
-               State("user_id", "children")])
-def convert_model(n_clicks, elements, layout, user_id):
+               State("user_id", "children"),
+               State("modal", "is_open")])
+def convert_model(n_clicks, close, elements, layout, user_id, is_open):
 
     if user_id.startswith("python_generated_ssid"):
         # Trim id
         user_id = user_id.split("-")[-1]
 
     if n_clicks is None:
-        return [html.H5("No specs defined yet")]
+        return [False, [html.H5("No specs defined yet")]]
 
     else:
         # Keep elements that are either edges (have a source)
@@ -327,5 +359,5 @@ def convert_model(n_clicks, elements, layout, user_id):
 
         # TODO: Make this a modal
         #       https://dash-bootstrap-components.opensource.faculty.ai/l/components/modal
-        return [html.P(f"{i+1}) {str(pipeline)}")
-                for (i, pipeline) in enumerate(pipelines)]
+        return [not is_open, [html.P(f"{i+1}) {str(pipeline)}")
+                for (i, pipeline) in enumerate(pipelines)]]

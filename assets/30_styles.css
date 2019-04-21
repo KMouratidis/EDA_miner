@@ -55,3 +55,7 @@
 #add_nodes_submenu, #connect_nodes_submenu, #remove_node_submenu, #modify_nodes_submenu {
     margin-top: 13px !important;
 }
+
+#modal {
+    min-width: 600px !important;
+}
