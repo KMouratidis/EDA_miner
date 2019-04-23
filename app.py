@@ -1,9 +1,19 @@
 """
-    The main app is here. It takes the base menus from menus.py
-    and puts them in the app.layout, then defines callbacks
-    and finally has the if-name-main block necessary to run the app.
+The main app is here. It takes the base menus from menus.py
+and puts them in the app.layout, then defines callbacks
+and finally has the if-name-main block necessary to run the app.
 
-    You should probably not write code here.
+Dash callbacks:
+    - high_level_tabs: On high-level tab selection, render
+                       the appropriate layout.
+    - update_sidebar_menus: For the second level of tabs, show
+                            different sidebar menu.
+
+Notes to others:
+    You should probably not write code here, unless:
+        - working on side-menus,
+        - working on login system,
+        - adding a new-high-level tab, or other new feature.
 """
 
 
@@ -35,11 +45,7 @@ app.layout = html.Div([
 @app.callback(Output('selected_subpage', 'children'),
               [Input('high_level_tabs', 'value')])
 def high_level_tabs(tab):
-    """
-        For the first level of tabs, decide which submenu to
-        return. Choices are: Data View, Exploratory Data Analysis
-        and Modelling.
-    """
+    """On high-level tab selection, render the appropriate layout."""
 
     if tab == 'EDA':
         return exploration_view.layout
@@ -78,16 +84,6 @@ def update_sidebar_menus(level2_tabs):
 
     else:
         return []
-
-
-# Hide/display sidebar submenu
-@app.callback(Output('low_level_tabs_submenu', 'style'),
-              [Input('high_level_tabs', 'value')])
-def high_level_tabs(tab):
-    if tab not in ["EDA", "modelling"]:
-        return {"display": "none"}
-    else:
-        return {"display": "inline"}
 
 
 if __name__ == "__main__":

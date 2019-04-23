@@ -1,8 +1,16 @@
 """
-    This module is only here because of the Dash app spanning multiple files.
-    General configurations of the underlying app and server go here.
+This module is only here because of the Dash app spanning multiple files.
+General configurations of the underlying app and server go here as well.
 
-    DO NOT MODIFY WITHOUT PERSMISSION!
+Global Variables:
+    - server: The underlying Flask server, probably needed only for
+              deployment.
+    - app: The Dash server, imported everywhere that a dash callback
+           needs to be defined.
+
+Notes to others:
+    DO NOT MODIFY WITHOUT PERMISSION! These settings should rarely be
+    tampered with, if at all.
 """
 
 from dash import Dash
@@ -11,7 +19,6 @@ from dash import Dash
 DEBUG = True
 external_stylesheets = ["https://use.fontawesome.com/releases/v5.8.1/css/all.css",
                         "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"]
-
 
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -23,6 +30,7 @@ app.config['suppress_callback_exceptions'] = True
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
+# This is what the rendered html will look like
 app.index_string = '''
 <!DOCTYPE html>
 <html>

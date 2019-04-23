@@ -17,8 +17,6 @@ from server import app
 from utils import r, create_dropdown
 from apps.data.View import get_data
 
-import plotly.graph_objs as go
-import numpy as np
 from itertools import chain
 
 

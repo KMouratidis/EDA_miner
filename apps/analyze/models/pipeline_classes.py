@@ -64,7 +64,7 @@ class CustomClassifier(BaseEstimator, ClassifierMixin):
         return np.ones(X.shape[0])
 
 
-# For EVERY model that is expected to have parameterization
+# For EVERY model that is expected to have parametrization
 # you are expected to give its class a `modifiable_params`
 # dict with keys being the function argument and values the
 # allowed set of values (make it limited, i.e. few choices)

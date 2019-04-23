@@ -1,9 +1,30 @@
 """
-    This module will collect all unchanging views and dash
-    components (buttons, sidemenus, etc) so that the code
-    in index.py is cleaner and abstracted.
+This module will collect all unchanging views and dash components
+(buttons, sidemenus, etc) so that the code in index.py is cleaner
+and abstracted.
 
-    You should probably not write code here.
+Menus defined:
+    - SideBar: The left sidebar, meant to house the logo, and
+               a few extra buttons for non-app functionality.
+    - MainMenu: The high-level tabs, and two placeholders for the
+                low-level tabs plus a `dash_table.DataTable`.
+    - SideBar: The right sidebar, meant to be used for elements
+               that interact with the important parts of dash and
+               providing any interactivity, customization, and
+               other options.
+
+Functions:
+    - serve_layout: The layout of our app. Defined in a function
+                    so as to generate different `session_id`s.
+
+Dash callbacks:
+    - button_toggle: On click show/hide the external links.
+
+Notes to others:
+    You should probably not write code here, unless you're:
+        - adding a new button, external link, or similar to the sidebar,
+        - creating a login functionality,
+        - adding a new top-level menu tab, or other new feature.
 """
 
 from dash.dependencies import Input, Output, State
@@ -48,23 +69,6 @@ SideBar = [
 
 ]
 
-SideBar2 = [
-    # Placeholder for low-level submenus, if needed
-    html.H3("Tab menu"),
-    html.Div(children=[], id="low_level_tabs_submenu")
-]
-
-
-# When the sidebar button is clicked, collapse the div
-@app.callback(Output('sidebar_collapsible_button', 'style'),
-              [Input('button_collapse', 'n_clicks')],)
-def button_toggle(n_clicks):
-    if n_clicks % 2 == 1:
-        return {'display': 'none'}
-    else:
-        return {'display': 'block'}
-
-
 MainMenu = [
 
     # Tabs, level-1
@@ -90,12 +94,38 @@ MainMenu = [
 
 ]
 
+SideBar2 = [
+    # Placeholder for low-level submenus, if needed
+    html.H3("Tab menu"),
+    html.Div(children=[], id="low_level_tabs_submenu")
+]
+
+
+# When the sidebar button is clicked, collapse the div
+@app.callback(Output('sidebar_collapsible_button', 'style'),
+              [Input('button_collapse', 'n_clicks')],)
+def button_toggle(n_clicks):
+    """
+    On click show/hide the external links.
+
+    Args:
+        n_clicks: int, number of times the button was clicked.
+
+    Returns:
+        A style dict modifying the display CSS attribute.
+    """
+
+    if n_clicks % 2 == 1:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
+
 
 def serve_layout():
     """
-        The layout of our app needs to be inside a function
-        so that every time some new session starts a new
-        session_id is generated.
+    The layout of our app needs to be inside a function
+    so that every time some new session starts a new
+    session_id is generated.
     """
 
     session_id = f"python_generated_ssid_{uuid.uuid4()}"
