@@ -1,9 +1,16 @@
 """
-    This module takes care of the menu and choices provided when the
-    "Analyze & Predict" level-1 tab is selected.
+This module takes care of the menu and choices provided when the
+"Analyze & Predict" high-level tab is selected.
 
-    You should probably not write code here, UNLESS you are defining
-    a new level-2 tab.
+Dash callbacks:
+    - tab_subpages: Given the low-level tab choice, render the
+                    appropriate view.
+
+Notes to others:
+    You should probably not write code here, unless you are defining
+    a new level-2 tab. Here you can find functionality to define or
+    train ML / NN models. Implementations go to their own modules
+    down the package hierarchy, in `apps.analyze`.
 """
 
 from dash.dependencies import Input, Output, State
@@ -45,15 +52,21 @@ layout = html.Div(children=[
               [State("user_id", "children")])
 def tab_subpages(tab, user_id):
     """
-        This callback is called when a level two tab
-        is selected in the analysis menu. Accordingly,
-        it returns an interface to provide further
-        specifications for the model.
+    Given the low-level tab choice, render the appropriate view.
+
+    Args:
+        tab (str): the low-level tab.
+        user_id (str): the user/session uid.
+
+    Returns:
+        A list of HTML-dash components, usually within a div.
     """
 
-    options, results = get_available_choices(r, user_id)
-
     # Check whether the user has uploaded data
+    # TODO: This check for data existence might be slow.
+    #       It would be good to test/review and improve it.
+    #       Same as in `exploration_view.py` !
+    options, results = get_available_choices(r, user_id)
     if all(v is None for k, v in results.items()):
         return html.H4("No data currently uploaded")
 

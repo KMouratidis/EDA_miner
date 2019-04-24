@@ -33,7 +33,7 @@ def default_2d(xvars, yvars):
         yvars: str, title of the y-axis.
 
     Returns:
-        `go.Layout` instance.
+        A `go.Layout` instance.
     """
 
     if isinstance(yvars, list):
@@ -58,7 +58,7 @@ def default_3d(xvars, yvars, zvars):
         zvars: str, currently not used.
 
     Returns:
-        `go.Layout` instance.
+        A `go.Layout` instance.
 
     Todo:
         This needs a better implementation
@@ -76,7 +76,7 @@ def default_kpi(xvars, yvars):
         yvars: str, title of the y-axis.
 
     Returns:
-        `go.Layout` instance.
+        A `go.Layout` instance.
 
     Todo:
         This might need a better implementation

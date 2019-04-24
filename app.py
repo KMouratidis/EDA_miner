@@ -57,7 +57,6 @@ def high_level_tabs(tab):
         return '404'
 
 
-# Input and Output for the Sidebar, for each lower level tab
 @app.callback(Output('low_level_tabs_submenu', 'children'),
               [Input('level2_tabs', 'value')])
 def update_sidebar_menus(level2_tabs):
@@ -88,8 +87,8 @@ def update_sidebar_menus(level2_tabs):
 
 if __name__ == "__main__":
     # TODO: Implement user_id correctly:
-    # create a Redis entry with all `user_id`s that
-    # joined the session and cleanup for each of them
+    #       create a Redis entry with all `user_id`s that
+    #       joined the session and cleanup for each of them
 
     # TODO: Consider making this an executable
     #       https://community.plot.ly/t/convert-dash-to-executable-file-exe/14222

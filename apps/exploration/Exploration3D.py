@@ -1,10 +1,27 @@
 """
-    This module will be used to plot 3D graphs.
+This module defines the available graphs and creates the interface
+for the 3D dashboard.
 
-    You can write code in this module, but keep in
-    mind that it may be moved later on to lower-level
-    modules. Also, there is a chance that this will be
-    moved entirely into another tab.
+Global Variables:
+    - Sidebar: To be used for creating side-menus.
+
+Functions:
+    - Exploration3D_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_3d: Create a menu of dcc components for
+                                  the user to choose  plotting options.
+    - plot_graph_3d: Plot the graph according to user choices.
+
+Notes to others:
+    You should only write code here with caution, although contribution
+    in this part are very encouraged. You can use this module to add new
+    buttons, input, or other interface-related, element, or maybe a new
+    type of graph (in which case implement it in `graphs.graphs3d.py`).
+    Keep in mind that it may be moved later on to lower-level modules.
+    Also, there is a chance that this will be moved entirely into another
+    tab. Finally, exporting 3D graphs is currently not implemented, so
+    work on that is encouraged as well.
 """
 
 from dash.dependencies import Input, Output, State
@@ -60,8 +77,16 @@ def Exploration3D_Options(options, results):
               [State("user_id", "children")])
 def render_variable_choices_3d(dataset_choice, user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering plotting options based on datasets.
+    Create a menu of dcc components for the user to choose
+    plotting options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        user_id (str): Session/user id.
+
+    Notes on implementation:
+        Currently only one type of 3D graph is supported, but more
+        should be added later on.
     """
 
     df = get_data(dataset_choice, user_id)
@@ -84,8 +109,17 @@ def render_variable_choices_3d(dataset_choice, user_id):
      State("dataset_choice_3d", "value")])
 def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):
     """
-        This callback takes all available user choices and, if all
-        are present, it returns the appropriate plot.
+    Plot the graph according to user choices.
+
+    Args:
+        xvars (str): `x-axis` of the graph.
+        yvars (str): `y-axis`.
+        zvars (str): `z-axis`.
+        user_id (str): Session/user id.
+        dataset_choice_3d (str): Name of dataset.
+
+    Returns:
+        dict: A dictionary holding a plotly figure including layout.
     """
 
     df = get_data(dataset_choice_3d, user_id)

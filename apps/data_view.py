@@ -1,9 +1,17 @@
 """
-    This module takes care of the menu and choices provided when the
-    "Data view" level-1 tab is selected.
+This module takes care of the menu and choices provided when the
+"Data view" high-level tab is selected.
 
-    You should probably not write code here, UNLESS you are defining
-    a new level-2 tab.
+Dash callbacks:
+    - tab_subpages: Given the low-level tab choice, render the
+                    appropriate view.
+
+Notes to others:
+    You should probably not write code here, unless you are defining
+    a new level-2 tab. Here you can find find functionality to either
+    upload your data, connect to an API, or view/edit already uploaded
+    data. Implementations go to their own modules down the package
+    hierarchy, in `apps.data`
 """
 
 from dash.dependencies import Input, Output, State
@@ -34,13 +42,14 @@ layout = html.Div(children=[
               [State("user_id", "children")])
 def tab_subpages(tab, user_id):
     """
-        This is the second level of data tabs, that gets
-        called when one of the first-level tabs is selected.
-        Here you can either upload your data, connect to an
-        API, or view already uploaded data.
+    Given the low-level tab choice, render the appropriate view.
 
-        Input comes from current module, output comes from
-        the modules in data_tabs (loaded in __init__)
+    Args:
+        tab (str): the low-level tab.
+        user_id (str): the user/session uid.
+
+    Returns:
+        A list of HTML-dash components, usually within a div.
     """
 
     if tab == 'upload_data':

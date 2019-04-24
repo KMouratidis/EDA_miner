@@ -1,10 +1,28 @@
 """
-    This module defines the available graphs and creates the
-    interface for the 2D dashboard. You can use this module
-    if you want to add new buttons, input, or other, or maybe
-    a new type of graph (in which case also modify graphs2d.py).
+This module defines the available graphs and creates the interface
+for the 2D dashboard.
 
-    You should only write code here with caution.
+Global Variables:
+    - Sidebar: To be used for creating side-menus.
+    - Graphs_Export: Two buttons to export graphs (later used for
+                     PDF report generation).
+
+Functions:
+    - Exploration_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_2d: Create a menu of dcc components for
+                                  the user to choose  plotting options.
+    - plot_graph_2d: Plot the graph according to user choices.
+    - toggle_modal: Notify when a graph is exported.
+    - export_graph_callback: Export a graph (to a hidden div). One for
+                             every hidden graph.
+
+Notes to others:
+    You should only write code here with caution. You can use this
+    module to add new buttons, input, or other interface-related,
+    element, or maybe a new type of graph (in which case implement
+    it in `graphs.graphs2d.py`).
 """
 
 from dash.dependencies import Input, Output, State
@@ -46,8 +64,6 @@ def Exploration_Options(options, results):
         ], multi=False, id="graph_choice_exploration"),
                  className="horizontal_dropdowns"),
 
-
-
         # Available buttons and choices for plotting
         html.Div(id="variable_choices_2d", children=[
             html.Div(create_dropdown("X variable", options=[],
@@ -65,8 +81,9 @@ def Exploration_Options(options, results):
     ])
 
 
+# Export graph config
 Graphs_Export = [
-    # Export graph config
+    # Fancy bootstrap card containing buttons
     dbc.Card([
         dbc.CardHeader("Export graphs"),
         dbc.CardBody([
@@ -77,7 +94,7 @@ Graphs_Export = [
         ]),
     ], className="export_graphs_card"),
 
-
+    # When a graph is exported, notify the user
     dbc.Modal([
         dbc.ModalHeader("Graph exports:"),
         dbc.ModalBody("Nothing exported yet", id="modal_export_text"),
@@ -99,8 +116,22 @@ Sidebar = []
 def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
                                user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering plotting options based on datasets.
+    Create a menu of dcc components for the user to choose
+    plotting options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        graph_choice_exploration (str): The choice of graph type.
+        user_id (str): Session/user id.
+
+    Returns:
+        [list(dict), list(dict), bool]: Key-value pairs to be input
+                                        as `dcc.Dropdown` options and
+                                        a boolean to indicate whether
+                                        the graph needs a y-variable.
+
+    Notes on implementation:
+        These options should also take into account the datasets.
     """
 
     df = get_data(dataset_choice, user_id)
@@ -128,8 +159,20 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
 def plot_graph_2d(xvars, yvars, graph_choice_exploration,
                   user_id, dataset_choice):
     """
-        This callback takes all available user choices and, if all
-        are present, it returns the appropriate plot.
+    Plot the graph according to user choices.
+
+    Args:
+        xvars (str): `x-axis` of the graph.
+        yvars (str or list(str)): `y-axis`, can be multiple depending
+                                  on graph type.
+        graph_choice_exploration (str): The choice of graph type.
+        user_id (str): Session/user id.
+        dataset_choice (str): Name of dataset.
+
+    Returns:
+        [dict, bool]: A dictionary holding a plotly figure including
+                      layout and a boolean to indicate whether a Y
+                      variable is needed.
     """
 
     df = get_data(dataset_choice, user_id)
@@ -209,6 +252,24 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
               [State("modal_export_graph", "is_open"),
                State("graph_2d", "figure")])
 def toggle_modal(close, *args):
+    """
+    Notify when a graph is exported.
+
+    Args:
+        close (int): Number of times the close button was clicked.
+        *args (multiple): Timestamps for export button clicks, whether
+                          the modal is open, and the figure instance.
+
+    Notes on implementation:
+        Since the export buttons may increase in number we cannot avoid
+        the *args parameter. Sadly, this *args has to contain other parts
+        too, since dash `State`s must always be at the end.
+
+    Returns:
+        [bool, str or html element]: Whether to open/close the modal
+                                     and the text (or html) displayed.
+    """
+
     graph1, graph2, is_open, figure = args
 
     # TODO: Maybe return a better message?
@@ -231,6 +292,17 @@ for exported_figure in range(1, 3):
                   [Input(f"export_graph{exported_figure}", "n_clicks")],
                   [State("graph_2d", "figure")])
     def export_graph_callback(n_clicks, figure):
+        """
+        Export a graph (to a hidden div). One for every hidden graph.
+
+        Args:
+            n_clicks (int): Number of clicks for each respective button.
+            figure (dict): The figure parameters to be exported.
+
+        Returns:
+            dict: the figure is exported to the hidden div.
+        """
+
         if (n_clicks is not None) and (n_clicks >= 1) and (figure is not None):
             return figure
         else:

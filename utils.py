@@ -20,8 +20,8 @@ Global variables:
                creating dropdowns and used in `apps.analyze` modules.
 
 Notes to others:
-    Unless you are adding functions aimed at being used by many
-    lower-level modules, you should probably not write code here.
+    You should probably not write code here, unless you are adding
+    functions aimed at being used by many lower-level modules.
     Some of the functions here will later be moved to lower-level
     modules (e.g. `pretty_print_tweets`).
 """
@@ -71,8 +71,8 @@ def cleanup(redis_conn):
     """
     Clean up after the Dash app exits.
 
-    Mandatory arguments
-        - redis_conn: `redis.Redis` object.
+    Args:
+        redis_conn: `redis.Redis` object.
 
     Further details:
         Flush every key stored in the Redis database. If there
@@ -94,14 +94,15 @@ def create_dropdown(name, options, **kwargs):
     """
     Create a dropdown with a title.
 
-    Mandatory arguments:
-        - name: str, the title above the dropdown.
-        - options: list of dictionaries, dictionaries should contain
-                   keys at least the keys (label, value).
+    Args:
+        name (str): the title above the dropdown.
+        options (list(dict)): dictionaries should contain keys at least
+                             the keys (label, value).
+        **kwargs: keyword-value pairs. Accepts any keyword-arguments
+                  that can be passed to `dcc.Dropdown`.
 
-    Keyword arguments:
-        Accepts any keyword-arguments that can be passed to
-        `dcc.Dropdown`.
+    Returns:
+        list: an H5 and the Dropdown.
     """
 
     return [
@@ -116,12 +117,13 @@ def create_table(df, table_id="table"):
     """
     Creates a `dash_table.DataTable` given a `pandas.DataFrame`.
 
-    Mandatory arguments:
-        - df: `pandas.DataFrame`, the data.
+    Args:
+        df (`pandas.DataFrame`): the data.
+        table_id (str, optional): id of the table element for usage
+                                  with dash callbacks.
 
-    Optional arguments
-        - table_id: str, id of the table element for usage with
-                    dash callbacks.
+    Returns:
+        A `dash_table.DataTable` with pagination.
     """
 
     return dash_table.DataTable(
@@ -172,9 +174,12 @@ def encode_image(image_path):
     """
     Read and base64-encode an image for the dash app</h2>
 
-    Mandatory arguments:
-        - image_path: str, absolute path or relative to the
-                      top-level directory
+    Args:
+        image_path (str): absolute path or relative to the
+                          top-level directory
+
+    Returns:
+        A str to be used for the src attribute of an img element.
     """
 
     return 'data:image/png;base64,{}'.format(base64.b64encode(
@@ -185,10 +190,10 @@ def get_data(api_choice, user_id):
     """
     Get a `pandas.DataFrame` with the specified data.</h2>
 
-    Mandatory arguments:
-        - api_choice: str, the key used by the Redis server
-                      to store the data.
-        - user_id: str, the user for whom to fetch data.
+    Args:
+        api_choice (str): the key used by the Redis server
+                          to store the data.
+        user_id (str): the user for whom to fetch data.
     """
 
     if api_choice is None:
@@ -214,8 +219,11 @@ def hard_cast_to_float(x):
     """
     Convert to float or return 0.
 
-    Mandatory arguments:
-        - x: anything, will be type-casted or 0'ed.
+    Args:
+        x (anything): will be type-casted or 0'ed.
+
+    Returns:
+        float.
     """
 
     try:
@@ -232,11 +240,11 @@ def parse_contents(contents, filename, date, user_id):
     """
     Decode uploaded files and store them in Redis.
 
-    Mandatory arguments:
-        - contents: str, the content of the file to be decoded.
-        - filename: str, name of uploaded file.
-        - date: str, (modification?) date of the file.
-        - user_id: str, the user for whom to fetch data.
+    Args:
+        contents (str): the content of the file to be decoded.
+        filename (str): name of uploaded file.
+        date (str): (modification?) date of the file.
+        user_id (str): the user for whom to fetch data.
 
     Further details:
         After decoding the uploaded file, handle any remaining
@@ -291,10 +299,10 @@ def pretty_print_tweets(api, n_tweets):
     """
     Create H5 elements from the user's Twitter timeline.
 
-    Mandatory arguments:
-        - api: `twitter.Api`, a connection to Twitter
-                 with verified credentials.
-        - n_tweets: int, the number of tweets to display.
+    Args:
+        api (`twitter.Api`): a connection to Twitter
+                             with verified credentials.
+        n_tweets (int): the number of tweets to display.
     """
 
     return [
@@ -306,6 +314,9 @@ def pretty_print_tweets(api, n_tweets):
 def redis_startup():
     """
     Connect to a Redis server & handle startup.
+
+    Returns:
+        `redis.Redis`: a connection to a Redis server.
 
     Further details:
         Connects to a Redis server on its default port (6379) and

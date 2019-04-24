@@ -1,9 +1,26 @@
 """
-    This module will be used to show network data.
+This module is about viewing network data.
 
-    You can write code in this module, but keep in
-    mind that it may be moved later on to lower-level
-    modules.
+Global Variables:
+    - Sidebar: To be used for creating side-menus.
+
+Functions:
+    - Network_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_network: Create a menu of dcc components
+                                       for the user to choose plotting
+                                       options.
+    - plot_network: Plot the network graph according to user choices.
+
+Notes to others:
+    Contributions are encouraged here, although you should consider
+    starting with another part if you're new to dash or this project.
+    Main functionality is still lacking in this part. You can use this
+    module to add new buttons, input, or other interface-related,
+    element, or maybe a new type of graph (in which case implement
+    it in a new file `graphs.networks.py`). Like with other modules,
+    working on exporting network graphs is encouraged.
 """
 
 from dash.dependencies import Input, Output, State
@@ -18,6 +35,9 @@ from utils import r, create_dropdown
 from apps.data.View import get_data
 
 from itertools import chain
+
+
+Sidebar = []
 
 
 def Network_Options(options, results):
@@ -77,10 +97,18 @@ def Network_Options(options, results):
                Output("out_node", "options")],
               [Input("dataset_choice_network", "value")],
               [State("user_id", "children")])
-def render_variable_choices_3d(dataset_choice, user_id):
+def render_variable_choices_network(dataset_choice, user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering plotting options based on datasets.
+        Create a menu of dcc components for the user to choose
+        plotting options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        user_id (str): Session/user id.
+
+    Returns:
+        list(list(dict)): Key-value pairs to be input as
+                          `dcc.Dropdown` options.
     """
 
     df = get_data(dataset_choice, user_id)
@@ -101,14 +129,26 @@ def render_variable_choices_3d(dataset_choice, user_id):
                Input('dropdown-callbacks-1', 'value')],
               [State("user_id", "children"),
                State("dataset_choice_network", "value")])
-def plot_network(innode, outnode, layout_choice, user_id,
+def plot_network(in_node, out_node, layout_choice, user_id,
                  dataset_choice_network):
     """
-        This callback takes all available user choices and, if all
-        are present, it returns the appropriate plot.
+    Plot the network graph according to user choices.
+
+    Args:
+        in_node (str): Column name containing the values of
+                      nodes from where links start.
+        out_node (str): Column name for nodes where links end.
+        layout_choice (str): One of the layouts available in
+                             Cytoscape.
+        user_id (str): Session/user id.
+        dataset_choice_network (str): Name of dataset.
+
+    Returns:
+        [list(dict), dict]: A list of elements (dicts for Cytoscape)
+                            and the layout for the graph.
     """
 
-    if any(x is None for x in [innode, outnode, layout_choice,
+    if any(x is None for x in [in_node, out_node, layout_choice,
                                dataset_choice_network]):
         raise PreventUpdate
 
@@ -118,15 +158,15 @@ def plot_network(innode, outnode, layout_choice, user_id,
     df = get_data(dataset_choice_network, user_id).sample(n=100)
 
     node_list = []
-    for node in chain(df[innode].values, df[outnode].values):
+    for node in chain(df[in_node].values, df[out_node].values):
         node_list.append({"data": {
             "id": node, "label": node,
         }})
 
     edge_list = []
-    for i, row in df[[innode, outnode]].iterrows():
+    for i, row in df[[in_node, out_node]].iterrows():
         edge_list.append({"data": {
-            "source": row[innode], "target": row[outnode],
+            "source": row[in_node], "target": row[out_node],
         }})
 
     # TODO: consider coloring nodes based on in/out-nodes

@@ -3,7 +3,7 @@ This module will collect all unchanging views and dash components
 (buttons, sidemenus, etc) so that the code in index.py is cleaner
 and abstracted.
 
-Menus defined:
+Global variables:
     - SideBar: The left sidebar, meant to house the logo, and
                a few extra buttons for non-app functionality.
     - MainMenu: The high-level tabs, and two placeholders for the
@@ -95,8 +95,8 @@ MainMenu = [
 ]
 
 SideBar2 = [
-    # Placeholder for low-level submenus, if needed
     html.H3("Tab menu"),
+    # Placeholder for low-level submenus, if needed
     html.Div(children=[], id="low_level_tabs_submenu")
 ]
 
