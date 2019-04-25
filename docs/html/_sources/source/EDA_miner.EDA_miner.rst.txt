@@ -1,0 +1,30 @@
+EDA\_miner package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    EDA_miner.apps
+
+Submodules
+----------
+
+.. toctree::
+
+   EDA_miner.app
+   EDA_miner.layouts
+   EDA_miner.menus
+   EDA_miner.reportapp
+   EDA_miner.server
+   EDA_miner.styles
+   EDA_miner.utils
+
+Module contents
+---------------
+
+.. automodule:: EDA_miner
+    :members:
+    :undoc-members:
+    :show-inheritance:

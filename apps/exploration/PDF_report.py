@@ -8,7 +8,7 @@ Functions:
     - PDF_report_options: Generate the layout of the PDF generator.
 
 Dash callbacks:
-    - render_pdf_func: Render the PDF by filling-in the templates
+    - render_pdf_func: Render the PDF by filling-in the templates \
                        using the user-provided choices and texts.
 
 Notes to others:

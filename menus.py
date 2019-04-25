@@ -4,17 +4,17 @@ This module will collect all unchanging views and dash components
 and abstracted.
 
 Global variables:
-    - SideBar: The left sidebar, meant to house the logo, and
+    - SideBar: The left sidebar, meant to house the logo, and \
                a few extra buttons for non-app functionality.
-    - MainMenu: The high-level tabs, and two placeholders for the
+    - MainMenu: The high-level tabs, and two placeholders for the \
                 low-level tabs plus a `dash_table.DataTable`.
-    - SideBar: The right sidebar, meant to be used for elements
-               that interact with the important parts of dash and
+    - SideBar: The right sidebar, meant to be used for elements \
+               that interact with the important parts of dash and \
                providing any interactivity, customization, and
                other options.
 
 Functions:
-    - serve_layout: The layout of our app. Defined in a function
+    - serve_layout: The layout of our app. Defined in a function \
                     so as to generate different `session_id`s.
 
 Dash callbacks:

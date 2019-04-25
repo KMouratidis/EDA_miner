@@ -1,9 +1,15 @@
 """
-    This module contains the implementations of graphing
-    functions, and will probably contain core logic for KPI
-    creation. This should mirror the graphs2d module.
+This module collects functions and utilities for KPI visualization
+but may also be used to add other options and core implementation logic.
 
-    You can freely write code in this module.
+Functions:
+    - baseline_graph: Creates a baseline graph: a lineplot for the \
+                        timeseries and its baseline, and a barchart.
+
+Notes to others:
+    Feel free to write code here either to improve current or to add
+    new functionality. This part is in need of both customization and
+    presets.
 """
 
 from utils import hard_cast_to_float
@@ -13,9 +19,6 @@ import plotly.graph_objs as go
 
 
 ########## Helper functions ##########
-
-def _base_graph(x, y, **params):
-    raise NotImplementedError
 
 
 # Similar to graphs2d, but might need
@@ -30,6 +33,20 @@ graph_configs = {
 # These should return plotly traces (i.e. lists of `go` objects)
 
 def baseline_graph(df, xvars, yvars, secondary_yvars):
+    """
+    Creates a baseline graph: a lineplot for the timeseries and
+    its baseline, and a barchart.
+
+    Args:
+        df (`pd.DataFrame`): The data.
+        xvars (str): Column of `df`; `x-axis`.
+        yvars (str or list(str)): Column(s) of `df`; lineplot(s).
+        secondary_yvars (str):  Column of `df`; bar-chart.
+
+    Returns:
+        list: Plotly traces.
+    """
+
     return [
         go.Scatter(
             x=df[xvars],

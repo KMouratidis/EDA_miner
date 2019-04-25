@@ -10,13 +10,13 @@ Functions:
     - get_data: Get a `pandas.DataFrame` with the specified data.
     - hard_cast_to_float: Convert to float or return 0.
     - parse_contents: Decode uploaded files and store them in Redis.
-    - pretty_print_tweets: Create H5 elements from the user's Twitter
+    - pretty_print_tweets: Create H5 elements from the user's Twitter \
                            timeline.
     - redis_startup: Connect to a Redis server & handle startup.
 
 Global variables:
     - r: A Redis connection that is used throughout the app.
-    - mapping: A dict that maps tags to sklearn models meant for
+    - mapping: A dict that maps tags to sklearn models meant for \
                creating dropdowns and used in `apps.analyze` modules.
 
 Notes to others:
@@ -96,9 +96,9 @@ def create_dropdown(name, options, **kwargs):
 
     Args:
         name (str): the title above the dropdown.
-        options (list(dict)): dictionaries should contain keys at least
+        options (list(dict)): dictionaries should contain keys at least \
                              the keys (label, value).
-        **kwargs: keyword-value pairs. Accepts any keyword-arguments
+        **kwargs: keyword-value pairs. Accepts any keyword-arguments \
                   that can be passed to `dcc.Dropdown`.
 
     Returns:
@@ -119,7 +119,7 @@ def create_table(df, table_id="table"):
 
     Args:
         df (`pandas.DataFrame`): the data.
-        table_id (str, optional): id of the table element for usage
+        table_id (str, optional): id of the table element for usage \
                                   with dash callbacks.
 
     Returns:
@@ -175,7 +175,7 @@ def encode_image(image_path):
     Read and base64-encode an image for the dash app</h2>
 
     Args:
-        image_path (str): absolute path or relative to the
+        image_path (str): absolute path or relative to the \
                           top-level directory
 
     Returns:
@@ -191,7 +191,7 @@ def get_data(api_choice, user_id):
     Get a `pandas.DataFrame` with the specified data.</h2>
 
     Args:
-        api_choice (str): the key used by the Redis server
+        api_choice (str): the key used by the Redis server \
                           to store the data.
         user_id (str): the user for whom to fetch data.
     """
@@ -300,7 +300,7 @@ def pretty_print_tweets(api, n_tweets):
     Create H5 elements from the user's Twitter timeline.
 
     Args:
-        api (`twitter.Api`): a connection to Twitter
+        api (`twitter.Api`): a connection to Twitter \
                              with verified credentials.
         n_tweets (int): the number of tweets to display.
     """

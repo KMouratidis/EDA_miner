@@ -3,7 +3,7 @@ This module takes care of the menu and choices provided when the
 "Explore & Visualize" high-level tab is selected.
 
 Dash callbacks:
-    - tab_subpages: Given the low-level tab choice, render the
+    - tab_subpages: Given the low-level tab choice, render the \
                     appropriate view.
 
 Notes to others:

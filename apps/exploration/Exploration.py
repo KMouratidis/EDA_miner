@@ -4,18 +4,18 @@ for the 2D dashboard.
 
 Global Variables:
     - Sidebar: To be used for creating side-menus.
-    - Graphs_Export: Two buttons to export graphs (later used for
+    - Graphs_Export: Two buttons to export graphs (later used for \
                      PDF report generation).
 
 Functions:
     - Exploration_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
-    - render_variable_choices_2d: Create a menu of dcc components for
+    - render_variable_choices_2d: Create a menu of dcc components for \
                                   the user to choose  plotting options.
     - plot_graph_2d: Plot the graph according to user choices.
     - toggle_modal: Notify when a graph is exported.
-    - export_graph_callback: Export a graph (to a hidden div). One for
+    - export_graph_callback: Export a graph (to a hidden div). One for \
                              every hidden graph.
 
 Notes to others:
@@ -125,9 +125,9 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
         user_id (str): Session/user id.
 
     Returns:
-        [list(dict), list(dict), bool]: Key-value pairs to be input
-                                        as `dcc.Dropdown` options and
-                                        a boolean to indicate whether
+        [list(dict), list(dict), bool]: Key-value pairs to be input \
+                                        as `dcc.Dropdown` options and \
+                                        a boolean to indicate whether \
                                         the graph needs a y-variable.
 
     Notes on implementation:
@@ -163,15 +163,15 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
 
     Args:
         xvars (str): `x-axis` of the graph.
-        yvars (str or list(str)): `y-axis`, can be multiple depending
+        yvars (str or list(str)): `y-axis`, can be multiple depending \
                                   on graph type.
         graph_choice_exploration (str): The choice of graph type.
         user_id (str): Session/user id.
         dataset_choice (str): Name of dataset.
 
     Returns:
-        [dict, bool]: A dictionary holding a plotly figure including
-                      layout and a boolean to indicate whether a Y
+        [dict, bool]: A dictionary holding a plotly figure including \
+                      layout and a boolean to indicate whether a Y \
                       variable is needed.
     """
 

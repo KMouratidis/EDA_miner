@@ -8,8 +8,8 @@ Functions:
     - Network_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
-    - render_variable_choices_network: Create a menu of dcc components
-                                       for the user to choose plotting
+    - render_variable_choices_network: Create a menu of dcc components \
+                                       for the user to choose plotting \
                                        options.
     - plot_network: Plot the network graph according to user choices.
 
@@ -107,7 +107,7 @@ def render_variable_choices_network(dataset_choice, user_id):
         user_id (str): Session/user id.
 
     Returns:
-        list(list(dict)): Key-value pairs to be input as
+        list(list(dict)): Key-value pairs to be input as \
                           `dcc.Dropdown` options.
     """
 
@@ -135,16 +135,16 @@ def plot_network(in_node, out_node, layout_choice, user_id,
     Plot the network graph according to user choices.
 
     Args:
-        in_node (str): Column name containing the values of
+        in_node (str): Column name containing the values of \
                       nodes from where links start.
         out_node (str): Column name for nodes where links end.
-        layout_choice (str): One of the layouts available in
+        layout_choice (str): One of the layouts available in \
                              Cytoscape.
         user_id (str): Session/user id.
         dataset_choice_network (str): Name of dataset.
 
     Returns:
-        [list(dict), dict]: A list of elements (dicts for Cytoscape)
+        [list(dict), dict]: A list of elements (dicts for Cytoscape) \
                             and the layout for the graph.
     """
 

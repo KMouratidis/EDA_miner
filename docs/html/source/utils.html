@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EDA_miner.utils module &mdash; EDA_miner  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> EDA_miner
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">EDA_miner.utils module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EDA_miner</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>EDA_miner.utils module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-EDA_miner.utils">
+<span id="eda-miner-utils-module"></span><h1>EDA_miner.utils module<a class="headerlink" href="#module-EDA_miner.utils" title="Permalink to this headline">¶</a></h1>
+<p>This module provides utilities, functions, and other code that is
+meant to be used across the app. This may undergo changes soon.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>cleanup: Clean up after the Dash app exits.</li>
+<li>create_dropdown: Create a dropdown with a title.</li>
+<li>create_table: Creates a <cite>dash_table.DataTable</cite> given a <cite>pd.DataFrame</cite>.</li>
+<li>encode_image: Read and base64-encode an image for the dash app.</li>
+<li>get_data: Get a <cite>pandas.DataFrame</cite> with the specified data.</li>
+<li>hard_cast_to_float: Convert to float or return 0.</li>
+<li>parse_contents: Decode uploaded files and store them in Redis.</li>
+<li>pretty_print_tweets: Create H5 elements from the user’s Twitter                            timeline.</li>
+<li>redis_startup: Connect to a Redis server &amp; handle startup.</li>
+</ul>
+</dd>
+<dt>Global variables:</dt>
+<dd><ul class="first last simple">
+<li>r: A Redis connection that is used throughout the app.</li>
+<li>mapping: A dict that maps tags to sklearn models meant for                creating dropdowns and used in <cite>apps.analyze</cite> modules.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should probably not write code here, unless you are adding
+functions aimed at being used by many lower-level modules.
+Some of the functions here will later be moved to lower-level
+modules (e.g. <cite>pretty_print_tweets</cite>).</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.utils.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><em>redis_conn</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up after the Dash app exits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>redis_conn</strong> – <cite>redis.Redis</cite> object.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Further details:</dt>
+<dd>Flush every key stored in the Redis database. If there
+are users that have logged in and uploaded data, store
+those on disk. Also remove any static files generated
+while the server was running.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.create_dropdown">
+<code class="descname">create_dropdown</code><span class="sig-paren">(</span><em>name</em>, <em>options</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.create_dropdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a dropdown with a title.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the title above the dropdown.</li>
+<li><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>)</em>) – dictionaries should contain keys at least                              the keys (label, value).</li>
+<li><strong>**kwargs</strong> – keyword-value pairs. Accepts any keyword-arguments                   that can be passed to <cite>dcc.Dropdown</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an H5 and the Dropdown.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.create_table">
+<code class="descname">create_table</code><span class="sig-paren">(</span><em>df</em>, <em>table_id='table'</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <cite>dash_table.DataTable</cite> given a <cite>pandas.DataFrame</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<cite>pandas.DataFrame</cite>) – the data.</li>
+<li><strong>table_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – id of the table element for usage                                   with dash callbacks.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <cite>dash_table.DataTable</cite> with pagination.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.encode_image">
+<code class="descname">encode_image</code><span class="sig-paren">(</span><em>image_path</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.encode_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and base64-encode an image for the dash app&lt;/h2&gt;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>image_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – absolute path or relative to the                           top-level directory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A str to be used for the src attribute of an img element.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>api_choice</em>, <em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <cite>pandas.DataFrame</cite> with the specified data.&lt;/h2&gt;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_choice</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the key used by the Redis server                           to store the data.</li>
+<li><strong>user_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the user for whom to fetch data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.hard_cast_to_float">
+<code class="descname">hard_cast_to_float</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.hard_cast_to_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to float or return 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>anything</em>) – will be type-casted or 0’ed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">float.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.parse_contents">
+<code class="descname">parse_contents</code><span class="sig-paren">(</span><em>contents</em>, <em>filename</em>, <em>date</em>, <em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.parse_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode uploaded files and store them in Redis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the content of the file to be decoded.</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of uploaded file.</li>
+<li><strong>date</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – (modification?) date of the file.</li>
+<li><strong>user_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the user for whom to fetch data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Further details:</dt>
+<dd>After decoding the uploaded file, handle any remaining
+operations here. This was stolen from the dash docs. Currently
+it only supports csv, xls(x), json, and feather file types.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.pretty_print_tweets">
+<code class="descname">pretty_print_tweets</code><span class="sig-paren">(</span><em>api</em>, <em>n_tweets</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.pretty_print_tweets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create H5 elements from the user’s Twitter timeline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api</strong> (<cite>twitter.Api</cite>) – a connection to Twitter                              with verified credentials.</li>
+<li><strong>n_tweets</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of tweets to display.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="EDA_miner.utils.r">
+<code class="descname">r</code><em class="property"> = Redis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=0&gt;&gt;&gt;</em><a class="headerlink" href="#EDA_miner.utils.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Redis connection that is used throughout the app.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.redis_startup">
+<code class="descname">redis_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.redis_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to a Redis server &amp; handle startup.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a connection to a Redis server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><cite>redis.Redis</cite></td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Further details:</dt>
+<dd>Connects to a Redis server on its default port (6379) and
+is also responsible for any other startup operations needed.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, K.Mouratidis, V.Tsichli, C.Timamopoulos, G.Katrilakas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

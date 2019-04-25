@@ -1,10 +1,22 @@
 """
-    This module contains the implementations of graphing
-    functions. Every graph has its own line in the config
-    which indicates if the graph needs both X and Y variables
-    and whether the Y variables should be multiple.
+This module contains the implementations of graphing functions.
+I skipped adding docstrings for every function since most of them
+are one-liners anyway and should be pretty obvious.
 
-    You can freely write code in this module, without worries.
+Functions:
+    - scatterplot: Create a 2D scatterplot.
+    - line_chart: Create a lineplot.
+    - histogram: Create a histogram.
+    - heatmap: Create a heatmap of column correlations.
+    - bubble_chart: Create a bubble chart.
+    - filledarea: Create a lineplot with filled areas.
+    - errorbar: Create a lineplot with error bars (currently fixed).
+    - density2d: Create a heatmap.
+
+Notes to others:
+    Feel free to write code here either to improve current or to add
+    new functionality. Also feel free to add or tamper with styles 
+    and/or helper functions.
 """
 
 import numpy as np

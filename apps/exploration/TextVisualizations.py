@@ -8,7 +8,7 @@ Functions:
     - TextViz_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
-    - plot_graph_text: Currently only word cloud visualizations are
+    - plot_graph_text: Currently only word cloud visualizations are \
                        supported, from given text.
 
 Notes to others:
@@ -28,7 +28,7 @@ import dash_html_components as html
 
 from server import app
 from utils import encode_image
-from apps.exploration.graphs import word_cloud
+from apps.exploration.graphs import textviz
 
 
 Sidebar = []
@@ -73,7 +73,7 @@ def plot_graph_text(n_clicks, text, user_id):
     """
 
     if text is not None and len(text.split()) > 1:
-        word_cloud.create_wordcloud(text, user_id)
+        textviz.create_wordcloud(text, user_id)
         return encode_image(f"static/images/{user_id}_wordcloud.png")
 
     else:

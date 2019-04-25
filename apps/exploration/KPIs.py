@@ -9,7 +9,7 @@ Functions:
     - KPI_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
-    - render_variable_choices_kpi: Create a menu of dcc components for
+    - render_variable_choices_kpi: Create a menu of dcc components for \
                                    the user to choose  plotting options.
     - plot_graph_kpi: Plot the graph according to user choices.
 
@@ -82,7 +82,7 @@ def render_variable_choices_kpi(dataset_choice, user_id):
         user_id (str): Session/user id.
 
     Returns:
-        list(list(dict)): Key-value pairs to be input as
+        list(list(dict)): Key-value pairs to be input as \
                           `dcc.Dropdown` options.
 
     Notes on implementation:

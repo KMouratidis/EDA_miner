@@ -1,22 +1,31 @@
+"""
+This module collects functions and utilities for 3D visualization.
+
+Functions:
+    - scatterplot3d: Create a 3D scatterplot.
+
+Notes to others:
+    Feel free to write code here either to improve current or to add
+    new functionality. What is particularly needed is new graph types.
+"""
+
 import plotly.graph_objs as go
 
 
-def _simple_scatter(x, y, **params):
-    default_options = {
-        "opacity": 0.7,
-        "marker": {'size': 15,
-                   'line': {'width': 0.5,
-                            'color': 'white'}
-                   },
-        "mode": "markers",
-    }
+def scatterplot3d(x, y, z, **kwargs):
+    """
+    Create a 3D scatterplot.
 
-    default_options.update(params)
+    Args:
+        x  (iterable): `x-axis` data.
+        y  (iterable): `y-axis` data.
+        z  (iterable): `z-axis` data.
+        **kwargs: Anything accepted by `plotly.graph_objs.Scatter3d`.
 
-    return go.Scatter(x=x, y=y, **default_options)
+    Returns:
+        list: Plotly traces.
+    """
 
-
-def scatterplot(x, y, z, **kwargs):
     default_options = {
         "mode": 'markers',
         "marker": {

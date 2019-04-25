@@ -10,8 +10,8 @@ Functions:
     - default_kpi: Layout for KPI graphs, not implemented.
 
 Classes:
-    - PDF_Layout1: A sample PDF layout, more to be added. Implemented
-                   as a class out of convenience, may be changed later.
+    - PDF_Layout1: A sample PDF layout, more to be added. Implemented \
+                   as a class out of convenience, may be changed later. \
                    Usage: `PDF_Layout1.render(x_axis, y_axis)`.
 
 Notes to others:

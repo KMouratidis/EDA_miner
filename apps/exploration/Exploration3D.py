@@ -9,7 +9,7 @@ Functions:
     - Exploration3D_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
-    - render_variable_choices_3d: Create a menu of dcc components for
+    - render_variable_choices_3d: Create a menu of dcc components for \
                                   the user to choose  plotting options.
     - plot_graph_3d: Plot the graph according to user choices.
 
@@ -124,7 +124,7 @@ def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):
 
     df = get_data(dataset_choice_3d, user_id)
 
-    traces = graphs3d.scatterplot(df[xvars], df[yvars], df[zvars])
+    traces = graphs3d.scatterplot3d(df[xvars], df[yvars], df[zvars])
 
     return {
         'data': traces,
