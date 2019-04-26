@@ -31,6 +31,7 @@ from utils import encode_image
 from apps.exploration.graphs import textviz
 
 
+
 Sidebar = []
 
 
@@ -71,6 +72,7 @@ def plot_graph_text(n_clicks, text, user_id):
         str: the image encoded appropriately to be set as the 'src'
              value of the `img` element
     """
+
 
     if text is not None and len(text.split()) > 1:
         textviz.create_wordcloud(text, user_id)

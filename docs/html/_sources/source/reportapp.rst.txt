@@ -1,7 +1,0 @@
-EDA\_miner.reportapp module
-===========================
-
-.. automodule:: EDA_miner.reportapp
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -33,6 +33,7 @@ from utils import create_dropdown, get_data
 from apps.exploration.graphs import kpis
 
 
+
 Sidebar = [
     ]
 
@@ -91,6 +92,7 @@ def render_variable_choices_kpi(dataset_choice, user_id):
         on building custom KPIs and maybe graphs.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -124,6 +126,7 @@ def plot_graph_kpi(xvars, yvars, secondary_yvars,
     Returns:
         dict: A dictionary holding a plotly figure including layout.
     """
+
 
     df = get_data(dataset_choice, user_id)
 

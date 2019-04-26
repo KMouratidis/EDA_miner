@@ -134,6 +134,7 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
         These options should also take into account the datasets.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -174,6 +175,7 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
                       layout and a boolean to indicate whether a Y \
                       variable is needed.
     """
+
 
     df = get_data(dataset_choice, user_id)
 

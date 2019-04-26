@@ -1,9 +1,16 @@
 """
-    This module defines the interface for connecting to APIs.
-    It renders the appropriate layout according to the tab chosen.
+This module defines the interface for connecting to APIs.
+It renders the appropriate layout according to the tab chosen.
 
+Dash callbacks:
+    - api_connect: Render the appropriate view for the chosen API.
+
+Notes to others:
     You should probably not write code here, UNLESS you first
     defined a new connection to an API (also update View module).
+    Remember to include the elements necessary for the app to
+    function correctly (see `debugger_layout`), or feel free to
+    rework the whole thing if you can.
 """
 
 from dash.dependencies import Input, Output, State
@@ -37,7 +44,7 @@ API_Options = html.Div(children=[
     ]),
 
     html.Div(id="api_login_form", children=[
-        *api_layouts.debuger_layout,
+        *api_layouts.debugger_layout,
     ]),
 ])
 
@@ -53,17 +60,34 @@ API_Options = html.Div(children=[
 def api_connect(api_choice, n_clicks, user_id,
                 input1, input2, input3, input4):
     """
+    Render the appropriate view for the chosen API.
+
+    Args:
+        api_choice (str): Value from the tabs.
+        n_clicks (int): Number of times button was clicked.
+        user_id (str): Session/user id.
+        input1 (str): API-specific credential or value.
+        input2 (str): API-specific credential or value.
+        input3 (str): API-specific credential or value.
+        input4 (str): API-specific credential or value.
+
+    Returns:
+        list: A list of dash components.
+
+    Further details:
         Depending on the tab choice, provide the appropriate form.
         This callback is also responsible for adding the submit button
-        if necessary.
+        if necessary. When a user selects a tab where they have already
+        connected then an appropriate message is returned.
     """
+
 
     connected = r.get(f"{user_id}_{api_choice}") is not None
 
     if connected:
         return [
             html.H4("Connected previously"),
-            *api_layouts.debuger_layout,
+            *api_layouts.debugger_layout,
         ]
 
     if n_clicks is None:
@@ -123,5 +147,5 @@ def api_connect(api_choice, n_clicks, user_id,
         return [
             html.H4(f"{api_choice} not yet implemented"),
             html.H4("Debug element, please ignore"),
-            *api_layouts.debuger_layout,
+            *api_layouts.debugger_layout,
         ]

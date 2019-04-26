@@ -16,7 +16,6 @@ import plotly.graph_objs as go
 import numpy as np
 
 
-
 def Clustering_Options(options, results):
 
     return html.Div(children=[
@@ -63,6 +62,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
         for the user to choose for altering across datasets.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -98,6 +98,7 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
     """
+
 
     df = get_data(dataset_choice, user_id)
 

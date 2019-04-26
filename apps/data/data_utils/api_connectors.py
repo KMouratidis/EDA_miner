@@ -1,3 +1,17 @@
+"""
+This module collects the layouts for connecting to the various APIs.
+
+Functions:
+    - twitter_connect: Connect to the Twitter API.
+    - google_sheets_connect: Connect to the Google Sheets API.
+    - reddit_connect: Connect to the Reddit API.
+    - spotify_connect: Connect to the Spotify API.
+
+Notes to others:
+    You should probably not write code here, unless adding
+    a new API connection (or improving existing ones).
+"""
+
 from utils import r
 
 import twitter

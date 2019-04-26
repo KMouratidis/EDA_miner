@@ -15,6 +15,7 @@ import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
 
+
 def Classification_Options(options, results):
 
     return html.Div(children=[
@@ -52,6 +53,7 @@ def render_variable_choices_classification(dataset_choice,
         for the user to choose for altering across datasets.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -86,6 +88,7 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
     """
+
 
     df = get_data(dataset_choice, user_id)
 

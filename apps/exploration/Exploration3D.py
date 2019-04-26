@@ -34,6 +34,7 @@ from utils import create_dropdown, get_data
 from apps.exploration.graphs import graphs3d
 
 
+
 Sidebar = []
 
 
@@ -89,6 +90,7 @@ def render_variable_choices_3d(dataset_choice, user_id):
         should be added later on.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -121,6 +123,7 @@ def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):
     Returns:
         dict: A dictionary holding a plotly figure including layout.
     """
+
 
     df = get_data(dataset_choice_3d, user_id)
 

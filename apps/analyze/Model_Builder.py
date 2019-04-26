@@ -247,6 +247,7 @@ def modify_graph(remove_clicked_time, connect_selected_time,
               [State("user_id", "children")])
 def inspect_node(selected, user_id):
 
+
     if selected is None or "parent" not in selected:
         # No need to show info for parent nodes as
         # they are there just for show
@@ -320,6 +321,8 @@ def update_radio_buttons_modify_params(value, selected):
               [Input("cytoscape-graph", "elements")],
               [State("user_id", "children")])
 def inspect_node(elements, user_id):
+
+
     return [{
         "value": elem["data"]["id"],
         "label": elem["data"]["label"]
@@ -340,6 +343,7 @@ def convert_model(n_clicks, close, elements, layout, user_id, is_open):
     if user_id.startswith("python_generated_ssid"):
         # Trim id
         user_id = user_id.split("-")[-1]
+
 
     if n_clicks is None:
         return [False, [html.H5("No specs defined yet")]]

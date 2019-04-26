@@ -25,6 +25,7 @@ from apps.analyze import Econometrics_Options, Pipeline_Options
 from apps.data.View import get_available_choices
 
 
+
 layout = html.Div(children=[
     html.Div(children=[
         dcc.Tabs(id="level2_tabs", value="model_builder", children=[
@@ -61,6 +62,7 @@ def tab_subpages(tab, user_id):
     Returns:
         A list of HTML-dash components, usually within a div.
     """
+
 
     # Check whether the user has uploaded data
     # TODO: This check for data existence might be slow.

@@ -16,7 +16,6 @@ Submodules
    EDA_miner.app
    EDA_miner.layouts
    EDA_miner.menus
-   EDA_miner.reportapp
    EDA_miner.server
    EDA_miner.styles
    EDA_miner.utils

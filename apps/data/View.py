@@ -1,9 +1,18 @@
 """
-    This module provides views for the data (tables, lists
-    of tweets, etc).
+This module provides views for the data (tables, lists of tweets, etc).
 
-    You should probably not write code here, UNLESS you
-    defined a new connection to an API.
+Functions:
+    - get_available_choices: Get datasets available to user.
+
+Dash callbacks:
+    - display_subdataset_choices: Show/hide input field for Quandl API.
+    - render_table: Create a display for the chosen dataset.
+    - display_reddit_posts: For the Reddit API, allow the user to \
+                            specify a subreddit to get data from.
+
+Note to others:
+    You should probably not write code here, UNLESS you defined a
+    new connection to an API, or are doing refactoring.
 """
 
 from dash.dependencies import Input, Output, State
@@ -21,6 +30,18 @@ import pickle
 
 # TODO: This might need to get moved to a higher module
 def get_available_choices(redis_conn, user_id):
+    """
+    Get datasets available to user.
+
+    Args:
+        redis_conn (`redis.Redis`):
+        user_id (str): Session/user id.
+
+    Returns:
+        [list(dict), dict]: A list of options to be used for making \
+                            dropdowns, and a dict of the available \
+                            dataset keys (and their mapped data).
+    """
 
     results = {
         "twitter_api": redis_conn.get(f"{user_id}_twitter_api_handle"),
@@ -77,9 +98,17 @@ def View_Options(user_id):
 
 # TODO: This might need to be removed (or updated)
 @app.callback(Output("dataset_name", "style"),
-              [Input("api_choice", "value")],
-              [State("user_id", "children")])
-def display_subdataset_choices(api_choice, user_id):
+              [Input("api_choice", "value")])
+def display_subdataset_choices(api_choice):
+    """
+    Show/hide input field for Quandl API.
+
+    Args:
+        api_choice (str): Value from the dropdown.
+
+    Returns:
+        dict: CSS style.
+    """
     if api_choice == "quandl_api":
         return {"display": "inline"}
     else:
@@ -90,6 +119,21 @@ def display_subdataset_choices(api_choice, user_id):
               [Input("api_choice", "value")],
               [State("user_id", "children")])
 def render_table(api_choice, user_id):
+    """
+    Create a display for the chosen dataset.
+
+    Args:
+        api_choice (str): Value from the dropdown.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: A list of dash components.
+    """
+
+    if user_id == "<registered_user>":
+        # if the user is a registered user, override their
+        # name for use within this function
+        user_id = current_user.username
 
     if api_choice is None:
         return [html.H4("Nothing selected.")]
@@ -155,6 +199,19 @@ def render_table(api_choice, user_id):
               [State("subreddit_choice", "value"),
                State("user_id", "children")])
 def display_reddit_posts(n_clicks, subreddit_choice, user_id):
+    """
+    For the Reddit API, allow the user to specify a subreddit
+    to get data from.
+
+    Args:
+        n_clicks (int): Number of times button was clicked.
+        subreddit_choice (str): The name of the subreddit.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: A list of dash components.
+    """
+
 
     if n_clicks is not None and n_clicks >=1:
         if subreddit_choice is not None:

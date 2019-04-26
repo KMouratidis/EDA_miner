@@ -10,6 +10,7 @@ from server import app
 from utils import create_dropdown, mapping, get_data
 
 
+
 def Regression_Options(options, results):
 
     return html.Div(children=[
@@ -46,6 +47,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
         for the user to choose for altering across datasets.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -79,6 +81,7 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
     """
+
 
     df = get_data(dataset_choice, user_id)
 

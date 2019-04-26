@@ -1,7 +1,18 @@
 """
-    This module collects the layouts for connecting to the
-    various APIs.
+This module collects the layouts for connecting to the various APIs.
 
+Functions:
+    - success_message: Notify the user for successful connection.
+
+Global variables:
+    - debugger_layout: All inputs and the button used throughout the tab.
+    - twitter_layout: 4 input fields and a button.
+    - gsheets_layout: 2 input fields and a button. The rest are hidden.
+    - reddit_layout: 2 input fields and a button. The rest are hidden.
+    - quandl_layout: 2 input fields and a button. The rest are hidden.
+    - spotify_layout: 2 input fields and a button. The rest are hidden.
+
+Notes to others:
     You should probably not write code here, unless adding
     a new API connection.
 """
@@ -13,7 +24,7 @@ import dash_html_components as html
 # These are all elements that are needed as callback inputs
 # but if they disappear from one view then the callback stops
 # working so they are inserted as hidden in every layout
-debuger_layout = [
+debugger_layout = [
     dcc.Input(id="input1", type="text", value="", style={"display": "none"}),
     dcc.Input(id="input2", type="text", value="", style={"display": "none"}),
     dcc.Input(id="input3", type="text", value="", style={"display": "none"}),
@@ -26,7 +37,7 @@ def success_message(api):
     return [
         html.H4(f"Successfully got data from the {api} API."),
         html.Br(),
-        *debuger_layout,
+        *debugger_layout,
     ]
 
 

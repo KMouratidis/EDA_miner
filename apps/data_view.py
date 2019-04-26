@@ -22,6 +22,7 @@ from server import app
 from apps.data import Upload_Options, View_Options, API_Options
 
 
+
 layout = html.Div(children=[
     html.Div(children=[
         dcc.Tabs(id="level2_tabs", value='upload_data', children=[
@@ -51,6 +52,7 @@ def tab_subpages(tab, user_id):
     Returns:
         A list of HTML-dash components, usually within a div.
     """
+
 
     if tab == 'upload_data':
         # TODO: This might need change, depending on whether we specify

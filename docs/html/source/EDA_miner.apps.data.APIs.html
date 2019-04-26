@@ -149,8 +149,19 @@
 <span id="eda-miner-apps-data-apis-module"></span><h1>EDA_miner.apps.data.APIs module<a class="headerlink" href="#module-EDA_miner.apps.data.APIs" title="Permalink to this headline">¶</a></h1>
 <p>This module defines the interface for connecting to APIs.
 It renders the appropriate layout according to the tab chosen.</p>
-<p>You should probably not write code here, UNLESS you first
-defined a new connection to an API (also update View module).</p>
+<dl class="docutils">
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>api_connect: Render the appropriate view for the chosen API.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should probably not write code here, UNLESS you first
+defined a new connection to an API (also update View module).
+Remember to include the elements necessary for the app to
+function correctly (see <cite>debugger_layout</cite>), or feel free to
+rework the whole thing if you can.</dd>
+</dl>
 </div>
 
 

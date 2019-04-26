@@ -9,6 +9,8 @@ Submodules
    EDA_miner.apps.exploration.graphs.graphs2d
    EDA_miner.apps.exploration.graphs.graphs3d
    EDA_miner.apps.exploration.graphs.kpis
+   EDA_miner.apps.exploration.graphs.layouts
+   EDA_miner.apps.exploration.graphs.styles
    EDA_miner.apps.exploration.graphs.textviz
    EDA_miner.apps.exploration.graphs.word_cloud
 

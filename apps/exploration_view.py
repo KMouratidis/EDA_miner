@@ -25,6 +25,7 @@ from apps.exploration import Exploration3D_Options, Network_Options
 from apps.data.View import get_available_choices
 
 
+
 layout = html.Div(children=[
     html.Div(children=[
         dcc.Tabs(id="level2_tabs", value='exploration', children=[
@@ -62,6 +63,7 @@ def tab_subpages(tab, user_id):
     Returns:
         A list of HTML-dash components, usually within a div.
     """
+
 
     # TODO: This check for data existence might be slow.
     #       It would be good to test/review and improve it.

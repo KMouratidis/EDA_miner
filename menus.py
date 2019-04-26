@@ -10,7 +10,7 @@ Global variables:
                 low-level tabs plus a `dash_table.DataTable`.
     - SideBar: The right sidebar, meant to be used for elements \
                that interact with the important parts of dash and \
-               providing any interactivity, customization, and
+               providing any interactivity, customization, and \
                other options.
 
 Functions:
@@ -59,10 +59,14 @@ SideBar = [
             html.Li(html.A([
                         html.Span("GitHub repo  "),
                         html.I(className="fab fa-github", id="github_link"),
-                    ], href="https://github.com/KMouratidis/EDA_miner_public",
-                   target="_blank"),
-                ),
-            html.Li('I am just padded text'),
+            ], href="https://github.com/KMouratidis/EDA_miner_public",
+                target="_blank")),
+            html.Li(html.A([
+                    html.Span("Dash docs  "),
+                    html.I(className="fas fa-external-link-square-alt",
+                           id="dash_link")
+            ], href="https://dash.plot.ly/",
+                target="_blank")),
         ])
     ]),
 
@@ -137,7 +141,8 @@ def serve_layout():
 
         html.Div([
             # Sidebar / menu
-            html.Div(children=SideBar, className="col-sm-2 ml-auto", id="sidebar",
+            html.Div(children=SideBar, className="col-sm-2 ml-auto",
+                     id="sidebar",
                      style={"display": "inline-block"}),
 
             # main Div
@@ -146,7 +151,8 @@ def serve_layout():
                      style={"display": "inline-block"}),
 
             # Sidebar / menu
-            html.Div(children=SideBar2, className="col-sm-1 ml-auto", id="sidebar2",
+            html.Div(children=SideBar2, className="col-sm-1 ml-auto",
+                     id="sidebar2",
                      style={"display": "inline-block"}),
 
         ], className="row")

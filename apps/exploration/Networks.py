@@ -111,6 +111,7 @@ def render_variable_choices_network(dataset_choice, user_id):
                           `dcc.Dropdown` options.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -147,6 +148,7 @@ def plot_network(in_node, out_node, layout_choice, user_id,
         [list(dict), dict]: A list of elements (dicts for Cytoscape) \
                             and the layout for the graph.
     """
+
 
     if any(x is None for x in [in_node, out_node, layout_choice,
                                dataset_choice_network]):

@@ -26,10 +26,19 @@
     margin-right: 10px !important;
 }
 
-#github_link {
-    font-size: 28px;
+#github_link, #dash_link {
+    font-size: 26px;
     vertical-align: bottom;
     padding-top: 5px;
+}
+
+#dash_link {
+    margin-left: 10px;
+}
+
+#sidebar_collapsible_button>ul>li {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #external_links_caret {

@@ -145,8 +145,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="eda-miner-menus-module">
-<h1>EDA_miner.menus module<a class="headerlink" href="#eda-miner-menus-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-EDA_miner.menus">
+<span id="eda-miner-menus-module"></span><h1>EDA_miner.menus module<a class="headerlink" href="#module-EDA_miner.menus" title="Permalink to this headline">¶</a></h1>
+<p>This module will collect all unchanging views and dash components
+(buttons, sidemenus, etc) so that the code in index.py is cleaner
+and abstracted.</p>
+<dl class="docutils">
+<dt>Global variables:</dt>
+<dd><ul class="first last simple">
+<li>SideBar: The left sidebar, meant to house the logo, and                a few extra buttons for non-app functionality.</li>
+<li>MainMenu: The high-level tabs, and two placeholders for the                 low-level tabs plus a <cite>dash_table.DataTable</cite>.</li>
+<li>SideBar: The right sidebar, meant to be used for elements                that interact with the important parts of dash and                providing any interactivity, customization, and                other options.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>serve_layout: The layout of our app. Defined in a function                     so as to generate different <a href="#id1"><span class="problematic" id="id2">`</span></a>session_id`s.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>button_toggle: On click show/hide the external links.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd><dl class="first last docutils">
+<dt>You should probably not write code here, unless you’re:</dt>
+<dd><ul class="first last simple">
+<li>adding a new button, external link, or similar to the sidebar,</li>
+<li>creating a login functionality,</li>
+<li>adding a new top-level menu tab, or other new feature.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.menus.serve_layout">
+<code class="descclassname">EDA_miner.menus.</code><code class="descname">serve_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.menus.serve_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layout of our app needs to be inside a function
+so that every time some new session starts a new
+session_id is generated.</p>
+</dd></dl>
+
 </div>
 
 

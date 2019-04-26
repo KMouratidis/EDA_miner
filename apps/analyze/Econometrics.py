@@ -10,6 +10,7 @@ from server import app
 from utils import create_dropdown, get_data
 
 
+
 def Econometrics_Options(options, results):
 
     return html.Div(children=[
@@ -46,6 +47,7 @@ def render_variable_choices_econometrics(dataset_choice,
         for the user to choose for altering across datasets.
     """
 
+
     df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
@@ -74,11 +76,12 @@ def render_variable_choices_econometrics(dataset_choice,
      State("user_id", "children"),
      State("dataset_choice_econometrics", "value")])
 def fit_clustering_model(xvars, yvars, algo_choice_econometrics,
-                  user_id, dataset_choice):
+                         user_id, dataset_choice):
     """
         This callback takes all available user choices and, if all
         are present, it fits the appropriate model.
     """
+
 
     df = get_data(dataset_choice, user_id)
 
