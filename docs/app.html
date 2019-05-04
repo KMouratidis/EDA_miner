@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>EDA_miner_public.app API documentation</title>
+<meta name="description" content="The main app is here. It takes the base menus from menus.py
+and puts them in the app.layout, then defines callbacks
+and finally has the if-name-main …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>EDA_miner_public.app</code></h1>
+</header>
+<section id="section-intro">
+<p>The main app is here. It takes the base menus from menus.py
+and puts them in the app.layout, then defines callbacks
+and finally has the if-name-main block necessary to run the app.</p>
+<p>Dash callbacks:
+- high_level_tabs: On high-level tab selection, render
+the appropriate layout.
+- update_sidebar_menus: For the second level of tabs, show
+different sidebar menu.</p>
+<p>Notes to others:
+You should probably not write code here, unless:
+- working on side-menus,
+- working on login system,
+- adding a new-high-level tab, or other new feature.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+The main app is here. It takes the base menus from menus.py
+and puts them in the app.layout, then defines callbacks
+and finally has the if-name-main block necessary to run the app.
+
+Dash callbacks:
+    - high_level_tabs: On high-level tab selection, render
+                       the appropriate layout.
+    - update_sidebar_menus: For the second level of tabs, show
+                            different sidebar menu.
+
+Notes to others:
+    You should probably not write code here, unless:
+        - working on side-menus,
+        - working on login system,
+        - adding a new-high-level tab, or other new feature.
+&#34;&#34;&#34;
+
+
+from dash.dependencies import Input, Output, State
+import dash_core_components as dcc
+import dash_html_components as html
+
+from server import app
+from utils import cleanup, r
+from menus import serve_layout
+from apps import data_view, exploration_view, analyze_view
+from apps.exploration import Exploration, KPIs, Exploration3D
+from apps.analyze import Model_Builder
+
+
+app.layout = html.Div([
+
+    # for exporting figures aimed at PDF report generation
+    dcc.Graph(id=&#34;saved_graph_configs1&#34;, style={&#34;display&#34;: &#34;none&#34;}),
+    dcc.Graph(id=&#34;saved_graph_configs2&#34;, style={&#34;display&#34;: &#34;none&#34;}),
+
+    serve_layout(),
+])
+
+
+
+
+# Input and Output defined in MainMenu
+@app.callback(Output(&#39;selected_subpage&#39;, &#39;children&#39;),
+              [Input(&#39;high_level_tabs&#39;, &#39;value&#39;)])
+def high_level_tabs(tab):
+    &#34;&#34;&#34;On high-level tab selection, render the appropriate layout.&#34;&#34;&#34;
+
+    if tab == &#39;EDA&#39;:
+        return exploration_view.layout
+    elif tab == &#34;modelling&#34;:
+        return analyze_view.layout
+    elif tab == &#34;data&#34;:
+        return data_view.layout
+    else:
+        return &#39;404&#39;
+
+
+@app.callback(Output(&#39;low_level_tabs_submenu&#39;, &#39;children&#39;),
+              [Input(&#39;level2_tabs&#39;, &#39;value&#39;)])
+def update_sidebar_menus(level2_tabs):
+    &#34;&#34;&#34;For the second level of tabs, show different sidebar menu.&#34;&#34;&#34;
+
+    if level2_tabs is not None:
+        if level2_tabs == &#39;kpi&#39;:
+            return Exploration.Graphs_Export + KPIs.Sidebar
+
+        elif level2_tabs == &#34;exploration&#34;:
+            return Exploration.Graphs_Export + Exploration.Sidebar
+
+        elif level2_tabs == &#34;graphs3d&#34;:
+            return Exploration.Graphs_Export + Exploration3D.Sidebar
+
+        elif level2_tabs == &#39;model_builder&#39;:
+            return Model_Builder.SideBar_modelBuilder
+
+        elif level2_tabs == &#39;pipelines&#39;:
+            return [html.H4(f&#34;Tab is {level2_tabs}&#34;)]
+
+        else:
+            return [html.H4(f&#34;Tab is {level2_tabs}&#34;)]
+
+    else:
+        return []
+
+
+if __name__ == &#34;__main__&#34;:
+    # TODO: Implement user_id correctly:
+    #       create a Redis entry with all `user_id`s that
+    #       joined the session and cleanup for each of them
+
+    # TODO: Consider making this an executable
+    #       https://community.plot.ly/t/convert-dash-to-executable-file-exe/14222
+
+    try:
+        app.run_server(debug=True, host=&#39;0.0.0.0&#39;)
+
+    finally:
+        cleanup(r)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="EDA_miner_public" href="index.html">EDA_miner_public</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
