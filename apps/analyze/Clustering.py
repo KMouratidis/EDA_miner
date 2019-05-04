@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_daq as daq
+from dash.exceptions import PreventUpdate
 
 from server import app
 import layouts
@@ -105,7 +106,7 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, df, dataset_choice,
                                algo_choice_clustering]):
-        return {}
+        raise PreventUpdate()
 
     # TODO: Make this interface cleaner
     # We have the dictionary that maps keys to models so use that

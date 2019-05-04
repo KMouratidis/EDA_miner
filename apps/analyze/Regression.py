@@ -5,6 +5,7 @@
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import create_dropdown, mapping, get_data
@@ -88,7 +89,7 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, yvars, df, dataset_choice,
                                algo_choice_regression]):
-        return {}
+        raise PreventUpdate()
 
     # We have the dictionary that maps keys to models so use that
     model = mapping[algo_choice_regression]()

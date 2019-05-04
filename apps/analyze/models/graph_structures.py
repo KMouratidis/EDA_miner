@@ -166,7 +166,7 @@ class Node:
                 "id": self.id,
                 "parent": self.parent,
                 "url": self.url,
-                "func_params": {}
+                "func_params": options.get("func_params", {})
             },
             "position": {
                 'x': 100 + self.order * 250,

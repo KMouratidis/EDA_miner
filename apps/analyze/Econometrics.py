@@ -5,6 +5,7 @@
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import create_dropdown, get_data
@@ -88,6 +89,6 @@ def fit_clustering_model(xvars, yvars, algo_choice_econometrics,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, df, dataset_choice,
                                algo_choice_econometrics]):
-        return {}
+        raise PreventUpdate()
 
     return [html.H4("Not implemented")]
