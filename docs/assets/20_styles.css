@@ -1,0 +1,120 @@
+#app_logo {
+    max-width: 185px;
+    display: block;
+}
+
+button {
+    width: 185px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+li {
+    padding-left: 30px;
+    color: #000;
+}
+
+li>a {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #000;
+    text-decoration: none;
+    max-width: 140px;
+    /* list-style-type: disc; */
+}
+
+#sidebar, #sidebar2 {
+    max-width: 185px;
+    min-width: 185px;
+}
+
+#sidebar, #sidebar2, #main_page, #mainmenu {
+    padding-top: 10px;
+}
+
+
+@media only screen and (max-width: 3050px) {
+    #main_page, #mainmenu {
+        max-width: 75%;
+    }
+}
+
+@media only screen and (max-width: 1550px) {
+    #main_page, #mainmenu {
+        max-width: 65%;
+    }
+}
+
+
+#sidebar, #sidebar2 {
+    padding: 0px;
+}
+
+#sidebar {
+    margin-top: 10px;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+
+#dark_theme, #external_links_caret {
+    color: #000;
+}
+
+body {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+#high_level_tabs, .tab {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    vertical-align: middle;
+}
+
+#high_level_tabs {
+    font-size: 22px;
+    max-height: 70px;
+}
+
+.tab {
+    max-height: 60px;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+}
+
+#visuals-content, #data-content, #model-content {
+    padding-top: 15px;
+}
+
+._dash-undo-redo {
+    display: none;
+}
+
+#landing_page, #username, #login_form, #landing_page_form {
+    align-items: center !important;
+    align-content: center !important;
+    text-align: center !important;
+    padding: 20px;
+    vertical-align: center !important;
+}
+
+#submit_login_choice {
+    text-align: center;
+    font-size: 16px;
+    color: white;
+}
+
+#landing_page
+{
+	background-image: url("images/graph_abs.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	position: fixed;
+	min-height: 100%;
+	min-width: 100%;
+    background-color: transparent;
+    font-weight: bold;
+    padding-top: 200px;
+    color: white;
+}

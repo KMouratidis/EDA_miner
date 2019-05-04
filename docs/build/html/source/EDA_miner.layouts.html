@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EDA_miner.layouts module &mdash; EDA_miner  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> EDA_miner
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">EDA_miner.layouts module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EDA_miner</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>EDA_miner.layouts module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/EDA_miner.layouts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-EDA_miner.layouts">
+<span id="eda-miner-layouts-module"></span><h1>EDA_miner.layouts module<a class="headerlink" href="#module-EDA_miner.layouts" title="Permalink to this headline">¶</a></h1>
+<p>Similar to <cite>styles.py</cite>, this module is mean as a collection of layouts
+to be used across the dash app. A layout is about what components exist
+in any view (e.g. html elements) whereas a style is about… styling!
+Styles are implemented as functions to allow use with different parameters.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>default_2d: Layout for most plotly graphs.</li>
+<li>default_3d: Layout for 3D graphs, not implemented.</li>
+<li>default_kpi: Layout for KPI graphs, not implemented.</li>
+</ul>
+</dd>
+<dt>Classes:</dt>
+<dd><ul class="first last simple">
+<li>PDF_Layout1: A sample PDF layout, more to be added. Implemented                    as a class out of convenience, may be changed later.                    Usage: <cite>PDF_Layout1.render(x_axis, y_axis)</cite>.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>Feel free to tamper with all of the functions and classes below
+and/or add your own. Beware that in some cases (e.g. defining a
+new PDF layout) you might need to make changes in other files,
+or at least wait till needed functionality is added.</dd>
+</dl>
+<dl class="class">
+<dt id="EDA_miner.layouts.PDF_Layout1">
+<em class="property">class </em><code class="descclassname">EDA_miner.layouts.</code><code class="descname">PDF_Layout1</code><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class is meant to capture all specifications needed to create
+a report layout. This isn’t currently implemented correctly, it
+merely serves as a placeholder, not a template to be mimicked.
+The elements present below are being used elsewhere to create
+the layout of the the PDF, but those will probably moved here.</p>
+<dl class="attribute">
+<dt id="EDA_miner.layouts.PDF_Layout1.first_figure">
+<code class="descname">first_figure</code><em class="property"> = Layout({     'autosize': False,     'bargap': 0.35,     'font': {'family': 'Raleway', 'size': 10},     'height': 300,     'hovermode': 'closest',     'legend': {'orientation': 'h', 'x': -0.0228945952895, 'y': -0.189563896463, 'yanchor': 'top'},     'margin': {'b': 10, 'l': 10, 'r': 0, 't': 20},     'showlegend': True,     'title': {'text': ''},     'width': 600,     'xaxis': {'autorange': True, 'range': [-0.5, 4.5], 'showline': True, 'title': {'text': ''}, 'type': 'category'},     'yaxis': {'autorange': True,               'range': [0, 22.9789473684],               'showgrid': True,               'showline': True,               'title': {'text': ''},               'type': 'linear',               'zeroline': False} })</em><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.first_figure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="EDA_miner.layouts.PDF_Layout1.render">
+<em class="property">static </em><code class="descname">render</code><span class="sig-paren">(</span><em>x_axis</em>, <em>y_axis</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="EDA_miner.layouts.PDF_Layout1.second_figure">
+<code class="descname">second_figure</code><em class="property"> = Layout({     'autosize': False,     'bargap': 0.35,     'font': {'family': 'Raleway', 'size': 10},     'height': 300,     'hovermode': 'closest',     'legend': {'orientation': 'h', 'x': -0.0228945952895, 'y': -0.189563896463, 'yanchor': 'top'},     'margin': {'b': 10, 'l': 10, 'r': 0, 't': 20},     'showlegend': True,     'title': {'text': ''},     'width': 600,     'xaxis': {'autorange': True, 'range': [-0.5, 4.5], 'showline': True, 'title': {'text': ''}, 'type': 'category'},     'yaxis': {'autorange': True,               'range': [0, 22.9789473684],               'showgrid': True,               'showline': True,               'title': {'text': ''},               'type': 'linear',               'zeroline': False} })</em><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.second_figure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_2d">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_2d</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for 2D graphs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xvars</strong> – str, title of the x-axis.</li>
+<li><strong>yvars</strong> – str, title of the y-axis.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <cite>go.Layout</cite> instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_3d">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_3d</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em>, <em>zvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for 3D graphs. Currently same as default_2d.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xvars</strong> – str, title of the x-axis.</li>
+<li><strong>yvars</strong> – str, title of the y-axis.</li>
+<li><strong>zvars</strong> – str, currently not used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <cite>go.Layout</cite> instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_kpi">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_kpi</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_kpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for KPI graphs. Currently same as default_2d.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xvars</strong> – str, title of the x-axis.</li>
+<li><strong>yvars</strong> – str, title of the y-axis.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <cite>go.Layout</cite> instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, K.Mouratidis, V.Tsichli, C.Timamopoulos, G.Katrilakas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
