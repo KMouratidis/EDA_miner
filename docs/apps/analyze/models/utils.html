@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.models.utils API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.analyze.models.utils API documentation</title>
+<meta name="description" content="This module collects utility functions and models …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,14 +17,32 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.models.utils</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.models.utils</code></h1>
 </header>
 <section id="section-intro">
+<p>This module collects utility functions and models.</p>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>baseline: Calculate the baseline for a time series.
+Notes to others:
+Feel free to add or modify stuff here.</li>
+</ul>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">import pandas as pd
+<pre><code class="python">&#34;&#34;&#34;
+This module collects utility functions and models.
+
+Functions:
+    - baseline: Calculate the baseline for a time series.
+
+Notes to others:
+    Feel free to add or modify stuff here.
+&#34;&#34;&#34;
+
+import pandas as pd
 import numpy as np
 import peakutils
+
 
 def _moving_average(values, roll_window=3, correction=False):
     values = pd.Series(values)
@@ -40,8 +58,6 @@ def _moving_average(values, roll_window=3, correction=False):
 
 
 def _exp_moving_average(values, window):
-    &#34;&#34;&#34; Numpy implementation of EMA&#34;&#34;&#34;
-
     weights = np.exp(np.linspace(-1., 0.5, window))
     weights /= weights.sum()
     a = np.convolve(values, weights, mode=&#39;full&#39;)[:len(values)]
@@ -51,7 +67,6 @@ def _exp_moving_average(values, window):
 
 
 def _ema_baseline(values, func, ema_window=7, roll_window=7):
-
     ema = _exp_moving_average(values, ema_window)
 
     roll = _moving_average(func([values, ema], axis=0), roll_window)
@@ -62,6 +77,21 @@ def _ema_baseline(values, func, ema_window=7, roll_window=7):
 
 def baseline(values, min_max=&#34;min&#34;, deg=7, ema_window=7, roll_window=7,
              max_it=200, tol=1e-4):
+    &#34;&#34;&#34;
+
+    Args:
+        values (iterable(int)):
+        min_max (str): Whether to calculate an upper or lower baseline.
+        deg (int): The degree of the polynomial fitting.
+        ema_window (int): Window for the exponential moving average.
+        roll_window (int): Window for the simple moving average.
+        max_it (int): Number of iterations for `peakutils.baseline`.
+        tol (float): Least amount of change before termination of fitting \
+                     in `peakutils.baseline`.
+
+    Returns:
+
+    &#34;&#34;&#34;
 
     if min_max == &#34;min&#34;:
         bound = np.min
@@ -87,15 +117,47 @@ def baseline(values, min_max=&#34;min&#34;, deg=7, ema_window=7, roll_window=7,
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.utils.baseline"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.utils.baseline"><code class="name flex">
 <span>def <span class="ident">baseline</span></span>(<span>values, min_max='min', deg=7, ema_window=7, roll_window=7, max_it=200, tol=0.0001)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt>values (iterable(int)):</dt>
+<dt><strong><code>min_max</code></strong> :&ensp;<code>str</code></dt>
+<dd>Whether to calculate an upper or lower baseline.</dd>
+<dt><strong><code>deg</code></strong> :&ensp;<code>int</code></dt>
+<dd>The degree of the polynomial fitting.</dd>
+<dt><strong><code>ema_window</code></strong> :&ensp;<code>int</code></dt>
+<dd>Window for the exponential moving average.</dd>
+<dt><strong><code>roll_window</code></strong> :&ensp;<code>int</code></dt>
+<dd>Window for the simple moving average.</dd>
+<dt><strong><code>max_it</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of iterations for <code>peakutils.baseline</code>.</dd>
+<dt><strong><code>tol</code></strong> :&ensp;<code>float</code></dt>
+<dd>Least amount of change before termination of fitting
+in <code>peakutils.baseline</code>.</dd>
+</dl>
+<p>Returns:</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def baseline(values, min_max=&#34;min&#34;, deg=7, ema_window=7, roll_window=7,
              max_it=200, tol=1e-4):
+    &#34;&#34;&#34;
+
+    Args:
+        values (iterable(int)):
+        min_max (str): Whether to calculate an upper or lower baseline.
+        deg (int): The degree of the polynomial fitting.
+        ema_window (int): Window for the exponential moving average.
+        roll_window (int): Window for the simple moving average.
+        max_it (int): Number of iterations for `peakutils.baseline`.
+        tol (float): Least amount of change before termination of fitting \
+                     in `peakutils.baseline`.
+
+    Returns:
+
+    &#34;&#34;&#34;
 
     if min_max == &#34;min&#34;:
         bound = np.min
@@ -127,12 +189,12 @@ def baseline(values, min_max=&#34;min&#34;, deg=7, ema_window=7, roll_window=7,
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.models" href="index.html">EDA_miner_public.apps.analyze.models</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models" href="index.html">EDA_miner.apps.analyze.models</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.utils.baseline" href="#EDA_miner_public.apps.analyze.models.utils.baseline">baseline</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.utils.baseline" href="#EDA_miner.apps.analyze.models.utils.baseline">baseline</a></code></li>
 </ul>
 </li>
 </ul>

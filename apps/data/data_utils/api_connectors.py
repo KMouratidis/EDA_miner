@@ -12,6 +12,8 @@ Notes to others:
     a new API connection (or improving existing ones).
 """
 
+from dash.exceptions import PreventUpdate
+
 from utils import r
 
 import twitter
@@ -22,49 +24,24 @@ import spotipy
 from spotipy import util
 import pandas as pd
 import pickle
+import quandl
 
 
-def spotify_connect(client_id, client_secret, user_id):
-    """Connect to Spotify and store the handle in Redis."""
-
-    creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
-    token = creds.get_access_token()
-
-    spotify = spotipy.Spotify(auth=token)
-
-    r.set(f"{user_id}_spotify_api", "true")
-    r.set(f"{user_id}_spotify_api_handle", pickle.dumps(spotify))
-
-
-def reddit_connect(client_id, client_secret, user_id):
-    """Connect to Reddit and store the handle in Redis."""
-
-    reddit = praw.Reddit(client_id=client_id,
-                         client_secret=client_secret,
-                         user_agent='EDA miner')
-
-    r.set(f"{user_id}_reddit_api", "true")
-    r.set(f"{user_id}_reddit_api_handle", pickle.dumps(reddit))
-
-
-def twitter_connect(key, secret_key, access_token, access_token_secret,
-                    user_id, sleep_on_rate_limit=True):
+def twitter_connect(consumer_key, consumer_secret, access_token_key,
+                    access_token_secret, *, sleep_on_rate_limit=True):
     """Connect to Twitter API and store the handle in Redis."""
 
-    api = twitter.Api(consumer_key=key,
-                      consumer_secret=secret_key,
-                      access_token_key=access_token,
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token_key,
                       access_token_secret=access_token_secret,
                       sleep_on_rate_limit=sleep_on_rate_limit)
     api.VerifyCredentials()
 
-    r.set(f"{user_id}_twitter_api", "true")
-    # store the api object to redis so it
-    # can be used in other parts
-    r.set(f"{user_id}_twitter_api_handle", pickle.dumps(api))
+    return api
 
 
-def google_sheets_connect(credentials_file, gspread_key, user_id):
+def google_sheets_connect(credentials_file, gspread_key):
     """Connect to Google Sheets and store the data in Redis."""
 
     scope = ['https://spreadsheets.google.com/feeds',
@@ -82,14 +59,38 @@ def google_sheets_connect(credentials_file, gspread_key, user_id):
     # authorization .json file) to access the spreadsheet or to allow
     # access to everyone who has a link (or both)
     spreadsheet = gc.open_by_key(gspread_key)
-    ws = spreadsheet.get_worksheet(0)
 
-    data = ws.get_all_values()
-    data = pd.DataFrame(data[1:], columns=data[0])
-
-    r.set(f"{user_id}_gsheets_api", "true")
+    # ws = spreadsheet.get_worksheet(0)
     # TODO: Investigate and store the other components
-    r.set(f"{user_id}_gsheets_api_data", pickle.dumps(data))
+    # data = ws.get_all_values()
+    # data = pd.DataFrame(data[1:], columns=data[0])
+
+    # Here the api handle is both the gc instance and the spreadsheet
+    return [gc, spreadsheet]
+
+
+def reddit_connect(client_id, client_secret):
+    """Connect to Reddit and store the handle in Redis."""
+
+    return praw.Reddit(client_id=client_id,
+                       client_secret=client_secret,
+                       user_agent='EDA miner')
+
+
+def spotify_connect(client_id, client_secret):
+    """Connect to Spotify and store the handle in Redis."""
+
+    creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
+    token = creds.get_access_token()
+
+    return spotipy.Spotify(auth=token)
+
+
+def quandl_connect(api_key):
+    quandl.ApiConfig.api_key = api_key
+
+    # Not actually a handle, but can be used to get data.
+    return quandl.get
 
 
 def facebook_connect():
@@ -98,3 +99,27 @@ def facebook_connect():
 
 def google_docs_connect():
     raise NotImplementedError
+
+
+connectors_mapping = {
+    "spotify": spotify_connect,
+    "reddit": reddit_connect,
+    "twitter": twitter_connect,
+    "gsheets": google_sheets_connect,
+    "quandl": quandl_connect,
+}
+
+
+# A function that serves as the frontend to all others
+def api_connect(api_choice, user_id, *args, **kwargs):
+
+    if any(x is None for x in args):
+        raise PreventUpdate()
+
+    func = connectors_mapping[api_choice]
+
+    api_handle = func(*args, **kwargs)
+
+    # Store in Redis that the API connected, and its handle(s)
+    r.set(f"{user_id}_{api_choice}_api", "true")
+    r.set(f"{user_id}_{api_choice}_api_handle", pickle.dumps(api_handle))

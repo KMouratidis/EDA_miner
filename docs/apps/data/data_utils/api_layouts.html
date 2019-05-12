@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.data.data_utils.api_layouts API documentation</title>
+<title>EDA_miner.apps.data.data_utils.api_layouts API documentation</title>
 <meta name="description" content="This module collects the layouts for connecting to the various APIs …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.data.data_utils.api_layouts</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.data.data_utils.api_layouts</code></h1>
 </header>
 <section id="section-intro">
 <p>This module collects the layouts for connecting to the various APIs.</p>
@@ -25,18 +25,22 @@
 <ul>
 <li>success_message: Notify the user for successful connection.
 Global variables:<ul>
-<li>debugger_layout: All inputs and the button used throughout the tab.</li>
 <li>twitter_layout: 4 input fields and a button.</li>
-<li>gsheets_layout: 2 input fields and a button. The rest are hidden.</li>
-<li>reddit_layout: 2 input fields and a button. The rest are hidden.</li>
-<li>quandl_layout: 2 input fields and a button. The rest are hidden.</li>
-<li>spotify_layout: 2 input fields and a button. The rest are hidden.</li>
+<li>gsheets_layout: 2 input fields and a button.</li>
+<li>reddit_layout: 2 input fields and a button.</li>
+<li>quandl_layout: 2 input fields and a button.</li>
+<li>spotify_layout: 2 input fields and a button.</li>
 </ul>
 </li>
 </ul>
 <p>Notes to others:
 You should probably not write code here, unless adding
 a new API connection.</p>
+<pre><code>IMPORTANT: When designing layouts ALWAYS pre-append the input
+elements with the API name, and ALWAYS name each input id
+according to the names of the variables of the respective API
+connector.
+</code></pre>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
@@ -46,111 +50,136 @@ Functions:
     - success_message: Notify the user for successful connection.
 
 Global variables:
-    - debugger_layout: All inputs and the button used throughout the tab.
     - twitter_layout: 4 input fields and a button.
-    - gsheets_layout: 2 input fields and a button. The rest are hidden.
-    - reddit_layout: 2 input fields and a button. The rest are hidden.
-    - quandl_layout: 2 input fields and a button. The rest are hidden.
-    - spotify_layout: 2 input fields and a button. The rest are hidden.
+    - gsheets_layout: 2 input fields and a button.
+    - reddit_layout: 2 input fields and a button.
+    - quandl_layout: 2 input fields and a button.
+    - spotify_layout: 2 input fields and a button.
 
 Notes to others:
     You should probably not write code here, unless adding
     a new API connection.
+
+    IMPORTANT: When designing layouts ALWAYS pre-append the input
+    elements with the API name, and ALWAYS name each input id
+    according to the names of the variables of the respective API
+    connector.
 &#34;&#34;&#34;
 
 import dash_core_components as dcc
 import dash_html_components as html
 
 
-# These are all elements that are needed as callback inputs
-# but if they disappear from one view then the callback stops
-# working so they are inserted as hidden in every layout
-debugger_layout = [
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;, value=&#34;&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;, value=&#34;&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;, value=&#34;&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;, value=&#34;&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-]
-
-
 def success_message(api):
+    &#34;&#34;&#34;Utility to provide feedback on successful connections.&#34;&#34;&#34;
     return [
-        html.H4(f&#34;Successfully got data from the {api} API.&#34;),
+        html.H4(f&#34;Successfully connected to the {api} API.&#34;),
         html.Br(),
-        *debugger_layout,
     ]
 
 
-twitter_layout = [
-    html.H5(&#34;Key&#34;),
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Secret Key&#34;),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Access Token&#34;),
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Access Token Secret&#34;),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;),
+# TODO: DATA WITH METHODS (see api_connectors) MEANS CLASSES!
+#       Consider refactoring the code in these two files to make
+#       everything a class for better &amp; cleaner interface
 
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;,
-                style={&#34;display&#34;: &#34;inline&#34;})
+twitter_login = [
+
+    html.Div(id=&#34;twitter_login_form&#34;, children=[
+        html.H5(&#34;Consumer key&#34;),
+        dcc.Input(id=&#34;twitter_consumer_key&#34;, type=&#34;text&#34;),
+
+        html.H5(&#34;Consumer Secret&#34;),
+        dcc.Input(id=&#34;twitter_consumer_secret&#34;, type=&#34;text&#34;),
+
+        html.H5(&#34;Access Token&#34;),
+        dcc.Input(id=&#34;twitter_access_token_key&#34;, type=&#34;text&#34;),
+
+        html.H5(&#34;Access Token Secret&#34;),
+        dcc.Input(id=&#34;twitter_access_token_secret&#34;, type=&#34;text&#34;),
+
+        html.Button(&#34;Connect!&#34;, id=&#34;twitter_connect_button&#34;,
+                    style={&#34;display&#34;: &#34;inline&#34;}, n_clicks=0),
+    ]),
+
+    html.Div(id=&#34;twitter_UI&#34;),
 ]
 
-gsheets_layout = [
-    html.H5(&#34;Credentials file path&#34;),
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Secret Key&#34;),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;),
-
-    # debuggers
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;,
-                style={&#34;display&#34;: &#34;inline&#34;})
+twitter_success = [
+    html.Br(),
+    dcc.Input(id=&#34;twitter_account_name&#34;, placeholder=&#34;Enter a twitter handle name&#34;),
+    html.Button(&#34;Fetch tweets!&#34;, id=&#34;get_tweets_username&#34;, n_clicks=0),
+    html.Div(id=&#34;twitter_results&#34;),
 ]
 
-reddit_layout = [
-    html.H5(&#34;Client id&#34;),
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Client secret&#34;),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;),
+gsheets_login = [
 
-    # debuggers
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
+    html.Div(id=&#34;gsheets_login_form&#34;, children=[
+        html.H5(&#34;Credentials file path&#34;),
+        dcc.Input(id=&#34;gsheets_credentials_file&#34;, type=&#34;text&#34;),
 
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;,
-                style={&#34;display&#34;: &#34;inline&#34;})
+        html.H5(&#34;Secret Key&#34;),
+        dcc.Input(id=&#34;gsheets_gspread_key&#34;, type=&#34;text&#34;),
+
+        html.Button(&#34;Connect!&#34;, id=&#34;gsheets_connect_button&#34;,
+                    style={&#34;display&#34;: &#34;inline&#34;}, n_clicks=0),
+    ]),
+
+    html.Div(id=&#34;gsheets_UI&#34;),
 ]
 
-quandl_layout = [
-    html.H5(&#34;Quandl key&#34;),
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Quandl tag&#34;),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;),
+reddit_login = [
 
-    # debuggers
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
+    html.Div(id=&#34;reddit_login_form&#34;, children=[
+        html.H5(&#34;Client id&#34;),
+        dcc.Input(id=&#34;reddit_client_id&#34;, type=&#34;text&#34;),
 
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;,
-                style={&#34;display&#34;: &#34;inline&#34;})
+        html.H5(&#34;Client secret&#34;),
+        dcc.Input(id=&#34;reddit_client_secret&#34;, type=&#34;text&#34;),
+
+        html.Button(&#34;Connect!&#34;, id=&#34;reddit_connect_button&#34;,
+                    style={&#34;display&#34;: &#34;inline&#34;}, n_clicks=0)
+    ]),
+
+    html.Div(id=&#34;reddit_UI&#34;)
 ]
 
-spotify_layout = [
-    html.H5(&#34;Client id&#34;),
-    dcc.Input(id=&#34;input1&#34;, type=&#34;text&#34;),
-    html.H5(&#34;Client secret&#34;),
-    dcc.Input(id=&#34;input2&#34;, type=&#34;text&#34;),
+spotify_login = [
 
-    # debuggers
-    dcc.Input(id=&#34;input3&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
-    dcc.Input(id=&#34;input4&#34;, type=&#34;text&#34;, style={&#34;display&#34;: &#34;none&#34;}),
+    html.Div(id=&#34;quandl_login_form&#34;, children=[
+        html.H5(&#34;Client id&#34;),
+        dcc.Input(id=&#34;spotify_client_id&#34;, type=&#34;text&#34;),
 
-    html.Button(&#34;Connect!&#34;, id=&#34;connect_button&#34;,
-                style={&#34;display&#34;: &#34;inline&#34;}),
-]</code></pre>
+        html.H5(&#34;Client secret&#34;),
+        dcc.Input(id=&#34;spotify_client_secret&#34;, type=&#34;text&#34;),
+
+        html.Button(&#34;Connect!&#34;, id=&#34;spotify_connect_button&#34;,
+                    style={&#34;display&#34;: &#34;inline&#34;}, n_clicks=0)
+    ]),
+
+    html.Div(id=&#34;spotify_UI&#34;),
+]
+
+quandl_login = [
+
+    html.Div(id=&#34;quandl_login_form&#34;, children=[
+        html.H5(&#34;Quandl API key&#34;),
+        dcc.Input(id=&#34;quandl_api_key&#34;, type=&#34;text&#34;),
+
+        html.Button(&#34;Connect!&#34;, id=&#34;quandl_connect_button&#34;,
+                    style={&#34;display&#34;: &#34;inline&#34;}, n_clicks=0)
+    ]),
+
+    html.Div(id=&#34;quandl_UI&#34;),
+]
+
+# API: [ Forms for login, UI after login ]
+logins_ui_mapping = {
+    &#34;twitter&#34;: [twitter_login, twitter_success],
+    &#34;gsheets&#34;: [gsheets_login, success_message(&#34;Google Sheets&#34;)],
+    &#34;reddit&#34;: [reddit_login, success_message(&#34;Reddit&#34;)],
+    &#34;quandl&#34;: [quandl_login, success_message(&#34;Quandl&#34;)],
+    &#34;spotify&#34;: [spotify_login, success_message(&#34;Spotify&#34;)],
+}</code></pre>
 </details>
 </section>
 <section>
@@ -160,18 +189,18 @@ spotify_layout = [
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.data.data_utils.api_layouts.success_message"><code class="name flex">
+<dt id="EDA_miner.apps.data.data_utils.api_layouts.success_message"><code class="name flex">
 <span>def <span class="ident">success_message</span></span>(<span>api)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Utility to provide feedback on successful connections.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def success_message(api):
+    &#34;&#34;&#34;Utility to provide feedback on successful connections.&#34;&#34;&#34;
     return [
-        html.H4(f&#34;Successfully got data from the {api} API.&#34;),
+        html.H4(f&#34;Successfully connected to the {api} API.&#34;),
         html.Br(),
-        *debugger_layout,
     ]</code></pre>
 </details>
 </dd>
@@ -188,12 +217,12 @@ spotify_layout = [
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.data.data_utils" href="index.html">EDA_miner_public.apps.data.data_utils</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils" href="index.html">EDA_miner.apps.data.data_utils</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_layouts.success_message" href="#EDA_miner_public.apps.data.data_utils.api_layouts.success_message">success_message</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_layouts.success_message" href="#EDA_miner.apps.data.data_utils.api_layouts.success_message">success_message</a></code></li>
 </ul>
 </li>
 </ul>

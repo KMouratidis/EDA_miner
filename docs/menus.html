@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.menus API documentation</title>
+<title>EDA_miner.menus API documentation</title>
 <meta name="description" content="This module will collect all unchanging views and dash components
 (buttons, sidemenus, etc) so that the code in index.py is cleaner
 and abstracted …" />
@@ -19,7 +19,7 @@ and abstracted …" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.menus</code></h1>
+<h1 class="title">Module <code>EDA_miner.menus</code></h1>
 </header>
 <section id="section-intro">
 <p>This module will collect all unchanging views and dash components
@@ -119,11 +119,17 @@ SideBar = [
                            id=&#34;dash_link&#34;)
             ], href=&#34;https://dash.plot.ly/&#34;,
                 target=&#34;_blank&#34;)),
+
+            html.Li(html.A([
+                    html.Span(&#34;Our docs  &#34;),
+                    html.I(className=&#34;fas fa-external-link-square-alt&#34;,
+                           id=&#34;dev_link&#34;)
+            ], href=&#34;https://kmouratidis.github.io/EDA_miner_public/docs/&#34;,
+                target=&#34;_blank&#34;)),
         ])
     ]),
-
-
 ]
+
 
 MainMenu = [
 
@@ -147,8 +153,8 @@ MainMenu = [
     html.Div(id=&#34;table_container&#34;, children=[
         dash_table.DataTable(id=&#39;table&#39;,),
     ], style={&#34;display&#34;: &#34;none&#34;}),
-
 ]
+
 
 SideBar2 = [
     html.H3(&#34;Tab menu&#34;),
@@ -221,7 +227,7 @@ def serve_layout():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.menus.serve_layout"><code class="name flex">
+<dt id="EDA_miner.menus.serve_layout"><code class="name flex">
 <span>def <span class="ident">serve_layout</span></span>(<span>)</span>
 </code></dt>
 <dd>
@@ -280,12 +286,12 @@ session_id is generated.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public" href="index.html">EDA_miner_public</a></code></li>
+<li><code><a title="EDA_miner" href="index.html">EDA_miner</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.menus.serve_layout" href="#EDA_miner_public.menus.serve_layout">serve_layout</a></code></li>
+<li><code><a title="EDA_miner.menus.serve_layout" href="#EDA_miner.menus.serve_layout">serve_layout</a></code></li>
 </ul>
 </li>
 </ul>

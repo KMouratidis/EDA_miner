@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.exploration API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.exploration API documentation</title>
+<meta name="description" content="&lt;h2&gt;Developer notes&lt;/h2&gt; …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,12 +17,32 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.exploration</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.exploration</code></h1>
 </header>
 <section id="section-intro">
+<h2>Developer notes</h2>
+<p><strong>Do not add graph functions here.</strong> Some suggestions on what
+could be done here:
+<ul>
+<li>Prettify layout and user interface.</li>
+<li>Implement the interface to allow the user to create their own
+KPIs.</li>
+</ul></p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from apps.exploration.Exploration import Exploration_Options
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt;Developer notes&lt;/h2&gt;
+
+**Do not add graph functions here.** Some suggestions on what
+could be done here:
+&lt;ul&gt;
+    &lt;li&gt;Prettify layout and user interface.&lt;/li&gt;
+    &lt;li&gt;Implement the interface to allow the user to create their own
+    KPIs.&lt;/li&gt;
+&lt;/ul&gt;
+&#34;&#34;&#34;
+
+from apps.exploration.Exploration import Exploration_Options
 from apps.exploration.Exploration3D import Exploration3D_Options
 from apps.exploration.Networks import Network_Options
 from apps.exploration.KPIs import KPI_Options
@@ -33,36 +53,37 @@ from apps.exploration.TextVisualizations import TextViz_Options</code></pre>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.Exploration" href="Exploration.html">EDA_miner_public.apps.exploration.Exploration</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.Exploration" href="Exploration.html">EDA_miner.apps.exploration.Exploration</a></code></dt>
 <dd>
 <section class="desc"><p>This module defines the available graphs and creates the interface
 for the 2D dashboard …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.Exploration3D" href="Exploration3D.html">EDA_miner_public.apps.exploration.Exploration3D</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.Exploration3D" href="Exploration3D.html">EDA_miner.apps.exploration.Exploration3D</a></code></dt>
 <dd>
 <section class="desc"><p>This module defines the available graphs and creates the interface
 for the 3D dashboard …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.KPIs" href="KPIs.html">EDA_miner_public.apps.exploration.KPIs</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.KPIs" href="KPIs.html">EDA_miner.apps.exploration.KPIs</a></code></dt>
 <dd>
 <section class="desc"><p>This module is about building and viewing KPIs. The user should be
 able to view more advanced graphs and also create their own indicators …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.Networks" href="Networks.html">EDA_miner_public.apps.exploration.Networks</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.Networks" href="Networks.html">EDA_miner.apps.exploration.Networks</a></code></dt>
 <dd>
 <section class="desc"><p>This module is about viewing network data …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.PDF_report" href="PDF_report.html">EDA_miner_public.apps.exploration.PDF_report</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.PDF_report" href="PDF_report.html">EDA_miner.apps.exploration.PDF_report</a></code></dt>
 <dd>
 <section class="desc"><p>This module is about rendering and potentially printing PDF reports …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.TextVisualizations" href="TextVisualizations.html">EDA_miner_public.apps.exploration.TextVisualizations</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.TextVisualizations" href="TextVisualizations.html">EDA_miner.apps.exploration.TextVisualizations</a></code></dt>
 <dd>
 <section class="desc"><p>This module is about visualizing text data …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs" href="graphs/index.html">EDA_miner_public.apps.exploration.graphs</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs" href="graphs/index.html">EDA_miner.apps.exploration.graphs</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2>Developer notes</h2>
+<p>…</p></section>
 </dd>
 </dl>
 </section>
@@ -81,18 +102,18 @@ able to view more advanced graphs and also create their own indicators …</p></
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps" href="../index.html">EDA_miner_public.apps</a></code></li>
+<li><code><a title="EDA_miner.apps" href="../index.html">EDA_miner.apps</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.exploration.Exploration" href="Exploration.html">EDA_miner_public.apps.exploration.Exploration</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.Exploration3D" href="Exploration3D.html">EDA_miner_public.apps.exploration.Exploration3D</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.KPIs" href="KPIs.html">EDA_miner_public.apps.exploration.KPIs</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.Networks" href="Networks.html">EDA_miner_public.apps.exploration.Networks</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.PDF_report" href="PDF_report.html">EDA_miner_public.apps.exploration.PDF_report</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.TextVisualizations" href="TextVisualizations.html">EDA_miner_public.apps.exploration.TextVisualizations</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs" href="graphs/index.html">EDA_miner_public.apps.exploration.graphs</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.Exploration" href="Exploration.html">EDA_miner.apps.exploration.Exploration</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.Exploration3D" href="Exploration3D.html">EDA_miner.apps.exploration.Exploration3D</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.KPIs" href="KPIs.html">EDA_miner.apps.exploration.KPIs</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.Networks" href="Networks.html">EDA_miner.apps.exploration.Networks</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.PDF_report" href="PDF_report.html">EDA_miner.apps.exploration.PDF_report</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.TextVisualizations" href="TextVisualizations.html">EDA_miner.apps.exploration.TextVisualizations</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs" href="graphs/index.html">EDA_miner.apps.exploration.graphs</a></code></li>
 </ul>
 </li>
 </ul>

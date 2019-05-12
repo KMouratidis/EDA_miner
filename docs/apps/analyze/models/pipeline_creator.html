@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.models.pipeline_creator API documentation</title>
-<meta name="description" content="TBW..." />
+<title>EDA_miner.apps.analyze.models.pipeline_creator API documentation</title>
+<meta name="description" content="This module collects function to traverse the ModelBuilder graph …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,18 +17,45 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.models.pipeline_creator</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.models.pipeline_creator</code></h1>
 </header>
 <section id="section-intro">
-<p>TBW&hellip;</p>
+<p>This module collects function to traverse the ModelBuilder graph.</p>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>create_pipelines: Create pipelines from cytoscape elements and a
+dict that maps a node type to relevant parameters.</li>
+<li>find_pipeline_input: Given a goal creates a function that searches
+a pipeline for nodes of that type (or its
+subclasses). Essentially goes the reverse way
+of <a title="EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines" href="#EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines"><code>create_pipelines()</code></a>.
+Notes to others:
+Feel free to add or modify stuff here, but be cautious. You probably
+need experience with graphs and/or trees and traversal algorithms.
+The current implementation (unless I'm mistaken) are Breadth-First.</li>
+</ul>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
-    TBW...
+This module collects function to traverse the ModelBuilder graph.
+
+Functions:
+    - create_pipelines: Create pipelines from cytoscape elements and a \
+                        dict that maps a node type to relevant parameters.
+    - find_pipeline_input: Given a goal creates a function that searches \
+                           a pipeline for nodes of that type (or its \
+                           subclasses). Essentially goes the reverse way \
+                           of `create_pipelines`.
+
+Notes to others:
+    Feel free to add or modify stuff here, but be cautious. You probably \
+    need experience with graphs and/or trees and traversal algorithms. \
+    The current implementation (unless I&#39;m mistaken) are Breadth-First.
 &#34;&#34;&#34;
 
 import networkx as nx
 from sklearn.pipeline import Pipeline, FeatureUnion
+from apps.analyze.models import pipeline_classes, graph_structures
 
 
 def _traverse_graph(curr_node, G, mapper):
@@ -37,9 +64,10 @@ def _traverse_graph(curr_node, G, mapper):
     if len(parents) == 0:
         return mapper[curr_node]
     else:
+        # TODO: Maybe skip the FeatureUnion if `len(parents)==1` ?
         return Pipeline([
             (&#34;union&#34;, FeatureUnion([
-                (f&#34;name_{name}&#34;, _traverse_graph(name, G, mapper))
+                (f&#34;{name}&#34;, _traverse_graph(name, G, mapper))
                 for name in parents
                 if name in mapper
             ])),
@@ -49,10 +77,20 @@ def _traverse_graph(curr_node, G, mapper):
 
 def create_pipelines(data, node_options):
     &#34;&#34;&#34;
-        This function takes the data from the cytoscape graph and the node
-        options (dicts as in `Model_Builder.py`) and returns a list of
-        sklearn pipelines along with their terminal nodes. This uses
-        networkx for easier traversal.
+    Create pipelines from cytoscape elements and a dict that maps a node \
+    type to relevant parameters.
+
+    Args:
+        data (list(dict)): Cytoscape elements.
+        node_options (dict): Parameters to be passed at the classes as \
+                             they are instantiated for the pipeline(s).
+
+    Returns:
+        list, list: The pipelines and the terminal nodes.
+
+    Notes on implementation:
+        This uses networkx for easier traversal. Feel free to implement \
+        your own travel if you want to.
     &#34;&#34;&#34;
 
     G = nx.DiGraph()
@@ -71,7 +109,159 @@ def create_pipelines(data, node_options):
             terminal_nodes.append(node[&#34;data&#34;][&#34;id&#34;])
 
         node_info = node_options[node[&#34;data&#34;][&#34;node_type&#34;]]
-        mapper[node[&#34;data&#34;][&#34;id&#34;]] = node_info[&#34;func&#34;](**node[&#34;data&#34;][&#34;func_params&#34;])
+
+        # Get the default params for the model (we want this because we
+        # want to set the defaults at the server-side).
+        default_node_params = {}
+        for param, options in node_info[&#34;func&#34;].modifiable_params.items():
+            default_node_params[param] = options[0]
+
+        # Update the defaults with the given params
+        default_node_params.update(**node[&#34;data&#34;][&#34;func_params&#34;])
+        # Save it to the mapper
+        mapper[node[&#34;data&#34;][&#34;id&#34;]] = node_info[&#34;func&#34;](**default_node_params)
+
+    for edge in edges:
+        G.add_edge(edge[&#34;data&#34;][&#34;source&#34;], edge[&#34;data&#34;][&#34;target&#34;])
+
+    pipelines = []
+    for terminal_node in terminal_nodes:
+        pipelines.append(_traverse_graph(terminal_node, G, mapper))
+
+    return pipelines, terminal_nodes
+
+
+# TODO: THIS MIGHT NOT WORK CORRECTLY IF MORE THAN ONE PIPELINES ARE
+#       SIMULTANEOUSLY DEFINED. THIS PROBABLY NEEDS AN EXTRA SENTINEL.
+def find_pipeline_node(GOAL):
+    &#34;&#34;&#34;
+    Given a goal creates a function that searches a pipeline for nodes of \
+    that type (or its subclasses). Essentially goes the reverse way of \
+    `create_pipelines`.
+
+    Args:
+        GOAL (sklearn-like class): Stopping criteria / node for the recursion.
+
+    Returns:
+        The node of type `GOAL`, if found, else `None`.
+    &#34;&#34;&#34;
+
+    def _find_pipeline_input(pipe):
+        &#34;&#34;&#34;Find the input node of the graph&#34;&#34;&#34;
+
+        # TODO: This needs a better / cleaner implementation
+        if isinstance(pipe, Pipeline):
+            steps = [step[1] for step in pipe.steps]
+
+        elif isinstance(pipe, FeatureUnion):
+            steps = [transformer[1] for transformer in pipe.transformer_list]
+        else:
+            if isinstance(pipe, GOAL):
+                return pipe
+
+            steps = []
+
+        for step in steps:
+            ret = _find_pipeline_input(step)
+            if isinstance(ret, GOAL):
+                return ret
+
+    return _find_pipeline_input
+
+
+def find_input_node(elems):
+    elements = [elem for elem in elems if ((&#34;source&#34; in elem[&#34;data&#34;]) or
+                                           (&#34;parent&#34; in elem[&#34;data&#34;]))]
+
+    pipelines, _ = create_pipelines(elements, graph_structures.node_options)
+
+    current_pipeline = None
+    for pipe in pipelines:
+        feature_node = find_pipeline_node(
+            pipeline_classes.FeatureMaker
+        )(pipe)
+
+        if feature_node is not None:
+            current_pipeline = pipe
+            break
+
+    return find_pipeline_node(
+        pipeline_classes.BaseInput
+    )(current_pipeline)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines"><code class="name flex">
+<span>def <span class="ident">create_pipelines</span></span>(<span>data, node_options)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create pipelines from cytoscape elements and a dict that maps a node
+type to relevant parameters.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt>data (list(dict)): Cytoscape elements.</dt>
+<dt><strong><code>node_options</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Parameters to be passed at the classes as
+they are instantiated for the pipeline(s).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>list, list: The pipelines and the terminal nodes.
+Notes on implementation:
+This uses networkx for easier traversal. Feel free to implement
+your own travel if you want to.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_pipelines(data, node_options):
+    &#34;&#34;&#34;
+    Create pipelines from cytoscape elements and a dict that maps a node \
+    type to relevant parameters.
+
+    Args:
+        data (list(dict)): Cytoscape elements.
+        node_options (dict): Parameters to be passed at the classes as \
+                             they are instantiated for the pipeline(s).
+
+    Returns:
+        list, list: The pipelines and the terminal nodes.
+
+    Notes on implementation:
+        This uses networkx for easier traversal. Feel free to implement \
+        your own travel if you want to.
+    &#34;&#34;&#34;
+
+    G = nx.DiGraph()
+    terminal_nodes = []
+
+    edges = [elem for elem in data if &#34;source&#34; in elem[&#34;data&#34;]]
+    nodes = [elem for elem in data if &#34;source&#34; not in elem[&#34;data&#34;]]
+
+    mapper = {}
+    for node in nodes:
+        G.add_node(node[&#34;data&#34;][&#34;id&#34;])
+        # From each of these we will start a reverse search to construct the
+        # pipeline. We check to see if the node is a model (in contrast to
+        # transformers, input, etc)
+        if node_options[node[&#34;data&#34;][&#34;node_type&#34;]][&#34;parent&#34;] == &#34;models&#34;:
+            terminal_nodes.append(node[&#34;data&#34;][&#34;id&#34;])
+
+        node_info = node_options[node[&#34;data&#34;][&#34;node_type&#34;]]
+
+        # Get the default params for the model (we want this because we
+        # want to set the defaults at the server-side).
+        default_node_params = {}
+        for param, options in node_info[&#34;func&#34;].modifiable_params.items():
+            default_node_params[param] = options[0]
+
+        # Update the defaults with the given params
+        default_node_params.update(**node[&#34;data&#34;][&#34;func_params&#34;])
+        # Save it to the mapper
+        mapper[node[&#34;data&#34;][&#34;id&#34;]] = node_info[&#34;func&#34;](**default_node_params)
 
     for edge in edges:
         G.add_edge(edge[&#34;data&#34;][&#34;source&#34;], edge[&#34;data&#34;][&#34;target&#34;])
@@ -82,58 +272,82 @@ def create_pipelines(data, node_options):
 
     return pipelines, terminal_nodes</code></pre>
 </details>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_creator.create_pipelines"><code class="name flex">
-<span>def <span class="ident">create_pipelines</span></span>(<span>data, node_options)</span>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_creator.find_input_node"><code class="name flex">
+<span>def <span class="ident">find_input_node</span></span>(<span>elems)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>This function takes the data from the cytoscape graph and the node
-options (dicts as in <code>Model_Builder.py</code>) and returns a list of
-sklearn pipelines along with their terminal nodes. This uses
-networkx for easier traversal.</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def create_pipelines(data, node_options):
+<pre><code class="python">def find_input_node(elems):
+    elements = [elem for elem in elems if ((&#34;source&#34; in elem[&#34;data&#34;]) or
+                                           (&#34;parent&#34; in elem[&#34;data&#34;]))]
+
+    pipelines, _ = create_pipelines(elements, graph_structures.node_options)
+
+    current_pipeline = None
+    for pipe in pipelines:
+        feature_node = find_pipeline_node(
+            pipeline_classes.FeatureMaker
+        )(pipe)
+
+        if feature_node is not None:
+            current_pipeline = pipe
+            break
+
+    return find_pipeline_node(
+        pipeline_classes.BaseInput
+    )(current_pipeline)</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_creator.find_pipeline_node"><code class="name flex">
+<span>def <span class="ident">find_pipeline_node</span></span>(<span>GOAL)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Given a goal creates a function that searches a pipeline for nodes of
+that type (or its subclasses). Essentially goes the reverse way of
+<a title="EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines" href="#EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines"><code>create_pipelines()</code></a>.</p>
+<h2 id="args">Args</h2>
+<p>GOAL (sklearn-like class): Stopping criteria / node for the recursion.</p>
+<h2 id="returns">Returns</h2>
+<p>The node of type <code>GOAL</code>, if found, else <code>None</code>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def find_pipeline_node(GOAL):
     &#34;&#34;&#34;
-        This function takes the data from the cytoscape graph and the node
-        options (dicts as in `Model_Builder.py`) and returns a list of
-        sklearn pipelines along with their terminal nodes. This uses
-        networkx for easier traversal.
+    Given a goal creates a function that searches a pipeline for nodes of \
+    that type (or its subclasses). Essentially goes the reverse way of \
+    `create_pipelines`.
+
+    Args:
+        GOAL (sklearn-like class): Stopping criteria / node for the recursion.
+
+    Returns:
+        The node of type `GOAL`, if found, else `None`.
     &#34;&#34;&#34;
 
-    G = nx.DiGraph()
-    terminal_nodes = []
+    def _find_pipeline_input(pipe):
+        &#34;&#34;&#34;Find the input node of the graph&#34;&#34;&#34;
 
-    edges = [elem for elem in data if &#34;source&#34; in elem[&#34;data&#34;]]
-    nodes = [elem for elem in data if &#34;source&#34; not in elem[&#34;data&#34;]]
+        # TODO: This needs a better / cleaner implementation
+        if isinstance(pipe, Pipeline):
+            steps = [step[1] for step in pipe.steps]
 
-    mapper = {}
-    for node in nodes:
-        G.add_node(node[&#34;data&#34;][&#34;id&#34;])
-        # From each of these we will start a reverse search to construct the
-        # pipeline. We check to see if the node is a model (in contrast to
-        # transformers, input, etc)
-        if node_options[node[&#34;data&#34;][&#34;node_type&#34;]][&#34;parent&#34;] == &#34;models&#34;:
-            terminal_nodes.append(node[&#34;data&#34;][&#34;id&#34;])
+        elif isinstance(pipe, FeatureUnion):
+            steps = [transformer[1] for transformer in pipe.transformer_list]
+        else:
+            if isinstance(pipe, GOAL):
+                return pipe
 
-        node_info = node_options[node[&#34;data&#34;][&#34;node_type&#34;]]
-        mapper[node[&#34;data&#34;][&#34;id&#34;]] = node_info[&#34;func&#34;](**node[&#34;data&#34;][&#34;func_params&#34;])
+            steps = []
 
-    for edge in edges:
-        G.add_edge(edge[&#34;data&#34;][&#34;source&#34;], edge[&#34;data&#34;][&#34;target&#34;])
+        for step in steps:
+            ret = _find_pipeline_input(step)
+            if isinstance(ret, GOAL):
+                return ret
 
-    pipelines = []
-    for terminal_node in terminal_nodes:
-        pipelines.append(_traverse_graph(terminal_node, G, mapper))
-
-    return pipelines, terminal_nodes</code></pre>
+    return _find_pipeline_input</code></pre>
 </details>
 </dd>
 </dl>
@@ -149,12 +363,14 @@ networkx for easier traversal.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.models" href="index.html">EDA_miner_public.apps.analyze.models</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models" href="index.html">EDA_miner.apps.analyze.models</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_creator.create_pipelines" href="#EDA_miner_public.apps.analyze.models.pipeline_creator.create_pipelines">create_pipelines</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines" href="#EDA_miner.apps.analyze.models.pipeline_creator.create_pipelines">create_pipelines</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_creator.find_input_node" href="#EDA_miner.apps.analyze.models.pipeline_creator.find_input_node">find_input_node</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_creator.find_pipeline_node" href="#EDA_miner.apps.analyze.models.pipeline_creator.find_pipeline_node">find_pipeline_node</a></code></li>
 </ul>
 </li>
 </ul>

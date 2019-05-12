@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner API documentation</title>
+<meta name="description" content="&lt;h2&gt; Welcome to EDA Miner! &lt;/h2&gt; …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,71 +17,174 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public</code></h1>
+<h1 class="title">Module <code>EDA_miner</code></h1>
 </header>
 <section id="section-intro">
+<h2> Welcome to EDA Miner! </h2>
+<h3>Usage walk-through</h3>
+<p>We strive to create a simple and intuitive interface. The app is meant to be
+run in a central server and accessed via web, but can of course be run locally,
+too.</p>
+<p>Upon visiting the page you will be directed to the "<b>Data View</b>" tab where
+you upload your own datasets, connect to APIs, or view the data you have
+uploaded. When viewing your data, each API displays data in different ways,
+although actually using those data is not yet implemented (May 2019).</p>
+<p>As soon as you have uploaded a dataset, the other two tabs become functional.
+The first stop would be the "<b>Explore &amp; Visualize</b>" tab. Here you will
+find options to plot your data; each sub-tab contains a different class of
+visualizations.
+<ol>
+<li><b>Exploratory analysis</b> contains all the 2D graphs, including
+matplotlib-generated pairplots.</li>
+<li><b>Key performance indicators</b> currently implements only
+a baseline graph, but we plan to implement functionality so you
+can create your own KPIs, and we want to add additional analysis
+tools.</li>
+<li><b>3D graphs</b> currently only plots 3D scatterplots.</li>
+<li><b>Network graphs</b> use Cytoscape.js to create graph/network
+visualizations, allowing various layout choices.</li>
+<li><b>Text visualizations</b> currently only allow for creating
+simple word clouds (from given text), but plans for further integration
+and more visualizations include word vector visualization.</li>
+<li><b>PDF report</b> allows you to create reports using the figures
+you plot in the other tabs (using the "export graph config" buttons)
+and add custom text, headers, titles.</li>
+</ol></p>
+<p>Finally, in the "<b>Analyze &amp; Predict</b>" tab you are able to use your
+data to train Machine Learning models. The <b>Model builder</b> can be
+used to create more advanced pipelines (including defining your own
+features). The default steps are to first define the model <b>fully</b>
+(or some features may not work), then go over every node you want to
+customize and change its node options, and when you're done export the
+model ("convert to model" button). Finally, head over to the "Pipelines
+trainer" tab, select and train your model. If you want to run simpler
+models, there are additional tabs with the most common types of problems.</p>
+<h3>Project structure</h3>
+<p>Contributors wanting to familiarize themselves with the project structure
+can take a look at the <a src='https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines'>
+contributor guidelines</a>. You can also go through all the files and read
+the module docstrings that have rough guidelines about contributions. In the
+Python spirit, <b>feel free to completely ignore them</b></p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt; Welcome to EDA Miner! &lt;/h2&gt;
+
+&lt;h3&gt;Usage walk-through&lt;/h3&gt;
+We strive to create a simple and intuitive interface. The app is meant to be
+run in a central server and accessed via web, but can of course be run locally,
+too.
+
+Upon visiting the page you will be directed to the &#34;&lt;b&gt;Data View&lt;/b&gt;&#34; tab where
+you upload your own datasets, connect to APIs, or view the data you have
+uploaded. When viewing your data, each API displays data in different ways,
+although actually using those data is not yet implemented (May 2019).
+
+As soon as you have uploaded a dataset, the other two tabs become functional.
+The first stop would be the &#34;&lt;b&gt;Explore &amp; Visualize&lt;/b&gt;&#34; tab. Here you will
+find options to plot your data; each sub-tab contains a different class of
+visualizations.
+&lt;ol&gt;
+    &lt;li&gt;&lt;b&gt;Exploratory analysis&lt;/b&gt; contains all the 2D graphs, including
+    matplotlib-generated pairplots.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Key performance indicators&lt;/b&gt; currently implements only
+    a baseline graph, but we plan to implement functionality so you
+    can create your own KPIs, and we want to add additional analysis
+    tools.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;3D graphs&lt;/b&gt; currently only plots 3D scatterplots.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Network graphs&lt;/b&gt; use Cytoscape.js to create graph/network
+    visualizations, allowing various layout choices.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Text visualizations&lt;/b&gt; currently only allow for creating
+    simple word clouds (from given text), but plans for further integration
+    and more visualizations include word vector visualization.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;PDF report&lt;/b&gt; allows you to create reports using the figures
+    you plot in the other tabs (using the &#34;export graph config&#34; buttons)
+    and add custom text, headers, titles.&lt;/li&gt;
+&lt;/ol&gt;
+
+Finally, in the &#34;&lt;b&gt;Analyze &amp; Predict&lt;/b&gt;&#34; tab you are able to use your
+data to train Machine Learning models. The &lt;b&gt;Model builder&lt;/b&gt; can be
+used to create more advanced pipelines (including defining your own
+features). The default steps are to first define the model &lt;b&gt;fully&lt;/b&gt;
+(or some features may not work), then go over every node you want to
+customize and change its node options, and when you&#39;re done export the
+model (&#34;convert to model&#34; button). Finally, head over to the &#34;Pipelines
+trainer&#34; tab, select and train your model. If you want to run simpler
+models, there are additional tabs with the most common types of problems.
+
+
+&lt;h3&gt;Project structure&lt;/h3&gt;
+Contributors wanting to familiarize themselves with the project structure
+can take a look at the &lt;a src=&#39;https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines&#39;&gt;
+contributor guidelines&lt;/a&gt;. You can also go through all the files and read
+the module docstrings that have rough guidelines about contributions. In the
+Python spirit, &lt;b&gt;feel free to completely ignore them&lt;/b&gt;
+&#34;&#34;&#34;</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.Data" href="Data/index.html">EDA_miner_public.Data</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.Data" href="Data/index.html">EDA_miner.Data</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.app" href="app.html">EDA_miner_public.app</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.app" href="app.html">EDA_miner.app</a></code></dt>
 <dd>
 <section class="desc"><p>The main app is here. It takes the base menus from menus.py
 and puts them in the app.layout, then defines callbacks
 and finally has the if-name-main …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps" href="apps/index.html">EDA_miner_public.apps</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps" href="apps/index.html">EDA_miner.apps</a></code></dt>
+<dd>
+<section class="desc"><h2>Developer notes</h2>
+<p>Here you will find all of the "apps", each is a high-level tab. The main
+function of the files defined here is to delegate …</p></section>
+</dd>
+<dt><code class="name"><a title="EDA_miner.assets" href="assets/index.html">EDA_miner.assets</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.assets" href="assets/index.html">EDA_miner_public.assets</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.cache" href="cache/index.html">EDA_miner.cache</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.cache" href="cache/index.html">EDA_miner_public.cache</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.docs" href="docs/index.html">EDA_miner.docs</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.docs" href="docs/index.html">EDA_miner_public.docs</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.images" href="images/index.html">EDA_miner.images</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.images" href="images/index.html">EDA_miner_public.images</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="EDA_miner_public.layouts" href="layouts.html">EDA_miner_public.layouts</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.layouts" href="layouts.html">EDA_miner.layouts</a></code></dt>
 <dd>
 <section class="desc"><p>Similar to <code>styles.py</code>, this module is mean as a collection of layouts
 to be used across the dash app. A layout is about what components exist
 in any …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.menus" href="menus.html">EDA_miner_public.menus</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.menus" href="menus.html">EDA_miner.menus</a></code></dt>
 <dd>
 <section class="desc"><p>This module will collect all unchanging views and dash components
 (buttons, sidemenus, etc) so that the code in index.py is cleaner
 and abstracted …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.server" href="server.html">EDA_miner_public.server</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.server" href="server.html">EDA_miner.server</a></code></dt>
 <dd>
 <section class="desc"><p>This module is only here because of the Dash app spanning multiple files.
 General configurations of the underlying app and server go here as well …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.static" href="static/index.html">EDA_miner_public.static</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.static" href="static/index.html">EDA_miner.static</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.styles" href="styles.html">EDA_miner_public.styles</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.styles" href="styles.html">EDA_miner.styles</a></code></dt>
 <dd>
 <section class="desc"><p>This module is meant as a collection of styles that cannot be defined
 in the CSS (e.g. due to JS/Dash libraries' rendered elements not being
 viewable …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.utils" href="utils.html">EDA_miner_public.utils</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.utils" href="utils.html">EDA_miner.utils</a></code></dt>
 <dd>
 <section class="desc"><p>This module provides utilities, functions, and other code that is
 meant to be used across the app. This may undergo changes soon …</p></section>
@@ -103,19 +206,19 @@ meant to be used across the app. This may undergo changes soon …</p></section>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.Data" href="Data/index.html">EDA_miner_public.Data</a></code></li>
-<li><code><a title="EDA_miner_public.app" href="app.html">EDA_miner_public.app</a></code></li>
-<li><code><a title="EDA_miner_public.apps" href="apps/index.html">EDA_miner_public.apps</a></code></li>
-<li><code><a title="EDA_miner_public.assets" href="assets/index.html">EDA_miner_public.assets</a></code></li>
-<li><code><a title="EDA_miner_public.cache" href="cache/index.html">EDA_miner_public.cache</a></code></li>
-<li><code><a title="EDA_miner_public.docs" href="docs/index.html">EDA_miner_public.docs</a></code></li>
-<li><code><a title="EDA_miner_public.images" href="images/index.html">EDA_miner_public.images</a></code></li>
-<li><code><a title="EDA_miner_public.layouts" href="layouts.html">EDA_miner_public.layouts</a></code></li>
-<li><code><a title="EDA_miner_public.menus" href="menus.html">EDA_miner_public.menus</a></code></li>
-<li><code><a title="EDA_miner_public.server" href="server.html">EDA_miner_public.server</a></code></li>
-<li><code><a title="EDA_miner_public.static" href="static/index.html">EDA_miner_public.static</a></code></li>
-<li><code><a title="EDA_miner_public.styles" href="styles.html">EDA_miner_public.styles</a></code></li>
-<li><code><a title="EDA_miner_public.utils" href="utils.html">EDA_miner_public.utils</a></code></li>
+<li><code><a title="EDA_miner.Data" href="Data/index.html">EDA_miner.Data</a></code></li>
+<li><code><a title="EDA_miner.app" href="app.html">EDA_miner.app</a></code></li>
+<li><code><a title="EDA_miner.apps" href="apps/index.html">EDA_miner.apps</a></code></li>
+<li><code><a title="EDA_miner.assets" href="assets/index.html">EDA_miner.assets</a></code></li>
+<li><code><a title="EDA_miner.cache" href="cache/index.html">EDA_miner.cache</a></code></li>
+<li><code><a title="EDA_miner.docs" href="docs/index.html">EDA_miner.docs</a></code></li>
+<li><code><a title="EDA_miner.images" href="images/index.html">EDA_miner.images</a></code></li>
+<li><code><a title="EDA_miner.layouts" href="layouts.html">EDA_miner.layouts</a></code></li>
+<li><code><a title="EDA_miner.menus" href="menus.html">EDA_miner.menus</a></code></li>
+<li><code><a title="EDA_miner.server" href="server.html">EDA_miner.server</a></code></li>
+<li><code><a title="EDA_miner.static" href="static/index.html">EDA_miner.static</a></code></li>
+<li><code><a title="EDA_miner.styles" href="styles.html">EDA_miner.styles</a></code></li>
+<li><code><a title="EDA_miner.utils" href="utils.html">EDA_miner.utils</a></code></li>
 </ul>
 </li>
 </ul>

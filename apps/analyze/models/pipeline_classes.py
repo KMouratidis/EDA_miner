@@ -1,10 +1,29 @@
 """
-    This module serves
+This module collects every model class, including input and transformers.
+
+Notes to others:
+    Feel free to tamper with anything or add your own models and classes. \
+    Everything should implement an sklearn-like API providing a fit and \
+    (more importantly) a transform method. It should also have a \
+    `modifiable_params` dictionary with the names of attributes that can \
+    be modified and a list of possible values (keep them limited, for now). \
+    Input classes should subclass `GenericInput`. If you add new classes \
+    remember to modify `ml_options` in `graph_structures.py`.
 """
 
-import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
+from dash.exceptions import PreventUpdate
 
+from utils import r, get_data
+
+import dill
+import pickle
+import sympy
+import numpy as np
+import pandas as pd
+from textblob import TextBlob
+from flask_login import current_user
+
+from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.linear_model import Ridge, Lasso
@@ -22,7 +41,71 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
-class InputFile(BaseEstimator, TransformerMixin):
+# All custom classes should subclass these ones.
+# This is done for checks down the line that
+# determine properties of nodes of the Graph
+# which in turn is useful for selecting dataset
+# and being able to create custom features or
+# handle outputs
+
+class BaseInput(BaseEstimator, TransformerMixin):
+    """Base class for ALL input nodes."""
+    pass
+
+
+class GenericInput(BaseInput):
+    """Base class for dataset/file loaders."""
+    modifiable_params = {}
+
+
+class TerminalNode(BaseEstimator):
+    modifiable_params = {}
+
+
+class UnsupervisedLearner(TerminalNode):
+    def fit(self, X, y=None):
+        return self
+
+
+class InputFile(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        self.dataset = dataset
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X
+
+
+# TODO: I changed my mind. This implementation SUCKS HARD.
+#       Rework the whole Twitter dataset idea by getting
+#       the data in the Data View tab and treat Twitter
+#       as regular datasets.
+# Does not subclass GenericInput !
+class TwitterAPI(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        if dataset is None:
+            self.dataset = dataset
+        elif dataset == "*":
+            raise NotImplementedError()
+        else:
+            self.dataset = pickle.loads(r.get(dataset))
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # TODO: Sort based on date
+        return np.array([status.text for status in self.dataset],
+                        dtype=object).reshape((-1, 1))
+
+
+class DataCleaner(BaseEstimator, TransformerMixin):
     modifiable_params = {}
 
     def fit(self, X, y=None):
@@ -32,23 +115,9 @@ class InputFile(BaseEstimator, TransformerMixin):
         return X
 
 
-class DataCleaner(InputFile):
-    def fit(self, X, y=None):
-        return self
+class DataImputer(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
 
-    def transform(self, X):
-        return X
-
-
-class DataImputater(InputFile):
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X
-
-
-class TwitterAPI(InputFile):
     def fit(self, X, y=None):
         return self
 
@@ -57,6 +126,8 @@ class TwitterAPI(InputFile):
 
 
 class CustomClassifier(BaseEstimator, ClassifierMixin):
+    modifiable_params = {}
+
     def fit(self, X, y=None):
         return self
 
@@ -64,11 +135,71 @@ class CustomClassifier(BaseEstimator, ClassifierMixin):
         return np.ones(X.shape[0])
 
 
+# parameters to be used for eval and exec statements later on
+sympy_funcs = {f"{f}": eval(f"sympy.{f}") for f in dir(sympy)}
+global_scope = {"sympy": sympy, "__builtins__": None}
+
+
+class FeatureMaker(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
+
+    def __init__(self, func_name="", cols=None, dataset_choice=None,
+                 user_id=None):
+        self.query = r.get(func_name)
+        self.cols = cols
+        self.func = lambda x: x
+        self.dataset_choice = dataset_choice
+        self.user_id = user_id
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.cols is None:
+            return self.func(X)
+
+        else:
+            # Evaluate the user-defined function
+            if self.query is not None:
+                # http: // lybniz2.sourceforge.net / safeeval.html
+                symbols, f, func = dill.loads(self.query)
+
+                exec(symbols, global_scope,
+                     sympy_funcs)
+                exec(f, global_scope, sympy_funcs)
+                self.func = eval(func, global_scope,
+                                 sympy_funcs)
+
+            try:
+                # TODO: This needs a better implementation than re-loading
+                #       the whole dataset from Redis. Can probably be fixed
+                #       if edge params are implemented.
+                # Overwrite X with the original DataFrame
+                X = get_data(self.dataset_choice, self.user_id)
+                cols = [X[col] for col in self.cols]
+
+            except IndexError as e:
+                raise IndexError((str(e)+", probably incorrect input cols: " +
+                                  str(self.cols)))
+
+            return self.func(*cols).values.reshape((-1, 1))
+
+
+# TODO: do an actual implementation
+class SentimentAnalyzer(UnsupervisedLearner):
+    def predict(self, X):
+        if isinstance(X, np.ndarray):
+            return np.array([TextBlob(x[0]).polarity for x in X])
+        else:
+            return np.array([TextBlob(x).polarity for x in X])
+
+
 # For EVERY model that is expected to have parametrization
 # you are expected to give its class a `modifiable_params`
 # dict with keys being the function argument and values the
 # allowed set of values (make it limited, i.e. few choices)
-# Also, the first is assumed to be the default value
+# Also, the first is assumed to be the default value which
+# will be passed to the model upon the creation of pipelines.
 
 LinearRegression.modifiable_params = {
     "fit_intercept": [True, False],
@@ -148,6 +279,8 @@ BernoulliNB.modifiable_params = {
     "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
 }
 
+XGBClassifier.modifiable_params = {}
+
 GaussianNB.modifiable_params = {}
 
 MultinomialNB.modifiable_params = {
@@ -155,7 +288,7 @@ MultinomialNB.modifiable_params = {
 }
 
 SimpleImputer.modifiable_params = {
-    "strategy": ["mean", "median", "most_frequent"]
+    "strategy": ["most_frequent", "mean", "median"]
 }
 
 MissingIndicator.modifiable_params = {}

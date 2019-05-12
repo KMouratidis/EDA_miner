@@ -1,5 +1,18 @@
 """
-    To be implemented.
+This module defines the interface for doing econometrics stuff.
+
+Functions:
+    - Econometrics_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_econometrics: Create a menu of dcc components \
+                                            for the user to choose fitting \
+                                            options.
+    - fit_econometrics_model: Fits any models defined.
+
+Notes to others:
+    Not implemented yet. Feel free to experiment as much as you like here. \
+    What do econometricians do other than glorified linear regressions?! :D
 """
 
 from dash.dependencies import Input, Output, State
@@ -44,8 +57,16 @@ def render_variable_choices_econometrics(dataset_choice,
                                          algo_choice_econometrics,
                                          user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select dataset, variables,
+    and training options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        algo_choice_econometrics (str): The choice of algorithm type.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     """
 
 
@@ -55,6 +76,7 @@ def render_variable_choices_econometrics(dataset_choice,
     if any(x is None for x in [df, dataset_choice, algo_choice_econometrics]):
         return [html.H4("Select dataset and algorithm first.")]
 
+    # Truncate labels so they don't fill the whole dropdown
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     layout = [
@@ -76,11 +98,20 @@ def render_variable_choices_econometrics(dataset_choice,
     [State('algo_choice_econometrics', "value"),
      State("user_id", "children"),
      State("dataset_choice_econometrics", "value")])
-def fit_clustering_model(xvars, yvars, algo_choice_econometrics,
-                         user_id, dataset_choice):
+def fit_econometrics_model(xvars, yvars, algo_choice_econometrics,
+                           user_id, dataset_choice):
     """
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable.
+        algo_choice_econometrics (str): The choice of algorithm type.
+        user_id: Session/user id.
+        dataset_choice: Name of dataset.
+
+    Returns:
+        list: Dash element(s) with the results of model fitting.
     """
 
 

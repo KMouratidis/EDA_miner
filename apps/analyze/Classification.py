@@ -1,5 +1,18 @@
 """
-    To be implemented.
+This module defines the interface for fitting simple classification models.
+
+Functions:
+    - Classification_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_classification: Create a menu of dcc components \
+                                              for the user to choose fitting \
+                                              options.
+    - fit_classification_model: Fits any pipelines defined.
+
+Notes to others:
+    Feel free to experiment as much as you like here, although you probably \
+    want to write code elsewhere.
 """
 
 from dash.dependencies import Input, Output, State
@@ -50,8 +63,16 @@ def Classification_Options(options, results):
 def render_variable_choices_classification(dataset_choice,
                                            algo_choice_classification, user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select dataset, variables,
+    and training options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        algo_choice_classification (str): The choice of algorithm type.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     """
 
 
@@ -61,6 +82,7 @@ def render_variable_choices_classification(dataset_choice,
     if any(x is None for x in [df, dataset_choice, algo_choice_classification]):
         return [html.H4("Select dataset and algorithm first.")]
 
+    # Truncate labels so they don't fill the whole dropdown
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     layout = [
@@ -84,10 +106,20 @@ def render_variable_choices_classification(dataset_choice,
      State("user_id", "children"),
      State("dataset_choice_classification", "value")])
 def fit_classification_model(xvars, yvars, algo_choice_classification,
-                  user_id, dataset_choice):
+                             user_id, dataset_choice):
     """
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable.
+        algo_choice_classification (str): The choice of algorithm type.
+        user_id: Session/user id.
+        dataset_choice: Name of dataset.
+
+    Returns:
+        list, dict: Dash element(s) with the results of model fitting,
+                    and parameters for plotting a graph.
     """
 
 
@@ -100,15 +132,19 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
 
     # We have the dictionary that maps keys to models so use that
     model = mapping[algo_choice_classification]()
+
+    # TODO: This probably needs a better/cleaner implementation and/or
+    #       might need to be used in other parts as well.
     y = pd.factorize(df[yvars])
     model.fit(df[xvars], y[0])
-
-    labels = model.predict(df[xvars])
 
     layout = [
         html.H4(f"Classification model scored: {model.score(df[xvars], y[0])}")
     ]
 
+    labels = model.predict(df[xvars])
+    # TODO: Visualize the (in)correctly grouped points.
+    # If we have >=2 variables, visualize the classification
     if len(xvars) >= 3:
 
         trace1 = go.Scatter3d(x=df[xvars[0]],
@@ -131,8 +167,8 @@ def fit_classification_model(xvars, yvars, algo_choice_classification,
                              marker={'color': labels.astype(np.float)})
 
         layout += [{
-            'data': traces,
-            'layout': layouts.default_2d(xvars[0], yvars[0])
+            'data': [traces],
+            'layout': layouts.default_2d(xvars[0], yvars)
         }]
 
     else:

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.exploration.graphs.graphs2d API documentation</title>
+<title>EDA_miner.apps.exploration.graphs.graphs2d API documentation</title>
 <meta name="description" content="This module contains the implementations of graphing functions.
 I skipped adding docstrings for every function since most of them
 are one-liners …" />
@@ -19,7 +19,7 @@ are one-liners …" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.exploration.graphs.graphs2d</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.exploration.graphs.graphs2d</code></h1>
 </header>
 <section id="section-intro">
 <p>This module contains the implementations of graphing functions.
@@ -206,7 +206,7 @@ def pairplot(x):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.bubble_chart"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.bubble_chart"><code class="name flex">
 <span>def <span class="ident">bubble_chart</span></span>(<span>x, y, size, **kwargs)</span>
 </code></dt>
 <dd>
@@ -222,7 +222,7 @@ def pairplot(x):
     return _simple_scatter(x, y, mode=&#34;markers&#34;, marker=marker, **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.density2d"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.density2d"><code class="name flex">
 <span>def <span class="ident">density2d</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -251,7 +251,7 @@ def pairplot(x):
     ]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.errorbar"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.errorbar"><code class="name flex">
 <span>def <span class="ident">errorbar</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -271,7 +271,7 @@ def pairplot(x):
     return _simple_scatter(x, y, mode=None, error_y=error_y, **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.filledarea"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.filledarea"><code class="name flex">
 <span>def <span class="ident">filledarea</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -282,7 +282,7 @@ def pairplot(x):
     return _simple_scatter(x, y, mode=None, fill=&#39;tonexty&#39;, **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.heatmap"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.heatmap"><code class="name flex">
 <span>def <span class="ident">heatmap</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -301,7 +301,7 @@ def pairplot(x):
     return go.Heatmap(z=np.corrcoef(data.T), **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.histogram"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.histogram"><code class="name flex">
 <span>def <span class="ident">histogram</span></span>(<span>x, **kwargs)</span>
 </code></dt>
 <dd>
@@ -312,7 +312,7 @@ def pairplot(x):
     return go.Histogram(x=x, **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.line_chart"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.line_chart"><code class="name flex">
 <span>def <span class="ident">line_chart</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -323,7 +323,7 @@ def pairplot(x):
     return _simple_scatter(x, y, mode=&#34;lines&#34;, **kwargs)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.pairplot"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.pairplot"><code class="name flex">
 <span>def <span class="ident">pairplot</span></span>(<span>x)</span>
 </code></dt>
 <dd>
@@ -348,7 +348,7 @@ def pairplot(x):
     return [plotly_fig]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.exploration.graphs.graphs2d.scatterplot"><code class="name flex">
+<dt id="EDA_miner.apps.exploration.graphs.graphs2d.scatterplot"><code class="name flex">
 <span>def <span class="ident">scatterplot</span></span>(<span>x, y, **kwargs)</span>
 </code></dt>
 <dd>
@@ -372,20 +372,20 @@ def pairplot(x):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs" href="index.html">EDA_miner_public.apps.exploration.graphs</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs" href="index.html">EDA_miner.apps.exploration.graphs</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.bubble_chart" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.bubble_chart">bubble_chart</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.density2d" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.density2d">density2d</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.errorbar" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.errorbar">errorbar</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.filledarea" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.filledarea">filledarea</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.heatmap" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.heatmap">heatmap</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.histogram" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.histogram">histogram</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.line_chart" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.line_chart">line_chart</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.pairplot" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.pairplot">pairplot</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d.scatterplot" href="#EDA_miner_public.apps.exploration.graphs.graphs2d.scatterplot">scatterplot</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.bubble_chart" href="#EDA_miner.apps.exploration.graphs.graphs2d.bubble_chart">bubble_chart</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.density2d" href="#EDA_miner.apps.exploration.graphs.graphs2d.density2d">density2d</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.errorbar" href="#EDA_miner.apps.exploration.graphs.graphs2d.errorbar">errorbar</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.filledarea" href="#EDA_miner.apps.exploration.graphs.graphs2d.filledarea">filledarea</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.heatmap" href="#EDA_miner.apps.exploration.graphs.graphs2d.heatmap">heatmap</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.histogram" href="#EDA_miner.apps.exploration.graphs.graphs2d.histogram">histogram</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.line_chart" href="#EDA_miner.apps.exploration.graphs.graphs2d.line_chart">line_chart</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.pairplot" href="#EDA_miner.apps.exploration.graphs.graphs2d.pairplot">pairplot</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d.scatterplot" href="#EDA_miner.apps.exploration.graphs.graphs2d.scatterplot">scatterplot</a></code></li>
 </ul>
 </li>
 </ul>

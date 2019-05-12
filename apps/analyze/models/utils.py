@@ -1,6 +1,17 @@
+"""
+This module collects utility functions and models.
+
+Functions:
+    - baseline: Calculate the baseline for a time series.
+
+Notes to others:
+    Feel free to add or modify stuff here.
+"""
+
 import pandas as pd
 import numpy as np
 import peakutils
+
 
 def _moving_average(values, roll_window=3, correction=False):
     values = pd.Series(values)
@@ -16,8 +27,6 @@ def _moving_average(values, roll_window=3, correction=False):
 
 
 def _exp_moving_average(values, window):
-    """ Numpy implementation of EMA"""
-
     weights = np.exp(np.linspace(-1., 0.5, window))
     weights /= weights.sum()
     a = np.convolve(values, weights, mode='full')[:len(values)]
@@ -27,7 +36,6 @@ def _exp_moving_average(values, window):
 
 
 def _ema_baseline(values, func, ema_window=7, roll_window=7):
-
     ema = _exp_moving_average(values, ema_window)
 
     roll = _moving_average(func([values, ema], axis=0), roll_window)
@@ -38,6 +46,21 @@ def _ema_baseline(values, func, ema_window=7, roll_window=7):
 
 def baseline(values, min_max="min", deg=7, ema_window=7, roll_window=7,
              max_it=200, tol=1e-4):
+    """
+
+    Args:
+        values (iterable(int)):
+        min_max (str): Whether to calculate an upper or lower baseline.
+        deg (int): The degree of the polynomial fitting.
+        ema_window (int): Window for the exponential moving average.
+        roll_window (int): Window for the simple moving average.
+        max_it (int): Number of iterations for `peakutils.baseline`.
+        tol (float): Least amount of change before termination of fitting \
+                     in `peakutils.baseline`.
+
+    Returns:
+
+    """
 
     if min_max == "min":
         bound = np.min

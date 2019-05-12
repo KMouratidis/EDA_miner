@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.analyze API documentation</title>
+<meta name="description" content="&lt;h2&gt;Developer notes&lt;/h2&gt; …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,12 +17,34 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze</code></h1>
 </header>
 <section id="section-intro">
+<h2>Developer notes</h2>
+<p>Some suggestions on what could be done:
+<ul>
+<li>Better reporting on fitting results.</li>
+<li>Download a model.</li>
+<li>Predict a test set.</li>
+<li>Prettier interfaces.</li>
+<li>Implement Econometrics functionality.</li>
+</ul></p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from apps.analyze.Regression import Regression_Options
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt;Developer notes&lt;/h2&gt;
+
+Some suggestions on what could be done:
+&lt;ul&gt;
+    &lt;li&gt;Better reporting on fitting results.&lt;/li&gt;
+    &lt;li&gt;Download a model.&lt;/li&gt;
+    &lt;li&gt;Predict a test set.&lt;/li&gt;
+    &lt;li&gt;Prettier interfaces.&lt;/li&gt;
+    &lt;li&gt;Implement Econometrics functionality.&lt;/li&gt;
+&lt;/ul&gt;
+&#34;&#34;&#34;
+
+from apps.analyze.Regression import Regression_Options
 from apps.analyze.Classification import Classification_Options
 from apps.analyze.Clustering import Clustering_Options
 from apps.analyze.Econometrics import Econometrics_Options
@@ -33,34 +55,35 @@ from apps.analyze.Pipelines import Pipeline_Options</code></pre>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Classification" href="Classification.html">EDA_miner_public.apps.analyze.Classification</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Classification" href="Classification.html">EDA_miner.apps.analyze.Classification</a></code></dt>
 <dd>
-<section class="desc"><p>To be implemented.</p></section>
+<section class="desc"><p>This module defines the interface for fitting simple classification models …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Clustering" href="Clustering.html">EDA_miner_public.apps.analyze.Clustering</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Clustering" href="Clustering.html">EDA_miner.apps.analyze.Clustering</a></code></dt>
 <dd>
-<section class="desc"><p>To be implemented.</p></section>
+<section class="desc"><p>TBW&hellip;</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Econometrics" href="Econometrics.html">EDA_miner_public.apps.analyze.Econometrics</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Econometrics" href="Econometrics.html">EDA_miner.apps.analyze.Econometrics</a></code></dt>
 <dd>
-<section class="desc"><p>To be implemented.</p></section>
+<section class="desc"><p>This module defines the interface for doing econometrics stuff …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Model_Builder" href="Model_Builder.html">EDA_miner_public.apps.analyze.Model_Builder</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Model_Builder" href="Model_Builder.html">EDA_miner.apps.analyze.Model_Builder</a></code></dt>
 <dd>
 <section class="desc"><p>This module will be used to graphically create models.
 RapidMiner, Weka, Orange, etc, ain't got sh!t on us :) …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Pipelines" href="Pipelines.html">EDA_miner_public.apps.analyze.Pipelines</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Pipelines" href="Pipelines.html">EDA_miner.apps.analyze.Pipelines</a></code></dt>
 <dd>
-<section class="desc"><p>To be implemented.</p></section>
+<section class="desc"><p>This module defines the interface for fitting (pre)defined pipelines …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.Regression" href="Regression.html">EDA_miner_public.apps.analyze.Regression</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.Regression" href="Regression.html">EDA_miner.apps.analyze.Regression</a></code></dt>
 <dd>
-<section class="desc"><p>To be implemented.</p></section>
+<section class="desc"><p>This module defines the interface for fitting simple regression models …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.models" href="models/index.html">EDA_miner_public.apps.analyze.models</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.models" href="models/index.html">EDA_miner.apps.analyze.models</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2>Developer notes</h2>
+<p>…</p></section>
 </dd>
 </dl>
 </section>
@@ -79,18 +102,18 @@ RapidMiner, Weka, Orange, etc, ain't got sh!t on us :) …</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps" href="../index.html">EDA_miner_public.apps</a></code></li>
+<li><code><a title="EDA_miner.apps" href="../index.html">EDA_miner.apps</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.Classification" href="Classification.html">EDA_miner_public.apps.analyze.Classification</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.Clustering" href="Clustering.html">EDA_miner_public.apps.analyze.Clustering</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.Econometrics" href="Econometrics.html">EDA_miner_public.apps.analyze.Econometrics</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.Model_Builder" href="Model_Builder.html">EDA_miner_public.apps.analyze.Model_Builder</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.Pipelines" href="Pipelines.html">EDA_miner_public.apps.analyze.Pipelines</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.Regression" href="Regression.html">EDA_miner_public.apps.analyze.Regression</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models" href="models/index.html">EDA_miner_public.apps.analyze.models</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Classification" href="Classification.html">EDA_miner.apps.analyze.Classification</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Clustering" href="Clustering.html">EDA_miner.apps.analyze.Clustering</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Econometrics" href="Econometrics.html">EDA_miner.apps.analyze.Econometrics</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Model_Builder" href="Model_Builder.html">EDA_miner.apps.analyze.Model_Builder</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Pipelines" href="Pipelines.html">EDA_miner.apps.analyze.Pipelines</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Regression" href="Regression.html">EDA_miner.apps.analyze.Regression</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models" href="models/index.html">EDA_miner.apps.analyze.models</a></code></li>
 </ul>
 </li>
 </ul>

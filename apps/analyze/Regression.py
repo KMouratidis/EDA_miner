@@ -1,5 +1,18 @@
 """
-    To be implemented.
+This module defines the interface for fitting simple regression models.
+
+Functions:
+    - Regression_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_regression: Create a menu of dcc components \
+                                          for the user to choose fitting \
+                                          options.
+    - fit_regression_model: Fits any models defined.
+
+Notes to others:
+    Feel free to experiment as much as you like here, although you probably \
+    want to write code elsewhere.
 """
 
 from dash.dependencies import Input, Output, State
@@ -41,11 +54,19 @@ def Regression_Options(options, results):
               [Input("dataset_choice_regression", "value"),
                Input("algo_choice_regression", "value")],
               [State("user_id", "children")])
-def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
+def render_variable_choices_regression(dataset_choice, algo_choice_regression,
                                        user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select dataset, variables,
+    and training options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        algo_choice_regression (str): The choice of algorithm type.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     """
 
 
@@ -55,6 +76,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
     if any(x is None for x in [df, dataset_choice, algo_choice_regression]):
         return [html.H4("Select dataset and algorithm first.")]
 
+    # Truncate labels so they don't fill the whole dropdown
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     layout = [
@@ -79,8 +101,17 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
 def fit_regression_model(xvars, yvars, algo_choice_regression,
                          user_id, dataset_choice):
     """
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable.
+        algo_choice_regression (str): The choice of algorithm type.
+        user_id: Session/user id.
+        dataset_choice: Name of dataset.
+
+    Returns:
+        list: Dash element(s) with the results of model fitting.
     """
 
 
@@ -95,6 +126,8 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
     model = mapping[algo_choice_regression]()
 
     model.fit(df[xvars], df[yvars])
+
+    # TODO: Add visualizations for the results.
 
     return [
         html.H4(f"Regression model scored: {model.score(df[xvars], df[yvars])}")

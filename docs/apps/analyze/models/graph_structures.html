@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.models.graph_structures API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.analyze.models.graph_structures API documentation</title>
+<meta name="description" content="This module collects function to traverse the ModelBuilder graph …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,12 +17,58 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.models.graph_structures</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.models.graph_structures</code></h1>
 </header>
 <section id="section-intro">
+<p>This module collects function to traverse the ModelBuilder graph.</p>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>create_pipelines: Create pipelines from cytoscape elements and a
+dict that maps a node type to relevant parameters.</li>
+<li>find_pipeline_input:</li>
+</ul>
+<h2 id="classes">Classes</h2>
+<ul>
+<li>Node: A class to hold data for the nodes. Validation and advanced
+functionality may be added later.
+Global variables:<ul>
+<li>ml_options (list(dict)): The available sklearn-like classes for use
+with the ModelBuilder.</li>
+<li>node_options (dict): Reverse mapping of ml_options.</li>
+<li>orders (dict): The vertical ordering (position) of groups of nodes.</li>
+</ul>
+</li>
+</ul>
+<p>Notes to others:
+Feel free to add or modify stuff here, but be cautious. You probably
+need experience with graphs and/or trees and traversal algorithms.
+The current implementation (unless I'm mistaken) are Breadth-First.</p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python"># import custom models
+<pre><code class="python">&#34;&#34;&#34;
+This module collects function to traverse the ModelBuilder graph.
+
+Functions:
+    - create_pipelines: Create pipelines from cytoscape elements and a \
+                        dict that maps a node type to relevant parameters.
+    - find_pipeline_input:
+
+Classes:
+    - Node: A class to hold data for the nodes. Validation and advanced \
+            functionality may be added later.
+
+Global variables:
+    - ml_options (list(dict)): The available sklearn-like classes for use \
+                               with the ModelBuilder.
+    - node_options (dict): Reverse mapping of ml_options.
+    - orders (dict): The vertical ordering (position) of groups of nodes.
+
+Notes to others:
+    Feel free to add or modify stuff here, but be cautious. You probably \
+    need experience with graphs and/or trees and traversal algorithms. \
+    The current implementation (unless I&#39;m mistaken) are Breadth-First.
+&#34;&#34;&#34;
+
 from apps.analyze.models import pipeline_classes
 
 import random
@@ -30,14 +76,16 @@ import numpy as np
 import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout
 from itertools import combinations
+from collections import defaultdict
 
 
 orders = {
     &#34;input&#34;: 0,
     &#34;cleaning&#34;: 1,
-    &#34;preprocessing&#34;: 2,
-    &#34;dim_red&#34;: 3,
-    &#34;models&#34;: 4,
+    &#34;features&#34;: 2,
+    &#34;preprocessing&#34;: 3,
+    &#34;dim_red&#34;: 4,
+    &#34;models&#34;: 5,
 }
 
 # TODO: add ensemble models as last-step models (voting, ensembles, etc)
@@ -46,19 +94,23 @@ ml_options = [
     # Inputs
     {&#34;label&#34;: &#34;Twitter API&#34;, &#34;node_type&#34;: &#34;twitter_api&#34;,
      &#34;parent&#34;: &#34;input&#34;, &#34;func&#34;: pipeline_classes.TwitterAPI,
-     &#34;url&#34;: &#34;https://i.imgur.com/4yTJ3Vm.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/new_name_zpsdifgtbpq.png&#34;},
     {&#34;label&#34;: &#34;Input file&#34;, &#34;node_type&#34;: &#34;input_file&#34;,
      &#34;parent&#34;: &#34;input&#34;, &#34;func&#34;: pipeline_classes.InputFile,
-     &#34;url&#34;: &#34;https://i.imgur.com/UTmR1OM.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/files_zpsfykrxcb6.png&#34;},
 
     # Cleaners
     {&#34;label&#34;: &#34;Data Cleaner&#34;, &#34;node_type&#34;: &#34;data_cleaner&#34;,
      &#34;parent&#34;: &#34;cleaning&#34;, &#34;func&#34;: pipeline_classes.DataCleaner,
-     &#34;url&#34;: &#34;https://i.imgur.com/1zMK4Gp.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/Cleaning_zpss6odzhkw.png&#34;},
     {&#34;label&#34;: &#34;Fill missing: impute&#34;, &#34;node_type&#34;: &#34;simple_missing&#34;,
      &#34;parent&#34;: &#34;cleaning&#34;, &#34;func&#34;: pipeline_classes.SimpleImputer},
     {&#34;label&#34;: &#34;Fill missing: indicator&#34;, &#34;node_type&#34;: &#34;ind_missing&#34;,
      &#34;parent&#34;: &#34;cleaning&#34;, &#34;func&#34;: pipeline_classes.MissingIndicator},
+
+    # Feature makers
+    {&#34;label&#34;: &#34;Feature constructor&#34;, &#34;node_type&#34;: &#34;feat_maker&#34;,
+     &#34;parent&#34;: &#34;features&#34;, &#34;func&#34;: pipeline_classes.FeatureMaker},
 
     # Preprocessors
     {&#34;label&#34;: &#34;Standardization&#34;, &#34;node_type&#34;: &#34;stdsc&#34;,
@@ -84,30 +136,30 @@ ml_options = [
     # Regression
     {&#34;label&#34;: &#34;Linear Regression&#34;, &#34;node_type&#34;: &#34;linr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.LinearRegression,
-     &#34;url&#34;: &#34;https://i.imgur.com/654kGq8.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/linear_regression_zpsdo0ngvwz.png&#34;},
     {&#34;label&#34;: &#34;SVM Regression&#34;, &#34;node_type&#34;: &#34;svr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.SVR,
-     &#34;url&#34;: &#34;https://i.imgur.com/gIUtwdA.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/svm_zpsq1mxdxbo.png&#34;},
     {&#34;label&#34;: &#34;KNN Regression&#34;, &#34;node_type&#34;: &#34;knnr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.KNeighborsRegressor,
      &#34;url&#34;: &#34;https://i.imgur.com/U9EFqYj.png&#34;},
     {&#34;label&#34;: &#34;Decision Tree Regression&#34;, &#34;node_type&#34;: &#34;dtr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.DecisionTreeRegressor,
-     &#34;url&#34;: &#34;https://i.imgur.com/RVFhsHi.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/decision_tree_zpsuud1pf95.png&#34;},
     {&#34;label&#34;: &#34;Dummy model: regression&#34;, &#34;node_type&#34;: &#34;dummyreg&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.DummyRegressor},
     {&#34;label&#34;: &#34;Random Forests Regression&#34;, &#34;node_type&#34;: &#34;rfr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.RandomForestRegressor,
-     &#34;url&#34;: &#34;https://i.imgur.com/x4mpozp.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/random_forests_zpsy5ixn5xw.png&#34;},
     {&#34;label&#34;: &#34;Ridge Regression&#34;, &#34;node_type&#34;: &#34;ridge&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.Ridge,
-     &#34;url&#34;: &#34;https://i.imgur.com/Fq5f2JR.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/ridge_regression_zpshttczfhc.png&#34;},
     {&#34;label&#34;: &#34;Lasso Regression&#34;, &#34;node_type&#34;: &#34;lasso&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.Lasso},
     # Classification
     {&#34;label&#34;: &#34;Logistic Regression&#34;, &#34;node_type&#34;: &#34;logr&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.LogisticRegression,
-     &#34;url&#34;: &#34;https://i.imgur.com/y2iOi2A.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/logistic_regression_zpsspczljjr.png&#34;},
     {&#34;label&#34;: &#34;KNN Classifier&#34;, &#34;node_type&#34;: &#34;knnc&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.KNeighborsClassifier,
      &#34;url&#34;: &#34;https://i.imgur.com/U9EFqYj.png&#34;},
@@ -122,14 +174,14 @@ ml_options = [
     # Clustering
     {&#34;label&#34;: &#34;K-Means Clustering&#34;, &#34;node_type&#34;: &#34;kmc&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.KMeans,
-     &#34;url&#34;: &#34;https://i.imgur.com/U9EFqYj.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/knn_zps24j2lqvu.png&#34;},
     {&#34;label&#34;: &#34;DBSCAN Clustering&#34;, &#34;node_type&#34;: &#34;dbscan&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.DBSCAN},
     {&#34;label&#34;: &#34;Birch Clustering&#34;, &#34;node_type&#34;: &#34;birch&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.Birch},
     {&#34;label&#34;: &#34;Agglomerative Clustering&#34;, &#34;node_type&#34;: &#34;agglomerative&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.AgglomerativeClustering,
-     &#34;url&#34;: &#34;https://i.imgur.com/Ac6VaNo.png&#34;},
+     &#34;url&#34;: &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/hierarchical_clustering_zpsqgxjunmf.png&#34;},
     # Naive Bayes models
     {&#34;label&#34;: &#34;Naive Bayes: Bernoulli&#34;, &#34;node_type&#34;: &#34;bernoulli_nb&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.BernoulliNB},
@@ -137,6 +189,9 @@ ml_options = [
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.GaussianNB},
     {&#34;label&#34;: &#34;Naive Bayes: Multinomial&#34;, &#34;node_type&#34;: &#34;multi_nb&#34;,
      &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.MultinomialNB},
+    # Others
+    {&#34;label&#34;: &#34;Sentiment Analysis&#34;, &#34;node_type&#34;: &#34;sentiment&#34;,
+     &#34;parent&#34;: &#34;models&#34;, &#34;func&#34;: pipeline_classes.SentimentAnalyzer},
 
 ]
 
@@ -145,14 +200,21 @@ node_options = {options[&#34;node_type&#34;]: options
 
 
 class Node:
-    &#34;&#34;&#34;This class just holds data for nodes, nothing else&#34;&#34;&#34;
-    ## TODO: Consider using slots
+    &#34;&#34;&#34;
+    A class to hold data for the nodes. Validation and advanced \
+    functionality may be added later.
+
+    Create the node either by supplying `options` or `node_type` and \
+    a `note_id`.
+
+        Args:
+            options (dict): A cytoscape element.
+            node_type (str): One of the keys of node_options.
+            node_id (str): Unique node identifier.
+    &#34;&#34;&#34;
+    # TODO: Consider using slots, and/or refactoring the class.
 
     def __init__(self, *, options=None, node_type=None, node_id=None):
-        &#34;&#34;&#34;
-            When called with options={} it expects a dictionary
-            as the ones returned by cytoscape.
-        &#34;&#34;&#34;
 
         if (options is None) and (node_type is None):
             raise ValueError(&#34;Provide at least one!&#34;)
@@ -176,7 +238,7 @@ class Node:
             raise ValueError(&#34;Something went wrong, and we need to investigate&#34;)
 
         self.url = node_options[options[&#34;node_type&#34;]].get(&#34;url&#34;,
-                                            &#34;https://i.imgur.com/hhSthEf.png&#34;)
+                                            &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/layers_zps6k0vkthc.png&#34;)
 
         self.label = options[&#34;label&#34;]
 
@@ -190,7 +252,7 @@ class Node:
                 &#34;id&#34;: self.id,
                 &#34;parent&#34;: self.parent,
                 &#34;url&#34;: self.url,
-                &#34;func_params&#34;: {}
+                &#34;func_params&#34;: options.get(&#34;func_params&#34;, {})
             },
             &#34;position&#34;: {
                 &#39;x&#39;: 100 + self.order * 250,
@@ -204,13 +266,27 @@ class Node:
 
 
 class NodeCollection:
+    &#34;&#34;&#34;
+    A collection of nodes with some added functionality for rendering them.
 
+    Args:
+        nodes (list(dict)): A list of Cytoscape elements.
+        graph (`Graph`): The parent instance.
+
+    Attributes:
+        parent_nodes (list(dict)): Cytoscape elements that function as \
+                                   parent/group nodes.
+    &#34;&#34;&#34;
+
+    # TODO: These probably need their own positioning!
     # Make them non-selectable so that the user cannot connect
     # a node to a group directly (might be revised later)
     parent_nodes = [
         {&#34;data&#34;: {&#34;label&#34;: &#34;Inputs&#34;, &#34;id&#34;: &#34;input&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
         {&#34;data&#34;: {&#34;label&#34;: &#34;Cleaning&#34;, &#34;id&#34;: &#34;cleaning&#34;},
+         &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
+        {&#34;data&#34;: {&#34;label&#34;: &#34;User-defined features&#34;, &#34;id&#34;: &#34;features&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
         {&#34;data&#34;: {&#34;label&#34;: &#34;Preprocessing&#34;, &#34;id&#34;: &#34;preprocessing&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
@@ -226,6 +302,8 @@ class NodeCollection:
         self.nodes = []
         self.graph = graph
 
+        self.group_counts = defaultdict(int)
+
         # If nodes are given, parse them into an internal
         # representation and increase the relevant counts
         # (nodes originally are dictionaries of attributes)
@@ -235,18 +313,44 @@ class NodeCollection:
             # keep the maximum id (e.g. &#39;linr_002&#39;)
             self.node_max[node.node_type] = max(self.node_max[node.node_type],
                                                 node.id)
-
             self.nodes.append(node)
+            self.group_counts[node.parent] += 1
 
     def add_node(self, node_type):
-        # Generate the ID based on previous max
+        &#34;&#34;&#34;
+        Add a new node given a node_type. Generate the ID based on \
+        the previous max for ID for the selected node type.
+
+        Args:
+            node_type(str): One of the keys of node_options.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+
         max_id = self.node_max[node_type]
         node_id = f&#34;{node_type}_{str(int(max_id[-3:]) + 1).zfill(3)}&#34;
 
         new_node = Node(node_type=node_type, node_id=node_id)
         self.nodes.append(new_node)
 
+        self.group_counts[new_node.parent] += 1
+
     def remove_node(self, node_id):
+        &#34;&#34;&#34;
+        Remove a node and its edges.
+
+        Args:
+            node_id (str): ID of the node to be removed.
+
+        Returns:
+            None
+
+        Notes on implementation:
+            Consider whether connecting the nodes that were connected to \
+            the removed node.
+        &#34;&#34;&#34;
+
         to_be_removed = [n for n in self.nodes if n.id == node_id]
 
         if len(to_be_removed):
@@ -260,28 +364,48 @@ class NodeCollection:
                     (to_be_removed[0].id != edge[&#34;data&#34;][&#34;target&#34;]))]
 
     def render(self):
-        return [node.render() for node in self.nodes] + self.parent_nodes
+        # Render nodes and remove parents without children
+        return [node.render() for node in self.nodes] + [
+            parent for parent in self.parent_nodes
+            if self.group_counts[parent[&#34;data&#34;][&#34;id&#34;]] &gt; 0
+        ]
 
 
 class EdgeCollection:
+    &#34;&#34;&#34;
+    A collection of edges with some added functionality for rendering them.
+
+    Args:
+        edges (list(dict)): A list of Cytoscape elements.
+        graph (`Graph`): The parent instance.
+    &#34;&#34;&#34;
+
     def __init__(self, edges=[], graph=None):
         self.edges = edges
         self.graph = graph
 
-    # TODO: This needs a better implementation to allow
-    #       chaining of models in the same step
+    # TODO: This probably needs a better implementation
     def add_edges(self, selected):
+        &#34;&#34;&#34;
+        Add edges between the selected nodes.
+
+        Args:
+            selected (list(dict)): A list of Cytoscape elements.
+
+        Returns:
+            None
+
+        Notes on implementation:
+            Currently, edges take their direction according to the \
+            order in which the nodes where clicked, not allowing \
+            going back but allowing connections within the same level.
+        &#34;&#34;&#34;
 
         for combination in combinations(selected, 2):
             node1 = Node(options=combination[0])
             node2 = Node(options=combination[1])
 
-            # TODO: It is these 3 ifs that need changing.
-            #       We need a new way to define order
-            if node1.order == node2.order:
-                continue
-
-            elif node1.order &gt; node2.order:
+            if node1.order &gt; node2.order:
                 new_edge = {&#34;data&#34;: {
                     &#34;source&#34;: node2.id,
                     &#34;target&#34;: node1.id
@@ -289,7 +413,7 @@ class EdgeCollection:
 
                 self.edges.append(new_edge)
 
-            elif node1.order &lt; node2.order:
+            elif node1.order &lt;= node2.order:
                 new_edge = {&#34;data&#34;: {
                     &#34;source&#34;: node1.id,
                     &#34;target&#34;: node2.id
@@ -302,8 +426,16 @@ class EdgeCollection:
 
 
 class Graph:
+    &#34;&#34;&#34;
+    A Graph to hold collections of nodes and edges and perform functions \
+    on them.
+
+    Args:
+        elems (list(dict)): A list of Cytoscape elements.
+    &#34;&#34;&#34;
 
     def __init__(self, elems):
+
         edges = [elem for elem in elems if &#34;source&#34; in elem[&#34;data&#34;]]
         # Don&#39;t add parent nodes, they will be added by default
         nodes = [elem for elem in elems if ((&#34;source&#34; not in elem[&#34;data&#34;]) and
@@ -313,6 +445,12 @@ class Graph:
         self.edge_collection = EdgeCollection(edges, self)
 
     def render_graph(self):
+        &#34;&#34;&#34;
+        Calculates positions for all nodes in the graph and render it.
+
+        Returns:
+            list(dict): A list of Cytoscape elements.
+        &#34;&#34;&#34;
 
         # TODO: find a better way to estimate positions
         # Convert to networkx so we can use its functionality
@@ -328,15 +466,15 @@ class Graph:
         # it seems to be causing many overlaps
         positions = graphviz_layout(nx_graph)
         x_values, y_values = zip(*positions.values())
-        x_max = max(x_values)
-        x_min = min(x_values)
+        x_max = max(x_values) + 100
+        x_min = min(x_values) - 100
 
         # A dictionary that holds value counts of elements sharing
         # the same level / parent
         Ys = {}
         # linspace for how many different parents exist
         n_levels = 5
-        widths = np.linspace(20, 800, n_levels + 1)
+        widths = np.linspace(20, 700, n_levels + 1)
         for node in self.node_collection.nodes:
             # the horizontal position depends only
             # on which is the parent
@@ -351,17 +489,27 @@ class Graph:
             # a bit higher to avoid arrows to pass through
             # unconnected nodes
             if node.order % 2 == 0:
-                y += 50
+                y -= 50
 
             # this fix is necessary due to our viewport
             node.options[&#34;position&#34;] = {&#34;x&#34;: x * 2,
                                         &#34;y&#34;: y / 2}
 
+        # TODO: Remove parents that don&#39;t have children
         return self.node_collection.render() + self.edge_collection.render()
 
 
 class GraphUtils:
-    &#34;&#34;&#34;To be used for default layouts&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    To be used for default layouts. This definitely needs a better \
+    implementation to be able to handle more advanced pipelines, and/or \
+    provide better interface.
+
+    Args:
+        steps (list(tuples): Pipeline steps in the following format: \
+                             (order, node_type, description).
+    &#34;&#34;&#34;
+
     def __init__(self, steps):
         self.G = Graph([])
         for step in steps:
@@ -371,7 +519,38 @@ class GraphUtils:
             self.G.edge_collection.add_edges([s1.render(), s2.render()])
 
     def render_graph(self):
-        return self.G.render_graph()</code></pre>
+        return self.G.render_graph()
+
+
+# TODO: This probably needs to go inside GraphUtils
+# Name of pipeline and list of dash.cytoscape elements
+prebuilt_pipelines = {
+
+    # Standard scaling, dimensionality reduction, model
+    &#34;default&#34;: [
+        (0, &#34;input_file&#34;, &#34;Input data&#34;),
+        (1, &#34;data_cleaner&#34;, &#34;Data cleaning&#34;),
+        (2, &#34;feat_maker&#34;, &#34;Feature Maker&#34;),
+        (3, &#34;stdsc&#34;, &#34;Standardization&#34;),
+        (4, &#34;pca&#34;, &#34;Principal Components Analysis&#34;),
+        (5, &#34;linr&#34;, &#34;Linear Regression&#34;),
+    ],
+
+    &#34;scale_reduce_kmeans&#34;: [
+        (0, &#34;input_file&#34;, &#34;Input data&#34;),
+        (3, &#34;stdsc&#34;, &#34;Standardization&#34;),
+        (4, &#34;pca&#34;, &#34;Principal Components Analysis&#34;),
+        (5, &#34;kmc&#34;, &#34;K-Means Clustering&#34;),
+    ],
+
+    &#34;twitter_sentiment&#34;: [
+        (0, &#34;twitter_api&#34;, &#34;Twitter API&#34;),
+        (1, &#34;simple_missing&#34;, &#34;Fill missing: impute&#34;),
+        (2, &#34;data_cleaner&#34;, &#34;Data Cleaner&#34;),
+        (3, &#34;sentiment&#34;, &#34;Sentiment Analysis&#34;),
+    ]
+
+}</code></pre>
 </details>
 </section>
 <section>
@@ -383,33 +562,52 @@ class GraphUtils:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection"><code class="flex name class">
 <span>class <span class="ident">EdgeCollection</span></span>
 <span>(</span><span>edges=[], graph=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A collection of edges with some added functionality for rendering them.</p>
+<h2 id="args">Args</h2>
+<p>edges (list(dict)): A list of Cytoscape elements.
+graph (<a title="EDA_miner.apps.analyze.models.graph_structures.Graph" href="#EDA_miner.apps.analyze.models.graph_structures.Graph"><code>Graph</code></a>): The parent instance.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class EdgeCollection:
+    &#34;&#34;&#34;
+    A collection of edges with some added functionality for rendering them.
+
+    Args:
+        edges (list(dict)): A list of Cytoscape elements.
+        graph (`Graph`): The parent instance.
+    &#34;&#34;&#34;
+
     def __init__(self, edges=[], graph=None):
         self.edges = edges
         self.graph = graph
 
-    # TODO: This needs a better implementation to allow
-    #       chaining of models in the same step
+    # TODO: This probably needs a better implementation
     def add_edges(self, selected):
+        &#34;&#34;&#34;
+        Add edges between the selected nodes.
+
+        Args:
+            selected (list(dict)): A list of Cytoscape elements.
+
+        Returns:
+            None
+
+        Notes on implementation:
+            Currently, edges take their direction according to the \
+            order in which the nodes where clicked, not allowing \
+            going back but allowing connections within the same level.
+        &#34;&#34;&#34;
 
         for combination in combinations(selected, 2):
             node1 = Node(options=combination[0])
             node2 = Node(options=combination[1])
 
-            # TODO: It is these 3 ifs that need changing.
-            #       We need a new way to define order
-            if node1.order == node2.order:
-                continue
-
-            elif node1.order &gt; node2.order:
+            if node1.order &gt; node2.order:
                 new_edge = {&#34;data&#34;: {
                     &#34;source&#34;: node2.id,
                     &#34;target&#34;: node1.id
@@ -417,7 +615,7 @@ class GraphUtils:
 
                 self.edges.append(new_edge)
 
-            elif node1.order &lt; node2.order:
+            elif node1.order &lt;= node2.order:
                 new_edge = {&#34;data&#34;: {
                     &#34;source&#34;: node1.id,
                     &#34;target&#34;: node2.id
@@ -430,25 +628,42 @@ class GraphUtils:
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.add_edges"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.add_edges"><code class="name flex">
 <span>def <span class="ident">add_edges</span></span>(<span>self, selected)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Add edges between the selected nodes.</p>
+<h2 id="args">Args</h2>
+<p>selected (list(dict)): A list of Cytoscape elements.</p>
+<h2 id="returns">Returns</h2>
+<p>None
+Notes on implementation:
+Currently, edges take their direction according to the
+order in which the nodes where clicked, not allowing
+going back but allowing connections within the same level.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def add_edges(self, selected):
+    &#34;&#34;&#34;
+    Add edges between the selected nodes.
+
+    Args:
+        selected (list(dict)): A list of Cytoscape elements.
+
+    Returns:
+        None
+
+    Notes on implementation:
+        Currently, edges take their direction according to the \
+        order in which the nodes where clicked, not allowing \
+        going back but allowing connections within the same level.
+    &#34;&#34;&#34;
 
     for combination in combinations(selected, 2):
         node1 = Node(options=combination[0])
         node2 = Node(options=combination[1])
 
-        # TODO: It is these 3 ifs that need changing.
-        #       We need a new way to define order
-        if node1.order == node2.order:
-            continue
-
-        elif node1.order &gt; node2.order:
+        if node1.order &gt; node2.order:
             new_edge = {&#34;data&#34;: {
                 &#34;source&#34;: node2.id,
                 &#34;target&#34;: node1.id
@@ -456,7 +671,7 @@ class GraphUtils:
 
             self.edges.append(new_edge)
 
-        elif node1.order &lt; node2.order:
+        elif node1.order &lt;= node2.order:
             new_edge = {&#34;data&#34;: {
                 &#34;source&#34;: node1.id,
                 &#34;target&#34;: node2.id
@@ -465,7 +680,7 @@ class GraphUtils:
             self.edges.append(new_edge)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.render"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.render"><code class="name flex">
 <span>def <span class="ident">render</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -478,17 +693,28 @@ class GraphUtils:
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.Graph"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.Graph"><code class="flex name class">
 <span>class <span class="ident">Graph</span></span>
 <span>(</span><span>elems)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A Graph to hold collections of nodes and edges and perform functions
+on them.</p>
+<h2 id="args">Args</h2>
+<p>elems (list(dict)): A list of Cytoscape elements.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Graph:
+    &#34;&#34;&#34;
+    A Graph to hold collections of nodes and edges and perform functions \
+    on them.
+
+    Args:
+        elems (list(dict)): A list of Cytoscape elements.
+    &#34;&#34;&#34;
 
     def __init__(self, elems):
+
         edges = [elem for elem in elems if &#34;source&#34; in elem[&#34;data&#34;]]
         # Don&#39;t add parent nodes, they will be added by default
         nodes = [elem for elem in elems if ((&#34;source&#34; not in elem[&#34;data&#34;]) and
@@ -498,6 +724,12 @@ class GraphUtils:
         self.edge_collection = EdgeCollection(edges, self)
 
     def render_graph(self):
+        &#34;&#34;&#34;
+        Calculates positions for all nodes in the graph and render it.
+
+        Returns:
+            list(dict): A list of Cytoscape elements.
+        &#34;&#34;&#34;
 
         # TODO: find a better way to estimate positions
         # Convert to networkx so we can use its functionality
@@ -513,15 +745,15 @@ class GraphUtils:
         # it seems to be causing many overlaps
         positions = graphviz_layout(nx_graph)
         x_values, y_values = zip(*positions.values())
-        x_max = max(x_values)
-        x_min = min(x_values)
+        x_max = max(x_values) + 100
+        x_min = min(x_values) - 100
 
         # A dictionary that holds value counts of elements sharing
         # the same level / parent
         Ys = {}
         # linspace for how many different parents exist
         n_levels = 5
-        widths = np.linspace(20, 800, n_levels + 1)
+        widths = np.linspace(20, 700, n_levels + 1)
         for node in self.node_collection.nodes:
             # the horizontal position depends only
             # on which is the parent
@@ -536,24 +768,33 @@ class GraphUtils:
             # a bit higher to avoid arrows to pass through
             # unconnected nodes
             if node.order % 2 == 0:
-                y += 50
+                y -= 50
 
             # this fix is necessary due to our viewport
             node.options[&#34;position&#34;] = {&#34;x&#34;: x * 2,
                                         &#34;y&#34;: y / 2}
 
+        # TODO: Remove parents that don&#39;t have children
         return self.node_collection.render() + self.edge_collection.render()</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.Graph.render_graph"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.Graph.render_graph"><code class="name flex">
 <span>def <span class="ident">render_graph</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Calculates positions for all nodes in the graph and render it.</p>
+<h2 id="returns">Returns</h2>
+<p>list(dict): A list of Cytoscape elements.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def render_graph(self):
+    &#34;&#34;&#34;
+    Calculates positions for all nodes in the graph and render it.
+
+    Returns:
+        list(dict): A list of Cytoscape elements.
+    &#34;&#34;&#34;
 
     # TODO: find a better way to estimate positions
     # Convert to networkx so we can use its functionality
@@ -569,15 +810,15 @@ class GraphUtils:
     # it seems to be causing many overlaps
     positions = graphviz_layout(nx_graph)
     x_values, y_values = zip(*positions.values())
-    x_max = max(x_values)
-    x_min = min(x_values)
+    x_max = max(x_values) + 100
+    x_min = min(x_values) - 100
 
     # A dictionary that holds value counts of elements sharing
     # the same level / parent
     Ys = {}
     # linspace for how many different parents exist
     n_levels = 5
-    widths = np.linspace(20, 800, n_levels + 1)
+    widths = np.linspace(20, 700, n_levels + 1)
     for node in self.node_collection.nodes:
         # the horizontal position depends only
         # on which is the parent
@@ -592,27 +833,42 @@ class GraphUtils:
         # a bit higher to avoid arrows to pass through
         # unconnected nodes
         if node.order % 2 == 0:
-            y += 50
+            y -= 50
 
         # this fix is necessary due to our viewport
         node.options[&#34;position&#34;] = {&#34;x&#34;: x * 2,
                                     &#34;y&#34;: y / 2}
 
+    # TODO: Remove parents that don&#39;t have children
     return self.node_collection.render() + self.edge_collection.render()</code></pre>
 </details>
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.GraphUtils"><code class="flex name class">
 <span>class <span class="ident">GraphUtils</span></span>
 <span>(</span><span>steps)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>To be used for default layouts</p></section>
+<section class="desc"><p>To be used for default layouts. This definitely needs a better
+implementation to be able to handle more advanced pipelines, and/or
+provide better interface.</p>
+<h2 id="args">Args</h2>
+<p>steps (list(tuples): Pipeline steps in the following format:
+(order, node_type, description).</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class GraphUtils:
-    &#34;&#34;&#34;To be used for default layouts&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    To be used for default layouts. This definitely needs a better \
+    implementation to be able to handle more advanced pipelines, and/or \
+    provide better interface.
+
+    Args:
+        steps (list(tuples): Pipeline steps in the following format: \
+                             (order, node_type, description).
+    &#34;&#34;&#34;
+
     def __init__(self, steps):
         self.G = Graph([])
         for step in steps:
@@ -626,7 +882,7 @@ class GraphUtils:
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils.render_graph"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.GraphUtils.render_graph"><code class="name flex">
 <span>def <span class="ident">render_graph</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -639,25 +895,38 @@ class GraphUtils:
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.Node"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.Node"><code class="flex name class">
 <span>class <span class="ident">Node</span></span>
 <span>(</span><span>*, options=None, node_type=None, node_id=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>This class just holds data for nodes, nothing else</p>
-<p>When called with options={} it expects a dictionary
-as the ones returned by cytoscape.</p></section>
+<section class="desc"><p>A class to hold data for the nodes. Validation and advanced
+functionality may be added later.</p>
+<p>Create the node either by supplying <code>options</code> or <code>node_type</code> and
+a <code>note_id</code>.</p>
+<pre><code>Args:
+    options (dict): A cytoscape element.
+    node_type (str): One of the keys of node_options.
+    node_id (str): Unique node identifier.
+</code></pre></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Node:
-    &#34;&#34;&#34;This class just holds data for nodes, nothing else&#34;&#34;&#34;
-    ## TODO: Consider using slots
+    &#34;&#34;&#34;
+    A class to hold data for the nodes. Validation and advanced \
+    functionality may be added later.
+
+    Create the node either by supplying `options` or `node_type` and \
+    a `note_id`.
+
+        Args:
+            options (dict): A cytoscape element.
+            node_type (str): One of the keys of node_options.
+            node_id (str): Unique node identifier.
+    &#34;&#34;&#34;
+    # TODO: Consider using slots, and/or refactoring the class.
 
     def __init__(self, *, options=None, node_type=None, node_id=None):
-        &#34;&#34;&#34;
-            When called with options={} it expects a dictionary
-            as the ones returned by cytoscape.
-        &#34;&#34;&#34;
 
         if (options is None) and (node_type is None):
             raise ValueError(&#34;Provide at least one!&#34;)
@@ -681,7 +950,7 @@ as the ones returned by cytoscape.</p></section>
             raise ValueError(&#34;Something went wrong, and we need to investigate&#34;)
 
         self.url = node_options[options[&#34;node_type&#34;]].get(&#34;url&#34;,
-                                            &#34;https://i.imgur.com/hhSthEf.png&#34;)
+                                            &#34;https://i261.photobucket.com/albums/ii47/kostasmouratidis/layers_zps6k0vkthc.png&#34;)
 
         self.label = options[&#34;label&#34;]
 
@@ -695,7 +964,7 @@ as the ones returned by cytoscape.</p></section>
                 &#34;id&#34;: self.id,
                 &#34;parent&#34;: self.parent,
                 &#34;url&#34;: self.url,
-                &#34;func_params&#34;: {}
+                &#34;func_params&#34;: options.get(&#34;func_params&#34;, {})
             },
             &#34;position&#34;: {
                 &#39;x&#39;: 100 + self.order * 250,
@@ -709,7 +978,7 @@ as the ones returned by cytoscape.</p></section>
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.Node.render"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.Node.render"><code class="name flex">
 <span>def <span class="ident">render</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -722,22 +991,42 @@ as the ones returned by cytoscape.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.NodeCollection"><code class="flex name class">
 <span>class <span class="ident">NodeCollection</span></span>
 <span>(</span><span>nodes=[], graph=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A collection of nodes with some added functionality for rendering them.</p>
+<h2 id="args">Args</h2>
+<p>nodes (list(dict)): A list of Cytoscape elements.
+graph (<a title="EDA_miner.apps.analyze.models.graph_structures.Graph" href="#EDA_miner.apps.analyze.models.graph_structures.Graph"><code>Graph</code></a>): The parent instance.</p>
+<h2 id="attributes">Attributes</h2>
+<p>parent_nodes (list(dict)): Cytoscape elements that function as
+parent/group nodes.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class NodeCollection:
+    &#34;&#34;&#34;
+    A collection of nodes with some added functionality for rendering them.
 
+    Args:
+        nodes (list(dict)): A list of Cytoscape elements.
+        graph (`Graph`): The parent instance.
+
+    Attributes:
+        parent_nodes (list(dict)): Cytoscape elements that function as \
+                                   parent/group nodes.
+    &#34;&#34;&#34;
+
+    # TODO: These probably need their own positioning!
     # Make them non-selectable so that the user cannot connect
     # a node to a group directly (might be revised later)
     parent_nodes = [
         {&#34;data&#34;: {&#34;label&#34;: &#34;Inputs&#34;, &#34;id&#34;: &#34;input&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
         {&#34;data&#34;: {&#34;label&#34;: &#34;Cleaning&#34;, &#34;id&#34;: &#34;cleaning&#34;},
+         &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
+        {&#34;data&#34;: {&#34;label&#34;: &#34;User-defined features&#34;, &#34;id&#34;: &#34;features&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
         {&#34;data&#34;: {&#34;label&#34;: &#34;Preprocessing&#34;, &#34;id&#34;: &#34;preprocessing&#34;},
          &#39;selectable&#39;: False, &#39;classes&#39;: &#34;parents&#34;},
@@ -753,6 +1042,8 @@ as the ones returned by cytoscape.</p></section>
         self.nodes = []
         self.graph = graph
 
+        self.group_counts = defaultdict(int)
+
         # If nodes are given, parse them into an internal
         # representation and increase the relevant counts
         # (nodes originally are dictionaries of attributes)
@@ -762,18 +1053,44 @@ as the ones returned by cytoscape.</p></section>
             # keep the maximum id (e.g. &#39;linr_002&#39;)
             self.node_max[node.node_type] = max(self.node_max[node.node_type],
                                                 node.id)
-
             self.nodes.append(node)
+            self.group_counts[node.parent] += 1
 
     def add_node(self, node_type):
-        # Generate the ID based on previous max
+        &#34;&#34;&#34;
+        Add a new node given a node_type. Generate the ID based on \
+        the previous max for ID for the selected node type.
+
+        Args:
+            node_type(str): One of the keys of node_options.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+
         max_id = self.node_max[node_type]
         node_id = f&#34;{node_type}_{str(int(max_id[-3:]) + 1).zfill(3)}&#34;
 
         new_node = Node(node_type=node_type, node_id=node_id)
         self.nodes.append(new_node)
 
+        self.group_counts[new_node.parent] += 1
+
     def remove_node(self, node_id):
+        &#34;&#34;&#34;
+        Remove a node and its edges.
+
+        Args:
+            node_id (str): ID of the node to be removed.
+
+        Returns:
+            None
+
+        Notes on implementation:
+            Consider whether connecting the nodes that were connected to \
+            the removed node.
+        &#34;&#34;&#34;
+
         to_be_removed = [n for n in self.nodes if n.id == node_id]
 
         if len(to_be_removed):
@@ -787,41 +1104,86 @@ as the ones returned by cytoscape.</p></section>
                     (to_be_removed[0].id != edge[&#34;data&#34;][&#34;target&#34;]))]
 
     def render(self):
-        return [node.render() for node in self.nodes] + self.parent_nodes</code></pre>
+        # Render nodes and remove parents without children
+        return [node.render() for node in self.nodes] + [
+            parent for parent in self.parent_nodes
+            if self.group_counts[parent[&#34;data&#34;][&#34;id&#34;]] &gt; 0
+        ]</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.parent_nodes"><code class="name">var <span class="ident">parent_nodes</span></code></dt>
+<dt id="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.parent_nodes"><code class="name">var <span class="ident">parent_nodes</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.add_node"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.add_node"><code class="name flex">
 <span>def <span class="ident">add_node</span></span>(<span>self, node_type)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Add a new node given a node_type. Generate the ID based on
+the previous max for ID for the selected node type.</p>
+<h2 id="args">Args</h2>
+<p>node_type(str): One of the keys of node_options.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def add_node(self, node_type):
-    # Generate the ID based on previous max
+    &#34;&#34;&#34;
+    Add a new node given a node_type. Generate the ID based on \
+    the previous max for ID for the selected node type.
+
+    Args:
+        node_type(str): One of the keys of node_options.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+
     max_id = self.node_max[node_type]
     node_id = f&#34;{node_type}_{str(int(max_id[-3:]) + 1).zfill(3)}&#34;
 
     new_node = Node(node_type=node_type, node_id=node_id)
-    self.nodes.append(new_node)</code></pre>
+    self.nodes.append(new_node)
+
+    self.group_counts[new_node.parent] += 1</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.remove_node"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.remove_node"><code class="name flex">
 <span>def <span class="ident">remove_node</span></span>(<span>self, node_id)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Remove a node and its edges.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>node_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>ID of the node to be removed.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None
+Notes on implementation:
+Consider whether connecting the nodes that were connected to
+the removed node.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def remove_node(self, node_id):
+    &#34;&#34;&#34;
+    Remove a node and its edges.
+
+    Args:
+        node_id (str): ID of the node to be removed.
+
+    Returns:
+        None
+
+    Notes on implementation:
+        Consider whether connecting the nodes that were connected to \
+        the removed node.
+    &#34;&#34;&#34;
+
     to_be_removed = [n for n in self.nodes if n.id == node_id]
 
     if len(to_be_removed):
@@ -835,7 +1197,7 @@ as the ones returned by cytoscape.</p></section>
                 (to_be_removed[0].id != edge[&#34;data&#34;][&#34;target&#34;]))]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.render"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.render"><code class="name flex">
 <span>def <span class="ident">render</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -843,7 +1205,11 @@ as the ones returned by cytoscape.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def render(self):
-    return [node.render() for node in self.nodes] + self.parent_nodes</code></pre>
+    # Render nodes and remove parents without children
+    return [node.render() for node in self.nodes] + [
+        parent for parent in self.parent_nodes
+        if self.group_counts[parent[&#34;data&#34;][&#34;id&#34;]] &gt; 0
+    ]</code></pre>
 </details>
 </dd>
 </dl>
@@ -859,43 +1225,43 @@ as the ones returned by cytoscape.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.models" href="index.html">EDA_miner_public.apps.analyze.models</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models" href="index.html">EDA_miner.apps.analyze.models</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection" href="#EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection">EdgeCollection</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection" href="#EDA_miner.apps.analyze.models.graph_structures.EdgeCollection">EdgeCollection</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.add_edges" href="#EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.add_edges">add_edges</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.render" href="#EDA_miner_public.apps.analyze.models.graph_structures.EdgeCollection.render">render</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.add_edges" href="#EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.add_edges">add_edges</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.render" href="#EDA_miner.apps.analyze.models.graph_structures.EdgeCollection.render">render</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.Graph" href="#EDA_miner_public.apps.analyze.models.graph_structures.Graph">Graph</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.graph_structures.Graph" href="#EDA_miner.apps.analyze.models.graph_structures.Graph">Graph</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.Graph.render_graph" href="#EDA_miner_public.apps.analyze.models.graph_structures.Graph.render_graph">render_graph</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.Graph.render_graph" href="#EDA_miner.apps.analyze.models.graph_structures.Graph.render_graph">render_graph</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils" href="#EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils">GraphUtils</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.graph_structures.GraphUtils" href="#EDA_miner.apps.analyze.models.graph_structures.GraphUtils">GraphUtils</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils.render_graph" href="#EDA_miner_public.apps.analyze.models.graph_structures.GraphUtils.render_graph">render_graph</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.GraphUtils.render_graph" href="#EDA_miner.apps.analyze.models.graph_structures.GraphUtils.render_graph">render_graph</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.Node" href="#EDA_miner_public.apps.analyze.models.graph_structures.Node">Node</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.graph_structures.Node" href="#EDA_miner.apps.analyze.models.graph_structures.Node">Node</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.Node.render" href="#EDA_miner_public.apps.analyze.models.graph_structures.Node.render">render</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.Node.render" href="#EDA_miner.apps.analyze.models.graph_structures.Node.render">render</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection" href="#EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection">NodeCollection</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.graph_structures.NodeCollection" href="#EDA_miner.apps.analyze.models.graph_structures.NodeCollection">NodeCollection</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.add_node" href="#EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.add_node">add_node</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.parent_nodes" href="#EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.parent_nodes">parent_nodes</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.remove_node" href="#EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.remove_node">remove_node</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.render" href="#EDA_miner_public.apps.analyze.models.graph_structures.NodeCollection.render">render</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.add_node" href="#EDA_miner.apps.analyze.models.graph_structures.NodeCollection.add_node">add_node</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.parent_nodes" href="#EDA_miner.apps.analyze.models.graph_structures.NodeCollection.parent_nodes">parent_nodes</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.remove_node" href="#EDA_miner.apps.analyze.models.graph_structures.NodeCollection.remove_node">remove_node</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures.NodeCollection.render" href="#EDA_miner.apps.analyze.models.graph_structures.NodeCollection.render">render</a></code></li>
 </ul>
 </li>
 </ul>

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.models API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.analyze.models API documentation</title>
+<meta name="description" content="&lt;h2&gt;Developer notes&lt;/h2&gt; …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,28 +17,50 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.models</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.models</code></h1>
 </header>
 <section id="section-intro">
+<h2>Developer notes</h2>
+<p>Some suggestions on what could be done:
+<ul>
+<li>Improve handling of pipeline traversal and creation.</li>
+<li>Add new classes for the pipelines (inputs, transformers,
+data cleaners, models).</li>
+<li>Improve handling of data / use better data structures.</li>
+</ul></p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt;Developer notes&lt;/h2&gt;
+
+Some suggestions on what could be done:
+&lt;ul&gt;
+    &lt;li&gt;Improve handling of pipeline traversal and creation.&lt;/li&gt;
+    &lt;li&gt;Add new classes for the pipelines (inputs, transformers,
+    data cleaners, models).&lt;/li&gt;
+    &lt;li&gt;Improve handling of data / use better data structures.&lt;/li&gt;
+&lt;/ul&gt;
+&#34;&#34;&#34;</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.models.graph_structures" href="graph_structures.html">EDA_miner_public.apps.analyze.models.graph_structures</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.models.graph_structures" href="graph_structures.html">EDA_miner.apps.analyze.models.graph_structures</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>This module collects function to traverse the ModelBuilder graph …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.models.pipeline_classes" href="pipeline_classes.html">EDA_miner_public.apps.analyze.models.pipeline_classes</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.models.pipeline_classes" href="pipeline_classes.html">EDA_miner.apps.analyze.models.pipeline_classes</a></code></dt>
 <dd>
-<section class="desc"><p>This module serves</p></section>
+<section class="desc"><p>This module collects every model class, including input and transformers …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.models.pipeline_creator" href="pipeline_creator.html">EDA_miner_public.apps.analyze.models.pipeline_creator</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.models.pipeline_creator" href="pipeline_creator.html">EDA_miner.apps.analyze.models.pipeline_creator</a></code></dt>
 <dd>
-<section class="desc"><p>TBW&hellip;</p></section>
+<section class="desc"><p>This module collects function to traverse the ModelBuilder graph …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze.models.utils" href="utils.html">EDA_miner_public.apps.analyze.models.utils</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze.models.utils" href="utils.html">EDA_miner.apps.analyze.models.utils</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>This module collects utility functions and models …</p></section>
 </dd>
 </dl>
 </section>
@@ -57,15 +79,15 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze" href="../index.html">EDA_miner_public.apps.analyze</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze" href="../index.html">EDA_miner.apps.analyze</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.models.graph_structures" href="graph_structures.html">EDA_miner_public.apps.analyze.models.graph_structures</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes" href="pipeline_classes.html">EDA_miner_public.apps.analyze.models.pipeline_classes</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_creator" href="pipeline_creator.html">EDA_miner_public.apps.analyze.models.pipeline_creator</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.utils" href="utils.html">EDA_miner_public.apps.analyze.models.utils</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.graph_structures" href="graph_structures.html">EDA_miner.apps.analyze.models.graph_structures</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes" href="pipeline_classes.html">EDA_miner.apps.analyze.models.pipeline_classes</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_creator" href="pipeline_creator.html">EDA_miner.apps.analyze.models.pipeline_creator</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.utils" href="utils.html">EDA_miner.apps.analyze.models.utils</a></code></li>
 </ul>
 </li>
 </ul>

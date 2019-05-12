@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.Pipelines API documentation</title>
-<meta name="description" content="To be implemented." />
+<title>EDA_miner.apps.analyze.Pipelines API documentation</title>
+<meta name="description" content="This module defines the interface for fitting (pre)defined pipelines …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,24 +17,53 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.Pipelines</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.Pipelines</code></h1>
 </header>
 <section id="section-intro">
-<p>To be implemented.</p>
+<p>This module defines the interface for fitting (pre)defined pipelines.</p>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>Pipeline_Options: Generate the layout of the dashboard.
+Dash callbacks:<ul>
+<li>render_variable_choices_pipeline: Create a menu of dcc components
+for the user to choose fitting
+options.</li>
+<li>fit_pipeline_model: Fits any pipelines defined.</li>
+</ul>
+</li>
+</ul>
+<p>Notes to others:
+You should probably not write code here, UNLESS reworking the interface.</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
-    To be implemented.
+This module defines the interface for fitting (pre)defined pipelines.
+
+Functions:
+    - Pipeline_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_pipeline: Create a menu of dcc components \
+                                        for the user to choose fitting \
+                                        options.
+    - fit_pipeline_model: Fits any pipelines defined.
+
+Notes to others:
+    You should probably not write code here, UNLESS reworking the interface.
 &#34;&#34;&#34;
+
 
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import r, create_dropdown, get_data
+from apps.analyze.models import pipeline_classes
 
 import dill
+from apps.analyze.models import pipeline_creator
 
 
 def Pipeline_Options(options, results, user_id):
@@ -47,10 +76,7 @@ def Pipeline_Options(options, results, user_id):
                            for k in r.keys(f&#39;{user_id}_pipeline_*&#39;)}
 
     return html.Div(children=[
-        # Choose a dataset
-        html.Div(create_dropdown(&#34;Available datasets&#34;, options,
-                                 multi=False, id=&#34;dataset_choice_pipeline&#34;),
-                 className=&#34;horizontal_dropdowns&#34;),
+        # Dataset is defined in the ModelBuilder
 
         # Choose an algorithm
         html.Div(create_dropdown(&#34;Choose algorithm type&#34;, options=[
@@ -60,7 +86,16 @@ def Pipeline_Options(options, results, user_id):
                  className=&#34;horizontal_dropdowns&#34;),
 
         # Available choices for fitting
-        html.Div(id=&#34;variable_choices_pipeline&#34;),
+        html.Div(id=&#34;variable_choices_pipeline&#34;, children=[
+            # Debuggers
+            html.Button(&#34;Fit model&#34;, id=&#34;fit_model&#34;, n_clicks=0,
+                        style={&#34;display&#34;: &#34;none&#34;}),
+            html.Div(create_dropdown(&#34;&#34;, [], multi=True, id=&#34;xvars_pipeline&#34;,
+                                     style={&#34;display&#34;: &#34;none&#34;})),
+            html.Div(create_dropdown(&#34;&#34;, [], multi=True, id=&#34;yvars_pipeline&#34;,
+                                     style={&#34;display&#34;: &#34;none&#34;})),
+
+        ]),
 
         # The results
         html.Div(id=&#34;training_results_pipeline&#34;),
@@ -68,33 +103,89 @@ def Pipeline_Options(options, results, user_id):
 
 
 @app.callback(Output(&#34;variable_choices_pipeline&#34;, &#34;children&#34;),
-              [Input(&#34;dataset_choice_pipeline&#34;, &#34;value&#34;),
-               Input(&#34;algo_choice_pipeline&#34;, &#34;value&#34;)],
+              [Input(&#34;algo_choice_pipeline&#34;, &#34;value&#34;)],
               [State(&#34;user_id&#34;, &#34;children&#34;)])
-def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
-                                       user_id):
+def render_variable_choices_pipeline(algo_choice_pipeline,
+                                     user_id):
     &#34;&#34;&#34;
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select pipeline and variables.
+
+    Args:
+        algo_choice_pipeline (str): Choice among (pre)defined pipelines.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     &#34;&#34;&#34;
 
-
-    df = get_data(dataset_choice, user_id)
 
     # Make sure all variables have a value before returning choices
-    if any(x is None for x in [df, dataset_choice, algo_choice_regression]):
-        return [html.H4(&#34;Select dataset and algorithm first.&#34;)]
+    if algo_choice_pipeline is None:
+        return [html.H4(&#34;Select a pipeline first.&#34;)]
 
-    options = [{&#39;label&#39;: col[:35], &#39;value&#39;: col} for col in df.columns]
+    model = dill.loads(r.get(algo_choice_pipeline))
 
-    layout = [
-        html.Div(create_dropdown(&#34;X variable(s)&#34;, options,
-                                 multi=True, id=&#34;xvars_pipeline&#34;),
-                 className=&#34;horizontal_dropdowns&#34;),
-        html.Div(create_dropdown(&#34;Y variable&#34;, options,
-                                 multi=False, id=&#34;yvars_pipeline&#34;),
-                 className=&#34;horizontal_dropdowns&#34;),
-    ]
+    input_node = pipeline_creator.find_pipeline_node(
+        pipeline_classes.BaseInput
+    )(model)
+
+    terminal_node = pipeline_creator.find_pipeline_node(
+        pipeline_classes.TerminalNode
+    )(model)
+
+    # defaults
+    layout = []
+    options = []
+
+    if isinstance(input_node, pipeline_classes.GenericInput):
+        try:
+            dataset_choice = input_node.dataset
+        except AttributeError:
+            return [html.H4(&#34;Something went wrong with the input&#34;)]
+
+        if isinstance(input_node, pipeline_classes.TwitterAPI):
+            layout += [
+                html.Button(&#34;Fit model&#34;, id=&#34;fit_model&#34;, n_clicks=0),
+
+                # Debugger
+                html.Div(dcc.Dropdown(options=[], multi=True, id=&#34;xvars_pipeline&#34;,
+                                      style={&#34;display&#34;: &#34;none&#34;})),
+            ]
+
+        else:
+            df = get_data(dataset_choice, user_id)
+
+            # Truncate labels so they don&#39;t fill the whole dropdown
+            options = [{&#39;label&#39;: col[:35], &#39;value&#39;: col} for col in df.columns]
+
+            layout += [
+                html.Div(create_dropdown(&#34;X variable(s)&#34;, options,
+                                         multi=True, id=&#34;xvars_pipeline&#34;),
+                         className=&#34;horizontal_dropdowns&#34;),
+
+                # to debug the next callback
+                html.Button(&#34;Fit model&#34;, id=&#34;fit_model&#34;, n_clicks=0,
+                            style={&#34;display&#34;: &#34;none&#34;})
+            ]
+
+    else:
+        layout += [
+            # Debuggers
+            html.Button(&#34;Fit model&#34;, id=&#34;fit_model&#34;, n_clicks=0,
+                               style={&#34;display&#34;: &#34;none&#34;}),
+            html.Div(dcc.Dropdown(options=[], multi=True, id=&#34;xvars_pipeline&#34;,
+                                     style={&#34;display&#34;: &#34;none&#34;})),
+        ]
+
+    if not isinstance(terminal_node, pipeline_classes.UnsupervisedLearner):
+        layout += [html.Div(dcc.Dropdown(options=options,
+                            multi=False, id=&#34;yvars_pipeline&#34;),
+                            className=&#34;horizontal_dropdowns&#34;)]
+
+    else:
+        # Only existing for debugging the next callback, no yvars needed
+        layout += [dcc.Dropdown(options=[], id=&#34;yvars_pipeline&#34;,
+                                style={&#34;display&#34;: &#34;none&#34;})]
 
     return layout
 
@@ -102,34 +193,84 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
 @app.callback(
     Output(&#34;training_results_pipeline&#34;, &#34;children&#34;),
     [Input(&#34;xvars_pipeline&#34;, &#34;value&#34;),
-     Input(&#34;yvars_pipeline&#34;, &#34;value&#34;)],
+     Input(&#34;yvars_pipeline&#34;, &#34;value&#34;),
+     Input(&#34;fit_model&#34;, &#34;n_clicks&#34;)],
     [State(&#39;algo_choice_pipeline&#39;, &#34;value&#34;),
-     State(&#34;user_id&#34;, &#34;children&#34;),
-     State(&#34;dataset_choice_pipeline&#34;, &#34;value&#34;)])
-def fit_regression_model(xvars, yvars, algo_choice_pipeline,
-                         user_id, dataset_choice):
+     State(&#34;user_id&#34;, &#34;children&#34;)])
+def fit_pipeline_model(xvars, yvars, fit_model, algo_choice_pipeline, user_id):
     &#34;&#34;&#34;
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable.
+        algo_choice_pipeline (str): Choice among (pre)defined pipelines.
+        user_id: Session/user id.
+
+    Returns:
+        list: Dash element(s) with the results of model fitting.
     &#34;&#34;&#34;
 
+    if algo_choice_pipeline is None:
+        raise PreventUpdate()
 
-    df = get_data(dataset_choice, user_id)
-
-    ## Make sure all variables have a value before fitting
-    if any(x is None for x in [xvars, yvars, df, dataset_choice,
-                               algo_choice_pipeline]):
-        return []
 
     # We have the dictionary that maps keys to models so use that
     model = dill.loads(r.get(algo_choice_pipeline))
 
-    model.fit(df[xvars], df[yvars])
+    input_node = pipeline_creator.find_pipeline_node(
+        pipeline_classes.GenericInput
+    )(model)
 
-    # TODO: Implement score function for all models, including clustering
-    return [
-        html.H4(f&#34;Pipeline model scored: {model.score(df[xvars], df[yvars])}&#34;)
-    ]</code></pre>
+    terminal_node = pipeline_creator.find_pipeline_node(
+        pipeline_classes.TerminalNode
+    )(model)
+
+    if isinstance(input_node, pipeline_classes.GenericInput):
+        if isinstance(input_node, pipeline_classes.TwitterAPI):
+            if fit_model == 0:
+                # Don&#39;t fit
+                raise PreventUpdate()
+
+            X = []
+
+        else:
+            try:
+                dataset_choice = input_node.dataset
+            except AttributeError:
+                return [html.H4(&#34;Something went wrong with the input&#34;)]
+
+            df = get_data(dataset_choice, user_id)
+
+            ## Make sure all variables have a value before fitting
+            if any(x is None for x in [xvars, df, dataset_choice]):
+                raise PreventUpdate()
+
+            # if we used df[xvars] directly the ordering of variables that the user
+            # gave would actually affect the model. This forces those variables to
+            # be in the order of the original df. It matters only here since the
+            # user might have defined a FeatureMaker that depends on this.
+            xvars = [xvar for xvar in df.columns if xvar in xvars]
+            X = df[xvars]
+
+    else:
+        X = []
+
+    if isinstance(terminal_node, pipeline_classes.UnsupervisedLearner):
+        model.fit(X)
+        return [html.H4(str(model.predict(X)))]
+
+    else:
+
+        if yvars is None:
+            raise PreventUpdate()
+
+        model.fit(X, df[yvars])
+
+        # TODO: Implement score function for all models.
+        return [
+            html.H4(f&#34;Pipeline model scored: {model.score(df[xvars], df[yvars])}&#34;)
+        ]</code></pre>
 </details>
 </section>
 <section>
@@ -139,7 +280,7 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.Pipelines.Pipeline_Options"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.Pipelines.Pipeline_Options"><code class="name flex">
 <span>def <span class="ident">Pipeline_Options</span></span>(<span>options, results, user_id)</span>
 </code></dt>
 <dd>
@@ -156,10 +297,7 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
                            for k in r.keys(f&#39;{user_id}_pipeline_*&#39;)}
 
     return html.Div(children=[
-        # Choose a dataset
-        html.Div(create_dropdown(&#34;Available datasets&#34;, options,
-                                 multi=False, id=&#34;dataset_choice_pipeline&#34;),
-                 className=&#34;horizontal_dropdowns&#34;),
+        # Dataset is defined in the ModelBuilder
 
         # Choose an algorithm
         html.Div(create_dropdown(&#34;Choose algorithm type&#34;, options=[
@@ -169,7 +307,16 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
                  className=&#34;horizontal_dropdowns&#34;),
 
         # Available choices for fitting
-        html.Div(id=&#34;variable_choices_pipeline&#34;),
+        html.Div(id=&#34;variable_choices_pipeline&#34;, children=[
+            # Debuggers
+            html.Button(&#34;Fit model&#34;, id=&#34;fit_model&#34;, n_clicks=0,
+                        style={&#34;display&#34;: &#34;none&#34;}),
+            html.Div(create_dropdown(&#34;&#34;, [], multi=True, id=&#34;xvars_pipeline&#34;,
+                                     style={&#34;display&#34;: &#34;none&#34;})),
+            html.Div(create_dropdown(&#34;&#34;, [], multi=True, id=&#34;yvars_pipeline&#34;,
+                                     style={&#34;display&#34;: &#34;none&#34;})),
+
+        ]),
 
         # The results
         html.Div(id=&#34;training_results_pipeline&#34;),
@@ -189,12 +336,12 @@ def fit_regression_model(xvars, yvars, algo_choice_pipeline,
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze" href="index.html">EDA_miner_public.apps.analyze</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze" href="index.html">EDA_miner.apps.analyze</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.Pipelines.Pipeline_Options" href="#EDA_miner_public.apps.analyze.Pipelines.Pipeline_Options">Pipeline_Options</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Pipelines.Pipeline_Options" href="#EDA_miner.apps.analyze.Pipelines.Pipeline_Options">Pipeline_Options</a></code></li>
 </ul>
 </li>
 </ul>

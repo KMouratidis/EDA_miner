@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.exploration.graphs API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps.exploration.graphs API documentation</title>
+<meta name="description" content="&lt;h2&gt;Developer notes&lt;/h2&gt; …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,41 +17,69 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.exploration.graphs</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.exploration.graphs</code></h1>
 </header>
 <section id="section-intro">
+<h2>Developer notes</h2>
+<p>Some suggestions on what could be done here:
+<ul>
+<li><b>Define more PDF report layouts</b>
+(see also <code>layouts.py</code>).</li>
+<li>Add more graph types in any of the categories (but avoid word
+vector visualizations).</li>
+<li>Add additional functionality in KPIs.</li>
+<li>Improve baseline graph and/or function.</li>
+<li>Improve network visualizations.</li>
+</ul></p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt;Developer notes&lt;/h2&gt;
+
+Some suggestions on what could be done here:
+&lt;ul&gt;
+    &lt;li&gt;&lt;b&gt;Define more PDF report layouts&lt;/b&gt;
+    (see also &lt;code&gt;layouts.py&lt;/code&gt;).&lt;/li&gt;
+    &lt;li&gt;Add more graph types in any of the categories (but avoid word
+    vector visualizations).&lt;/li&gt;
+    &lt;li&gt;Add additional functionality in KPIs.&lt;/li&gt;
+    &lt;li&gt;Improve baseline graph and/or function.&lt;/li&gt;
+    &lt;li&gt;Improve network visualizations.&lt;/li&gt;
+&lt;/ul&gt;
+&#34;&#34;&#34;</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.graphs2d" href="graphs2d.html">EDA_miner_public.apps.exploration.graphs.graphs2d</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.graphs2d" href="graphs2d.html">EDA_miner.apps.exploration.graphs.graphs2d</a></code></dt>
 <dd>
 <section class="desc"><p>This module contains the implementations of graphing functions.
 I skipped adding docstrings for every function since most of them
 are one-liners …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.graphs3d" href="graphs3d.html">EDA_miner_public.apps.exploration.graphs.graphs3d</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.graphs3d" href="graphs3d.html">EDA_miner.apps.exploration.graphs.graphs3d</a></code></dt>
 <dd>
 <section class="desc"><p>This module collects functions and utilities for 3D visualization …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.kpis" href="kpis.html">EDA_miner_public.apps.exploration.graphs.kpis</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.kpis" href="kpis.html">EDA_miner.apps.exploration.graphs.kpis</a></code></dt>
 <dd>
 <section class="desc"><p>This module collects functions and utilities for KPI visualization
 but may also be used to add other options and core implementation logic …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.layouts" href="layouts.html">EDA_miner_public.apps.exploration.graphs.layouts</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.layouts" href="layouts.html">EDA_miner.apps.exploration.graphs.layouts</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.styles" href="styles.html">EDA_miner_public.apps.exploration.graphs.styles</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.styles" href="styles.html">EDA_miner.apps.exploration.graphs.styles</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.textviz" href="textviz.html">EDA_miner_public.apps.exploration.graphs.textviz</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.textviz" href="textviz.html">EDA_miner.apps.exploration.graphs.textviz</a></code></dt>
 <dd>
 <section class="desc"><p>This module collects functions and utilities for text visualizations …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration.graphs.word_cloud" href="word_cloud.html">EDA_miner_public.apps.exploration.graphs.word_cloud</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration.graphs.word_cloud" href="word_cloud.html">EDA_miner.apps.exploration.graphs.word_cloud</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -72,18 +100,18 @@ but may also be used to add other options and core implementation logic …</p><
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.exploration" href="../index.html">EDA_miner_public.apps.exploration</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration" href="../index.html">EDA_miner.apps.exploration</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs2d" href="graphs2d.html">EDA_miner_public.apps.exploration.graphs.graphs2d</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.graphs3d" href="graphs3d.html">EDA_miner_public.apps.exploration.graphs.graphs3d</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.kpis" href="kpis.html">EDA_miner_public.apps.exploration.graphs.kpis</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.layouts" href="layouts.html">EDA_miner_public.apps.exploration.graphs.layouts</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.styles" href="styles.html">EDA_miner_public.apps.exploration.graphs.styles</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.textviz" href="textviz.html">EDA_miner_public.apps.exploration.graphs.textviz</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration.graphs.word_cloud" href="word_cloud.html">EDA_miner_public.apps.exploration.graphs.word_cloud</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs2d" href="graphs2d.html">EDA_miner.apps.exploration.graphs.graphs2d</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.graphs3d" href="graphs3d.html">EDA_miner.apps.exploration.graphs.graphs3d</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.kpis" href="kpis.html">EDA_miner.apps.exploration.graphs.kpis</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.layouts" href="layouts.html">EDA_miner.apps.exploration.graphs.layouts</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.styles" href="styles.html">EDA_miner.apps.exploration.graphs.styles</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.textviz" href="textviz.html">EDA_miner.apps.exploration.graphs.textviz</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration.graphs.word_cloud" href="word_cloud.html">EDA_miner.apps.exploration.graphs.word_cloud</a></code></li>
 </ul>
 </li>
 </ul>

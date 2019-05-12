@@ -67,11 +67,17 @@ SideBar = [
                            id="dash_link")
             ], href="https://dash.plot.ly/",
                 target="_blank")),
+
+            html.Li(html.A([
+                    html.Span("Our docs  "),
+                    html.I(className="fas fa-external-link-square-alt",
+                           id="dev_link")
+            ], href="https://kmouratidis.github.io/EDA_miner_public/docs/",
+                target="_blank")),
         ])
     ]),
-
-
 ]
+
 
 MainMenu = [
 
@@ -95,8 +101,8 @@ MainMenu = [
     html.Div(id="table_container", children=[
         dash_table.DataTable(id='table',),
     ], style={"display": "none"}),
-
 ]
+
 
 SideBar2 = [
     html.H3("Tab menu"),

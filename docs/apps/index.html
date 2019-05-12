@@ -4,8 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps API documentation</title>
-<meta name="description" content="" />
+<title>EDA_miner.apps API documentation</title>
+<meta name="description" content="&lt;h2&gt;Developer notes&lt;/h2&gt;
+Here you will find all of the &#34;apps&#34;, each is a high-level tab. The main
+function of the files defined here is to delegate …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,36 +19,75 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps</code></h1>
 </header>
 <section id="section-intro">
+<h2>Developer notes</h2>
+<p>Here you will find all of the "apps", each is a high-level tab. The main
+function of the files defined here is to delegate work to lower-level modules,
+although the structure might later be changed. View the respective files for
+more details notes.</p>
+<h3><code>data_view.py</code></h3>
+<p>Defines the "Data View" tab. Anything that has to to do with acquiring,
+editing, and viewing data.</p>
+<h3><code>exploration_view.py</code></h3>
+<p>Defines the "Explore &amp; Visualize" tab. Anything that has to do with graphs
+and analysis (e.g. KPIs).</p>
+<h3><code>analyze_view.py</code></h3>
+<p>Defines the "Analyze &amp; Predict" tab. Anything that has to do with creating
+and training Machine Learning models.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+&lt;h2&gt;Developer notes&lt;/h2&gt;
+Here you will find all of the &#34;apps&#34;, each is a high-level tab. The main
+function of the files defined here is to delegate work to lower-level modules,
+although the structure might later be changed. View the respective files for
+more details notes.
+
+&lt;h3&gt;&lt;code&gt;data_view.py&lt;/code&gt;&lt;/h3&gt;
+Defines the &#34;Data View&#34; tab. Anything that has to to do with acquiring,
+editing, and viewing data.
+
+&lt;h3&gt;&lt;code&gt;exploration_view.py&lt;/code&gt;&lt;/h3&gt;
+Defines the &#34;Explore &amp; Visualize&#34; tab. Anything that has to do with graphs
+and analysis (e.g. KPIs).
+
+&lt;h3&gt;&lt;code&gt;analyze_view.py&lt;/code&gt;&lt;/h3&gt;
+Defines the &#34;Analyze &amp; Predict&#34; tab. Anything that has to do with creating
+and training Machine Learning models.
+&#34;&#34;&#34;</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze" href="analyze/index.html">EDA_miner_public.apps.analyze</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze" href="analyze/index.html">EDA_miner.apps.analyze</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2>Developer notes</h2>
+<p>…</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.analyze_view" href="analyze_view.html">EDA_miner_public.apps.analyze_view</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.analyze_view" href="analyze_view.html">EDA_miner.apps.analyze_view</a></code></dt>
 <dd>
 <section class="desc"><p>This module takes care of the menu and choices provided when the
 "Analyze &amp; Predict" high-level tab is selected …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.data" href="data/index.html">EDA_miner_public.apps.data</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.data" href="data/index.html">EDA_miner.apps.data</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2>Developer notes</h2>
+<p>…</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.data_view" href="data_view.html">EDA_miner_public.apps.data_view</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.data_view" href="data_view.html">EDA_miner.apps.data_view</a></code></dt>
 <dd>
 <section class="desc"><p>This module takes care of the menu and choices provided when the
 "Data view" high-level tab is selected …</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration" href="exploration/index.html">EDA_miner_public.apps.exploration</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration" href="exploration/index.html">EDA_miner.apps.exploration</a></code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><h2>Developer notes</h2>
+<p>…</p></section>
 </dd>
-<dt><code class="name"><a title="EDA_miner_public.apps.exploration_view" href="exploration_view.html">EDA_miner_public.apps.exploration_view</a></code></dt>
+<dt><code class="name"><a title="EDA_miner.apps.exploration_view" href="exploration_view.html">EDA_miner.apps.exploration_view</a></code></dt>
 <dd>
 <section class="desc"><p>This module takes care of the menu and choices provided when the
 "Explore &amp; Visualize" high-level tab is selected …</p></section>
@@ -68,17 +109,17 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public" href="../index.html">EDA_miner_public</a></code></li>
+<li><code><a title="EDA_miner" href="../index.html">EDA_miner</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze" href="analyze/index.html">EDA_miner_public.apps.analyze</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze_view" href="analyze_view.html">EDA_miner_public.apps.analyze_view</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data" href="data/index.html">EDA_miner_public.apps.data</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data_view" href="data_view.html">EDA_miner_public.apps.data_view</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration" href="exploration/index.html">EDA_miner_public.apps.exploration</a></code></li>
-<li><code><a title="EDA_miner_public.apps.exploration_view" href="exploration_view.html">EDA_miner_public.apps.exploration_view</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze" href="analyze/index.html">EDA_miner.apps.analyze</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze_view" href="analyze_view.html">EDA_miner.apps.analyze_view</a></code></li>
+<li><code><a title="EDA_miner.apps.data" href="data/index.html">EDA_miner.apps.data</a></code></li>
+<li><code><a title="EDA_miner.apps.data_view" href="data_view.html">EDA_miner.apps.data_view</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration" href="exploration/index.html">EDA_miner.apps.exploration</a></code></li>
+<li><code><a title="EDA_miner.apps.exploration_view" href="exploration_view.html">EDA_miner.apps.exploration_view</a></code></li>
 </ul>
 </li>
 </ul>

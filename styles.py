@@ -13,7 +13,8 @@ cyto_stylesheet = [
     {
         'selector': 'node',
         'style': {
-            'label': 'data(label)'
+            'label': 'data(label)',
+            'font-size': 18,
         }
     },
     {
@@ -34,8 +35,8 @@ cyto_stylesheet = [
     {
         'selector': '.withimage',
         'style': {
-            'width': 50,
-            'height': 50,
+            'width': 80,
+            'height': 80,
             'background-fit': 'cover',
             'background-image': 'data(url)'
         }

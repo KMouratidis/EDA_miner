@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.Regression API documentation</title>
-<meta name="description" content="To be implemented." />
+<title>EDA_miner.apps.analyze.Regression API documentation</title>
+<meta name="description" content="This module defines the interface for fitting simple regression models …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,19 +17,47 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.Regression</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.Regression</code></h1>
 </header>
 <section id="section-intro">
-<p>To be implemented.</p>
+<p>This module defines the interface for fitting simple regression models.</p>
+<h2 id="functions">Functions</h2>
+<ul>
+<li>Regression_Options: Generate the layout of the dashboard.
+Dash callbacks:<ul>
+<li>render_variable_choices_regression: Create a menu of dcc components
+for the user to choose fitting
+options.</li>
+<li>fit_regression_model: Fits any models defined.</li>
+</ul>
+</li>
+</ul>
+<p>Notes to others:
+Feel free to experiment as much as you like here, although you probably
+want to write code elsewhere.</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
-    To be implemented.
+This module defines the interface for fitting simple regression models.
+
+Functions:
+    - Regression_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_regression: Create a menu of dcc components \
+                                          for the user to choose fitting \
+                                          options.
+    - fit_regression_model: Fits any models defined.
+
+Notes to others:
+    Feel free to experiment as much as you like here, although you probably \
+    want to write code elsewhere.
 &#34;&#34;&#34;
 
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import create_dropdown, mapping, get_data
@@ -65,11 +93,19 @@ def Regression_Options(options, results):
               [Input(&#34;dataset_choice_regression&#34;, &#34;value&#34;),
                Input(&#34;algo_choice_regression&#34;, &#34;value&#34;)],
               [State(&#34;user_id&#34;, &#34;children&#34;)])
-def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
+def render_variable_choices_regression(dataset_choice, algo_choice_regression,
                                        user_id):
     &#34;&#34;&#34;
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select dataset, variables,
+    and training options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        algo_choice_regression (str): The choice of algorithm type.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     &#34;&#34;&#34;
 
 
@@ -79,6 +115,7 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
     if any(x is None for x in [df, dataset_choice, algo_choice_regression]):
         return [html.H4(&#34;Select dataset and algorithm first.&#34;)]
 
+    # Truncate labels so they don&#39;t fill the whole dropdown
     options = [{&#39;label&#39;: col[:35], &#39;value&#39;: col} for col in df.columns]
 
     layout = [
@@ -103,8 +140,17 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_regression,
 def fit_regression_model(xvars, yvars, algo_choice_regression,
                          user_id, dataset_choice):
     &#34;&#34;&#34;
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable.
+        algo_choice_regression (str): The choice of algorithm type.
+        user_id: Session/user id.
+        dataset_choice: Name of dataset.
+
+    Returns:
+        list: Dash element(s) with the results of model fitting.
     &#34;&#34;&#34;
 
 
@@ -113,12 +159,14 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
     ## Make sure all variables have a value before fitting
     if any(x is None for x in [xvars, yvars, df, dataset_choice,
                                algo_choice_regression]):
-        return {}
+        raise PreventUpdate()
 
     # We have the dictionary that maps keys to models so use that
     model = mapping[algo_choice_regression]()
 
     model.fit(df[xvars], df[yvars])
+
+    # TODO: Add visualizations for the results.
 
     return [
         html.H4(f&#34;Regression model scored: {model.score(df[xvars], df[yvars])}&#34;)
@@ -132,7 +180,7 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.Regression.Regression_Options"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.Regression.Regression_Options"><code class="name flex">
 <span>def <span class="ident">Regression_Options</span></span>(<span>options, results)</span>
 </code></dt>
 <dd>
@@ -177,12 +225,12 @@ def fit_regression_model(xvars, yvars, algo_choice_regression,
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze" href="index.html">EDA_miner_public.apps.analyze</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze" href="index.html">EDA_miner.apps.analyze</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.Regression.Regression_Options" href="#EDA_miner_public.apps.analyze.Regression.Regression_Options">Regression_Options</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.Regression.Regression_Options" href="#EDA_miner.apps.analyze.Regression.Regression_Options">Regression_Options</a></code></li>
 </ul>
 </li>
 </ul>

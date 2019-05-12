@@ -1,5 +1,5 @@
 """
-    To be implemented.
+    TBW...
 """
 
 from dash.dependencies import Input, Output, State
@@ -59,8 +59,16 @@ def Clustering_Options(options, results):
 def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
                                        user_id):
     """
-        This callback is used in order to create a menu of dcc components
-        for the user to choose for altering across datasets.
+    Create a menu of dcc components to select dataset, variables,
+    and training options.
+
+    Args:
+        dataset_choice (str): Name of dataset.
+        algo_choice_clustering (str): The choice of algorithm type.
+        user_id (str): Session/user id.
+
+    Returns:
+        list: Dash elements.
     """
 
 
@@ -68,8 +76,9 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
 
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice, algo_choice_clustering]):
-        return [[html.H4("Select dataset and algorithm first.")], {}]
+        return [html.H4("Select dataset and algorithm first.")]
 
+    # Truncate labels so they don't fill the whole dropdown
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     layout = [
@@ -96,8 +105,18 @@ def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
 def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
                          user_id, dataset_choice):
     """
-        This callback takes all available user choices and, if all
-        are present, it fits the appropriate model.
+    Take user choices and, if all are present, fit the appropriate model.
+
+    Args:
+        xvars (list(str)): predictor variables.
+        yvars (str): target variable; not needed.
+        algo_choice_clustering (str): The choice of algorithm type.
+        user_id: Session/user id.
+        dataset_choice: Name of dataset.
+
+    Returns:
+        list, dict: Dash element(s) with the results of model fitting,
+                    and parameters for plotting a graph.
     """
 
 
@@ -117,10 +136,12 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
 
     model.fit(df[xvars])
 
-    labels = model.labels_
-
+    # TODO: Find a meaningful way (metric) to notify the user of model score.
     layout = [[html.H4(f"Clustering model scored: {model.score(df[xvars])}")]]
 
+    labels = model.labels_
+    # TODO: If Y is given, visualize the (in)correctly grouped points.
+    # If we have >=2 variables, visualize the clusters
     if len(xvars) >= 3:
 
         trace1 = go.Scatter3d(x=df[xvars[0]],
@@ -143,7 +164,7 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
                             marker={'color': labels.astype(np.float)})
 
         layout += [{
-            'data': trace,
+            'data': [trace],
             'layout': layouts.default_2d(xvars[0], xvars[1])
         }]
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.utils API documentation</title>
+<title>EDA_miner.utils API documentation</title>
 <meta name="description" content="This module provides utilities, functions, and other code that is
 meant to be used across the app. This may undergo changes soon …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -18,7 +18,7 @@ meant to be used across the app. This may undergo changes soon …" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.utils</code></h1>
+<h1 class="title">Module <code>EDA_miner.utils</code></h1>
 </header>
 <section id="section-intro">
 <p>This module provides utilities, functions, and other code that is
@@ -46,7 +46,7 @@ creating dropdowns and used in <code>apps.analyze</code> modules.</li>
 You should probably not write code here, unless you are adding
 functions aimed at being used by many lower-level modules.
 Some of the functions here will later be moved to lower-level
-modules (e.g. <a title="EDA_miner_public.utils.pretty_print_tweets" href="#EDA_miner_public.utils.pretty_print_tweets"><code>pretty_print_tweets()</code></a>).</p>
+modules (e.g. <a title="EDA_miner.utils.pretty_print_tweets" href="#EDA_miner.utils.pretty_print_tweets"><code>pretty_print_tweets()</code></a>).</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
@@ -388,7 +388,7 @@ r = redis_startup()
 <section>
 <h2 class="section-title" id="header-variables">Global variables</h2>
 <dl>
-<dt id="EDA_miner_public.utils.r"><code class="name">var <span class="ident">r</span></code></dt>
+<dt id="EDA_miner.utils.r"><code class="name">var <span class="ident">r</span></code></dt>
 <dd>
 <section class="desc"><p>The Redis connection that is used throughout the app.</p></section>
 </dd>
@@ -397,7 +397,7 @@ r = redis_startup()
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.utils.cleanup"><code class="name flex">
+<dt id="EDA_miner.utils.cleanup"><code class="name flex">
 <span>def <span class="ident">cleanup</span></span>(<span>redis_conn)</span>
 </code></dt>
 <dd>
@@ -437,7 +437,7 @@ while the server was running.</p></section>
             os.remove(f&#34;static/images/{img}&#34;)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.create_dropdown"><code class="name flex">
+<dt id="EDA_miner.utils.create_dropdown"><code class="name flex">
 <span>def <span class="ident">create_dropdown</span></span>(<span>name, options, **kwargs)</span>
 </code></dt>
 <dd>
@@ -482,7 +482,7 @@ that can be passed to <code>dcc.Dropdown</code>.</dd>
         )]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.create_table"><code class="name flex">
+<dt id="EDA_miner.utils.create_table"><code class="name flex">
 <span>def <span class="ident">create_table</span></span>(<span>df, table_id='table')</span>
 </code></dt>
 <dd>
@@ -555,7 +555,7 @@ with dash callbacks.</dd>
     )</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.encode_image"><code class="name flex">
+<dt id="EDA_miner.utils.encode_image"><code class="name flex">
 <span>def <span class="ident">encode_image</span></span>(<span>image_path)</span>
 </code></dt>
 <dd>
@@ -586,7 +586,7 @@ top-level directory</dd>
         open(image_path, &#39;rb&#39;).read()).decode())</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.get_data"><code class="name flex">
+<dt id="EDA_miner.utils.get_data"><code class="name flex">
 <span>def <span class="ident">get_data</span></span>(<span>api_choice, user_id)</span>
 </code></dt>
 <dd>
@@ -630,7 +630,7 @@ to store the data.</dd>
     return df</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.hard_cast_to_float"><code class="name flex">
+<dt id="EDA_miner.utils.hard_cast_to_float"><code class="name flex">
 <span>def <span class="ident">hard_cast_to_float</span></span>(<span>x)</span>
 </code></dt>
 <dd>
@@ -663,7 +663,7 @@ to store the data.</dd>
     return ret</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.parse_contents"><code class="name flex">
+<dt id="EDA_miner.utils.parse_contents"><code class="name flex">
 <span>def <span class="ident">parse_contents</span></span>(<span>contents, filename, date, user_id)</span>
 </code></dt>
 <dd>
@@ -744,7 +744,7 @@ it only supports csv, xls(x), json, and feather file types.</p></section>
     ])</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.pretty_print_tweets"><code class="name flex">
+<dt id="EDA_miner.utils.pretty_print_tweets"><code class="name flex">
 <span>def <span class="ident">pretty_print_tweets</span></span>(<span>api, n_tweets)</span>
 </code></dt>
 <dd>
@@ -774,7 +774,7 @@ with verified credentials.</dt>
     ]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.utils.redis_startup"><code class="name flex">
+<dt id="EDA_miner.utils.redis_startup"><code class="name flex">
 <span>def <span class="ident">redis_startup</span></span>(<span>)</span>
 </code></dt>
 <dd>
@@ -816,25 +816,25 @@ is also responsible for any other startup operations needed.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public" href="index.html">EDA_miner_public</a></code></li>
+<li><code><a title="EDA_miner" href="index.html">EDA_miner</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-variables">Global variables</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.utils.r" href="#EDA_miner_public.utils.r">r</a></code></li>
+<li><code><a title="EDA_miner.utils.r" href="#EDA_miner.utils.r">r</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
-<li><code><a title="EDA_miner_public.utils.cleanup" href="#EDA_miner_public.utils.cleanup">cleanup</a></code></li>
-<li><code><a title="EDA_miner_public.utils.create_dropdown" href="#EDA_miner_public.utils.create_dropdown">create_dropdown</a></code></li>
-<li><code><a title="EDA_miner_public.utils.create_table" href="#EDA_miner_public.utils.create_table">create_table</a></code></li>
-<li><code><a title="EDA_miner_public.utils.encode_image" href="#EDA_miner_public.utils.encode_image">encode_image</a></code></li>
-<li><code><a title="EDA_miner_public.utils.get_data" href="#EDA_miner_public.utils.get_data">get_data</a></code></li>
-<li><code><a title="EDA_miner_public.utils.hard_cast_to_float" href="#EDA_miner_public.utils.hard_cast_to_float">hard_cast_to_float</a></code></li>
-<li><code><a title="EDA_miner_public.utils.parse_contents" href="#EDA_miner_public.utils.parse_contents">parse_contents</a></code></li>
-<li><code><a title="EDA_miner_public.utils.pretty_print_tweets" href="#EDA_miner_public.utils.pretty_print_tweets">pretty_print_tweets</a></code></li>
-<li><code><a title="EDA_miner_public.utils.redis_startup" href="#EDA_miner_public.utils.redis_startup">redis_startup</a></code></li>
+<li><code><a title="EDA_miner.utils.cleanup" href="#EDA_miner.utils.cleanup">cleanup</a></code></li>
+<li><code><a title="EDA_miner.utils.create_dropdown" href="#EDA_miner.utils.create_dropdown">create_dropdown</a></code></li>
+<li><code><a title="EDA_miner.utils.create_table" href="#EDA_miner.utils.create_table">create_table</a></code></li>
+<li><code><a title="EDA_miner.utils.encode_image" href="#EDA_miner.utils.encode_image">encode_image</a></code></li>
+<li><code><a title="EDA_miner.utils.get_data" href="#EDA_miner.utils.get_data">get_data</a></code></li>
+<li><code><a title="EDA_miner.utils.hard_cast_to_float" href="#EDA_miner.utils.hard_cast_to_float">hard_cast_to_float</a></code></li>
+<li><code><a title="EDA_miner.utils.parse_contents" href="#EDA_miner.utils.parse_contents">parse_contents</a></code></li>
+<li><code><a title="EDA_miner.utils.pretty_print_tweets" href="#EDA_miner.utils.pretty_print_tweets">pretty_print_tweets</a></code></li>
+<li><code><a title="EDA_miner.utils.redis_startup" href="#EDA_miner.utils.redis_startup">redis_startup</a></code></li>
 </ul>
 </li>
 </ul>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.data.APIs API documentation</title>
+<title>EDA_miner.apps.data.APIs API documentation</title>
 <meta name="description" content="This module defines the interface for connecting to APIs.
 It renders the appropriate layout according to the tab chosen …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -18,7 +18,7 @@ It renders the appropriate layout according to the tab chosen …" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.data.APIs</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.data.APIs</code></h1>
 </header>
 <section id="section-intro">
 <p>This module defines the interface for connecting to APIs.
@@ -51,139 +51,107 @@ Notes to others:
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
-from utils import r
-from apps.data.data_utils import api_layouts, api_connectors
+from utils import r, parse_contents
+from apps.data.data_utils import api_connectors
+from apps.data.data_utils.api_layouts import logins_ui_mapping
 
+import base64
+import json
 import pickle
 import quandl
+from inspect import getfullargspec
 
 
 API_Options = html.Div(children=[
     html.H4(&#34;Connect to an API from the list:&#34;),
 
     html.Div(children=[
-        dcc.Tabs(id=&#34;api_choice&#34;, value=&#39;twitter_api&#39;, children=[
-            dcc.Tab(label=&#39;Twitter&#39;, value=&#39;twitter_api&#39;,
+        dcc.Tabs(id=&#34;api_choice&#34;, value=&#39;twitter&#39;, children=[
+            dcc.Tab(label=&#39;Twitter&#39;, value=&#39;twitter&#39;,
                     id=&#34;twitter_api&#34;),
-            dcc.Tab(label=&#39;Google Sheets&#39;, value=&#39;gsheets_api&#39;,
+            dcc.Tab(label=&#39;Google Sheets&#39;, value=&#39;gsheets&#39;,
                     id=&#34;gsheets_api&#34;),
-            dcc.Tab(label=&#39;Reddit&#39;, value=&#39;reddit_api&#39;,
+            dcc.Tab(label=&#39;Reddit&#39;, value=&#39;reddit&#39;,
                     id=&#34;reddit_api&#34;),
-            dcc.Tab(label=&#39;Quandl&#39;, value=&#39;quandl_api&#39;,
+            dcc.Tab(label=&#39;Quandl&#39;, value=&#39;quandl&#39;,
                     id=&#34;quandl_api&#34;),
-            dcc.Tab(label=&#39;Spotify&#39;, value=&#39;spotify_api&#39;,
+            dcc.Tab(label=&#39;Spotify&#39;, value=&#39;spotify&#39;,
                     id=&#34;spotify_api&#34;),
         ]),
     ]),
 
-    html.Div(id=&#34;api_login_form&#34;, children=[
-        *api_layouts.debugger_layout,
-    ]),
+    html.Div(id=&#34;api_login_form&#34;),
+    html.Div(id=&#34;api_user_interface&#34;),
 ])
 
 
+# Responsible for rendering the available login form
 @app.callback(Output(&#39;api_login_form&#39;, &#39;children&#39;),
-              [Input(&#39;api_choice&#39;, &#39;value&#39;),
-               Input(&#39;connect_button&#39;, &#39;n_clicks&#39;)],
-              [State(&#34;user_id&#34;, &#34;children&#34;),
-               State(&#34;input1&#34;, &#34;value&#34;),
-               State(&#34;input2&#34;, &#34;value&#34;),
-               State(&#34;input3&#34;, &#34;value&#34;),
-               State(&#34;input4&#34;, &#34;value&#34;)])
-def api_connect(api_choice, n_clicks, user_id,
-                input1, input2, input3, input4):
-    &#34;&#34;&#34;
-    Render the appropriate view for the chosen API.
-
-    Args:
-        api_choice (str): Value from the tabs.
-        n_clicks (int): Number of times button was clicked.
-        user_id (str): Session/user id.
-        input1 (str): API-specific credential or value.
-        input2 (str): API-specific credential or value.
-        input3 (str): API-specific credential or value.
-        input4 (str): API-specific credential or value.
-
-    Returns:
-        list: A list of dash components.
-
-    Further details:
-        Depending on the tab choice, provide the appropriate form.
-        This callback is also responsible for adding the submit button
-        if necessary. When a user selects a tab where they have already
-        connected then an appropriate message is returned.
-    &#34;&#34;&#34;
+              [Input(&#39;api_choice&#39;, &#39;value&#39;)],
+              [State(&#34;user_id&#34;, &#34;children&#34;)])
+def render_api_login_form(api_choice, user_id):
 
 
-    connected = r.get(f&#34;{user_id}_{api_choice}&#34;) is not None
+    if r.get(f&#34;{user_id}_{api_choice}_api&#34;) is not None:
+        # Previously connected
+        return logins_ui_mapping[api_choice][1]
+    else:
+        return logins_ui_mapping[api_choice][0]
 
-    if connected:
-        return [
-            html.H4(&#34;Connected previously&#34;),
-            *api_layouts.debugger_layout,
-        ]
 
-    if n_clicks is None:
-        n_clicks = 0
+# Create callbacks for every API login form, based on
+# their connectors&#39; function arguments
+for api, func in api_connectors.connectors_mapping.items():
+    @app.callback([Output(f&#39;{api}_UI&#39;, &#39;children&#39;),
+                   Output(f&#39;{api}_login_form&#39;, &#39;style&#39;)],
+                  [Input(f&#39;{api}_connect_button&#39;, &#39;n_clicks&#39;)],
+                  [State(&#34;api_choice&#34;, &#34;value&#34;),
+                   State(&#34;user_id&#34;, &#34;children&#34;)] + [
+                      State(f&#34;{api}_{var}&#34;, &#34;value&#34;)
+                      for var in getfullargspec(func).args
+                  ])
+    def parse_credentials(n_clicks, api_choice, user_id, *func_params):
 
-    if api_choice == &#34;twitter_api&#34;:
-        if n_clicks &gt;= 1:
-            api_connectors.twitter_connect(input1, input2, input3,
-                                           input4, user_id)
-            return api_layouts.success_message(&#34;Twitter&#34;)
+        api_connectors.api_connect(api_choice, user_id, *func_params)
+
+        if r.get(f&#34;{user_id}_{api_choice}_api&#34;) is not None:
+            # Success logging in
+            return logins_ui_mapping[api_choice][1], {&#34;display&#34;: &#34;none&#34;}
 
         else:
-            return api_layouts.twitter_layout
+            raise PreventUpdate()
 
-    elif api_choice == &#34;gsheets_api&#34;:
-        if n_clicks &gt;= 1:
-            api_connectors.google_sheets_connect(input1, input2, user_id)
-            return api_layouts.success_message(&#34;Google Sheets&#34;)
 
+# Callback that handles what happens with the Twitter UI
+@app.callback(Output(&#34;twitter_results&#34;, &#34;children&#34;),
+              [Input(&#34;get_tweets_username&#34;, &#34;n_clicks&#34;)],
+              [State(&#34;twitter_account_name&#34;, &#34;value&#34;),
+               State(&#34;user_id&#34;, &#34;children&#34;)])
+def get_users_tweets(n_clicks, acc_name, user_id):
+
+
+    if n_clicks &gt; 0:
+        api = pickle.loads(r.get(f&#34;{user_id}_twitter_api_handle&#34;))
+
+        # TODO: This is a cache so consider a better implementation.
+        query = r.get(f&#34;{user_id}_twitter_data_{acc_name}&#34;)
+        if query is None:
+            # TODO: Consider saving for future use / as a dataset.
+            query = api.GetUserTimeline(screen_name=acc_name)
+
+            # Expire the retrieved tweets cache in one hour
+            r.set(f&#34;{user_id}_twitter_data_{acc_name}&#34;,
+                  pickle.dumps(query), ex=3600)
         else:
-            return api_layouts.gsheets_layout
+            query = pickle.loads(query)
 
-    elif api_choice == &#34;reddit_api&#34;:
-
-        if n_clicks &gt;= 1:
-            api_connectors.reddit_connect(input1, input2, user_id)
-            return api_layouts.success_message(&#34;Reddit&#34;)
-
-        else:
-            return api_layouts.reddit_layout
-
-    elif api_choice == &#34;quandl_api&#34;:
-        if n_clicks &gt;= 1:
-            # Does&#39;t exactly need an authentication function
-            quandl.ApiConfig.api_key = input1
-
-            r.set(f&#34;{user_id}_{api_choice}&#34;, &#34;true&#34;)
-            r.set(f&#34;{user_id}_{api_choice}_{input2}&#34;,
-                  pickle.dumps(quandl.get(input2)))
-
-            # TODO: This needs revisiting for allowing user to add
-            # multiple datasets
-            return api_layouts.success_message(&#34;Quandl&#34;)
-
-        else:
-            return api_layouts.quandl_layout
-
-    elif api_choice == &#34;spotify_api&#34;:
-        if n_clicks &gt;= 1:
-            api_connectors.spotify_connect(input1, input2, user_id)
-            return api_layouts.success_message(&#34;Spotify&#34;)
-
-        else:
-            return api_layouts.spotify_layout
+        return [html.P(str(status.text)) for status in query]
 
     else:
-        return [
-            html.H4(f&#34;{api_choice} not yet implemented&#34;),
-            html.H4(&#34;Debug element, please ignore&#34;),
-            *api_layouts.debugger_layout,
-        ]</code></pre>
+        raise PreventUpdate()</code></pre>
 </details>
 </section>
 <section>
@@ -203,7 +171,7 @@ def api_connect(api_choice, n_clicks, user_id,
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.data" href="index.html">EDA_miner_public.apps.data</a></code></li>
+<li><code><a title="EDA_miner.apps.data" href="index.html">EDA_miner.apps.data</a></code></li>
 </ul>
 </li>
 </ul>

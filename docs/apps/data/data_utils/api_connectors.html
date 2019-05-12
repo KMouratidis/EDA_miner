@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.data.data_utils.api_connectors API documentation</title>
+<title>EDA_miner.apps.data.data_utils.api_connectors API documentation</title>
 <meta name="description" content="This module collects the layouts for connecting to the various APIs …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.data.data_utils.api_connectors</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.data.data_utils.api_connectors</code></h1>
 </header>
 <section id="section-intro">
 <p>This module collects the layouts for connecting to the various APIs.</p>
@@ -47,6 +47,8 @@ Notes to others:
     a new API connection (or improving existing ones).
 &#34;&#34;&#34;
 
+from dash.exceptions import PreventUpdate
+
 from utils import r
 
 import twitter
@@ -57,49 +59,24 @@ import spotipy
 from spotipy import util
 import pandas as pd
 import pickle
+import quandl
 
 
-def spotify_connect(client_id, client_secret, user_id):
-    &#34;&#34;&#34;Connect to Spotify and store the handle in Redis.&#34;&#34;&#34;
-
-    creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
-    token = creds.get_access_token()
-
-    spotify = spotipy.Spotify(auth=token)
-
-    r.set(f&#34;{user_id}_spotify_api&#34;, &#34;true&#34;)
-    r.set(f&#34;{user_id}_spotify_api_handle&#34;, pickle.dumps(spotify))
-
-
-def reddit_connect(client_id, client_secret, user_id):
-    &#34;&#34;&#34;Connect to Reddit and store the handle in Redis.&#34;&#34;&#34;
-
-    reddit = praw.Reddit(client_id=client_id,
-                         client_secret=client_secret,
-                         user_agent=&#39;EDA miner&#39;)
-
-    r.set(f&#34;{user_id}_reddit_api&#34;, &#34;true&#34;)
-    r.set(f&#34;{user_id}_reddit_api_handle&#34;, pickle.dumps(reddit))
-
-
-def twitter_connect(key, secret_key, access_token, access_token_secret,
-                    user_id, sleep_on_rate_limit=True):
+def twitter_connect(consumer_key, consumer_secret, access_token_key,
+                    access_token_secret, *, sleep_on_rate_limit=True):
     &#34;&#34;&#34;Connect to Twitter API and store the handle in Redis.&#34;&#34;&#34;
 
-    api = twitter.Api(consumer_key=key,
-                      consumer_secret=secret_key,
-                      access_token_key=access_token,
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token_key,
                       access_token_secret=access_token_secret,
                       sleep_on_rate_limit=sleep_on_rate_limit)
     api.VerifyCredentials()
 
-    r.set(f&#34;{user_id}_twitter_api&#34;, &#34;true&#34;)
-    # store the api object to redis so it
-    # can be used in other parts
-    r.set(f&#34;{user_id}_twitter_api_handle&#34;, pickle.dumps(api))
+    return api
 
 
-def google_sheets_connect(credentials_file, gspread_key, user_id):
+def google_sheets_connect(credentials_file, gspread_key):
     &#34;&#34;&#34;Connect to Google Sheets and store the data in Redis.&#34;&#34;&#34;
 
     scope = [&#39;https://spreadsheets.google.com/feeds&#39;,
@@ -117,14 +94,38 @@ def google_sheets_connect(credentials_file, gspread_key, user_id):
     # authorization .json file) to access the spreadsheet or to allow
     # access to everyone who has a link (or both)
     spreadsheet = gc.open_by_key(gspread_key)
-    ws = spreadsheet.get_worksheet(0)
 
-    data = ws.get_all_values()
-    data = pd.DataFrame(data[1:], columns=data[0])
-
-    r.set(f&#34;{user_id}_gsheets_api&#34;, &#34;true&#34;)
+    # ws = spreadsheet.get_worksheet(0)
     # TODO: Investigate and store the other components
-    r.set(f&#34;{user_id}_gsheets_api_data&#34;, pickle.dumps(data))
+    # data = ws.get_all_values()
+    # data = pd.DataFrame(data[1:], columns=data[0])
+
+    # Here the api handle is both the gc instance and the spreadsheet
+    return [gc, spreadsheet]
+
+
+def reddit_connect(client_id, client_secret):
+    &#34;&#34;&#34;Connect to Reddit and store the handle in Redis.&#34;&#34;&#34;
+
+    return praw.Reddit(client_id=client_id,
+                       client_secret=client_secret,
+                       user_agent=&#39;EDA miner&#39;)
+
+
+def spotify_connect(client_id, client_secret):
+    &#34;&#34;&#34;Connect to Spotify and store the handle in Redis.&#34;&#34;&#34;
+
+    creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
+    token = creds.get_access_token()
+
+    return spotipy.Spotify(auth=token)
+
+
+def quandl_connect(api_key):
+    quandl.ApiConfig.api_key = api_key
+
+    # Not actually a handle, but can be used to get data.
+    return quandl.get
 
 
 def facebook_connect():
@@ -132,7 +133,31 @@ def facebook_connect():
 
 
 def google_docs_connect():
-    raise NotImplementedError</code></pre>
+    raise NotImplementedError
+
+
+connectors_mapping = {
+    &#34;spotify&#34;: spotify_connect,
+    &#34;reddit&#34;: reddit_connect,
+    &#34;twitter&#34;: twitter_connect,
+    &#34;gsheets&#34;: google_sheets_connect,
+    &#34;quandl&#34;: quandl_connect,
+}
+
+
+# A function that serves as the frontend to all others
+def api_connect(api_choice, user_id, *args, **kwargs):
+
+    if any(x is None for x in args):
+        raise PreventUpdate()
+
+    func = connectors_mapping[api_choice]
+
+    api_handle = func(*args, **kwargs)
+
+    # Store in Redis that the API connected, and its handle(s)
+    r.set(f&#34;{user_id}_{api_choice}_api&#34;, &#34;true&#34;)
+    r.set(f&#34;{user_id}_{api_choice}_api_handle&#34;, pickle.dumps(api_handle))</code></pre>
 </details>
 </section>
 <section>
@@ -142,7 +167,28 @@ def google_docs_connect():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.facebook_connect"><code class="name flex">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.api_connect"><code class="name flex">
+<span>def <span class="ident">api_connect</span></span>(<span>api_choice, user_id, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def api_connect(api_choice, user_id, *args, **kwargs):
+
+    if any(x is None for x in args):
+        raise PreventUpdate()
+
+    func = connectors_mapping[api_choice]
+
+    api_handle = func(*args, **kwargs)
+
+    # Store in Redis that the API connected, and its handle(s)
+    r.set(f&#34;{user_id}_{api_choice}_api&#34;, &#34;true&#34;)
+    r.set(f&#34;{user_id}_{api_choice}_api_handle&#34;, pickle.dumps(api_handle))</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.facebook_connect"><code class="name flex">
 <span>def <span class="ident">facebook_connect</span></span>(<span>)</span>
 </code></dt>
 <dd>
@@ -153,7 +199,7 @@ def google_docs_connect():
     raise NotImplementedError</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.google_docs_connect"><code class="name flex">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.google_docs_connect"><code class="name flex">
 <span>def <span class="ident">google_docs_connect</span></span>(<span>)</span>
 </code></dt>
 <dd>
@@ -164,14 +210,14 @@ def google_docs_connect():
     raise NotImplementedError</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.google_sheets_connect"><code class="name flex">
-<span>def <span class="ident">google_sheets_connect</span></span>(<span>credentials_file, gspread_key, user_id)</span>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.google_sheets_connect"><code class="name flex">
+<span>def <span class="ident">google_sheets_connect</span></span>(<span>credentials_file, gspread_key)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Connect to Google Sheets and store the data in Redis.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def google_sheets_connect(credentials_file, gspread_key, user_id):
+<pre><code class="python">def google_sheets_connect(credentials_file, gspread_key):
     &#34;&#34;&#34;Connect to Google Sheets and store the data in Redis.&#34;&#34;&#34;
 
     scope = [&#39;https://spreadsheets.google.com/feeds&#39;,
@@ -189,75 +235,80 @@ def google_docs_connect():
     # authorization .json file) to access the spreadsheet or to allow
     # access to everyone who has a link (or both)
     spreadsheet = gc.open_by_key(gspread_key)
-    ws = spreadsheet.get_worksheet(0)
 
-    data = ws.get_all_values()
-    data = pd.DataFrame(data[1:], columns=data[0])
-
-    r.set(f&#34;{user_id}_gsheets_api&#34;, &#34;true&#34;)
+    # ws = spreadsheet.get_worksheet(0)
     # TODO: Investigate and store the other components
-    r.set(f&#34;{user_id}_gsheets_api_data&#34;, pickle.dumps(data))</code></pre>
+    # data = ws.get_all_values()
+    # data = pd.DataFrame(data[1:], columns=data[0])
+
+    # Here the api handle is both the gc instance and the spreadsheet
+    return [gc, spreadsheet]</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.reddit_connect"><code class="name flex">
-<span>def <span class="ident">reddit_connect</span></span>(<span>client_id, client_secret, user_id)</span>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.quandl_connect"><code class="name flex">
+<span>def <span class="ident">quandl_connect</span></span>(<span>api_key)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def quandl_connect(api_key):
+    quandl.ApiConfig.api_key = api_key
+
+    # Not actually a handle, but can be used to get data.
+    return quandl.get</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.reddit_connect"><code class="name flex">
+<span>def <span class="ident">reddit_connect</span></span>(<span>client_id, client_secret)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Connect to Reddit and store the handle in Redis.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def reddit_connect(client_id, client_secret, user_id):
+<pre><code class="python">def reddit_connect(client_id, client_secret):
     &#34;&#34;&#34;Connect to Reddit and store the handle in Redis.&#34;&#34;&#34;
 
-    reddit = praw.Reddit(client_id=client_id,
-                         client_secret=client_secret,
-                         user_agent=&#39;EDA miner&#39;)
-
-    r.set(f&#34;{user_id}_reddit_api&#34;, &#34;true&#34;)
-    r.set(f&#34;{user_id}_reddit_api_handle&#34;, pickle.dumps(reddit))</code></pre>
+    return praw.Reddit(client_id=client_id,
+                       client_secret=client_secret,
+                       user_agent=&#39;EDA miner&#39;)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.spotify_connect"><code class="name flex">
-<span>def <span class="ident">spotify_connect</span></span>(<span>client_id, client_secret, user_id)</span>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.spotify_connect"><code class="name flex">
+<span>def <span class="ident">spotify_connect</span></span>(<span>client_id, client_secret)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Connect to Spotify and store the handle in Redis.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def spotify_connect(client_id, client_secret, user_id):
+<pre><code class="python">def spotify_connect(client_id, client_secret):
     &#34;&#34;&#34;Connect to Spotify and store the handle in Redis.&#34;&#34;&#34;
 
     creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
     token = creds.get_access_token()
 
-    spotify = spotipy.Spotify(auth=token)
-
-    r.set(f&#34;{user_id}_spotify_api&#34;, &#34;true&#34;)
-    r.set(f&#34;{user_id}_spotify_api_handle&#34;, pickle.dumps(spotify))</code></pre>
+    return spotipy.Spotify(auth=token)</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.data.data_utils.api_connectors.twitter_connect"><code class="name flex">
-<span>def <span class="ident">twitter_connect</span></span>(<span>key, secret_key, access_token, access_token_secret, user_id, sleep_on_rate_limit=True)</span>
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.twitter_connect"><code class="name flex">
+<span>def <span class="ident">twitter_connect</span></span>(<span>consumer_key, consumer_secret, access_token_key, access_token_secret, *, sleep_on_rate_limit=True)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Connect to Twitter API and store the handle in Redis.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def twitter_connect(key, secret_key, access_token, access_token_secret,
-                    user_id, sleep_on_rate_limit=True):
+<pre><code class="python">def twitter_connect(consumer_key, consumer_secret, access_token_key,
+                    access_token_secret, *, sleep_on_rate_limit=True):
     &#34;&#34;&#34;Connect to Twitter API and store the handle in Redis.&#34;&#34;&#34;
 
-    api = twitter.Api(consumer_key=key,
-                      consumer_secret=secret_key,
-                      access_token_key=access_token,
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token_key,
                       access_token_secret=access_token_secret,
                       sleep_on_rate_limit=sleep_on_rate_limit)
     api.VerifyCredentials()
 
-    r.set(f&#34;{user_id}_twitter_api&#34;, &#34;true&#34;)
-    # store the api object to redis so it
-    # can be used in other parts
-    r.set(f&#34;{user_id}_twitter_api_handle&#34;, pickle.dumps(api))</code></pre>
+    return api</code></pre>
 </details>
 </dd>
 </dl>
@@ -273,17 +324,19 @@ def google_docs_connect():
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.data.data_utils" href="index.html">EDA_miner_public.apps.data.data_utils</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils" href="index.html">EDA_miner.apps.data.data_utils</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.facebook_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.facebook_connect">facebook_connect</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.google_docs_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.google_docs_connect">google_docs_connect</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.google_sheets_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.google_sheets_connect">google_sheets_connect</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.reddit_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.reddit_connect">reddit_connect</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.spotify_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.spotify_connect">spotify_connect</a></code></li>
-<li><code><a title="EDA_miner_public.apps.data.data_utils.api_connectors.twitter_connect" href="#EDA_miner_public.apps.data.data_utils.api_connectors.twitter_connect">twitter_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.api_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.api_connect">api_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.facebook_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.facebook_connect">facebook_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.google_docs_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.google_docs_connect">google_docs_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.google_sheets_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.google_sheets_connect">google_sheets_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.quandl_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.quandl_connect">quandl_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.reddit_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.reddit_connect">reddit_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.spotify_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.spotify_connect">spotify_connect</a></code></li>
+<li><code><a title="EDA_miner.apps.data.data_utils.api_connectors.twitter_connect" href="#EDA_miner.apps.data.data_utils.api_connectors.twitter_connect">twitter_connect</a></code></li>
 </ul>
 </li>
 </ul>

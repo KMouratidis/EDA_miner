@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.5.3" />
-<title>EDA_miner_public.apps.analyze.models.pipeline_classes API documentation</title>
-<meta name="description" content="This module serves" />
+<title>EDA_miner.apps.analyze.models.pipeline_classes API documentation</title>
+<meta name="description" content="This module collects every model class, including input and transformers …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,19 +17,46 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>EDA_miner_public.apps.analyze.models.pipeline_classes</code></h1>
+<h1 class="title">Module <code>EDA_miner.apps.analyze.models.pipeline_classes</code></h1>
 </header>
 <section id="section-intro">
-<p>This module serves</p>
+<p>This module collects every model class, including input and transformers.</p>
+<p>Notes to others:
+Feel free to tamper with anything or add your own models and classes.
+Everything should implement an sklearn-like API providing a fit and
+(more importantly) a transform method. It should also have a
+<code>modifiable_params</code> dictionary with the names of attributes that can
+be modified and a list of possible values (keep them limited, for now).
+Input classes should subclass <a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput"><code>GenericInput</code></a>. If you add new classes
+remember to modify <code>ml_options</code> in <code>graph_structures.py</code>.</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
-    This module serves
+This module collects every model class, including input and transformers.
+
+Notes to others:
+    Feel free to tamper with anything or add your own models and classes. \
+    Everything should implement an sklearn-like API providing a fit and \
+    (more importantly) a transform method. It should also have a \
+    `modifiable_params` dictionary with the names of attributes that can \
+    be modified and a list of possible values (keep them limited, for now). \
+    Input classes should subclass `GenericInput`. If you add new classes \
+    remember to modify `ml_options` in `graph_structures.py`.
 &#34;&#34;&#34;
 
-import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
+from dash.exceptions import PreventUpdate
 
+from utils import r, get_data
+
+import dill
+import pickle
+import sympy
+import numpy as np
+import pandas as pd
+from textblob import TextBlob
+from flask_login import current_user
+
+from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.linear_model import Ridge, Lasso
@@ -47,7 +74,71 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
-class InputFile(BaseEstimator, TransformerMixin):
+# All custom classes should subclass these ones.
+# This is done for checks down the line that
+# determine properties of nodes of the Graph
+# which in turn is useful for selecting dataset
+# and being able to create custom features or
+# handle outputs
+
+class BaseInput(BaseEstimator, TransformerMixin):
+    &#34;&#34;&#34;Base class for ALL input nodes.&#34;&#34;&#34;
+    pass
+
+
+class GenericInput(BaseInput):
+    &#34;&#34;&#34;Base class for dataset/file loaders.&#34;&#34;&#34;
+    modifiable_params = {}
+
+
+class TerminalNode(BaseEstimator):
+    modifiable_params = {}
+
+
+class UnsupervisedLearner(TerminalNode):
+    def fit(self, X, y=None):
+        return self
+
+
+class InputFile(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        self.dataset = dataset
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X
+
+
+# TODO: I changed my mind. This implementation SUCKS HARD.
+#       Rework the whole Twitter dataset idea by getting
+#       the data in the Data View tab and treat Twitter
+#       as regular datasets.
+# Does not subclass GenericInput !
+class TwitterAPI(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        if dataset is None:
+            self.dataset = dataset
+        elif dataset == &#34;*&#34;:
+            raise NotImplementedError()
+        else:
+            self.dataset = pickle.loads(r.get(dataset))
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # TODO: Sort based on date
+        return np.array([status.text for status in self.dataset],
+                        dtype=object).reshape((-1, 1))
+
+
+class DataCleaner(BaseEstimator, TransformerMixin):
     modifiable_params = {}
 
     def fit(self, X, y=None):
@@ -57,23 +148,9 @@ class InputFile(BaseEstimator, TransformerMixin):
         return X
 
 
-class DataCleaner(InputFile):
-    def fit(self, X, y=None):
-        return self
+class DataImputer(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
 
-    def transform(self, X):
-        return X
-
-
-class DataImputater(InputFile):
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X
-
-
-class TwitterAPI(InputFile):
     def fit(self, X, y=None):
         return self
 
@@ -82,6 +159,8 @@ class TwitterAPI(InputFile):
 
 
 class CustomClassifier(BaseEstimator, ClassifierMixin):
+    modifiable_params = {}
+
     def fit(self, X, y=None):
         return self
 
@@ -89,11 +168,71 @@ class CustomClassifier(BaseEstimator, ClassifierMixin):
         return np.ones(X.shape[0])
 
 
+# parameters to be used for eval and exec statements later on
+sympy_funcs = {f&#34;{f}&#34;: eval(f&#34;sympy.{f}&#34;) for f in dir(sympy)}
+global_scope = {&#34;sympy&#34;: sympy, &#34;__builtins__&#34;: None}
+
+
+class FeatureMaker(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
+
+    def __init__(self, func_name=&#34;&#34;, cols=None, dataset_choice=None,
+                 user_id=None):
+        self.query = r.get(func_name)
+        self.cols = cols
+        self.func = lambda x: x
+        self.dataset_choice = dataset_choice
+        self.user_id = user_id
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.cols is None:
+            return self.func(X)
+
+        else:
+            # Evaluate the user-defined function
+            if self.query is not None:
+                # http: // lybniz2.sourceforge.net / safeeval.html
+                symbols, f, func = dill.loads(self.query)
+
+                exec(symbols, global_scope,
+                     sympy_funcs)
+                exec(f, global_scope, sympy_funcs)
+                self.func = eval(func, global_scope,
+                                 sympy_funcs)
+
+            try:
+                # TODO: This needs a better implementation than re-loading
+                #       the whole dataset from Redis. Can probably be fixed
+                #       if edge params are implemented.
+                # Overwrite X with the original DataFrame
+                X = get_data(self.dataset_choice, self.user_id)
+                cols = [X[col] for col in self.cols]
+
+            except IndexError as e:
+                raise IndexError((str(e)+&#34;, probably incorrect input cols: &#34; +
+                                  str(self.cols)))
+
+            return self.func(*cols).values.reshape((-1, 1))
+
+
+# TODO: do an actual implementation
+class SentimentAnalyzer(UnsupervisedLearner):
+    def predict(self, X):
+        if isinstance(X, np.ndarray):
+            return np.array([TextBlob(x[0]).polarity for x in X])
+        else:
+            return np.array([TextBlob(x).polarity for x in X])
+
+
 # For EVERY model that is expected to have parametrization
 # you are expected to give its class a `modifiable_params`
 # dict with keys being the function argument and values the
 # allowed set of values (make it limited, i.e. few choices)
-# Also, the first is assumed to be the default value
+# Also, the first is assumed to be the default value which
+# will be passed to the model upon the creation of pipelines.
 
 LinearRegression.modifiable_params = {
     &#34;fit_intercept&#34;: [True, False],
@@ -173,6 +312,8 @@ BernoulliNB.modifiable_params = {
     &#34;alpha&#34;: [1, 0.1, 0.2, 0.5, 0.7, 0.85],
 }
 
+XGBClassifier.modifiable_params = {}
+
 GaussianNB.modifiable_params = {}
 
 MultinomialNB.modifiable_params = {
@@ -180,7 +321,7 @@ MultinomialNB.modifiable_params = {
 }
 
 SimpleImputer.modifiable_params = {
-    &#34;strategy&#34;: [&#34;mean&#34;, &#34;median&#34;, &#34;most_frequent&#34;]
+    &#34;strategy&#34;: [&#34;most_frequent&#34;, &#34;mean&#34;, &#34;median&#34;]
 }
 
 MissingIndicator.modifiable_params = {}
@@ -236,7 +377,29 @@ RandomForestClassifier.modifiable_params = {
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.BaseInput"><code class="flex name class">
+<span>class <span class="ident">BaseInput</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for ALL input nodes.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BaseInput(BaseEstimator, TransformerMixin):
+    &#34;&#34;&#34;Base class for ALL input nodes.&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sklearn.base.BaseEstimator</li>
+<li>sklearn.base.TransformerMixin</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput">GenericInput</a></li>
+</ul>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier"><code class="flex name class">
 <span>class <span class="ident">CustomClassifier</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
@@ -249,6 +412,8 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class CustomClassifier(BaseEstimator, ClassifierMixin):
+    modifiable_params = {}
+
     def fit(self, X, y=None):
         return self
 
@@ -260,9 +425,16 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <li>sklearn.base.BaseEstimator</li>
 <li>sklearn.base.ClassifierMixin</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.fit"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.fit"><code class="name flex">
 <span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
 </code></dt>
 <dd>
@@ -273,7 +445,7 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
     return self</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.predict"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.predict"><code class="name flex">
 <span>def <span class="ident">predict</span></span>(<span>self, X)</span>
 </code></dt>
 <dd>
@@ -286,7 +458,7 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner"><code class="flex name class">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner"><code class="flex name class">
 <span>class <span class="ident">DataCleaner</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
@@ -298,109 +470,7 @@ at the class level in their <code>__init__</code> as explicit keyword
 arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class DataCleaner(InputFile):
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></li>
-<li>sklearn.base.BaseEstimator</li>
-<li>sklearn.base.TransformerMixin</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.fit"><code class="name flex">
-<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def fit(self, X, y=None):
-    return self</code></pre>
-</details>
-</dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.transform"><code class="name flex">
-<span>def <span class="ident">transform</span></span>(<span>self, X)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def transform(self, X):
-    return X</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater"><code class="flex name class">
-<span>class <span class="ident">DataImputater</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Base class for all estimators in scikit-learn</p>
-<h2 id="notes">Notes</h2>
-<p>All estimators should specify all the parameters that can be set
-at the class level in their <code>__init__</code> as explicit keyword
-arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class DataImputater(InputFile):
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></li>
-<li>sklearn.base.BaseEstimator</li>
-<li>sklearn.base.TransformerMixin</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.fit"><code class="name flex">
-<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def fit(self, X, y=None):
-    return self</code></pre>
-</details>
-</dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.transform"><code class="name flex">
-<span>def <span class="ident">transform</span></span>(<span>self, X)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def transform(self, X):
-    return X</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile"><code class="flex name class">
-<span>class <span class="ident">InputFile</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Base class for all estimators in scikit-learn</p>
-<h2 id="notes">Notes</h2>
-<p>All estimators should specify all the parameters that can be set
-at the class level in their <code>__init__</code> as explicit keyword
-arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">class InputFile(BaseEstimator, TransformerMixin):
+<pre><code class="python">class DataCleaner(BaseEstimator, TransformerMixin):
     modifiable_params = {}
 
     def fit(self, X, y=None):
@@ -414,22 +484,16 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <li>sklearn.base.BaseEstimator</li>
 <li>sklearn.base.TransformerMixin</li>
 </ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner">DataCleaner</a></li>
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater">DataImputater</a></li>
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI">TwitterAPI</a></li>
-</ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.fit"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.fit"><code class="name flex">
 <span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
 </code></dt>
 <dd>
@@ -440,7 +504,7 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
     return self</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.transform"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.transform"><code class="name flex">
 <span>def <span class="ident">transform</span></span>(<span>self, X)</span>
 </code></dt>
 <dd>
@@ -453,8 +517,8 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI"><code class="flex name class">
-<span>class <span class="ident">TwitterAPI</span></span>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer"><code class="flex name class">
+<span>class <span class="ident">DataImputer</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
@@ -465,7 +529,9 @@ at the class level in their <code>__init__</code> as explicit keyword
 arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class TwitterAPI(InputFile):
+<pre><code class="python">class DataImputer(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
+
     def fit(self, X, y=None):
         return self
 
@@ -474,13 +540,19 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></li>
 <li>sklearn.base.BaseEstimator</li>
 <li>sklearn.base.TransformerMixin</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.fit"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.fit"><code class="name flex">
 <span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
 </code></dt>
 <dd>
@@ -491,7 +563,7 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
     return self</code></pre>
 </details>
 </dd>
-<dt id="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.transform"><code class="name flex">
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.transform"><code class="name flex">
 <span>def <span class="ident">transform</span></span>(<span>self, X)</span>
 </code></dt>
 <dd>
@@ -500,6 +572,401 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <summary>Source code</summary>
 <pre><code class="python">def transform(self, X):
     return X</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker"><code class="flex name class">
+<span>class <span class="ident">FeatureMaker</span></span>
+<span>(</span><span>func_name='', cols=None, dataset_choice=None, user_id=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for all estimators in scikit-learn</p>
+<h2 id="notes">Notes</h2>
+<p>All estimators should specify all the parameters that can be set
+at the class level in their <code>__init__</code> as explicit keyword
+arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FeatureMaker(BaseEstimator, TransformerMixin):
+    modifiable_params = {}
+
+    def __init__(self, func_name=&#34;&#34;, cols=None, dataset_choice=None,
+                 user_id=None):
+        self.query = r.get(func_name)
+        self.cols = cols
+        self.func = lambda x: x
+        self.dataset_choice = dataset_choice
+        self.user_id = user_id
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.cols is None:
+            return self.func(X)
+
+        else:
+            # Evaluate the user-defined function
+            if self.query is not None:
+                # http: // lybniz2.sourceforge.net / safeeval.html
+                symbols, f, func = dill.loads(self.query)
+
+                exec(symbols, global_scope,
+                     sympy_funcs)
+                exec(f, global_scope, sympy_funcs)
+                self.func = eval(func, global_scope,
+                                 sympy_funcs)
+
+            try:
+                # TODO: This needs a better implementation than re-loading
+                #       the whole dataset from Redis. Can probably be fixed
+                #       if edge params are implemented.
+                # Overwrite X with the original DataFrame
+                X = get_data(self.dataset_choice, self.user_id)
+                cols = [X[col] for col in self.cols]
+
+            except IndexError as e:
+                raise IndexError((str(e)+&#34;, probably incorrect input cols: &#34; +
+                                  str(self.cols)))
+
+            return self.func(*cols).values.reshape((-1, 1))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sklearn.base.BaseEstimator</li>
+<li>sklearn.base.TransformerMixin</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.fit"><code class="name flex">
+<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def fit(self, X, y=None):
+    return self</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.transform"><code class="name flex">
+<span>def <span class="ident">transform</span></span>(<span>self, X)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transform(self, X):
+    if self.cols is None:
+        return self.func(X)
+
+    else:
+        # Evaluate the user-defined function
+        if self.query is not None:
+            # http: // lybniz2.sourceforge.net / safeeval.html
+            symbols, f, func = dill.loads(self.query)
+
+            exec(symbols, global_scope,
+                 sympy_funcs)
+            exec(f, global_scope, sympy_funcs)
+            self.func = eval(func, global_scope,
+                             sympy_funcs)
+
+        try:
+            # TODO: This needs a better implementation than re-loading
+            #       the whole dataset from Redis. Can probably be fixed
+            #       if edge params are implemented.
+            # Overwrite X with the original DataFrame
+            X = get_data(self.dataset_choice, self.user_id)
+            cols = [X[col] for col in self.cols]
+
+        except IndexError as e:
+            raise IndexError((str(e)+&#34;, probably incorrect input cols: &#34; +
+                              str(self.cols)))
+
+        return self.func(*cols).values.reshape((-1, 1))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput"><code class="flex name class">
+<span>class <span class="ident">GenericInput</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for dataset/file loaders.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GenericInput(BaseInput):
+    &#34;&#34;&#34;Base class for dataset/file loaders.&#34;&#34;&#34;
+    modifiable_params = {}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.BaseInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.BaseInput">BaseInput</a></li>
+<li>sklearn.base.BaseEstimator</li>
+<li>sklearn.base.TransformerMixin</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></li>
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI" href="#EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI">TwitterAPI</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.InputFile"><code class="flex name class">
+<span>class <span class="ident">InputFile</span></span>
+<span>(</span><span>dataset=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for dataset/file loaders.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class InputFile(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        self.dataset = dataset
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput">GenericInput</a></li>
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.BaseInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.BaseInput">BaseInput</a></li>
+<li>sklearn.base.BaseEstimator</li>
+<li>sklearn.base.TransformerMixin</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.fit"><code class="name flex">
+<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def fit(self, X, y=None):
+    return self</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.transform"><code class="name flex">
+<span>def <span class="ident">transform</span></span>(<span>self, X)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transform(self, X):
+    return X</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer"><code class="flex name class">
+<span>class <span class="ident">SentimentAnalyzer</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for all estimators in scikit-learn</p>
+<h2 id="notes">Notes</h2>
+<p>All estimators should specify all the parameters that can be set
+at the class level in their <code>__init__</code> as explicit keyword
+arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class SentimentAnalyzer(UnsupervisedLearner):
+    def predict(self, X):
+        if isinstance(X, np.ndarray):
+            return np.array([TextBlob(x[0]).polarity for x in X])
+        else:
+            return np.array([TextBlob(x).polarity for x in X])</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner" href="#EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner">UnsupervisedLearner</a></li>
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode" href="#EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode">TerminalNode</a></li>
+<li>sklearn.base.BaseEstimator</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer.predict"><code class="name flex">
+<span>def <span class="ident">predict</span></span>(<span>self, X)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def predict(self, X):
+    if isinstance(X, np.ndarray):
+        return np.array([TextBlob(x[0]).polarity for x in X])
+    else:
+        return np.array([TextBlob(x).polarity for x in X])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode"><code class="flex name class">
+<span>class <span class="ident">TerminalNode</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for all estimators in scikit-learn</p>
+<h2 id="notes">Notes</h2>
+<p>All estimators should specify all the parameters that can be set
+at the class level in their <code>__init__</code> as explicit keyword
+arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TerminalNode(BaseEstimator):
+    modifiable_params = {}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sklearn.base.BaseEstimator</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner" href="#EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner">UnsupervisedLearner</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI"><code class="flex name class">
+<span>class <span class="ident">TwitterAPI</span></span>
+<span>(</span><span>dataset=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for dataset/file loaders.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TwitterAPI(GenericInput):
+    modifiable_params = {}
+
+    def __init__(self, dataset=None):
+        if dataset is None:
+            self.dataset = dataset
+        elif dataset == &#34;*&#34;:
+            raise NotImplementedError()
+        else:
+            self.dataset = pickle.loads(r.get(dataset))
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # TODO: Sort based on date
+        return np.array([status.text for status in self.dataset],
+                        dtype=object).reshape((-1, 1))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput">GenericInput</a></li>
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.BaseInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.BaseInput">BaseInput</a></li>
+<li>sklearn.base.BaseEstimator</li>
+<li>sklearn.base.TransformerMixin</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.modifiable_params"><code class="name">var <span class="ident">modifiable_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.fit"><code class="name flex">
+<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def fit(self, X, y=None):
+    return self</code></pre>
+</details>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.transform"><code class="name flex">
+<span>def <span class="ident">transform</span></span>(<span>self, X)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transform(self, X):
+    # TODO: Sort based on date
+    return np.array([status.text for status in self.dataset],
+                    dtype=object).reshape((-1, 1))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner"><code class="flex name class">
+<span>class <span class="ident">UnsupervisedLearner</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for all estimators in scikit-learn</p>
+<h2 id="notes">Notes</h2>
+<p>All estimators should specify all the parameters that can be set
+at the class level in their <code>__init__</code> as explicit keyword
+arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class UnsupervisedLearner(TerminalNode):
+    def fit(self, X, y=None):
+        return self</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode" href="#EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode">TerminalNode</a></li>
+<li>sklearn.base.BaseEstimator</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer" href="#EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer">SentimentAnalyzer</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner.fit"><code class="name flex">
+<span>def <span class="ident">fit</span></span>(<span>self, X, y=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def fit(self, X, y=None):
+    return self</code></pre>
 </details>
 </dd>
 </dl>
@@ -515,45 +982,84 @@ arguments (no <code>*args</code> or <code>**kwargs</code>).</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="EDA_miner_public.apps.analyze.models" href="index.html">EDA_miner_public.apps.analyze.models</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models" href="index.html">EDA_miner.apps.analyze.models</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier">CustomClassifier</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.BaseInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.BaseInput">BaseInput</a></code></h4>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier" href="#EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier">CustomClassifier</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.fit" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.fit">fit</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.predict" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.CustomClassifier.predict">predict</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.predict" href="#EDA_miner.apps.analyze.models.pipeline_classes.CustomClassifier.predict">predict</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner">DataCleaner</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner">DataCleaner</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.fit" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.fit">fit</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.transform" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataCleaner.transform">transform</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.transform" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataCleaner.transform">transform</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater">DataImputater</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataImputer">DataImputer</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.fit" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.fit">fit</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.transform" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.DataImputater.transform">transform</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.transform" href="#EDA_miner.apps.analyze.models.pipeline_classes.DataImputer.transform">transform</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker" href="#EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker">FeatureMaker</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.fit" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.fit">fit</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.modifiable_params" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.modifiable_params">modifiable_params</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.transform" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.InputFile.transform">transform</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.transform" href="#EDA_miner.apps.analyze.models.pipeline_classes.FeatureMaker.transform">transform</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI">TwitterAPI</a></code></h4>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput">GenericInput</a></code></h4>
 <ul class="">
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.fit" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.fit">fit</a></code></li>
-<li><code><a title="EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.transform" href="#EDA_miner_public.apps.analyze.models.pipeline_classes.TwitterAPI.transform">transform</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.GenericInput.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.GenericInput.modifiable_params">modifiable_params</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.InputFile" href="#EDA_miner.apps.analyze.models.pipeline_classes.InputFile">InputFile</a></code></h4>
+<ul class="">
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.InputFile.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.InputFile.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.InputFile.transform" href="#EDA_miner.apps.analyze.models.pipeline_classes.InputFile.transform">transform</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer" href="#EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer">SentimentAnalyzer</a></code></h4>
+<ul class="">
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer.predict" href="#EDA_miner.apps.analyze.models.pipeline_classes.SentimentAnalyzer.predict">predict</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode" href="#EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode">TerminalNode</a></code></h4>
+<ul class="">
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.TerminalNode.modifiable_params">modifiable_params</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI" href="#EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI">TwitterAPI</a></code></h4>
+<ul class="">
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.fit">fit</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.modifiable_params" href="#EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.modifiable_params">modifiable_params</a></code></li>
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.transform" href="#EDA_miner.apps.analyze.models.pipeline_classes.TwitterAPI.transform">transform</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner" href="#EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner">UnsupervisedLearner</a></code></h4>
+<ul class="">
+<li><code><a title="EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner.fit" href="#EDA_miner.apps.analyze.models.pipeline_classes.UnsupervisedLearner.fit">fit</a></code></li>
 </ul>
 </li>
 </ul>
