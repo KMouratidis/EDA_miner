@@ -37,12 +37,14 @@ li>a {
 @media only screen and (max-width: 3050px) {
     #main_page, #mainmenu {
         max-width: 75%;
+        display: inline;
     }
 }
 
 @media only screen and (max-width: 1550px) {
     #main_page, #mainmenu {
         max-width: 65%;
+        display: inline;
     }
 }
 
