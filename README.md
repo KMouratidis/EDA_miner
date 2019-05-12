@@ -8,7 +8,9 @@ and allow you to run Machine Learning models from a server. Started as a univers
 
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
 
-Just looking around? Then:
+Just looking around? Then you can either install locally or with docker.
+
+#### Locally:
 1. Get Python3.6+, optionally with Anaconda. You might want to set up a [virtual environment](https://stackoverflow.com/questions/41972261/what-is-a-virtualenv-and-why-should-i-use-one)
 2. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
 3. You'll need [redis](https://redis.io) (if on Windows, you might also need [this](https://github.com/dmajkic/redis/downloads)) and [graphviz](https://www.graphviz.org/) (for pygraphviz)
@@ -16,6 +18,12 @@ Just looking around? Then:
 5. Run `python app.py`
 6. Go to your browser, `http://127.0.0.1:8050`
 
+#### Docker:
+1. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
+2. Get Redis in Docker, start a server, and publish port 6379, by running: `sudo docker run --name=redis-devel --publish=6379:6379 --hostname=redis --restart=on-failure --detach redis:latest`
+3. Navigate to the EDA Miner folder and run this to build the docker container: `sudo docker build -t kmouratidis/eda_miner .`
+4. Run the app container: `sudo docker run --network host kmouratidis/eda_miner`
+5. Go to http://127.0.0.1:8050/
 <br>
 
 ### Example of Model Builder
