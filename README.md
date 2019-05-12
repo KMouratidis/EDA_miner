@@ -9,10 +9,12 @@ and allow you to run Machine Learning models from a server. Started as a univers
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
 
 Just looking around? Then:
-1. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
-2. Run `pip install -r requirements.txt`
-3. Run `python app.py`
-4. Go to your browser, `http://127.0.0.1:8050`
+1. Get Python3.6+, optionally with Anaconda. You might want to set up a [virtual environment](https://stackoverflow.com/questions/41972261/what-is-a-virtualenv-and-why-should-i-use-one)
+2. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
+3. You'll need [redis](https://redis.io) (if on Windows, you might also need [this](https://github.com/dmajkic/redis/downloads)) and [graphviz](https://www.graphviz.org/) (for pygraphviz)
+4. Run `pip install -r requirements.txt`
+5. Run `python app.py`
+6. Go to your browser, `http://127.0.0.1:8050`
 
 <br>
 
