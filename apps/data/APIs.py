@@ -19,14 +19,11 @@ import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
 from server import app
-from utils import r, parse_contents
+from utils import r
 from apps.data.data_utils import api_connectors
 from apps.data.data_utils.api_layouts import logins_ui_mapping
 
-import base64
-import json
 import pickle
-import quandl
 from inspect import getfullargspec
 
 
@@ -80,9 +77,9 @@ for api, func in api_connectors.connectors_mapping.items():
                   ])
     def parse_credentials(n_clicks, api_choice, user_id, *func_params):
 
-        api_connectors.api_connect(api_choice, user_id, *func_params)
+        success = api_connectors.api_connect(api_choice, user_id, *func_params)
 
-        if r.get(f"{user_id}_{api_choice}_api") is not None:
+        if success:
             # Success logging in
             return logins_ui_mapping[api_choice][1], {"display": "none"}
 

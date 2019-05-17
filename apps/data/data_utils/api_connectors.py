@@ -12,8 +12,6 @@ Notes to others:
     a new API connection (or improving existing ones).
 """
 
-from dash.exceptions import PreventUpdate
-
 from utils import r
 
 import twitter
@@ -22,7 +20,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import spotipy
 from spotipy import util
-import pandas as pd
 import pickle
 import quandl
 
@@ -114,12 +111,19 @@ connectors_mapping = {
 def api_connect(api_choice, user_id, *args, **kwargs):
 
     if any(x is None for x in args):
-        raise PreventUpdate()
+        return False
 
     func = connectors_mapping[api_choice]
 
-    api_handle = func(*args, **kwargs)
+    try:
+        api_handle = func(*args, **kwargs)
 
-    # Store in Redis that the API connected, and its handle(s)
-    r.set(f"{user_id}_{api_choice}_api", "true")
-    r.set(f"{user_id}_{api_choice}_api_handle", pickle.dumps(api_handle))
+        # Store in Redis that the API connected, and its handle(s)
+        r.set(f"{user_id}_{api_choice}_api", "true")
+        r.set(f"{user_id}_{api_choice}_api_handle", pickle.dumps(api_handle))
+
+        return True
+
+    except Exception as e:
+        print(e)
+        return False

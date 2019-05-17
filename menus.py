@@ -32,11 +32,13 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
-from utils import encode_image
+from utils import encode_image, r
 
 import dash_table
 
 import uuid
+import pandas as pd
+import os
 
 
 
@@ -139,6 +141,12 @@ def serve_layout():
     """
 
     session_id = f"python_generated_ssid_{uuid.uuid4()}"
+
+    # load some data for all users
+    for file in os.listdir("Data/Example_CSVs"):
+        if file.endswith("csv"):
+            df = pd.read_csv("Data/Example_CSVs/"+file)
+            r.set(f"{session_id}_user_data_example_{file}", df.to_msgpack(compress='zlib'))
 
     return html.Div(children=[
 

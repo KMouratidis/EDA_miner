@@ -449,7 +449,7 @@ def update_radio_buttons_modify_params(value, selected, user_id):
         if isinstance(func(), pipeline_classes.GenericInput):
             if isinstance(func(), pipeline_classes.TwitterAPI):
                 twitter_data = r.keys(f"{user_id}_twitter_data_*")
-                choices = [{"label":k, "value": k} for k in twitter_data]
+                choices = [{"label":k.decode(), "value": k.decode()} for k in twitter_data]
             else:
                 choices, _ = get_available_choices(r, user_id)
 
