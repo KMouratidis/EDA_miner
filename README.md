@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/assets/images/y2d.png" width="250" align="left">
+<img src="https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/EDA_miner/assets/images/y2d.png" width="250" align="left">
 
 # EDA_miner
 
