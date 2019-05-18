@@ -1,0 +1,46 @@
+Running Sphinx v2.0.1
+/home/meirtolpin/Documents/EDA_miner
+loading translations [eb]... not available for built-in messages
+making output directory... done
+building [mo]: targets for 0 po files that are out of date
+building [html]: targets for 10 source files that are out of date
+updating environment: 10 added, 0 changed, 0 removed
+reading sources... [ 10%] EDA_miner
+reading sources... [ 20%] EDA_miner.apps
+reading sources... [ 30%] EDA_miner.apps.analyze
+reading sources... [ 40%] EDA_miner.apps.analyze.models
+reading sources... [ 50%] EDA_miner.apps.data
+reading sources... [ 60%] EDA_miner.apps.data.data_utils
+reading sources... [ 70%] EDA_miner.apps.exploration
+reading sources... [ 80%] EDA_miner.apps.exploration.graphs
+reading sources... [ 90%] index
+reading sources... [100%] modules
+
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+writing output... [ 10%] EDA_miner
+writing output... [ 20%] EDA_miner.apps
+writing output... [ 30%] EDA_miner.apps.analyze
+writing output... [ 40%] EDA_miner.apps.analyze.models
+writing output... [ 50%] EDA_miner.apps.data
+writing output... [ 60%] EDA_miner.apps.data.data_utils
+writing output... [ 70%] EDA_miner.apps.exploration
+writing output... [ 80%] EDA_miner.apps.exploration.graphs
+writing output... [ 90%] index
+writing output... [100%] modules
+
+generating indices... genindex py-modindex
+writing additional pages... search
+copying static files... done
+copying extra files... done
+dumping search index in English (code: en) ... done
+dumping object inventory... done
+build succeeded, 22 warnings.
+
+The HTML pages are in build/html.
+Running Sphinx v2.0.1
+/home/meirtolpin/Documents/EDA_miner
+loading translations [eb]... not available for built-in messages
+Makefile:19: recipe for target '/dev/null' failed

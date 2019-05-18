@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="eb" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="eb" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EDA_miner Package &mdash; EDA . documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="contents.html" class="icon icon-home"> EDA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.html">app Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apps.html">apps Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layouts.html">layouts Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menus.html">menus Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">server Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="styles.html">styles Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">EDA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>EDA_miner Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/EDA_miner.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="eda-miner-package">
+<h1>EDA_miner Package<a class="headerlink" href="#eda-miner-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">EDA_miner</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-EDA_miner.__init__"></span><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</div>
+<div class="section" id="module-EDA_miner.app">
+<span id="app-module"></span><h2><a class="reference internal" href="app.html#module-app" title="app"><code class="xref py py-mod docutils literal notranslate"><span class="pre">app</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.app" title="Permalink to this headline">¶</a></h2>
+<p>The main app is here. It takes the base menus from menus.py
+and puts them in the app.layout, then defines callbacks
+and finally has the if-name-main block necessary to run the app.</p>
+<dl class="docutils">
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>high_level_tabs: On high-level tab selection, render</dt>
+<dd>the appropriate layout.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>update_sidebar_menus: For the second level of tabs, show</dt>
+<dd>different sidebar menu.</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd><dl class="first last docutils">
+<dt>You should probably not write code here, unless:</dt>
+<dd><ul class="first last simple">
+<li>working on side-menus,</li>
+<li>working on login system,</li>
+<li>adding a new-high-level tab, or other new feature.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="module-EDA_miner.layouts">
+<span id="layouts-module"></span><h2><a class="reference internal" href="layouts.html#module-layouts" title="layouts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">layouts</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.layouts" title="Permalink to this headline">¶</a></h2>
+<p>Similar to <cite>styles.py</cite>, this module is mean as a collection of layouts
+to be used across the dash app. A layout is about what components exist
+in any view (e.g. html elements) whereas a style is about... styling!
+Styles are implemented as functions to allow use with different parameters.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>default_2d: Layout for most plotly graphs.</li>
+<li>default_3d: Layout for 3D graphs, not implemented.</li>
+<li>default_kpi: Layout for KPI graphs, not implemented.</li>
+</ul>
+</dd>
+<dt>Classes:</dt>
+<dd><ul class="first last simple">
+<li>PDF_Layout1: A sample PDF layout, more to be added. Implemented                    as a class out of convenience, may be changed later.                    Usage: <cite>PDF_Layout1.render(x_axis, y_axis)</cite>.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>Feel free to tamper with all of the functions and classes below
+and/or add your own. Beware that in some cases (e.g. defining a
+new PDF layout) you might need to make changes in other files,
+or at least wait till needed functionality is added.</dd>
+</dl>
+<dl class="class">
+<dt id="EDA_miner.layouts.PDF_Layout1">
+<em class="property">class </em><code class="descclassname">EDA_miner.layouts.</code><code class="descname">PDF_Layout1</code><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is meant to capture all specifications needed to create
+a report layout. This isn't currently implemented correctly, it
+merely serves as a placeholder, not a template to be mimicked.
+The elements present below are being used elsewhere to create
+the layout of the the PDF, but those will probably moved here.</p>
+<dl class="attribute">
+<dt id="EDA_miner.layouts.PDF_Layout1.first_figure">
+<code class="descname">first_figure</code><em class="property"> = Layout({     'autosize': False,     'bargap': 0.35,     'font': {'family': 'Raleway', 'size': 10},     'height': 300,     'hovermode': 'closest',     'legend': {'orientation': 'h', 'x': -0.0228945952895, 'y': -0.189563896463, 'yanchor': 'top'},     'margin': {'b': 10, 'l': 10, 'r': 0, 't': 20},     'showlegend': True,     'title': {'text': ''},     'width': 600,     'xaxis': {'autorange': True, 'range': [-0.5, 4.5], 'showline': True, 'title': {'text': ''}, 'type': 'category'},     'yaxis': {'autorange': True,               'range': [0, 22.9789473684],               'showgrid': True,               'showline': True,               'title': {'text': ''},               'type': 'linear',               'zeroline': False} })</em><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.first_figure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="EDA_miner.layouts.PDF_Layout1.render">
+<em class="property">static </em><code class="descname">render</code><span class="sig-paren">(</span><em>x_axis</em>, <em>y_axis</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="EDA_miner.layouts.PDF_Layout1.second_figure">
+<code class="descname">second_figure</code><em class="property"> = Layout({     'autosize': False,     'bargap': 0.35,     'font': {'family': 'Raleway', 'size': 10},     'height': 300,     'hovermode': 'closest',     'legend': {'orientation': 'h', 'x': -0.0228945952895, 'y': -0.189563896463, 'yanchor': 'top'},     'margin': {'b': 10, 'l': 10, 'r': 0, 't': 20},     'showlegend': True,     'title': {'text': ''},     'width': 600,     'xaxis': {'autorange': True, 'range': [-0.5, 4.5], 'showline': True, 'title': {'text': ''}, 'type': 'category'},     'yaxis': {'autorange': True,               'range': [0, 22.9789473684],               'showgrid': True,               'showline': True,               'title': {'text': ''},               'type': 'linear',               'zeroline': False} })</em><a class="headerlink" href="#EDA_miner.layouts.PDF_Layout1.second_figure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_2d">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_2d</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for 2D graphs.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>xvars: str, title of the x-axis.
+yvars: str, title of the y-axis.</dd>
+<dt>Returns:</dt>
+<dd>A <cite>go.Layout</cite> instance.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_3d">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_3d</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em>, <em>zvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for 3D graphs. Currently same as default_2d.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>xvars: str, title of the x-axis.
+yvars: str, title of the y-axis.
+zvars: str, currently not used.</dd>
+<dt>Returns:</dt>
+<dd>A <cite>go.Layout</cite> instance.</dd>
+<dt>Todo:</dt>
+<dd>This needs a better implementation</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.layouts.default_kpi">
+<code class="descclassname">EDA_miner.layouts.</code><code class="descname">default_kpi</code><span class="sig-paren">(</span><em>xvars</em>, <em>yvars</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.layouts.default_kpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <cite>go.Layout</cite> for KPI graphs. Currently same as default_2d.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>xvars: str, title of the x-axis.
+yvars: str, title of the y-axis.</dd>
+<dt>Returns:</dt>
+<dd>A <cite>go.Layout</cite> instance.</dd>
+<dt>Todo:</dt>
+<dd>This might need a better implementation</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDA_miner.menus">
+<span id="menus-module"></span><h2><a class="reference internal" href="menus.html#module-menus" title="menus"><code class="xref py py-mod docutils literal notranslate"><span class="pre">menus</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.menus" title="Permalink to this headline">¶</a></h2>
+<p>This module will collect all unchanging views and dash components
+(buttons, sidemenus, etc) so that the code in index.py is cleaner
+and abstracted.</p>
+<dl class="docutils">
+<dt>Global variables:</dt>
+<dd><ul class="first last simple">
+<li>SideBar: The left sidebar, meant to house the logo, and                a few extra buttons for non-app functionality.</li>
+<li>MainMenu: The high-level tabs, and two placeholders for the                 low-level tabs plus a <cite>dash_table.DataTable</cite>.</li>
+<li>SideBar: The right sidebar, meant to be used for elements                that interact with the important parts of dash and                providing any interactivity, customization, and                other options.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>serve_layout: The layout of our app. Defined in a function                     so as to generate different <a href="#id2"><span class="problematic" id="id3">`</span></a>session_id`s.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>button_toggle: On click show/hide the external links.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd><dl class="first last docutils">
+<dt>You should probably not write code here, unless you're:</dt>
+<dd><ul class="first last simple">
+<li>adding a new button, external link, or similar to the sidebar,</li>
+<li>creating a login functionality,</li>
+<li>adding a new top-level menu tab, or other new feature.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.menus.serve_layout">
+<code class="descclassname">EDA_miner.menus.</code><code class="descname">serve_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.menus.serve_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The layout of our app needs to be inside a function
+so that every time some new session starts a new
+session_id is generated.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDA_miner.server">
+<span id="server-module"></span><h2><a class="reference internal" href="server.html#module-server" title="server"><code class="xref py py-mod docutils literal notranslate"><span class="pre">server</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.server" title="Permalink to this headline">¶</a></h2>
+<p>This module is only here because of the Dash app spanning multiple files.
+General configurations of the underlying app and server go here as well.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>server: The underlying Flask server, probably needed only for               deployment.</li>
+<li>app: The Dash server, imported everywhere that a dash callback            needs to be defined.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>DO NOT MODIFY WITHOUT PERMISSION! These settings should rarely be
+tampered with, if at all.</dd>
+</dl>
+<dl class="class">
+<dt id="EDA_miner.server.app">
+<em class="property">class </em><code class="descclassname">EDA_miner.server.</code><code class="descname">app</code><a class="headerlink" href="#EDA_miner.server.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The <cite>dash.Dash</cite> app.</p>
+<dl class="method">
+<dt id="EDA_miner.server.app.callback">
+<code class="descname">callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.server.app.callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDA_miner.styles">
+<span id="styles-module"></span><h2><a class="reference internal" href="styles.html#module-styles" title="styles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">styles</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.styles" title="Permalink to this headline">¶</a></h2>
+<p>This module is meant as a collection of styles that cannot be defined
+in the CSS (e.g. due to JS/Dash libraries' rendered elements not being
+viewable in inspection, or some overriding).</p>
+<dl class="docutils">
+<dt>Available styles:</dt>
+<dd><ul class="first last simple">
+<li>cyto_stylesheet: The style used for the Model Builder, and will                        probably also be used for other cytoscape                        visualizations.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="module-EDA_miner.utils">
+<span id="utils-module"></span><h2><a class="reference internal" href="utils.html#module-utils" title="utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils</span></code></a> Module<a class="headerlink" href="#module-EDA_miner.utils" title="Permalink to this headline">¶</a></h2>
+<p>This module provides utilities, functions, and other code that is
+meant to be used across the app. This may undergo changes soon.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>cleanup: Clean up after the Dash app exits.</li>
+<li>create_dropdown: Create a dropdown with a title.</li>
+<li>create_table: Creates a <cite>dash_table.DataTable</cite> given a <cite>pd.DataFrame</cite>.</li>
+<li>encode_image: Read and base64-encode an image for the dash app.</li>
+<li>get_data: Get a <cite>pandas.DataFrame</cite> with the specified data.</li>
+<li>hard_cast_to_float: Convert to float or return 0.</li>
+<li>parse_contents: Decode uploaded files and store them in Redis.</li>
+<li>pretty_print_tweets: Create H5 elements from the user's Twitter                            timeline.</li>
+<li>redis_startup: Connect to a Redis server &amp; handle startup.</li>
+</ul>
+</dd>
+<dt>Global variables:</dt>
+<dd><ul class="first last simple">
+<li>r: A Redis connection that is used throughout the app.</li>
+<li>mapping: A dict that maps tags to sklearn models meant for                creating dropdowns and used in <cite>apps.analyze</cite> modules.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should probably not write code here, unless you are adding
+functions aimed at being used by many lower-level modules.
+Some of the functions here will later be moved to lower-level
+modules (e.g. <cite>pretty_print_tweets</cite>).</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.utils.cleanup">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">cleanup</code><span class="sig-paren">(</span><em>redis_conn</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up after the Dash app exits.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>redis_conn: <cite>redis.Redis</cite> object.</dd>
+<dt>Further details:</dt>
+<dd>Flush every key stored in the Redis database. If there
+are users that have logged in and uploaded data, store
+those on disk. Also remove any static files generated
+while the server was running.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.create_dropdown">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">create_dropdown</code><span class="sig-paren">(</span><em>name</em>, <em>options</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.create_dropdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a dropdown with a title.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name (str): the title above the dropdown.
+options (list(dict)): dictionaries should contain keys at least                              the keys (label, value).
+<a href="#id4"><span class="problematic" id="id5">**</span></a>kwargs: keyword-value pairs. Accepts any keyword-arguments                   that can be passed to <cite>dcc.Dropdown</cite>.</dd>
+<dt>Returns:</dt>
+<dd>list: an H5 and the Dropdown.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.create_table">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">create_table</code><span class="sig-paren">(</span><em>df</em>, <em>table_id='table'</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <cite>dash_table.DataTable</cite> given a <cite>pandas.DataFrame</cite>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>df (<cite>pandas.DataFrame</cite>): the data.
+table_id (str, optional): id of the table element for usage                                   with dash callbacks.</dd>
+<dt>Returns:</dt>
+<dd>A <cite>dash_table.DataTable</cite> with pagination.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.encode_image">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">encode_image</code><span class="sig-paren">(</span><em>image_path</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.encode_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and base64-encode an image for the dash app&lt;/h2&gt;</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>image_path (str): absolute path or relative to the                           top-level directory</dd>
+<dt>Returns:</dt>
+<dd>A str to be used for the src attribute of an img element.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.get_data">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">get_data</code><span class="sig-paren">(</span><em>api_choice</em>, <em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <cite>pandas.DataFrame</cite> with the specified data.&lt;/h2&gt;</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>api_choice (str): the key used by the Redis server                           to store the data.
+user_id (str): the user for whom to fetch data.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.hard_cast_to_float">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">hard_cast_to_float</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.hard_cast_to_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to float or return 0.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>x (anything): will be type-casted or 0'ed.</dd>
+<dt>Returns:</dt>
+<dd>float.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.parse_contents">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">parse_contents</code><span class="sig-paren">(</span><em>contents</em>, <em>filename</em>, <em>date</em>, <em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.parse_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode uploaded files and store them in Redis.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>contents (str): the content of the file to be decoded.
+filename (str): name of uploaded file.
+date (str): (modification?) date of the file.
+user_id (str): the user for whom to fetch data.</dd>
+<dt>Further details:</dt>
+<dd>After decoding the uploaded file, handle any remaining
+operations here. This was stolen from the dash docs. Currently
+it only supports csv, xls(x), json, and feather file types.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.pretty_print_tweets">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">pretty_print_tweets</code><span class="sig-paren">(</span><em>api</em>, <em>n_tweets</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.pretty_print_tweets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create H5 elements from the user's Twitter timeline.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>api (<cite>twitter.Api</cite>): a connection to Twitter                              with verified credentials.
+n_tweets (int): the number of tweets to display.</dd>
+</dl>
+</dd></dl>
+
+<dl class="data">
+<dt id="EDA_miner.utils.r">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">r</code><em class="property"> = Redis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=0&gt;&gt;&gt;</em><a class="headerlink" href="#EDA_miner.utils.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Redis connection that is used throughout the app.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.utils.redis_startup">
+<code class="descclassname">EDA_miner.utils.</code><code class="descname">redis_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.utils.redis_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to a Redis server &amp; handle startup.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><cite>redis.Redis</cite>: a connection to a Redis server.</dd>
+<dt>Further details:</dt>
+<dd>Connects to a Redis server on its default port (6379) and
+is also responsible for any other startup operations needed.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="EDA_miner.apps.html">apps Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="EDA_miner.apps.html#id1"><code class="docutils literal notranslate"><span class="pre">apps</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDA_miner.apps.html#module-EDA_miner.apps.analyze_view"><code class="docutils literal notranslate"><span class="pre">analyze_view</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDA_miner.apps.html#module-EDA_miner.apps.data_view"><code class="docutils literal notranslate"><span class="pre">data_view</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDA_miner.apps.html#module-EDA_miner.apps.exploration_view"><code class="docutils literal notranslate"><span class="pre">exploration_view</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDA_miner.apps.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="EDA_miner.apps.analyze.html">analyze Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#id1"><code class="docutils literal notranslate"><span class="pre">analyze</span></code> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Classification"><code class="docutils literal notranslate"><span class="pre">Classification</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Clustering"><code class="docutils literal notranslate"><span class="pre">Clustering</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Econometrics"><code class="docutils literal notranslate"><span class="pre">Econometrics</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Model_Builder"><code class="docutils literal notranslate"><span class="pre">Model_Builder</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Pipelines"><code class="docutils literal notranslate"><span class="pre">Pipelines</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#module-EDA_miner.apps.analyze.Regression"><code class="docutils literal notranslate"><span class="pre">Regression</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.analyze.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="EDA_miner.apps.analyze.models.html">models Package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.analyze.models.html#id1"><code class="docutils literal notranslate"><span class="pre">models</span></code> Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.analyze.models.html#module-EDA_miner.apps.analyze.models.graph_structures"><code class="docutils literal notranslate"><span class="pre">graph_structures</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.analyze.models.html#module-EDA_miner.apps.analyze.models.pipeline_classes"><code class="docutils literal notranslate"><span class="pre">pipeline_classes</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.analyze.models.html#module-EDA_miner.apps.analyze.models.pipeline_creator"><code class="docutils literal notranslate"><span class="pre">pipeline_creator</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.analyze.models.html#module-EDA_miner.apps.analyze.models.utils"><code class="docutils literal notranslate"><span class="pre">utils</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="EDA_miner.apps.data.html">data Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.data.html#id1"><code class="docutils literal notranslate"><span class="pre">data</span></code> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.data.html#module-EDA_miner.apps.data.APIs"><code class="docutils literal notranslate"><span class="pre">APIs</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.data.html#module-EDA_miner.apps.data.Upload"><code class="docutils literal notranslate"><span class="pre">Upload</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.data.html#module-EDA_miner.apps.data.View"><code class="docutils literal notranslate"><span class="pre">View</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.data.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="EDA_miner.apps.data.data_utils.html">data_utils Package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.data.data_utils.html#id1"><code class="docutils literal notranslate"><span class="pre">data_utils</span></code> Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.data.data_utils.html#module-EDA_miner.apps.data.data_utils.api_connectors"><code class="docutils literal notranslate"><span class="pre">api_connectors</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.data.data_utils.html#module-EDA_miner.apps.data.data_utils.api_layouts"><code class="docutils literal notranslate"><span class="pre">api_layouts</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="EDA_miner.apps.exploration.html">exploration Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#id1"><code class="docutils literal notranslate"><span class="pre">exploration</span></code> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.Exploration"><code class="docutils literal notranslate"><span class="pre">Exploration</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.Exploration3D"><code class="docutils literal notranslate"><span class="pre">Exploration3D</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.KPIs"><code class="docutils literal notranslate"><span class="pre">KPIs</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.Networks"><code class="docutils literal notranslate"><span class="pre">Networks</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.PDF_report"><code class="docutils literal notranslate"><span class="pre">PDF_report</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#module-EDA_miner.apps.exploration.TextVisualizations"><code class="docutils literal notranslate"><span class="pre">TextVisualizations</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDA_miner.apps.exploration.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html">graphs Package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html#id1"><code class="docutils literal notranslate"><span class="pre">graphs</span></code> Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html#module-EDA_miner.apps.exploration.graphs.graphs2d"><code class="docutils literal notranslate"><span class="pre">graphs2d</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html#module-EDA_miner.apps.exploration.graphs.graphs3d"><code class="docutils literal notranslate"><span class="pre">graphs3d</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html#module-EDA_miner.apps.exploration.graphs.kpis"><code class="docutils literal notranslate"><span class="pre">kpis</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="EDA_miner.apps.exploration.graphs.html#module-EDA_miner.apps.exploration.graphs.textviz"><code class="docutils literal notranslate"><span class="pre">textviz</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, .
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

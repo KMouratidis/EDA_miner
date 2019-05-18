@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="eb" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="eb" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_utils Package &mdash; EDA . documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="contents.html" class="icon icon-home"> EDA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.html">app Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apps.html">apps Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layouts.html">layouts Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menus.html">menus Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">server Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="styles.html">styles Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">EDA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>data_utils Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/EDA_miner.apps.data.data_utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-utils-package">
+<h1>data_utils Package<a class="headerlink" href="#data-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_utils</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-EDA_miner.apps.data.data_utils"></span><p>&lt;h2&gt;Developer notes&lt;/h2&gt;</p>
+<p>The modules here are for implementing utilities needed by higher-level
+modules. Some suggestions on what could be done:
+&lt;ul&gt;</p>
+<blockquote>
+<div>&lt;li&gt;Add new API connections (note: you need to implement both
+the connector and define a layout/form).&lt;/li&gt;
+&lt;li&gt;Fix the bug that made me pollute the whole file with those
+ugly debugger layouts.&lt;/li&gt;</div></blockquote>
+<p>&lt;/ul&gt;</p>
+</div>
+<div class="section" id="module-EDA_miner.apps.data.data_utils.api_connectors">
+<span id="api-connectors-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">api_connectors</span></code> Module<a class="headerlink" href="#module-EDA_miner.apps.data.data_utils.api_connectors" title="Permalink to this headline">¶</a></h2>
+<p>This module collects the layouts for connecting to the various APIs.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>twitter_connect: Connect to the Twitter API.</li>
+<li>google_sheets_connect: Connect to the Google Sheets API.</li>
+<li>reddit_connect: Connect to the Reddit API.</li>
+<li>spotify_connect: Connect to the Spotify API.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should probably not write code here, unless adding
+a new API connection (or improving existing ones).</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.api_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">api_connect</code><span class="sig-paren">(</span><em>api_choice</em>, <em>user_id</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.api_connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.facebook_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">facebook_connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.facebook_connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.google_docs_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">google_docs_connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.google_docs_connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.google_sheets_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">google_sheets_connect</code><span class="sig-paren">(</span><em>credentials_file</em>, <em>gspread_key</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.google_sheets_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to Google Sheets and store the data in Redis.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.quandl_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">quandl_connect</code><span class="sig-paren">(</span><em>api_key</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.quandl_connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.reddit_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">reddit_connect</code><span class="sig-paren">(</span><em>client_id</em>, <em>client_secret</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.reddit_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to Reddit and store the handle in Redis.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.spotify_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">spotify_connect</code><span class="sig-paren">(</span><em>client_id</em>, <em>client_secret</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.spotify_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to Spotify and store the handle in Redis.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_connectors.twitter_connect">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_connectors.</code><code class="descname">twitter_connect</code><span class="sig-paren">(</span><em>consumer_key</em>, <em>consumer_secret</em>, <em>access_token_key</em>, <em>access_token_secret</em>, <em>*</em>, <em>sleep_on_rate_limit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_connectors.twitter_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to Twitter API and store the handle in Redis.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDA_miner.apps.data.data_utils.api_layouts">
+<span id="api-layouts-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">api_layouts</span></code> Module<a class="headerlink" href="#module-EDA_miner.apps.data.data_utils.api_layouts" title="Permalink to this headline">¶</a></h2>
+<p>This module collects the layouts for connecting to the various APIs.</p>
+<dl class="docutils">
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>success_message: Notify the user for successful connection.</li>
+</ul>
+</dd>
+<dt>Global variables:</dt>
+<dd><ul class="first last simple">
+<li>twitter_layout: 4 input fields and a button.</li>
+<li>gsheets_layout: 2 input fields and a button.</li>
+<li>reddit_layout: 2 input fields and a button.</li>
+<li>quandl_layout: 2 input fields and a button.</li>
+<li>spotify_layout: 2 input fields and a button.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd><p class="first">You should probably not write code here, unless adding
+a new API connection.</p>
+<p class="last">IMPORTANT: When designing layouts ALWAYS pre-append the input
+elements with the API name, and ALWAYS name each input id
+according to the names of the variables of the respective API
+connector.</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="EDA_miner.apps.data.data_utils.api_layouts.success_message">
+<code class="descclassname">EDA_miner.apps.data.data_utils.api_layouts.</code><code class="descname">success_message</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="headerlink" href="#EDA_miner.apps.data.data_utils.api_layouts.success_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility to provide feedback on successful connections.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, .
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

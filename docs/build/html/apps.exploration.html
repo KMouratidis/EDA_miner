@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="eb" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="eb" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>exploration Package &mdash; EDA . documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="graphs Package" href="apps.exploration.graphs.html" />
+    <link rel="prev" title="data_utils Package" href="apps.data.data_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="contents.html" class="icon icon-home"> EDA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app.html">app Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apps.html">apps Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="apps.html#id1"><code class="docutils literal notranslate"><span class="pre">apps</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.html#module-apps.analyze_view"><code class="docutils literal notranslate"><span class="pre">analyze_view</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.html#module-apps.data_view"><code class="docutils literal notranslate"><span class="pre">data_view</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.html#module-apps.exploration_view"><code class="docutils literal notranslate"><span class="pre">exploration_view</span></code> Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="apps.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="apps.analyze.html">analyze Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apps.data.html">data Package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">exploration Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">exploration</span></code> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.Exploration"><code class="docutils literal notranslate"><span class="pre">Exploration</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.Exploration3D"><code class="docutils literal notranslate"><span class="pre">Exploration3D</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.KPIs"><code class="docutils literal notranslate"><span class="pre">KPIs</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.Networks"><code class="docutils literal notranslate"><span class="pre">Networks</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.PDF_report"><code class="docutils literal notranslate"><span class="pre">PDF_report</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-apps.exploration.TextVisualizations"><code class="docutils literal notranslate"><span class="pre">TextVisualizations</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="layouts.html">layouts Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menus.html">menus Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">server Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="styles.html">styles Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils Module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">EDA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+          <li><a href="apps.html">apps Package</a> &raquo;</li>
+        
+      <li>exploration Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/apps.exploration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exploration-package">
+<h1>exploration Package<a class="headerlink" href="#exploration-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">exploration</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-apps.exploration"></span><p>&lt;h2&gt;Developer notes&lt;/h2&gt;</p>
+<p><strong>Do not add graph functions here.</strong> Some suggestions on what
+could be done here:
+&lt;ul&gt;</p>
+<blockquote>
+<div>&lt;li&gt;Prettify layout and user interface.&lt;/li&gt;
+&lt;li&gt;Implement the interface to allow the user to create their own
+KPIs.&lt;/li&gt;</div></blockquote>
+<p>&lt;/ul&gt;</p>
+</div>
+<div class="section" id="module-apps.exploration.Exploration">
+<span id="exploration-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Exploration</span></code> Module<a class="headerlink" href="#module-apps.exploration.Exploration" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the available graphs and creates the interface
+for the 2D dashboard.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+<li>Graphs_Export: Two buttons to export graphs (later used for                      PDF report generation).</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>Exploration_Options: Generate the layout of the dashboard.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>render_variable_choices_2d: Create a menu of dcc components for                                   the user to choose  plotting options.</li>
+<li>plot_graph_2d: Plot the graph according to user choices.</li>
+<li>toggle_modal: Notify when a graph is exported.</li>
+<li>export_graph_callback: Export a graph (to a hidden div). One for                              every hidden graph.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should only write code here with caution. You can use this
+module to add new buttons, input, or other interface-related,
+element, or maybe a new type of graph (in which case implement
+it in <cite>graphs.graphs2d.py</cite>).</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.Exploration.Exploration_Options">
+<code class="descclassname">apps.exploration.Exploration.</code><code class="descname">Exploration_Options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.Exploration.Exploration_Options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-apps.exploration.Exploration3D">
+<span id="exploration3d-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Exploration3D</span></code> Module<a class="headerlink" href="#module-apps.exploration.Exploration3D" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the available graphs and creates the interface
+for the 3D dashboard.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>Exploration3D_Options: Generate the layout of the dashboard.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>render_variable_choices_3d: Create a menu of dcc components for                                   the user to choose  plotting options.</li>
+<li>plot_graph_3d: Plot the graph according to user choices.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>You should only write code here with caution, although contribution
+in this part are very encouraged. You can use this module to add new
+buttons, input, or other interface-related, element, or maybe a new
+type of graph (in which case implement it in <cite>graphs.graphs3d.py</cite>).
+Keep in mind that it may be moved later on to lower-level modules.
+Also, there is a chance that this will be moved entirely into another
+tab. Finally, exporting 3D graphs is currently not implemented, so
+work on that is encouraged as well.</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.Exploration3D.Exploration3D_Options">
+<code class="descclassname">apps.exploration.Exploration3D.</code><code class="descname">Exploration3D_Options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.Exploration3D.Exploration3D_Options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-apps.exploration.KPIs">
+<span id="kpis-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">KPIs</span></code> Module<a class="headerlink" href="#module-apps.exploration.KPIs" title="Permalink to this headline">¶</a></h2>
+<p>This module is about building and viewing KPIs. The user should be 
+able to view more advanced graphs and also create their own indicators.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>KPI_Options: Generate the layout of the dashboard.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>render_variable_choices_kpi: Create a menu of dcc components for                                    the user to choose  plotting options.</li>
+<li>plot_graph_kpi: Plot the graph according to user choices.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>Contributions are greatly needed and encouraged here. Main 
+functionality is still lacking in this part. You can use this
+module to add new buttons, input, or other interface-related, 
+element, or maybe a new type of graph (in which case implement
+it in <cite>graphs.kpis.py</cite>). Working on exporting KPI graphs is 
+also encouraged.</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.KPIs.KPI_Options">
+<code class="descclassname">apps.exploration.KPIs.</code><code class="descname">KPI_Options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.KPIs.KPI_Options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-apps.exploration.Networks">
+<span id="networks-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Networks</span></code> Module<a class="headerlink" href="#module-apps.exploration.Networks" title="Permalink to this headline">¶</a></h2>
+<p>This module is about viewing network data.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>Network_Options: Generate the layout of the dashboard.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>render_variable_choices_network: Create a menu of dcc components                                        for the user to choose plotting                                        options.</li>
+<li>plot_network: Plot the network graph according to user choices.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>Contributions are encouraged here, although you should consider
+starting with another part if you're new to dash or this project.
+Main functionality is still lacking in this part. You can use this
+module to add new buttons, input, or other interface-related,
+element, or maybe a new type of graph (in which case implement
+it in a new file <cite>graphs.networks.py</cite>). Like with other modules,
+working on exporting network graphs is encouraged.</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.Networks.Network_Options">
+<code class="descclassname">apps.exploration.Networks.</code><code class="descname">Network_Options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.Networks.Network_Options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-apps.exploration.PDF_report">
+<span id="pdf-report-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">PDF_report</span></code> Module<a class="headerlink" href="#module-apps.exploration.PDF_report" title="Permalink to this headline">¶</a></h2>
+<p>This module is about rendering and potentially printing PDF reports.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>PDF_report_options: Generate the layout of the PDF generator.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>render_pdf_func: Render the PDF by filling-in the templates                        using the user-provided choices and texts.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd><p class="first">** FEEL FREE TO SUBMIT YOUR OWN MWE DASH APPS (LAYOUT + STYLE). **</p>
+<p class="last">Contributions are greatly encouraged here, and this is a great
+starting point if you are new to dash or this project. What needs
+to be done is mainly creating PDF templates (see also the example
+at <cite>layouts.PDF_Layout1</cite>), but main functionality is also lacking.
+Feel free to add new buttons, input, or other interface-related,
+element. Also, contributions on a better export/render system are
+welcome, although slightly more advanced.</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.PDF_report.PDF_report_options">
+<code class="descclassname">apps.exploration.PDF_report.</code><code class="descname">PDF_report_options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.PDF_report.PDF_report_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-apps.exploration.TextVisualizations">
+<span id="textvisualizations-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">TextVisualizations</span></code> Module<a class="headerlink" href="#module-apps.exploration.TextVisualizations" title="Permalink to this headline">¶</a></h2>
+<p>This module is about visualizing text data.</p>
+<dl class="docutils">
+<dt>Global Variables:</dt>
+<dd><ul class="first last simple">
+<li>Sidebar: To be used for creating side-menus.</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li>TextViz_Options: Generate the layout of the dashboard.</li>
+</ul>
+</dd>
+<dt>Dash callbacks:</dt>
+<dd><ul class="first last simple">
+<li>plot_graph_text: Currently only word cloud visualizations are                        supported, from given text.</li>
+</ul>
+</dd>
+<dt>Notes to others:</dt>
+<dd>Contributions are encouraged here. Main functionality is still
+lacking in this part. You can use this module to add new buttons,
+input, or other interface-related, element, or maybe a new type
+of text visualizations (in which case implement it in a new file
+<cite>graphs.textviz.py</cite>). Like with other modules, working on exporting
+network graphs is encouraged. Finally, adding new visualization types
+is very welcome as well, but avoid loading huge word vectors files
+at this stage of development.</dd>
+</dl>
+<dl class="function">
+<dt id="apps.exploration.TextVisualizations.TextViz_Options">
+<code class="descclassname">apps.exploration.TextVisualizations.</code><code class="descname">TextViz_Options</code><span class="sig-paren">(</span><em>options</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.exploration.TextVisualizations.TextViz_Options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="apps.exploration.graphs.html">graphs Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apps.exploration.graphs.html#id1"><code class="docutils literal notranslate"><span class="pre">graphs</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.exploration.graphs.html#module-apps.exploration.graphs.graphs2d"><code class="docutils literal notranslate"><span class="pre">graphs2d</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.exploration.graphs.html#module-apps.exploration.graphs.graphs3d"><code class="docutils literal notranslate"><span class="pre">graphs3d</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.exploration.graphs.html#module-apps.exploration.graphs.kpis"><code class="docutils literal notranslate"><span class="pre">kpis</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps.exploration.graphs.html#module-apps.exploration.graphs.textviz"><code class="docutils literal notranslate"><span class="pre">textviz</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="apps.exploration.graphs.html" class="btn btn-neutral float-right" title="graphs Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="apps.data.data_utils.html" class="btn btn-neutral float-left" title="data_utils Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, .
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
