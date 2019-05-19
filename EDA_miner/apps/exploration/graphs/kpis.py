@@ -1,5 +1,5 @@
 """
-This module collects functions and utilities for KPI visualization
+This module collects functions and utilities for KPI visualization \
 but may also be used to add other options and core implementation logic.
 
 Functions:
@@ -7,8 +7,8 @@ Functions:
                         timeseries and its baseline, and a barchart.
 
 Notes to others:
-    Feel free to write code here either to improve current or to add
-    new functionality. This part is in need of both customization and
+    Feel free to write code here either to improve current or to add \
+    new functionality. This part is in need of both customization and \
     presets.
 """
 
@@ -34,7 +34,7 @@ graph_configs = {
 
 def baseline_graph(df, xvars, yvars, secondary_yvars):
     """
-    Creates a baseline graph: a lineplot for the timeseries and
+    Creates a baseline graph: a lineplot for the timeseries and \
     its baseline, and a barchart.
 
     Args:

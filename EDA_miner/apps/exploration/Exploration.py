@@ -1,5 +1,5 @@
 """
-This module defines the available graphs and creates the interface
+This module defines the available graphs and creates the interface \
 for the 2D dashboard.
 
 Global Variables:
@@ -19,9 +19,9 @@ Dash callbacks:
                              every hidden graph.
 
 Notes to others:
-    You should only write code here with caution. You can use this
-    module to add new buttons, input, or other interface-related,
-    element, or maybe a new type of graph (in which case implement
+    You should only write code here with caution. You can use this \
+    module to add new buttons, input, or other interface-related, \
+    element, or maybe a new type of graph (in which case implement \
     it in `graphs.graphs2d.py`).
 """
 
@@ -116,7 +116,7 @@ Sidebar = []
 def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
                                user_id):
     """
-    Create a menu of dcc components for the user to choose
+    Create a menu of dcc components for the user to choose \
     plotting options.
 
     Args:
@@ -259,16 +259,16 @@ def toggle_modal(close, *args):
 
     Args:
         close (int): Number of times the close button was clicked.
-        *args (multiple): Timestamps for export button clicks, whether
+        *args (multiple): Timestamps for export button clicks, whether \
                           the modal is open, and the figure instance.
 
     Notes on implementation:
-        Since the export buttons may increase in number we cannot avoid
-        the *args parameter. Sadly, this *args has to contain other parts
+        Since the export buttons may increase in number we cannot avoid \
+        the *args parameter. Sadly, this *args has to contain other parts \
         too, since dash `State`s must always be at the end.
 
     Returns:
-        [bool, str or html element]: Whether to open/close the modal
+        [bool, str or html element]: Whether to open/close the modal \
                                      and the text (or html) displayed.
     """
 

@@ -1,7 +1,7 @@
 """
-Similar to `styles.py`, this module is mean as a collection of layouts
-to be used across the dash app. A layout is about what components exist
-in any view (e.g. html elements) whereas a style is about... styling!
+Similar to `styles.py`, this module is mean as a collection of layouts \
+to be used across the dash app. A layout is about what components exist \
+in any view (e.g. html elements) whereas a style is about... styling! \
 Styles are implemented as functions to allow use with different parameters.
 
 Functions:
@@ -15,9 +15,9 @@ Classes:
                    Usage: `PDF_Layout1.render(x_axis, y_axis)`.
 
 Notes to others:
-    Feel free to tamper with all of the functions and classes below
-    and/or add your own. Beware that in some cases (e.g. defining a
-    new PDF layout) you might need to make changes in other files,
+    Feel free to tamper with all of the functions and classes below \
+    and/or add your own. Beware that in some cases (e.g. defining a \
+    new PDF layout) you might need to make changes in other files, \
     or at least wait till needed functionality is added.
 """
 
@@ -87,10 +87,10 @@ def default_kpi(xvars, yvars):
 
 class PDF_Layout1:
     """
-    This class is meant to capture all specifications needed to create
-    a report layout. This isn't currently implemented correctly, it
-    merely serves as a placeholder, not a template to be mimicked.
-    The elements present below are being used elsewhere to create
+    This class is meant to capture all specifications needed to create \
+    a report layout. This isn't currently implemented correctly, it \
+    merely serves as a placeholder, not a template to be mimicked. \
+    The elements present below are being used elsewhere to create \
     the layout of the the PDF, but those will probably moved here.
     """
 

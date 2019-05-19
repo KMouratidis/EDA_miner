@@ -1,15 +1,15 @@
 """
-This module defines the interface for connecting to APIs.
+This module defines the interface for connecting to APIs. \
 It renders the appropriate layout according to the tab chosen.
 
 Dash callbacks:
     - api_connect: Render the appropriate view for the chosen API.
 
 Notes to others:
-    You should probably not write code here, UNLESS you first
-    defined a new connection to an API (also update View module).
-    Remember to include the elements necessary for the app to
-    function correctly (see `debugger_layout`), or feel free to
+    You should probably not write code here, UNLESS you first \
+    defined a new connection to an API (also update View module). \
+    Remember to include the elements necessary for the app to \
+    function correctly (see `debugger_layout`), or feel free to \
     rework the whole thing if you can.
 """
 

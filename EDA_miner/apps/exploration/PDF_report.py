@@ -12,14 +12,13 @@ Dash callbacks:
                        using the user-provided choices and texts.
 
 Notes to others:
-    ** FEEL FREE TO SUBMIT YOUR OWN MWE DASH APPS (LAYOUT + STYLE). **
-
-    Contributions are greatly encouraged here, and this is a great
-    starting point if you are new to dash or this project. What needs
-    to be done is mainly creating PDF templates (see also the example
-    at `layouts.PDF_Layout1`), but main functionality is also lacking.
-    Feel free to add new buttons, input, or other interface-related,
-    element. Also, contributions on a better export/render system are
+    ** FEEL FREE TO SUBMIT YOUR OWN MWE DASH APPS (LAYOUT + STYLE). ** \
+    Contributions are greatly encouraged here, and this is a great \
+    starting point if you are new to dash or this project. What needs \
+    to be done is mainly creating PDF templates (see also the example \
+    at `layouts.PDF_Layout1`), but main functionality is also lacking. \
+    Feel free to add new buttons, input, or other interface-related, \
+    element. Also, contributions on a better export/render system are \
     welcome, although slightly more advanced.
 """
 
@@ -155,30 +154,30 @@ def PDF_report_options(options, results):
 def render_pdf_func(n_clicks, exported_figure1, exported_figure2,
                     row1col1_text, header_input, row1_header_input):
     """
-    Render the PDF by filling-in the templates using the user-provided
+    Render the PDF by filling-in the templates using the user-provided \
     choices and texts.
 
     Args:
         n_clicks (int): Number of times render button was clicked.
-        exported_figure1 (dict): a dict containing the figure information
+        exported_figure1 (dict): a dict containing the figure information \
                                  from a hidden div.
         exported_figure2 (dict): Same as above.
-        row1col1_text (str): User text written in one of the `textarea`s
+        row1col1_text (str): User text written in one of the `textarea`s \
                              provided by the template.
         header_input (str): User text written as the PDF title.
-        row1_header_input: User text written as a title of the first
+        row1_header_input: User text written as a title of the first \
                            section.
 
     Returns:
-        [dict, dict, list, list, list]: Returns the two figures, and three
-                                        lists containing elements to fill
+        [dict, dict, list, list, list]: Returns the two figures, and three \
+                                        lists containing elements to fill \
                                         the respective divs.
 
     Notes on implementation:
-        This function (including the previous layout) are only defined
-        for 1 report template. Additions to this page will most probably
-        lead to to inserting new elements in the initial layout or changing
-        the whole implementation completely. Feel free to discuss what you
+        This function (including the previous layout) are only defined \
+        for 1 report template. Additions to this page will most probably \
+        lead to to inserting new elements in the initial layout or changing \
+        the whole implementation completely. Feel free to discuss what you \
         would like to see implemented for you to use, or even your ideas.
     """
 

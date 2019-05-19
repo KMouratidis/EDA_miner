@@ -12,13 +12,13 @@ Dash callbacks:
                        supported, from given text.
 
 Notes to others:
-    Contributions are encouraged here. Main functionality is still
-    lacking in this part. You can use this module to add new buttons,
-    input, or other interface-related, element, or maybe a new type
-    of text visualizations (in which case implement it in a new file
-    `graphs.textviz.py`). Like with other modules, working on exporting
-    network graphs is encouraged. Finally, adding new visualization types
-    is very welcome as well, but avoid loading huge word vectors files
+    Contributions are encouraged here. Main functionality is still \
+    lacking in this part. You can use this module to add new buttons, \
+    input, or other interface-related, element, or maybe a new type \
+    of text visualizations (in which case implement it in a new file \
+    `graphs.textviz.py`). Like with other modules, working on exporting \
+    network graphs is encouraged. Finally, adding new visualization types \
+    is very welcome as well, but avoid loading huge word vectors files \
     at this stage of development.
 """
 
@@ -69,7 +69,7 @@ def plot_graph_text(n_clicks, text, user_id):
         user_id (str): Session/user id.
 
     Returns:
-        str: the image encoded appropriately to be set as the 'src'
+        str: the image encoded appropriately to be set as the 'src' \
              value of the `img` element
     """
 

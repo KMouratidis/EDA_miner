@@ -1,5 +1,5 @@
 """
-This module is about building and viewing KPIs. The user should be 
+This module is about building and viewing KPIs. The user should be \
 able to view more advanced graphs and also create their own indicators.
 
 Global Variables:
@@ -14,11 +14,11 @@ Dash callbacks:
     - plot_graph_kpi: Plot the graph according to user choices.
 
 Notes to others:
-    Contributions are greatly needed and encouraged here. Main 
-    functionality is still lacking in this part. You can use this
-    module to add new buttons, input, or other interface-related, 
-    element, or maybe a new type of graph (in which case implement
-    it in `graphs.kpis.py`). Working on exporting KPI graphs is 
+    Contributions are greatly needed and encouraged here. Main \
+    functionality is still lacking in this part. You can use this \
+    module to add new buttons, input, or other interface-related, \
+    element, or maybe a new type of graph (in which case implement \
+    it in `graphs.kpis.py`). Working on exporting KPI graphs is \
     also encouraged.
 """
 
@@ -75,7 +75,7 @@ def KPI_Options(options, results):
               [State("user_id", "children")])
 def render_variable_choices_kpi(dataset_choice, user_id):
     """
-    Create a menu of dcc components for the user to choose
+    Create a menu of dcc components for the user to choose \
     plotting options.
 
     Args:
@@ -87,8 +87,8 @@ def render_variable_choices_kpi(dataset_choice, user_id):
                           `dcc.Dropdown` options.
 
     Notes on implementation:
-        Currently only one type of KPI graph is supported, but more
-        should be added later on. Additionally, work should be done
+        Currently only one type of KPI graph is supported, but more \
+        should be added later on. Additionally, work should be done \
         on building custom KPIs and maybe graphs.
     """
 

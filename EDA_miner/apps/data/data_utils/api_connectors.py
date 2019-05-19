@@ -8,7 +8,7 @@ Functions:
     - spotify_connect: Connect to the Spotify API.
 
 Notes to others:
-    You should probably not write code here, unless adding
+    You should probably not write code here, unless adding \
     a new API connection (or improving existing ones).
 """
 
@@ -26,7 +26,9 @@ import quandl
 
 def twitter_connect(consumer_key, consumer_secret, access_token_key,
                     access_token_secret, *, sleep_on_rate_limit=True):
-    """Connect to Twitter API and store the handle in Redis."""
+    """
+    Connect to Twitter API and store the handle in Redis.
+    """
 
     api = twitter.Api(consumer_key=consumer_key,
                       consumer_secret=consumer_secret,
@@ -39,7 +41,9 @@ def twitter_connect(consumer_key, consumer_secret, access_token_key,
 
 
 def google_sheets_connect(credentials_file, gspread_key):
-    """Connect to Google Sheets and store the data in Redis."""
+    """
+    Connect to Google Sheets and store the data in Redis.
+    """
 
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
@@ -67,7 +71,9 @@ def google_sheets_connect(credentials_file, gspread_key):
 
 
 def reddit_connect(client_id, client_secret):
-    """Connect to Reddit and store the handle in Redis."""
+    """
+    Connect to Reddit and store the handle in Redis.
+    """
 
     return praw.Reddit(client_id=client_id,
                        client_secret=client_secret,
@@ -75,7 +81,9 @@ def reddit_connect(client_id, client_secret):
 
 
 def spotify_connect(client_id, client_secret):
-    """Connect to Spotify and store the handle in Redis."""
+    """
+    Connect to Spotify and store the handle in Redis.
+    """
 
     creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
     token = creds.get_access_token()

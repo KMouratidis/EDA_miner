@@ -1,13 +1,10 @@
 """
-<h2>Developer notes</h2>
+Developer notes:
 
 **Do not add graph functions here.** Some suggestions on what
 could be done here:
-<ul>
-    <li>Prettify layout and user interface.</li>
-    <li>Implement the interface to allow the user to create their own
-    KPIs.</li>
-</ul>
+    - Prettify layout and user interface.
+    - Implement the interface to allow the user to create their own KPIs.
 """
 
 from apps.exploration.Exploration import Exploration_Options

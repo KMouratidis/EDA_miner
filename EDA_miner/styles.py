@@ -1,6 +1,6 @@
 """
-This module is meant as a collection of styles that cannot be defined
-in the CSS (e.g. due to JS/Dash libraries' rendered elements not being
+This module is meant as a collection of styles that cannot be defined \
+in the CSS (e.g. due to JS/Dash libraries' rendered elements not being \
 viewable in inspection, or some overriding).
 
 Available styles:

@@ -1,5 +1,5 @@
 """
-This module takes care of the menu and choices provided when the
+This module takes care of the menu and choices provided when the \
 "Data view" high-level tab is selected.
 
 Dash callbacks:
@@ -7,11 +7,11 @@ Dash callbacks:
                     appropriate view.
 
 Notes to others:
-    You should probably not write code here, unless you are defining
-    a new level-2 tab. Here you can find find functionality to either
-    upload your data, connect to an API, or view/edit already uploaded
-    data. Implementations go to their own modules down the package
-    hierarchy, in `apps.data`
+    You should probably not write code here, unless you are defining \
+    a new level-2 tab. Here you can find find functionality to either \
+    upload your data, connect to an API, or view/edit already uploaded \
+    data. Implementations go to their own modules down the package \
+    hierarchy, in `apps.data`.
 """
 
 from dash.dependencies import Input, Output, State

@@ -1,6 +1,6 @@
 """
-This module will collect all unchanging views and dash components
-(buttons, sidemenus, etc) so that the code in index.py is cleaner
+This module will collect all unchanging views and dash components \
+(buttons, sidemenus, etc) so that the code in index.py is cleaner \
 and abstracted.
 
 Global variables:
@@ -135,8 +135,8 @@ def button_toggle(n_clicks):
 
 def serve_layout():
     """
-    The layout of our app needs to be inside a function
-    so that every time some new session starts a new
+    The layout of our app needs to be inside a function \
+    so that every time some new session starts a new \
     session_id is generated.
     """
 

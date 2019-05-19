@@ -5,8 +5,8 @@ Dash callbacks:
     - parse_uploads: Load and store the uploaded data.
 
 Notes to others:
-    You should probably not write code here, unless you mean to
-    implement new filetype uploads or other types of upload handling,
+    You should probably not write code here, unless you mean to \
+    implement new filetype uploads or other types of upload handling, \
     or other similar functionality.
 """
 

@@ -11,7 +11,7 @@ Dash callbacks:
                             specify a subreddit to get data from.
 
 Note to others:
-    You should probably not write code here, UNLESS you defined a
+    You should probably not write code here, UNLESS you defined a \
     new connection to an API, or are doing refactoring.
 """
 
@@ -200,7 +200,7 @@ def render_table(api_choice, user_id):
                State("user_id", "children")])
 def display_reddit_posts(n_clicks, subreddit_choice, user_id):
     """
-    For the Reddit API, allow the user to specify a subreddit
+    For the Reddit API, allow the user to specify a subreddit \
     to get data from.
 
     Args:

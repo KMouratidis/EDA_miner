@@ -1,5 +1,5 @@
 """
-This module takes care of the menu and choices provided when the
+This module takes care of the menu and choices provided when the \
 "Analyze & Predict" high-level tab is selected.
 
 Dash callbacks:
@@ -7,9 +7,9 @@ Dash callbacks:
                     appropriate view.
 
 Notes to others:
-    You should probably not write code here, unless you are defining
-    a new level-2 tab. Here you can find functionality to define or
-    train ML / NN models. Implementations go to their own modules
+    You should probably not write code here, unless you are defining \
+    a new level-2 tab. Here you can find functionality to define or \
+    train ML / NN models. Implementations go to their own modules \
     down the package hierarchy, in `apps.analyze`.
 """
 

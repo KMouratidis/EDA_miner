@@ -1,5 +1,5 @@
 """
-This module provides utilities, functions, and other code that is
+This module provides utilities, functions, and other code that is \
 meant to be used across the app. This may undergo changes soon.
 
 Functions:
@@ -20,9 +20,9 @@ Global variables:
                creating dropdowns and used in `apps.analyze` modules.
 
 Notes to others:
-    You should probably not write code here, unless you are adding
-    functions aimed at being used by many lower-level modules.
-    Some of the functions here will later be moved to lower-level
+    You should probably not write code here, unless you are adding \
+    functions aimed at being used by many lower-level modules. \
+    Some of the functions here will later be moved to lower-level \
     modules (e.g. `pretty_print_tweets`).
 """
 
@@ -75,9 +75,9 @@ def cleanup(redis_conn):
         redis_conn: `redis.Redis` object.
 
     Further details:
-        Flush every key stored in the Redis database. If there
-        are users that have logged in and uploaded data, store
-        those on disk. Also remove any static files generated
+        Flush every key stored in the Redis database. If there \
+        are users that have logged in and uploaded data, store \
+        those on disk. Also remove any static files generated \
         while the server was running.
     """
 
@@ -188,7 +188,7 @@ def encode_image(image_path):
 
 def get_data(api_choice, user_id):
     """
-    Get a `pandas.DataFrame` with the specified data.</h2>
+    Get a `pandas.DataFrame` with the specified data.
 
     Args:
         api_choice (str): the key used by the Redis server \
@@ -247,8 +247,8 @@ def parse_contents(contents, filename, date, user_id):
         user_id (str): the user for whom to fetch data.
 
     Further details:
-        After decoding the uploaded file, handle any remaining
-        operations here. This was stolen from the dash docs. Currently
+        After decoding the uploaded file, handle any remaining \
+        operations here. This was stolen from the dash docs. Currently \
         it only supports csv, xls(x), json, and feather file types.
     """
 
@@ -319,7 +319,7 @@ def redis_startup():
         `redis.Redis`: a connection to a Redis server.
 
     Further details:
-        Connects to a Redis server on its default port (6379) and
+        Connects to a Redis server on its default port (6379) and \
         is also responsible for any other startup operations needed.
     """
 
@@ -329,4 +329,3 @@ def redis_startup():
 
 
 r = redis_startup()
-"""The Redis connection that is used throughout the app."""

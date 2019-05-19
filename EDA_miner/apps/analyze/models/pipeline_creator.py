@@ -109,7 +109,6 @@ def find_pipeline_node(GOAL):
     """
 
     def _find_pipeline_input(pipe):
-        """Find the input node of the graph"""
 
         # TODO: This needs a better / cleaner implementation
         if isinstance(pipe, Pipeline):

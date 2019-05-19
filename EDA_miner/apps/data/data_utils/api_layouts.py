@@ -12,12 +12,12 @@ Global variables:
     - spotify_layout: 2 input fields and a button.
 
 Notes to others:
-    You should probably not write code here, unless adding
+    You should probably not write code here, unless adding \
     a new API connection.
 
-    IMPORTANT: When designing layouts ALWAYS pre-append the input
-    elements with the API name, and ALWAYS name each input id
-    according to the names of the variables of the respective API
+    IMPORTANT: When designing layouts ALWAYS pre-append the input \
+    elements with the API name, and ALWAYS name each input id \
+    according to the names of the variables of the respective API \
     connector.
 """
 
@@ -26,7 +26,16 @@ import dash_html_components as html
 
 
 def success_message(api):
-    """Utility to provide feedback on successful connections."""
+    """
+    Utility to provide feedback on successful connections.
+
+    Args:
+        api (str): Name / key of the API.
+
+    Returns:
+        list: A list of Dash elements.
+    """
+
     return [
         html.H4(f"Successfully connected to the {api} API."),
         html.Br(),

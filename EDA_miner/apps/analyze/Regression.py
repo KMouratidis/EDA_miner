@@ -57,7 +57,7 @@ def Regression_Options(options, results):
 def render_variable_choices_regression(dataset_choice, algo_choice_regression,
                                        user_id):
     """
-    Create a menu of dcc components to select dataset, variables,
+    Create a menu of dcc components to select dataset, variables, \
     and training options.
 
     Args:

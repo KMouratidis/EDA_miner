@@ -1,6 +1,6 @@
 """
-This module contains the implementations of graphing functions.
-I skipped adding docstrings for every function since most of them
+This module contains the implementations of graphing functions. \
+I skipped adding docstrings for every function since most of them \
 are one-liners anyway and should be pretty obvious.
 
 Functions:
@@ -14,8 +14,8 @@ Functions:
     - density2d: Create a heatmap.
 
 Notes to others:
-    Feel free to write code here either to improve current or to add
-    new functionality. Also feel free to add or tamper with styles 
+    Feel free to write code here either to improve current or to add \
+    new functionality. Also feel free to add or tamper with styles \
     and/or helper functions.
 """
 

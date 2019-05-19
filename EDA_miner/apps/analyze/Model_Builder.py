@@ -1,8 +1,9 @@
 """
-    This module will be used to graphically create models.
-    RapidMiner, Weka, Orange, etc, ain't got sh!t on us :)
+This module will be used to graphically create models. \
+RapidMiner, Weka, Orange, etc, ain't got sh!t on us :)
 
-    You should probably not write code here.
+You should probably not write code here, UNLESS you know \
+what you're doing.
 """
 
 from dash.dependencies import Input, Output, State

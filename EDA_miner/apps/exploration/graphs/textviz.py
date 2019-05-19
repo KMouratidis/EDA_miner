@@ -5,8 +5,8 @@ Functions:
     - create_wordcloud: Generate a wordcloud and save it to a file.
 
 Notes to others:
-    Feel free to write code here either to improve current or to add
-    new functionality. Avoid word vectors visualizations at this stage
+    Feel free to write code here either to improve current or to add \
+    new functionality. Avoid word vectors visualizations at this stage \
     of development as it will simply increase (re)load times for the app.
 """
 

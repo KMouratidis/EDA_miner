@@ -59,7 +59,7 @@ def baseline(values, min_max="min", deg=7, ema_window=7, roll_window=7,
                      in `peakutils.baseline`.
 
     Returns:
-
+        np.array: the baseline.
     """
 
     if min_max == "min":

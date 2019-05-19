@@ -1,12 +1,12 @@
 """
-The main app is here. It takes the base menus from menus.py
-and puts them in the app.layout, then defines callbacks
+The main app is here. It takes the base menus from menus.py \
+and puts them in the app.layout, then defines callbacks \
 and finally has the if-name-main block necessary to run the app.
 
 Dash callbacks:
-    - high_level_tabs: On high-level tab selection, render
+    - high_level_tabs: On high-level tab selection, render \
                        the appropriate layout.
-    - update_sidebar_menus: For the second level of tabs, show
+    - update_sidebar_menus: For the second level of tabs, show \
                             different sidebar menu.
 
 Notes to others:
@@ -46,7 +46,9 @@ app.layout = html.Div([
 @app.callback(Output('selected_subpage', 'children'),
               [Input('high_level_tabs', 'value')])
 def high_level_tabs(tab):
-    """On high-level tab selection, render the appropriate layout."""
+    """
+    On high-level tab selection, render the appropriate layout.
+    """
 
     if tab == 'EDA':
         return exploration_view.layout
@@ -61,7 +63,9 @@ def high_level_tabs(tab):
 @app.callback(Output('low_level_tabs_submenu', 'children'),
               [Input('level2_tabs', 'value')])
 def update_sidebar_menus(level2_tabs):
-    """For the second level of tabs, show different sidebar menu."""
+    """
+    For the second level of tabs, show different sidebar menu.
+    """
 
     if level2_tabs is not None:
         if level2_tabs == 'kpi':

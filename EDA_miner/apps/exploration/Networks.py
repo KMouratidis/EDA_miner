@@ -14,12 +14,12 @@ Dash callbacks:
     - plot_network: Plot the network graph according to user choices.
 
 Notes to others:
-    Contributions are encouraged here, although you should consider
-    starting with another part if you're new to dash or this project.
-    Main functionality is still lacking in this part. You can use this
-    module to add new buttons, input, or other interface-related,
-    element, or maybe a new type of graph (in which case implement
-    it in a new file `graphs.networks.py`). Like with other modules,
+    Contributions are encouraged here, although you should consider \
+    starting with another part if you're new to dash or this project. \
+    Main functionality is still lacking in this part. You can use this \
+    module to add new buttons, input, or other interface-related, \
+    element, or maybe a new type of graph (in which case implement \
+    it in a new file `graphs.networks.py`). Like with other modules, \
     working on exporting network graphs is encouraged.
 """
 
@@ -99,7 +99,7 @@ def Network_Options(options, results):
               [State("user_id", "children")])
 def render_variable_choices_network(dataset_choice, user_id):
     """
-        Create a menu of dcc components for the user to choose
+        Create a menu of dcc components for the user to choose \
         plotting options.
 
     Args:

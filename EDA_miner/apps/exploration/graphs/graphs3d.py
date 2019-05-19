@@ -5,7 +5,7 @@ Functions:
     - scatterplot3d: Create a 3D scatterplot.
 
 Notes to others:
-    Feel free to write code here either to improve current or to add
+    Feel free to write code here either to improve current or to add \
     new functionality. What is particularly needed is new graph types.
 """
 

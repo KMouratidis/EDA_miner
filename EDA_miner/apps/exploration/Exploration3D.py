@@ -1,5 +1,5 @@
 """
-This module defines the available graphs and creates the interface
+This module defines the available graphs and creates the interface \
 for the 3D dashboard.
 
 Global Variables:
@@ -14,13 +14,13 @@ Dash callbacks:
     - plot_graph_3d: Plot the graph according to user choices.
 
 Notes to others:
-    You should only write code here with caution, although contribution
-    in this part are very encouraged. You can use this module to add new
-    buttons, input, or other interface-related, element, or maybe a new
-    type of graph (in which case implement it in `graphs.graphs3d.py`).
-    Keep in mind that it may be moved later on to lower-level modules.
-    Also, there is a chance that this will be moved entirely into another
-    tab. Finally, exporting 3D graphs is currently not implemented, so
+    You should only write code here with caution, although contribution \
+    in this part are very encouraged. You can use this module to add new \
+    buttons, input, or other interface-related, element, or maybe a new \
+    type of graph (in which case implement it in `graphs.graphs3d.py`). \
+    Keep in mind that it may be moved later on to lower-level modules. \
+    Also, there is a chance that this will be moved entirely into another \
+    tab. Finally, exporting 3D graphs is currently not implemented, so \
     work on that is encouraged as well.
 """
 

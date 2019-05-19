@@ -1,13 +1,11 @@
 """
-<h2>Developer notes</h2>
+Developer notes:
 
 Some suggestions on what could be done:
-<ul>
-    <li>Implementing the editing and filtering of datasets.</li>
-    <li>A "download" button for datasets that were modified.</li>
-    <li>More API connections.</li>
-    <li>Prettier interfaces.</li>
-</ul>
+    - Implementing the editing and filtering of datasets.
+    - A "download" button for datasets that were modified.
+    - More API connections.
+    - Prettier interfaces.
 """
 
 from apps.data.Upload import Upload_Options
