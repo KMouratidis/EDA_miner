@@ -1,6 +1,8 @@
 ## First create the docs
 
 import os
+import re
+
 
 text = []
 
@@ -16,6 +18,9 @@ layouts = {}
 """)
     
     
+total_funcs_classes = 0
+documented_funcs_classes = 0
+
 for folder, folders, files in os.walk("../EDA_miner/"):
     for file in files:
 
@@ -39,6 +44,10 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
 
 
         for i, line in enumerate(rd):
+            # If func/class and not private
+            if ("def " in line or "class " in line) and not (line.strip().startswith("def _") or line.strip().startswith("class _") or line.strip().startswith("#")) and not doc:
+                total_funcs_classes += 1; print("LINE: ", line)
+
             if '"""' in line:
                 doc = not doc
 
@@ -46,9 +55,10 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
                     # function name
                     
                     correct_line = i - 1
-                    if "def" not in rd[correct_line]:
-                        while not ("def" in rd[correct_line] or "class" in rd[correct_line]):
+                    if "def " not in rd[correct_line] and "class " not in rd[correct_line]:
+                        while not ("def " in rd[correct_line] or "class " in rd[correct_line]):
                             correct_line -= 1
+                    documented_funcs_classes += 1 ; print("DOCUMENTED: ",line)
                                                     
                     if correct_line < i - 1:
                         line = " ".join(rd[j].strip() for j in range(correct_line, i))
@@ -56,6 +66,8 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
                         
                     handler(f'html.Br(), html.H3("""{rd[correct_line].replace("class ", "").replace("def ", "").strip()}""", style={{"backgroundColor": "#AAA", "display": "inline"}}), ')
                     handler("html.Div([")
+
+                        
                     continue
                 elif i >= 1 and not doc:
         #             handler(line)
@@ -231,6 +243,12 @@ def display_page(pathname):
         return layouts.get(".."+pathname[:-3])
     except (KeyError, TypeError):
         return html.Div(str(layouts.keys()))
+
+
+with open("../project_info.txt", "r") as f:
+    rd = f.read()
+with open("../project_info.txt", "w") as f:
+    f.write(re.sub("numeric: doc-coverage: \d+%", f"numeric: doc-coverage: {str(int(documented_funcs_classes/total_funcs_classes*100))}%", rd))
 
 
 server = app.server

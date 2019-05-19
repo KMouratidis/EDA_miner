@@ -49,12 +49,16 @@ from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 # handle outputs
 
 class BaseInput(BaseEstimator, TransformerMixin):
-    """Base class for ALL input nodes."""
+    """
+    Base class for ALL input nodes.
+    """
     pass
 
 
 class GenericInput(BaseInput):
-    """Base class for dataset/file loaders."""
+    """
+    Base class for dataset/file loaders.
+    """
     modifiable_params = {}
 
 

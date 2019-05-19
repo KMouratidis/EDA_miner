@@ -517,7 +517,7 @@ html.Br(), html.Div([
 	html.P("""Feel free to experiment as much as you like here, although you probably     want to write code elsewhere."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
-html.Br(), html.H3("""algo_choice_classification, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Br(), html.H3("""render_variable_choices_classification(dataset_choice,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""Create a menu of dcc components to select dataset, variables,"""),
 	html.P("""and training options."""),
@@ -926,10 +926,12 @@ html.Br(), html.Div([
 
 html.Br(), html.H3("""BaseInput(BaseEstimator, TransformerMixin):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""pass"""),
-	html.P(""""""),
-	html.P(""""""),
-	html.H3("""class GenericInput(BaseInput):"""),
+	html.P("""Base class for ALL input nodes."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""GenericInput(BaseInput):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Base class for dataset/file loaders."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])

@@ -2,6 +2,11 @@
 
 # EDA_miner
 
+<badges> <img src="https://img.shields.io/badge/doc--coverage-49%
+25-yellow.svg"> <img src="https://img.shields.io/badge/code--coverage-0%
+25-red.svg"> <img src="https://img.shields.io/badge/tests-0%
+25-red.svg"> </badges>
+
 A visualization and analytics dashboard that is able to connect to APIs, receive your data,
 and allow you to run Machine Learning models from a server. Started as a university project.
 
