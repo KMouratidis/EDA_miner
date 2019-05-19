@@ -74,7 +74,7 @@ SideBar = [
                     html.Span("Our docs  "),
                     html.I(className="fas fa-external-link-square-alt",
                            id="dev_link")
-            ], href="https://kmouratidis.github.io/EDA_miner_public/docs/",
+            ], href="http://docs.edaminer.com/",
                 target="_blank")),
         ])
     ]),
