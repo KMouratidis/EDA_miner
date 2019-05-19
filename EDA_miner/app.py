@@ -103,3 +103,8 @@ if __name__ == "__main__":
 
     finally:
         cleanup(r)
+
+else:
+    # Probably a deployment (we need it here because of Dash)
+    # not having a layout defined in server.py
+    server = app.server
