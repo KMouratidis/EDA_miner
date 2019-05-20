@@ -1,9 +1,6 @@
-*/__pycache__
-*/__pycache__/*
-__pycache__
-__pycache__/*
 *pycache*
 *.json
+*.csv
 *.pkl
 *.ipynb
 *.h5
@@ -14,9 +11,11 @@ __pycache__/*
 *_data.txt
 *.cache*
 .idea*
+*ropeproject*
+.coverage*
+*.hypothesis*
+*coverage_report*
 
 db.*
 *.db
 *.rdb
-*ropeproject*
-*node_information.csv

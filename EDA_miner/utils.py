@@ -85,9 +85,10 @@ def cleanup(redis_conn):
     redis_conn.flushdb()
 
     # Remove user images
-    for img in os.listdir("static/images"):
+    static_path = os.path.dirname(__file__) + "/static/images"
+    for img in os.listdir(static_path):
         if img.startswith("python_generated_ssid"):
-            os.remove(f"static/images/{img}")
+            os.remove(f"{static_path}/{img}")
 
 
 def create_dropdown(name, options, **kwargs):
@@ -172,11 +173,11 @@ def create_table(df, table_id="table"):
 
 def encode_image(image_path):
     """
-    Read and base64-encode an image for the dash app</h2>
+    Read and base64-encode an image for the dash app.
 
     Args:
         image_path (str): absolute path or relative to the \
-                          top-level directory
+                          top-level directory.
 
     Returns:
         A str to be used for the src attribute of an img element.

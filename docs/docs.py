@@ -247,6 +247,7 @@ def display_page(pathname):
 
 with open("../project_info.txt", "r") as f:
     rd = f.read()
+
 with open("../project_info.txt", "w") as f:
     f.write(re.sub("numeric: doc-coverage: \d+%", f"numeric: doc-coverage: {str(int(documented_funcs_classes/total_funcs_classes*100))}%", rd))
 
