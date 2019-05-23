@@ -41,11 +41,12 @@ import pandas as pd
 import os
 
 
+static_dir = os.path.dirname(__file__)
 
 
 SideBar = [
 
-    html.Img(id="app_logo", src=encode_image("assets/images/y2d.png")),
+    html.Img(id="app_logo", src=encode_image(os.path.join(static_dir, "assets/images/y2d.png"))),
     html.Br(),
 
     html.Button('Dark/Light theme', id="dark_theme"),
@@ -142,11 +143,13 @@ def serve_layout():
 
     session_id = f"python_generated_ssid_{uuid.uuid4()}"
 
+    # TODO: This should probably be moved to `utils.startup`
     # load some data for all users
     for file in os.listdir("../data"):
         if file.endswith("csv"):
             df = pd.read_csv("../data/" + file)
-            r.set(f"{session_id}_user_data_example_{file[:-4]}", df.to_msgpack(compress='zlib'))
+            r.set(f"{session_id}_user_data_example_{file[:-4]}",
+                  df.to_msgpack(compress='zlib'))
 
     return html.Div(children=[
 

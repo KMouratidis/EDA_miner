@@ -187,6 +187,7 @@ def encode_image(image_path):
         open(image_path, 'rb').read()).decode())
 
 
+# TODO: use a more unified interface
 def get_data(api_choice, user_id):
     """
     Get a `pandas.DataFrame` with the specified data.
@@ -230,7 +231,7 @@ def hard_cast_to_float(x):
     try:
         ret = np.float32(x)
     except:
-        ret = 0
+        ret = 0.
 
     return ret
 

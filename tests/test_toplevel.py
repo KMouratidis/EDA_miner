@@ -1,9 +1,9 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath("../EDA_miner"))
 import warnings
-warnings.filterwarnings("ignore")
 
+warnings.filterwarnings("ignore")
+sys.path.insert(0, os.path.abspath("../EDA_miner"))
 
 from utils import cleanup
 from redis import Redis
