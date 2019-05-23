@@ -11,6 +11,8 @@ Notes to others:
 import pandas as pd
 import numpy as np
 import peakutils
+from scipy import sparse
+from scipy.sparse.linalg import spsolve
 
 
 def _moving_average(values, roll_window=3, correction=False):
@@ -44,6 +46,19 @@ def _ema_baseline(values, func, ema_window=7, roll_window=7):
     return roll
 
 
+# https://stackoverflow.com/a/50160920/6655150
+def _als_baseline(values, lam=10, p=0.002, niter=10):
+    L = len(values)
+    D = sparse.diags([1, -2, 1], [0, -1, -2], shape=(L, L-2))
+    w = np.ones(L)
+    for i in range(niter):
+        W = sparse.spdiags(w, 0, L, L)
+        Z = W + lam * D.dot(D.transpose())
+        z = spsolve(Z, w*values)
+        w = p * (values > z) + (1-p) * (values < z)
+    return z
+
+
 def baseline(values, min_max="min", deg=7, ema_window=7, roll_window=7,
              max_it=200, tol=1e-4):
     """
@@ -75,6 +90,7 @@ def baseline(values, min_max="min", deg=7, ema_window=7, roll_window=7,
                                             tol=tol)
 
     # Give double the weight to peakutil's values
-    return np.mean([peakutils_baseline * 4/3,
+    return (2/3 * np.mean([peakutils_baseline * 4/3,
                     ema_baseline * 2/3], 0)
+            + 1/3 * _als_baseline(values))
 

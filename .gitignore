@@ -1,6 +1,5 @@
 *pycache*
 *.json
-*.csv
 *.pkl
 *.ipynb
 *.h5
