@@ -5,7 +5,7 @@
 <badges> <img src="https://img.shields.io/badge/doc--coverage-49%25-yellow.svg"> <img src="https://img.shields.io/badge/code--coverage-14%25-red.svg"> <img src="https://img.shields.io/badge/tests-100%25-brightgreen.svg"> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a> </badges>
 
 A visualization and analytics dashboard that is able to connect to APIs, receive your data,
-and allow you to run Machine Learning models from a server. Started as a university project.
+and allow you to run Machine Learning models from a server. Started as a university project, and will be deployed in their servers probably later this year.
 
 
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
