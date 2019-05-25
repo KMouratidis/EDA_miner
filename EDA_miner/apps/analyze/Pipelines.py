@@ -28,7 +28,16 @@ import dill
 from apps.analyze.models import pipeline_creator
 
 
-def Pipeline_Options(options, results, user_id):
+def Pipeline_Options(options, user_id):
+    """
+    Generate the layout of the dashboard.
+
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     if user_id.startswith("python_generated_ssid"):
         # Trim id

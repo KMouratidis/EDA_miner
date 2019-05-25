@@ -76,19 +76,19 @@ def tab_subpages(tab, user_id):
         return Model_Builder_Layout
 
     elif tab == "pipelines":
-        return Pipeline_Options(options, results, user_id)
+        return Pipeline_Options(options, user_id)
 
     elif tab == 'regression':
-        return Regression_Options(options, results)
+        return Regression_Options(options)
 
     elif tab == "classification":
-        return Classification_Options(options, results)
+        return Classification_Options(options)
 
     elif tab == "clustering":
-        return Clustering_Options(options, results)
+        return Clustering_Options(options)
 
     elif tab == "econometrics":
-        return Econometrics_Options(options, results)
+        return Econometrics_Options(options)
 
     else:
         return [html.H4("Click on a subtab...")]

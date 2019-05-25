@@ -1,6 +1,9 @@
 """
 This module provides views for the data (tables, lists of tweets, etc).
 
+Global Variables:
+    - View_Options: Generate the layout for inspecting available datasets.
+
 Functions:
     - get_available_choices: Get datasets available to user.
 
@@ -78,6 +81,15 @@ def get_available_choices(redis_conn, user_id):
 
 
 def View_Options(user_id):
+    """
+    Generate the layout for inspecting available datasets.
+
+    Args:
+        user_id (str): Session/user id.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     options, results = get_available_choices(r, user_id)
     available_choices = html.Div(dcc.Dropdown(options=options,

@@ -2,6 +2,9 @@
 This module defines the interface for connecting to APIs. \
 It renders the appropriate layout according to the tab chosen.
 
+Global Variables:
+    - API_Options: Generate the layout for connecting to APIs.
+
 Dash callbacks:
     - api_connect: Render the appropriate view for the chosen API.
 

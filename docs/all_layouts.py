@@ -116,6 +116,18 @@ html.Div([
 	html.P("""This class is meant to capture all specifications needed to create a report layout. This isn't currently implemented correctly, it merely serves as a placeholder, not a template to be mimicked. The elements present below are being used elsewhere to create     the layout of the the PDF, but those will probably moved here."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""render(x_axis, y_axis):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Fills the missing elements from the layout."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x_axis (str): the x-axis label."""),
+	html.P("""y_axis (str): the y-axis label."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A `go.Layout` instance."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 ])
 
 
@@ -182,10 +194,10 @@ html.Div([
 
 html.Br(), html.H3("""encode_image(image_path):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Read and base64-encode an image for the dash app</h2>"""),
+	html.P("""Read and base64-encode an image for the dash app."""),
 	html.P(""""""),
 	html.H3("""Args:"""),
-	html.P("""image_path (str): absolute path or relative to the                           top-level directory"""),
+	html.P("""image_path (str): absolute path or relative to the                           top-level directory."""),
 	html.P(""""""),
 	html.H3("""Returns:"""),
 	html.P("""A str to be used for the src attribute of an img element."""),
@@ -249,36 +261,6 @@ html.Div([
 
 
 
-layouts["../EDA_miner/reportapp"] = html.Div([
-html.Br(), html.H3("""load_stuff(_):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
-html.Div([
-	html.P("""This module is meant to be used as a secondary server only for printing"""),
-	html.P("""PDFs made inside the `PDF_Layout` tab."""),
-	html.P(""""""),
-	html.H3("""Dash callbacks:"""),
-	html.Li(""" load_stuff: On button click, load the layout exported                   from the main app."""),
-	html.P(""""""),
-	html.H3("""Notes to others:"""),
-	html.P("""Improvements can definitely be made regarding handling of PDF printing,"""),
-	html.P("""with particular need of javascript functionality. Help is most welcome"""),
-	html.P("""here, and should be prioritized."""),
-], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
-
-html.Br(), html.H3("""load_stuff(_):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
-html.Div([
-	html.P("""Load the layout exported from the main app when click."""),
-	html.P(""""""),
-	html.H3("""Args:"""),
-	html.P("""_ (int): number of times the button was clicked, not important."""),
-	html.P(""""""),
-	html.H3("""Returns:"""),
-	html.P("""pdf_layout (obj): loaded from bytes, the dash components                           making up the PDF report."""),
-], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
-
-])
-
-
-
 layouts["../EDA_miner/app"] = html.Div([
 html.H2("""app.py"""), 
 html.Br(), html.Div([
@@ -295,14 +277,51 @@ html.Br(), html.Div([
 	html.Li(""" adding a new-high-level tab, or other new feature."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""show_login_input(value):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Show or hide the login menu."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""value (str): yes/no."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""dict: Sets CSS `display` attribute."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""go_to_main_page(n_clicks, session_id, username, password):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Return appropriate layout after submit page, hide the rest."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.H3("""n_clicks (int):"""),
+	html.H3("""session_id:"""),
+	html.H3("""username:"""),
+	html.H3("""password:"""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P(""""""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""high_level_tabs(tab):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""On high-level tab selection, render the appropriate layout."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""tab (str): Selected top-level menu."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""list: The appropriate layout, or an empty list."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""update_sidebar_menus(level2_tabs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""For the second level of tabs, show different sidebar menu."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""level2_tabs (str): Selected second-level menu."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""list: The appropriate layout, or an empty list."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])
@@ -320,6 +339,20 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""DO NOT MODIFY WITHOUT PERMISSION! These settings should rarely be     tampered with, if at all."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""load_user(user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""When the user logs in, reload."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""user_id (str or int): ID of the user."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""object: The user object."""),
+	html.P(""""""),
+	html.H3("""TODO:"""),
+	html.P("""Investigate internals and modify appropriately."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])
@@ -365,16 +398,6 @@ html.Div([
 	html.P("""The layout of our app needs to be inside a function so that every time some new session starts a new     session_id is generated."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
-])
-
-
-
-layouts["../EDA_miner/users_mgt"] = html.Div([
-])
-
-
-
-layouts["../EDA_miner/config"] = html.Div([
 ])
 
 
@@ -506,21 +529,31 @@ html.H2("""Classification.py"""),
 html.Br(), html.Div([
 	html.P("""This module defines the interface for fitting simple classification models."""),
 	html.P(""""""),
-	html.H3("""Functions:"""),
+	html.H3("""Global Variables:"""),
 	html.Li(""" Classification_Options: Generate the layout of the dashboard."""),
 	html.P(""""""),
 	html.H3("""Dash callbacks:"""),
 	html.Li(""" render_variable_choices_classification: Create a menu of dcc components for the user to choose fitting                                               options."""),
-	html.Li(""" fit_classification_model: Fits any pipelines defined."""),
+	html.Li(""" fit_classification_model: Take user choices and, if all are present, fit                                 the appropriate model."""),
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Feel free to experiment as much as you like here, although you probably     want to write code elsewhere."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""Classification_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""render_variable_choices_classification(dataset_choice,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Create a menu of dcc components to select dataset, variables,"""),
-	html.P("""and training options."""),
+	html.P("""Create a menu of dcc components for the user to choose fitting options."""),
 	html.P(""""""),
 	html.H3("""Args:"""),
 	html.P("""dataset_choice (str): Name of dataset."""),
@@ -566,13 +599,33 @@ html.Br(), html.Div([
 layouts["../EDA_miner/apps/analyze/Clustering"] = html.Div([
 html.H2("""Clustering.py"""), 
 html.Br(), html.Div([
-	html.P("""TBW..."""),
+	html.P("""This module defines the interface for fitting simple classification models."""),
+	html.P(""""""),
+	html.H3("""Global Variables:"""),
+	html.Li(""" Clustering_Options: Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Dash callbacks:"""),
+	html.Li(""" render_variable_choices_clustering: Create a menu of dcc components for the user to choose fitting                                           options."""),
+	html.Li(""" fit_clustering_model: Take user choices and, if all are present, fit                             the appropriate model."""),
+	html.P(""""""),
+	html.H3("""Notes to others:"""),
+	html.P("""Feel free to experiment as much as you like here, although you probably     want to write code elsewhere."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""Clustering_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""render_variable_choices_clustering(dataset_choice, algo_choice_clustering,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Create a menu of dcc components to select dataset, variables,"""),
-	html.P("""and training options."""),
+	html.P("""Create a menu of dcc components for the user to choose fitting options."""),
 	html.P(""""""),
 	html.H3("""Args:"""),
 	html.P("""dataset_choice (str): Name of dataset."""),
@@ -613,16 +666,26 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Dash callbacks:"""),
 	html.Li(""" render_variable_choices_econometrics: Create a menu of dcc components for the user to choose fitting                                             options."""),
-	html.Li(""" fit_econometrics_model: Fits any models defined."""),
+	html.Li(""" fit_econometrics_model: Take user choices and, if all are present, fit                               the appropriate model."""),
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Not implemented yet. Feel free to experiment as much as you like here.     What do econometricians do other than glorified linear regressions?! :D"""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""Econometrics_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""render_variable_choices_econometrics(dataset_choice,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Create a menu of dcc components to select dataset, variables,"""),
-	html.P("""and training options."""),
+	html.P("""Create a menu of dcc components for the user to choose fitting options."""),
 	html.P(""""""),
 	html.H3("""Args:"""),
 	html.P("""dataset_choice (str): Name of dataset."""),
@@ -668,6 +731,17 @@ html.Br(), html.Div([
 	html.P("""You should probably not write code here, UNLESS reworking the interface."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""Pipeline_Options(options, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""render_variable_choices_pipeline(algo_choice_pipeline,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""Create a menu of dcc components to select pipeline and variables."""),
@@ -703,20 +777,31 @@ html.H2("""Regression.py"""),
 html.Br(), html.Div([
 	html.P("""This module defines the interface for fitting simple regression models."""),
 	html.P(""""""),
-	html.H3("""Functions:"""),
+	html.H3("""Global Variables:"""),
 	html.Li(""" Regression_Options: Generate the layout of the dashboard."""),
 	html.P(""""""),
 	html.H3("""Dash callbacks:"""),
 	html.Li(""" render_variable_choices_regression: Create a menu of dcc components for the user to choose fitting                                           options."""),
-	html.Li(""" fit_regression_model: Fits any models defined."""),
+	html.Li(""" fit_regression_model: Take user choices and, if all are present, fit                             the appropriate model."""),
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Feel free to experiment as much as you like here, although you probably     want to write code elsewhere."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""Regression_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""render_variable_choices_regression(dataset_choice, algo_choice_regression,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Create a menu of dcc components to select dataset, variables,     and training options."""),
+	html.P("""Create a menu of dcc components for the user to choose fitting options."""),
 	html.P(""""""),
 	html.H3("""Args:"""),
 	html.P("""dataset_choice (str): Name of dataset."""),
@@ -1002,6 +1087,9 @@ html.H2("""APIs.py"""),
 html.Br(), html.Div([
 	html.P("""This module defines the interface for connecting to APIs. It renders the appropriate layout according to the tab chosen."""),
 	html.P(""""""),
+	html.H3("""Global Variables:"""),
+	html.Li(""" API_Options: Generate the layout for connecting to APIs."""),
+	html.P(""""""),
 	html.H3("""Dash callbacks:"""),
 	html.Li(""" api_connect: Render the appropriate view for the chosen API."""),
 	html.P(""""""),
@@ -1017,6 +1105,9 @@ layouts["../EDA_miner/apps/data/View"] = html.Div([
 html.H2("""View.py"""), 
 html.Br(), html.Div([
 	html.P("""This module provides views for the data (tables, lists of tweets, etc)."""),
+	html.P(""""""),
+	html.H3("""Global Variables:"""),
+	html.Li(""" View_Options: Generate the layout for inspecting available datasets."""),
 	html.P(""""""),
 	html.H3("""Functions:"""),
 	html.Li(""" get_available_choices: Get datasets available to user."""),
@@ -1040,6 +1131,17 @@ html.Div([
 	html.P(""""""),
 	html.H3("""Returns:"""),
 	html.P("""[list(dict), dict]: A list of options to be used for making dropdowns, and a dict of the available                             dataset keys (and their mapped data)."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""View_Options(user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout for inspecting available datasets."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""user_id (str): Session/user id."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""display_subdataset_choices(api_choice):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1087,6 +1189,9 @@ html.H2("""Upload.py"""),
 html.Br(), html.Div([
 	html.P("""This module provides an interface for uploading and handling of files."""),
 	html.P(""""""),
+	html.H3("""Global Variables:"""),
+	html.Li(""" Upload_Options: Generate the layout for uploading datasets."""),
+	html.P(""""""),
 	html.H3("""Dash callbacks:"""),
 	html.Li(""" parse_uploads: Load and store the uploaded data."""),
 	html.P(""""""),
@@ -1129,22 +1234,41 @@ html.Br(), html.Div([
 
 html.Br(), html.H3("""twitter_connect(consumer_key, consumer_secret, access_token_key,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Connect to Twitter API and store the handle in Redis."""),
+	html.P("""Connect to Twitter API."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""google_sheets_connect(credentials_file, gspread_key):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Connect to Google Sheets and store the data in Redis."""),
+	html.P("""Connect to Google Sheets API."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""reddit_connect(client_id, client_secret):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Connect to Reddit and store the handle in Redis."""),
+	html.P("""Connect to Reddit API."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""spotify_connect(client_id, client_secret):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Connect to Spotify and store the handle in Redis."""),
+	html.P("""Connect to Spotify API."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""quandl_connect(api_key):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Connect to Quandl API."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""api_connect(api_choice, user_id, *args, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Connect to the selected API. A function that serves as the front end to all others, abstracting them away. ALso stores the API     handle in Redis for later usage."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""api_choice (str): A key in `connectors_mapping`."""),
+	html.P("""user_id (str): Session/user id."""),
+	html.P("""*args: Arguments to be passed to the appropriate API connector."""),
+	html.P("""**kwargs: Keyword arguments to be passed to the appropriate                   API connector."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""bool: Whether everything succeeded or not (an exception was raised)."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])
@@ -1237,6 +1361,17 @@ html.Br(), html.Div([
 	html.P("""** FEEL FREE TO SUBMIT YOUR OWN MWE DASH APPS (LAYOUT + STYLE). ** Contributions are greatly encouraged here, and this is a great starting point if you are new to dash or this project. What needs to be done is mainly creating PDF templates (see also the example at `layouts.PDF_Layout1`), but main functionality is also lacking. Feel free to add new buttons, input, or other interface-related, element. Also, contributions on a better export/render system are     welcome, although slightly more advanced."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""PDF_report_options(options=None):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the PDF generator."""),
+	html.P(""""""),
+	html.H3("""Optional Args:"""),
+	html.P("""options (list(dict)): Not relevant; here only for API compatibility."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""render_pdf_func(n_clicks, exported_figure1, exported_figure2,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""Render the PDF by filling-in the templates using the user-provided     choices and texts."""),
@@ -1254,6 +1389,19 @@ html.Div([
 	html.P(""""""),
 	html.H3("""Notes on implementation:"""),
 	html.P("""This function (including the previous layout) are only defined for 1 report template. Additions to this page will most probably lead to to inserting new elements in the initial layout or changing the whole implementation completely. Feel free to discuss what you         would like to see implemented for you to use, or even your ideas."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""print_pdf(n_clicks1, n_clicks2, pdf_layout):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Embeds a javascript function in a dash component to allow printing to PDF."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""n_clicks1 (int): Number of times "Render PDF" was clicked."""),
+	html.P("""n_clicks2 (int): Number of times "Print PDF" was clicked."""),
+	html.P("""pdf_layout (html.Div): The PDF report."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""str: Ties the JS script to the button. Also saves the layout."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""print_pdf(n_clicks1, n_clicks2, pdf_layout):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1293,6 +1441,17 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Contributions are encouraged here, although you should consider starting with another part if you're new to dash or this project. Main functionality is still lacking in this part. You can use this module to add new buttons, input, or other interface-related, element, or maybe a new type of graph (in which case implement it in a new file `graphs.networks.py`). Like with other modules,     working on exporting network graphs is encouraged."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""Network_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""render_variable_choices_network(dataset_choice, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1343,6 +1502,17 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Contributions are greatly needed and encouraged here. Main functionality is still lacking in this part. You can use this module to add new buttons, input, or other interface-related, element, or maybe a new type of graph (in which case implement it in `graphs.kpis.py`). Working on exporting KPI graphs is     also encouraged."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""KPI_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""render_variable_choices_kpi(dataset_choice, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1397,6 +1567,17 @@ html.Br(), html.Div([
 	html.P("""Contributions are encouraged here. Main functionality is still lacking in this part. You can use this module to add new buttons, input, or other interface-related, element, or maybe a new type of text visualizations (in which case implement it in a new file `graphs.textviz.py`). Like with other modules, working on exporting network graphs is encouraged. Finally, adding new visualization types is very welcome as well, but avoid loading huge word vectors files     at this stage of development."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""TextViz_Options(options=None):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Optional Args:"""),
+	html.P("""options (list(dict)): Not relevant; here only for API compatibility."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 html.Br(), html.H3("""plot_graph_text(n_clicks, text, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""Currently only word cloud visualizations are supported,"""),
@@ -1432,6 +1613,17 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""You should only write code here with caution, although contribution in this part are very encouraged. You can use this module to add new buttons, input, or other interface-related, element, or maybe a new type of graph (in which case implement it in `graphs.graphs3d.py`). Keep in mind that it may be moved later on to lower-level modules. Also, there is a chance that this will be moved entirely into another tab. Finally, exporting 3D graphs is currently not implemented, so     work on that is encouraged as well."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""Exploration3D_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""render_variable_choices_3d(dataset_choice, user_id):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1487,6 +1679,17 @@ html.Br(), html.Div([
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""You should only write code here with caution. You can use this module to add new buttons, input, or other interface-related, element, or maybe a new type of graph (in which case implement     it in `graphs.graphs2d.py`)."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""Exploration_Options(options):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Generate the layout of the dashboard."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""A Dash element or list of elements."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""render_variable_choices_2d(dataset_choice, graph_choice_exploration,""", style={"backgroundColor": "#AAA", "display": "inline"}), 
@@ -1636,15 +1839,123 @@ html.Br(), html.Div([
 	html.H3("""Functions:"""),
 	html.Li(""" scatterplot: Create a 2D scatterplot."""),
 	html.Li(""" line_chart: Create a lineplot."""),
-	html.Li(""" histogram: Create a histogram."""),
-	html.Li(""" heatmap: Create a heatmap of column correlations."""),
 	html.Li(""" bubble_chart: Create a bubble chart."""),
 	html.Li(""" filledarea: Create a lineplot with filled areas."""),
 	html.Li(""" errorbar: Create a lineplot with error bars (currently fixed)."""),
+	html.Li(""" histogram: Create a histogram."""),
+	html.Li(""" heatmap: Create a heatmap of column correlations."""),
 	html.Li(""" density2d: Create a heatmap."""),
 	html.P(""""""),
 	html.H3("""Notes to others:"""),
 	html.P("""Feel free to write code here either to improve current or to add new functionality. Also feel free to add or tamper with styles     and/or helper functions."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""_simple_scatter(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Internal function used to create a lot of other plots."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""scatterplot(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a 2D scatterplot."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""**params: Any other keyword argument passed to `go.Scatter`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Scatter`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""line_chart(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a lineplot."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Scatter`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Scatter`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""bubble_chart(x, y, size, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a bubble chart."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""size (iterable): Sized of bubbles."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Scatter`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Scatter`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""filledarea(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a lineplot with filled areas."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Scatter`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Scatter`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""errorbar(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a lineplot with error bars (currently fixed)."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Scatter`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Scatter`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""histogram(x, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a histogram."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for the histogram."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Histogram`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Histogram`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""heatmap(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a histogram."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for x-axis."""),
+	html.P("""y (iterable): Values for y-axis."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Histogram`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""`go.Heatmap`"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""density2d(x, y, **kwargs):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Create a histogram."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""x (iterable): Values for the histogram."""),
+	html.P("""**kwargs: Any other keyword argument passed to `go.Histogram2dContour`."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""list[`go.Scatter`, `go.Histogram2dContour`]"""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])

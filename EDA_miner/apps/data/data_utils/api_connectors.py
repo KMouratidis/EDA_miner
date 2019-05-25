@@ -27,7 +27,7 @@ import quandl
 def twitter_connect(consumer_key, consumer_secret, access_token_key,
                     access_token_secret, *, sleep_on_rate_limit=True):
     """
-    Connect to Twitter API and store the handle in Redis.
+    Connect to Twitter API.
     """
 
     api = twitter.Api(consumer_key=consumer_key,
@@ -42,7 +42,7 @@ def twitter_connect(consumer_key, consumer_secret, access_token_key,
 
 def google_sheets_connect(credentials_file, gspread_key):
     """
-    Connect to Google Sheets and store the data in Redis.
+    Connect to Google Sheets API.
     """
 
     scope = ['https://spreadsheets.google.com/feeds',
@@ -72,7 +72,7 @@ def google_sheets_connect(credentials_file, gspread_key):
 
 def reddit_connect(client_id, client_secret):
     """
-    Connect to Reddit and store the handle in Redis.
+    Connect to Reddit API.
     """
 
     return praw.Reddit(client_id=client_id,
@@ -82,7 +82,7 @@ def reddit_connect(client_id, client_secret):
 
 def spotify_connect(client_id, client_secret):
     """
-    Connect to Spotify and store the handle in Redis.
+    Connect to Spotify API.
     """
 
     creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
@@ -92,6 +92,9 @@ def spotify_connect(client_id, client_secret):
 
 
 def quandl_connect(api_key):
+    """
+    Connect to Quandl API.
+    """
     quandl.ApiConfig.api_key = api_key
 
     # Not actually a handle, but can be used to get data.
@@ -115,8 +118,23 @@ connectors_mapping = {
 }
 
 
-# A function that serves as the frontend to all others
 def api_connect(api_choice, user_id, *args, **kwargs):
+    """
+    Connect to the selected API. A function that serves as the front \
+    end to all others, abstracting them away. ALso stores the API \
+    handle in Redis for later usage.
+
+    Args:
+        api_choice (str): A key in `connectors_mapping`.
+        user_id (str): Session/user id.
+        *args: Arguments to be passed to the appropriate API connector.
+        **kwargs: Keyword arguments to be passed to the appropriate \
+                  API connector.
+
+    Returns:
+        bool: Whether everything succeeded or not (an exception was raised).
+    """
+
 
     if any(x is None for x in args):
         return False
@@ -126,6 +144,7 @@ def api_connect(api_choice, user_id, *args, **kwargs):
     try:
         api_handle = func(*args, **kwargs)
 
+        # TODO: Maybe add a timeout here as well?
         # Store in Redis that the API connected, and its handle(s)
         r.set(f"{user_id}_{api_choice}_api", "true")
         r.set(f"{user_id}_{api_choice}_api_handle", pickle.dumps(api_handle))

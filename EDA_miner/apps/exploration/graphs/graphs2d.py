@@ -6,11 +6,11 @@ are one-liners anyway and should be pretty obvious.
 Functions:
     - scatterplot: Create a 2D scatterplot.
     - line_chart: Create a lineplot.
-    - histogram: Create a histogram.
-    - heatmap: Create a heatmap of column correlations.
     - bubble_chart: Create a bubble chart.
     - filledarea: Create a lineplot with filled areas.
     - errorbar: Create a lineplot with error bars (currently fixed).
+    - histogram: Create a histogram.
+    - heatmap: Create a heatmap of column correlations.
     - density2d: Create a heatmap.
 
 Notes to others:
@@ -29,7 +29,11 @@ import plotly.graph_objs as go
 
 ########## Helper functions ##########
 
-def _simple_scatter(x, y, **params):
+def _simple_scatter(x, y, **kwargs):
+    """
+    Internal function used to create a lot of other plots.
+    """
+
     default_options = {
         "opacity": 0.7,
         "marker": {'size': 15,
@@ -39,7 +43,7 @@ def _simple_scatter(x, y, **params):
         "mode": "markers",
     }
 
-    default_options.update(params)
+    default_options.update(kwargs)
 
     return go.Scatter(x=x, y=y, **default_options)
 
@@ -66,43 +70,88 @@ graph_configs = {
 # These should return plotly traces (i.e. lists of `go` objects)
 
 def scatterplot(x, y, **kwargs):
+    """
+    Create a 2D scatterplot.
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        **params: Any other keyword argument passed to `go.Scatter`.
+
+    Returns:
+        `go.Scatter`
+    """
+
     return _simple_scatter(x, y, mode="markers", **kwargs)
 
 
 def line_chart(x, y, **kwargs):
+    """
+    Create a lineplot.
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        **kwargs: Any other keyword argument passed to `go.Scatter`.
+
+    Returns:
+        `go.Scatter`
+    """
+
     return _simple_scatter(x, y, mode="lines", **kwargs)
 
 
-def histogram(x, **kwargs):
-    return go.Histogram(x=x, **kwargs)
-
-
-def heatmap(x, y, **kwargs):
-
-    # Make sure they are in the appropriate shape
-    if not (len(x.shape) > 1 and x.shape[1] < 2):
-        x = np.atleast_2d(x).T
-    if not (len(y.shape) > 1 and y.shape[1] < 2):
-        y = np.atleast_2d(y).T
-
-    data = np.concatenate([x, y], 1)
-    return go.Heatmap(z=np.corrcoef(data.T), **kwargs)
-
-
 def bubble_chart(x, y, size, **kwargs):
+    """
+    Create a bubble chart.
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        size (iterable): Sized of bubbles.
+        **kwargs: Any other keyword argument passed to `go.Scatter`.
+
+    Returns:
+        `go.Scatter`
+    """
+
     marker = dict(size=size,
                   sizemode='area',
-                  sizeref=2.*max(size)/(40.**2),
+                  sizeref=2. * max(size) / (40. ** 2),
                   sizemin=4)
 
     return _simple_scatter(x, y, mode="markers", marker=marker, **kwargs)
 
 
 def filledarea(x, y, **kwargs):
+    """
+    Create a lineplot with filled areas.
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        **kwargs: Any other keyword argument passed to `go.Scatter`.
+
+    Returns:
+        `go.Scatter`
+    """
+
     return _simple_scatter(x, y, mode=None, fill='tonexty', **kwargs)
 
 
 def errorbar(x, y, **kwargs):
+    """
+    Create a lineplot with error bars (currently fixed).
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        **kwargs: Any other keyword argument passed to `go.Scatter`.
+
+    Returns:
+        `go.Scatter`
+    """
+
     std = np.zeros(y.shape) + y.std()
 
     error_y = dict(
@@ -115,7 +164,56 @@ def errorbar(x, y, **kwargs):
     return _simple_scatter(x, y, mode=None, error_y=error_y, **kwargs)
 
 
+def histogram(x, **kwargs):
+    """
+    Create a histogram.
+
+    Args:
+        x (iterable): Values for the histogram.
+        **kwargs: Any other keyword argument passed to `go.Histogram`.
+
+    Returns:
+        `go.Histogram`
+    """
+
+    return go.Histogram(x=x, **kwargs)
+
+
+def heatmap(x, y, **kwargs):
+    """
+    Create a histogram.
+
+    Args:
+        x (iterable): Values for x-axis.
+        y (iterable): Values for y-axis.
+        **kwargs: Any other keyword argument passed to `go.Histogram`.
+
+    Returns:
+        `go.Heatmap`
+    """
+
+    # Make sure they are in the appropriate shape
+    if not (len(x.shape) > 1 and x.shape[1] < 2):
+        x = np.atleast_2d(x).T
+    if not (len(y.shape) > 1 and y.shape[1] < 2):
+        y = np.atleast_2d(y).T
+
+    data = np.concatenate([x, y], 1)
+    return go.Heatmap(z=np.corrcoef(data.T), **kwargs)
+
+
 def density2d(x, y, **kwargs):
+    """
+    Create a histogram.
+
+    Args:
+        x (iterable): Values for the histogram.
+        **kwargs: Any other keyword argument passed to `go.Histogram2dContour`.
+
+    Returns:
+        list[`go.Scatter`, `go.Histogram2dContour`]
+    """
+
     marker = {
         "color": 'rgb(102,0,0)',
         "size": 2,

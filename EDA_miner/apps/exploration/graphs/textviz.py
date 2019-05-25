@@ -33,6 +33,7 @@ def create_wordcloud(text, user_id, *, background_color="white",
     Returns:
         None
     """
+
     wc = WordCloud(width=700,
                    height=500,
                    background_color=background_color,

@@ -35,7 +35,17 @@ from apps.exploration.graphs import textviz
 Sidebar = []
 
 
-def TextViz_Options(options, results):
+def TextViz_Options(options=None):
+    """
+    Generate the layout of the dashboard.
+
+    Optional Args:
+        options (list(dict)): Not relevant; here only for API compatibility.
+
+    Returns:
+        A Dash element or list of elements.
+    """
+
     return html.Div(children=[
 
         html.Div([

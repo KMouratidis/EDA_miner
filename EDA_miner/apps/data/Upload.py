@@ -1,6 +1,9 @@
 """
 This module provides an interface for uploading and handling of files.
 
+Global Variables:
+    - Upload_Options: Generate the layout for uploading datasets.
+
 Dash callbacks:
     - parse_uploads: Load and store the uploaded data.
 

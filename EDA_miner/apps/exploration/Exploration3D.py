@@ -38,7 +38,16 @@ from apps.exploration.graphs import graphs3d
 Sidebar = []
 
 
-def Exploration3D_Options(options, results):
+def Exploration3D_Options(options):
+    """
+    Generate the layout of the dashboard.
+
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     return html.Div(children=[
 

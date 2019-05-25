@@ -1,14 +1,15 @@
 """
 This module defines the interface for fitting simple regression models.
 
-Functions:
+Global Variables:
     - Regression_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
     - render_variable_choices_regression: Create a menu of dcc components \
                                           for the user to choose fitting \
                                           options.
-    - fit_regression_model: Fits any models defined.
+    - fit_regression_model: Take user choices and, if all are present, fit \
+                            the appropriate model.
 
 Notes to others:
     Feel free to experiment as much as you like here, although you probably \
@@ -25,7 +26,16 @@ from utils import create_dropdown, mapping, get_data
 
 
 
-def Regression_Options(options, results):
+def Regression_Options(options):
+    """
+    Generate the layout of the dashboard.
+
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     return html.Div(children=[
         # Choose a dataset
@@ -57,8 +67,7 @@ def Regression_Options(options, results):
 def render_variable_choices_regression(dataset_choice, algo_choice_regression,
                                        user_id):
     """
-    Create a menu of dcc components to select dataset, variables, \
-    and training options.
+    Create a menu of dcc components for the user to choose fitting options.
 
     Args:
         dataset_choice (str): Name of dataset.

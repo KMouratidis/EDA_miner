@@ -140,6 +140,17 @@ class PDF_Layout1:
 
     @staticmethod
     def render(x_axis, y_axis):
+        """
+        Fills the missing elements from the layout.
+
+        Args:
+            x_axis (str): the x-axis label.
+            y_axis (str): the y-axis label.
+
+        Returns:
+             A `go.Layout` instance.
+        """
+
         return go.Layout(
             autosize=False,
             bargap=0.35,

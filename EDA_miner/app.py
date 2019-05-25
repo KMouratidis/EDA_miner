@@ -48,6 +48,12 @@ app.layout = html.Div([
 def high_level_tabs(tab):
     """
     On high-level tab selection, render the appropriate layout.
+
+    Args:
+        tab (str): Selected top-level menu.
+
+    Returns:
+        list: The appropriate layout, or an empty list.
     """
 
     if tab == 'EDA':
@@ -57,7 +63,7 @@ def high_level_tabs(tab):
     elif tab == "data":
         return data_view.layout
     else:
-        return '404'
+        return []
 
 
 @app.callback(Output('low_level_tabs_submenu', 'children'),
@@ -65,6 +71,12 @@ def high_level_tabs(tab):
 def update_sidebar_menus(level2_tabs):
     """
     For the second level of tabs, show different sidebar menu.
+
+    Args:
+        level2_tabs (str): Selected second-level menu.
+
+    Returns:
+        list: The appropriate layout, or an empty list.
     """
 
     if level2_tabs is not None:

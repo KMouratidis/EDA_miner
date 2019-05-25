@@ -24,6 +24,11 @@ documented_funcs_classes = 0
 for folder, folders, files in os.walk("../EDA_miner/"):
     for file in files:
 
+        if any(x in file for x in ["reportapp", "printable_layout",
+                                   "config.py", "config.txt", "users_mgt",
+                                   "users.db", "coverage", "cache"]):
+            continue
+
         if not file.endswith(".py"):
             continue
         
@@ -46,7 +51,7 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
         for i, line in enumerate(rd):
             # If func/class and not private
             if ("def " in line or "class " in line) and not (line.strip().startswith("def _") or line.strip().startswith("class _") or line.strip().startswith("#")) and not doc:
-                total_funcs_classes += 1; print("LINE: ", line)
+                total_funcs_classes += 1
 
             if '"""' in line:
                 doc = not doc
@@ -58,7 +63,7 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
                     if "def " not in rd[correct_line] and "class " not in rd[correct_line]:
                         while not ("def " in rd[correct_line] or "class " in rd[correct_line]):
                             correct_line -= 1
-                    documented_funcs_classes += 1 ; print("DOCUMENTED: ",line)
+                    documented_funcs_classes += 1
                                                     
                     if correct_line < i - 1:
                         line = " ".join(rd[j].strip() for j in range(correct_line, i))
@@ -185,7 +190,12 @@ for folder, folders, files in os.walk("../EDA_miner/"):
     else:
         short_folder = folder[3:]
 
-    children = [file for file in files if file.endswith(".py")]
+    children = [
+        file for file in files if file.endswith(".py") and (
+            not any(x in file for x in ["reportapp", "printable_layout",
+                                        "config.py", "config.txt", "users_mgt",
+                                        "users.db", "coverage", "cache"])
+    )]
 
     if not len(children):
         continue

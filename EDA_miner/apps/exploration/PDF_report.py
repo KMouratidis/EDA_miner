@@ -35,7 +35,16 @@ import dash_daq as daq
 Sidebar = []
 
 
-def PDF_report_options(options, results):
+def PDF_report_options(options=None):
+    """
+    Generate the layout of the PDF generator.
+
+    Optional Args:
+        options (list(dict)): Not relevant; here only for API compatibility.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     return html.Div([
 

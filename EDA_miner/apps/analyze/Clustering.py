@@ -1,5 +1,19 @@
 """
-    TBW...
+This module defines the interface for fitting simple classification models.
+
+Global Variables:
+    - Clustering_Options: Generate the layout of the dashboard.
+
+Dash callbacks:
+    - render_variable_choices_clustering: Create a menu of dcc components \
+                                          for the user to choose fitting \
+                                          options.
+    - fit_clustering_model: Take user choices and, if all are present, fit \
+                            the appropriate model.
+
+Notes to others:
+    Feel free to experiment as much as you like here, although you probably \
+    want to write code elsewhere.
 """
 
 from dash.dependencies import Input, Output, State
@@ -17,7 +31,16 @@ import plotly.graph_objs as go
 import numpy as np
 
 
-def Clustering_Options(options, results):
+def Clustering_Options(options):
+    """
+    Generate the layout of the dashboard.
+
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     return html.Div(children=[
         # Choose a dataset
@@ -59,8 +82,7 @@ def Clustering_Options(options, results):
 def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
                                        user_id):
     """
-    Create a menu of dcc components to select dataset, variables,
-    and training options.
+    Create a menu of dcc components for the user to choose fitting options.
 
     Args:
         dataset_choice (str): Name of dataset.

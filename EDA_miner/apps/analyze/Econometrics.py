@@ -8,7 +8,8 @@ Dash callbacks:
     - render_variable_choices_econometrics: Create a menu of dcc components \
                                             for the user to choose fitting \
                                             options.
-    - fit_econometrics_model: Fits any models defined.
+    - fit_econometrics_model: Take user choices and, if all are present, fit \
+                              the appropriate model.
 
 Notes to others:
     Not implemented yet. Feel free to experiment as much as you like here. \
@@ -25,8 +26,17 @@ from utils import create_dropdown, get_data
 
 
 
-def Econometrics_Options(options, results):
+def Econometrics_Options(options):
+    """
+    Generate the layout of the dashboard.
 
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
+    
     return html.Div(children=[
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,
@@ -57,8 +67,7 @@ def render_variable_choices_econometrics(dataset_choice,
                                          algo_choice_econometrics,
                                          user_id):
     """
-    Create a menu of dcc components to select dataset, variables,
-    and training options.
+    Create a menu of dcc components for the user to choose fitting options.
 
     Args:
         dataset_choice (str): Name of dataset.

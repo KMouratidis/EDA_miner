@@ -67,6 +67,9 @@ def tab_subpages(tab, user_id):
 
     # TODO: This check for data existence might be slow.
     #       It would be good to test/review and improve it.
+    #       ** Update: Removed the `results` from downstream
+    #       view since it wasn't being used. Consider just
+    #       reworking `get_available_choices`.
     options, results = get_available_choices(r, user_id)
     if all(v is None for k,v in results.items()):
         return [html.H4("No data currently uploaded")]
@@ -74,22 +77,22 @@ def tab_subpages(tab, user_id):
     # each view should handle on its own how changing
     # the dataset is handled
     if tab == 'exploration':
-        return Exploration_Options(options, results)
+        return Exploration_Options(options)
 
     elif tab == 'kpi':
-        return KPI_Options(options, results)
+        return KPI_Options(options)
 
     elif tab == "graphs3d":
-        return Exploration3D_Options(options, results)
+        return Exploration3D_Options(options)
 
     elif tab == "networks":
-        return Network_Options(options, results)
+        return Network_Options(options)
 
     elif tab == "textviz":
-        return TextViz_Options(options, results)
+        return TextViz_Options()
 
     elif tab == "pdf_report":
-        return PDF_report_options(options, results)
+        return PDF_report_options()
 
     else:
         # In case someone messes with the underlying HTML/JS

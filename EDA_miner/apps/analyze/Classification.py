@@ -1,14 +1,15 @@
 """
 This module defines the interface for fitting simple classification models.
 
-Functions:
+Global Variables:
     - Classification_Options: Generate the layout of the dashboard.
 
 Dash callbacks:
     - render_variable_choices_classification: Create a menu of dcc components \
                                               for the user to choose fitting \
                                               options.
-    - fit_classification_model: Fits any pipelines defined.
+    - fit_classification_model: Take user choices and, if all are present, fit \
+                                the appropriate model.
 
 Notes to others:
     Feel free to experiment as much as you like here, although you probably \
@@ -30,7 +31,16 @@ import numpy as np
 import pandas as pd
 
 
-def Classification_Options(options, results):
+def Classification_Options(options):
+    """
+    Generate the layout of the dashboard.
+
+    Args:
+        options (list(dict)): Available datasets as options for `dcc.Dropdown`.
+
+    Returns:
+        A Dash element or list of elements.
+    """
 
     return html.Div(children=[
         # Choose a dataset
@@ -63,8 +73,7 @@ def Classification_Options(options, results):
 def render_variable_choices_classification(dataset_choice,
                                            algo_choice_classification, user_id):
     """
-    Create a menu of dcc components to select dataset, variables,
-    and training options.
+    Create a menu of dcc components for the user to choose fitting options.
 
     Args:
         dataset_choice (str): Name of dataset.
