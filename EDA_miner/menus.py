@@ -46,7 +46,9 @@ static_dir = os.path.dirname(__file__)
 
 SideBar = [
 
-    html.Img(id="app_logo", src=encode_image(os.path.join(static_dir, "assets/images/y2d.png"))),
+    html.Img(id="app_logo",
+             src=encode_image(os.path.join(static_dir, "assets/images/y2d.png"))),
+
     html.Br(),
 
     html.Button('Dark/Light theme', id="dark_theme"),
@@ -172,7 +174,7 @@ def serve_layout():
                      id="sidebar2",
                      style={"display": "inline-block"}),
 
-        ], className="row")
+        ], className="row", id="main_content")
 
 
     ], className="container",

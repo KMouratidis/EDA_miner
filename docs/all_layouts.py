@@ -1031,6 +1031,17 @@ html.Div([
 	html.P("""An input node used for working on Twitter data."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
+html.Br(), html.H3("""FeatureMaker(BaseEstimator, TransformerMixin):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""A node that helps the user create combinations and transformations of features by selecting columns from the input dataset and writing     a mathematical function as text, using whatever is available to sympy."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.H3("""func_name:"""),
+	html.H3("""cols:"""),
+	html.H3("""dataset_choice:"""),
+	html.H3("""user_id:"""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
 ])
 
 

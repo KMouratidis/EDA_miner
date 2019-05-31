@@ -19,11 +19,10 @@ import dill
 import pickle
 import sympy
 import numpy as np
-import pandas as pd
 from textblob import TextBlob
-from flask_login import current_user
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
+from sklearn.base import RegressorMixin
 from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.linear_model import Ridge, Lasso
@@ -157,6 +156,18 @@ global_scope = {"sympy": sympy, "__builtins__": None}
 
 
 class FeatureMaker(BaseEstimator, TransformerMixin):
+    """
+    A node that helps the user create combinations and transformations \
+    of features by selecting columns from the input dataset and writing \
+    a mathematical function as text, using whatever is available to sympy.
+
+    Args:
+        func_name:
+        cols:
+        dataset_choice:
+        user_id:
+    """
+
     modifiable_params = {}
 
     def __init__(self, func_name="", cols=None, dataset_choice=None,
@@ -202,7 +213,7 @@ class FeatureMaker(BaseEstimator, TransformerMixin):
 
 
 # TODO: do an actual implementation
-class SentimentAnalyzer(UnsupervisedLearner):
+class SentimentAnalyzer(BaseEstimator, RegressorMixin):
     def predict(self, X):
         if isinstance(X, np.ndarray):
             return np.array([TextBlob(x[0]).polarity for x in X])

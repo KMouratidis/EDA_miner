@@ -1,6 +1,13 @@
 #app_logo {
+    margin-top: 10px;
     max-width: 185px;
     display: block;
+}
+
+/*#selected_subpage, #selected_subpage>div*/
+.app0, #react-entry-point, #react-entry-point>div, #_dash-app-content,
+#_dash-app-content>div, #main_content, #main_page {
+    height: 100% !important;
 }
 
 button {
@@ -12,26 +19,38 @@ button {
 
 li {
     padding-left: 30px;
-    color: #000;
+    color: #FFF;
 }
 
 li>a {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
-    color: #000;
+    color: #FFF;
     text-decoration: none;
     max-width: 140px;
+
     /* list-style-type: disc; */
 }
 
 #sidebar, #sidebar2 {
-    max-width: 185px;
-    min-width: 185px;
+    max-width: 230px;
+    min-width: 230px;
+    height: auto !important;
 }
 
-#sidebar, #sidebar2, #main_page, #mainmenu {
-    padding-top: 10px;
+/*.tab, #high_level_tabs-parent, body, #sidebar2*/
+ #sidebar {
+    background-color: #4a72c4 !important;
 }
+
+#model-content, #visuals-content, #data-content {
+    height: auto !important;
+    background-color: white;
+}
+
+/*#sidebar, #sidebar2, #main_page, #mainmenu {*/
+/*    padding-top: 10px;*/
+/*}*/
 
 
 @media only screen and (max-width: 3050px) {
@@ -54,9 +73,16 @@ li>a {
 }
 
 #sidebar {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
+    margin-left: 0 !important;
+    /*margin-right: 10px !important;*/
+    padding-left: 10px !important;
+    /*padding-right: 10px !important;*/
+}
+
+
+#sidebar>* {
     margin-left: 10px !important;
-    margin-right: 10px !important;
 }
 
 #dark_theme, #external_links_caret {

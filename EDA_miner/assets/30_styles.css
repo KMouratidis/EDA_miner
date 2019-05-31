@@ -1,12 +1,20 @@
 /* (UN)COMMENT IF YOU NEED TO DEBUG LAYOUT */
+/*.row {*/
+/*    outline: 1px dashed black;*/
+/*}*/
+
+/*.js-plotly-plot, .plot-container, #cytoscape-graph {*/
+/*    outline: 2px dashed black !important;*/
+/*}*/
+/* (UN)COMMENT IF YOU NEED TO DEBUG LAYOUT */
+
 .row {
-    outline: 1px dashed black;
     margin-left: 0;
     margin-right: 0;
 }
 
-.js-plotly-plot, .plot-container, #cytoscape-graph {
-    outline: 2px dashed black !important;
+#printablePDF {
+    outline: 1px solid black;
 }
 
 #report_img {
@@ -53,6 +61,10 @@
 
 #button_collapse>span {
     color: #000;
+}
+
+#button_collapse, #dark_theme {
+    background-color: white;
 }
 
 .mb-3.dropdown {
