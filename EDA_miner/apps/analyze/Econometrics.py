@@ -36,7 +36,7 @@ def Econometrics_Options(options):
     Returns:
         A Dash element or list of elements.
     """
-    
+
     return html.Div(children=[
         # Choose a dataset
         html.Div(create_dropdown("Available datasets", options,

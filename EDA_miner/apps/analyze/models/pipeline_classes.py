@@ -50,7 +50,13 @@ from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 class BaseInput(BaseEstimator, TransformerMixin):
     """
-    Base class for ALL input nodes.
+    Base class for ALL input nodes. Important for pipeline creation. \
+    If you define your own input class you MUST subclass this at least \
+    indirectly. For now, use GenericInput if you are dealing with files \
+    or dataframes, else use directly.
+
+    This may become an abstract base class, or it may be discarded in \
+    favor of GenericInput.
     """
     pass
 
@@ -62,16 +68,16 @@ class GenericInput(BaseInput):
     modifiable_params = {}
 
 
+# TODO: This might be necessary, review carefully.
 class TerminalNode(BaseEstimator):
     modifiable_params = {}
 
 
-class UnsupervisedLearner(TerminalNode):
-    def fit(self, X, y=None):
-        return self
-
-
 class InputFile(GenericInput):
+    """
+    An input node used for selecting a user-uploaded dataset.
+    """
+
     modifiable_params = {}
 
     def __init__(self, dataset=None):
@@ -87,9 +93,12 @@ class InputFile(GenericInput):
 # TODO: I changed my mind. This implementation SUCKS HARD.
 #       Rework the whole Twitter dataset idea by getting
 #       the data in the Data View tab and treat Twitter
-#       as regular datasets.
-# Does not subclass GenericInput !
+#       as regular datasets. Should not subclass GenericInput !
 class TwitterAPI(GenericInput):
+    """
+    An input node used for working on Twitter data.
+    """
+
     modifiable_params = {}
 
     def __init__(self, dataset=None):
@@ -109,6 +118,7 @@ class TwitterAPI(GenericInput):
                         dtype=object).reshape((-1, 1))
 
 
+# TODO: Actually implement this.
 class DataCleaner(BaseEstimator, TransformerMixin):
     modifiable_params = {}
 
@@ -119,6 +129,7 @@ class DataCleaner(BaseEstimator, TransformerMixin):
         return X
 
 
+# TODO: Actually implement this, OR delete.
 class DataImputer(BaseEstimator, TransformerMixin):
     modifiable_params = {}
 
@@ -129,6 +140,7 @@ class DataImputer(BaseEstimator, TransformerMixin):
         return X
 
 
+# Template for creating your own node classes
 class CustomClassifier(BaseEstimator, ClassifierMixin):
     modifiable_params = {}
 

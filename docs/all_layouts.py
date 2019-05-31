@@ -1011,12 +1011,24 @@ html.Br(), html.Div([
 
 html.Br(), html.H3("""BaseInput(BaseEstimator, TransformerMixin):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
-	html.P("""Base class for ALL input nodes."""),
+	html.P("""Base class for ALL input nodes. Important for pipeline creation. If you define your own input class you MUST subclass this at least indirectly. For now, use GenericInput if you are dealing with files     or dataframes, else use directly."""),
+	html.P(""""""),
+	html.P("""This may become an abstract base class, or it may be discarded in     favor of GenericInput."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 html.Br(), html.H3("""GenericInput(BaseInput):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
 html.Div([
 	html.P("""Base class for dataset/file loaders."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""InputFile(GenericInput):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""An input node used for selecting a user-uploaded dataset."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""TwitterAPI(GenericInput):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""An input node used for working on Twitter data."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])
@@ -1060,6 +1072,17 @@ html.Div([
 	html.P(""""""),
 	html.H3("""Returns:"""),
 	html.P("""The node of type `GOAL`, if found, else `None`."""),
+], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
+
+html.Br(), html.H3("""find_input_node(elems):""", style={"backgroundColor": "#AAA", "display": "inline"}), 
+html.Div([
+	html.P("""Find the input node of a pipeline containing a FeatureMaker. This is currently only used for FeatureMaker and will probably be changed later     on. Use `find_pipeline_node(node_class)(pipe)` for other use-cases."""),
+	html.P(""""""),
+	html.H3("""Args:"""),
+	html.P("""elems (list(dict)): Cytoscape elements."""),
+	html.P(""""""),
+	html.H3("""Returns:"""),
+	html.P("""pipeline_classes.BaseInput: The input node of the pipeline."""),
 ], style={"marginLeft": "20px", "backgroundColor": "#CCE"}),
 
 ])

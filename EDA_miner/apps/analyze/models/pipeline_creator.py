@@ -131,11 +131,27 @@ def find_pipeline_node(GOAL):
 
 
 def find_input_node(elems):
+    """
+    Find the input node of a pipeline containing a FeatureMaker. This is \
+    currently only used for FeatureMaker and will probably be changed later \
+    on. Use `find_pipeline_node(node_class)(pipe)` for other use-cases.
+
+    Args:
+        elems (list(dict)): Cytoscape elements.
+
+    Returns:
+        pipeline_classes.BaseInput: The input node of the pipeline.
+    """
+
+    # TODO: Review this selection; why select "parent" elements and
+    #       discard other nodes?!
     elements = [elem for elem in elems if (("source" in elem["data"]) or
                                            ("parent" in elem["data"]))]
 
+    # Create a graph from the given elements
     pipelines, _ = create_pipelines(elements, graph_structures.node_options)
 
+    # Loop over all pipelines to find the one containing a FeatureMaker
     current_pipeline = None
     for pipe in pipelines:
         feature_node = find_pipeline_node(
@@ -146,6 +162,7 @@ def find_input_node(elems):
             current_pipeline = pipe
             break
 
+    # Find the input node of the selected pipeline.
     return find_pipeline_node(
         pipeline_classes.BaseInput
     )(current_pipeline)
