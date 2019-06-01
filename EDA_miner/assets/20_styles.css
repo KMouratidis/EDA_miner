@@ -1,12 +1,6 @@
-#app_logo {
-    margin-top: 10px;
-    max-width: 185px;
-    display: block;
-}
-
 /*#selected_subpage, #selected_subpage>div*/
 .app0, #react-entry-point, #react-entry-point>div, #_dash-app-content,
-#_dash-app-content>div, #main_content, #main_page {
+#_dash-app-content>div, #main_content, #main_page, #selected_subpage>div {
     height: 100% !important;
 }
 
@@ -24,12 +18,17 @@ li {
 
 li>a {
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     color: #FFF;
     text-decoration: none;
     max-width: 140px;
-
+    font-weight: bold;
     /* list-style-type: disc; */
+}
+
+li>a:hover {
+    text-decoration: none;
+    color: #FFF;
 }
 
 #sidebar, #sidebar2 {
@@ -38,19 +37,20 @@ li>a {
     height: auto !important;
 }
 
-/*.tab, #high_level_tabs-parent, body, #sidebar2*/
- #sidebar {
-    background-color: #4a72c4 !important;
+#sidebar2 {
+    margin-right: 0;
+    padding-right: 0;
 }
 
 #model-content, #visuals-content, #data-content {
-    height: auto !important;
+    height: 100%;
     background-color: white;
 }
 
-/*#sidebar, #sidebar2, #main_page, #mainmenu {*/
-/*    padding-top: 10px;*/
-/*}*/
+#mainmenu {
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 
 @media only screen and (max-width: 3050px) {
@@ -67,23 +67,23 @@ li>a {
     }
 }
 
-
-#sidebar, #sidebar2 {
-    padding: 0px;
-}
-
 #sidebar {
-    /*margin-top: 10px;*/
-    margin-left: 0 !important;
-    /*margin-right: 10px !important;*/
+    background-color: #4a72c4 !important;
     padding-left: 10px !important;
-    /*padding-right: 10px !important;*/
 }
-
 
 #sidebar>* {
     margin-left: 10px !important;
 }
+
+#app_logo {
+    margin-top: 10px;
+    height: 150px;
+    width: 200px;
+    display: block;
+    margin-left: 0px !important;
+}
+
 
 #dark_theme, #external_links_caret {
     color: #000;
@@ -112,6 +112,8 @@ body {
 
 #visuals-content, #data-content, #model-content {
     padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 ._dash-undo-redo {

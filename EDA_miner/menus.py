@@ -35,6 +35,7 @@ from server import app
 from utils import encode_image, r
 
 import dash_table
+import visdcc
 
 import uuid
 import pandas as pd
@@ -51,7 +52,8 @@ SideBar = [
 
     html.Br(),
 
-    html.Button('Dark/Light theme', id="dark_theme"),
+    visdcc.Run_js(id='theme_javascript'),
+    html.Button('Dark/Light theme', id="dark_theme", n_clicks=0),
 
     # Collapsible button with external links
     html.Button([
@@ -116,6 +118,58 @@ SideBar2 = [
 ]
 
 
+@app.callback(Output("theme_javascript", "run"),
+              [Input("dark_theme", "n_clicks")])
+def toggle_colors(n_clicks):
+    """
+    Embeds a javascript function in a dash component to allow changing the theme.
+
+    Args:
+        n_clicks (int): Number of times the theme button was clicked.
+
+    Returns:
+        str: Ties the JS script to the button.
+    """
+
+    if n_clicks % 2:
+        change_color = "document.getElementsByTagName('body')[0].style.backgroundColor = 'black'"
+    else:
+        change_color = change_color = "document.getElementsByTagName('body')[0].style.backgroundColor = 'white'"
+
+    # https://stackoverflow.com/a/16239245/6655150
+    return """
+        function change_theme () { 
+        // the css we are going to inject
+        var css = 'html {-webkit-filter: invert(100%);' +
+            '-moz-filter: invert(100%);' + 
+            '-o-filter: invert(100%);' + 
+            '-ms-filter: invert(100%); }',
+
+        head = document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+
+        // a hack, so you can "invert back" clicking the bookmarklet again
+        if (!window.counter) { window.counter = 1;} else  { window.counter ++;
+        if (window.counter % 2 == 0) { var css ='html {-webkit-filter: invert(0%); -moz-filter:    invert(0%); -o-filter: invert(0%); -ms-filter: invert(0%); }'}
+         };
+
+        style.type = 'text/css';
+        if (style.styleSheet){
+        style.styleSheet.cssText = css;
+        } else {
+        style.appendChild(document.createTextNode(css));
+        }
+
+        //injecting the css to the head
+        head.appendChild(style);
+        }
+
+        let theme_button = document.getElementById("dark_theme");
+        theme_button.onclick = change_theme;
+        
+    """ + change_color
+
+
 # When the sidebar button is clicked, collapse the div
 @app.callback(Output('sidebar_collapsible_button', 'style'),
               [Input('button_collapse', 'n_clicks')],)
@@ -160,17 +214,17 @@ def serve_layout():
 
         html.Div([
             # Sidebar / menu
-            html.Div(children=SideBar, className="col-sm-2 ml-auto",
+            html.Div(children=SideBar, className="col-sm-2",
                      id="sidebar",
                      style={"display": "inline-block"}),
 
             # main Div
-            html.Div(children=MainMenu, className="col-sm-9 ml-auto",
+            html.Div(children=MainMenu, className="col-sm-9",
                      id="mainmenu",
                      style={"display": "inline-block"}),
 
             # Sidebar / menu
-            html.Div(children=SideBar2, className="col-sm-1 ml-auto",
+            html.Div(children=SideBar2, className="col-sm-1",
                      id="sidebar2",
                      style={"display": "inline-block"}),
 

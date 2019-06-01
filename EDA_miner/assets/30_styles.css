@@ -113,6 +113,9 @@
     margin-left: 10px;
 }
 
+#delete_options, #pipeline_options {
+    width: 185px;
+}
 
 .vertical_dropdowns {
     display: block;
