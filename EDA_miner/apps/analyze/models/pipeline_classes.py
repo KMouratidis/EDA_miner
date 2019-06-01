@@ -214,6 +214,8 @@ class FeatureMaker(BaseEstimator, TransformerMixin):
 
 # TODO: do an actual implementation
 class SentimentAnalyzer(BaseEstimator, RegressorMixin):
+    modifiable_params = {}
+
     def predict(self, X):
         if isinstance(X, np.ndarray):
             return np.array([TextBlob(x[0]).polarity for x in X])
