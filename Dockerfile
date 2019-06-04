@@ -10,20 +10,16 @@ RUN conda install python-graphviz
 
 # install Python modules needed by the Python app
 COPY requirements.txt /usr/src/app/
+# Uninstall sympy because updating it throws a distutils error
+RUN conda uninstall sympy
 RUN pip install -r /usr/src/app/requirements.txt
 
 # copy files required for the app to run
-COPY ./* /usr/src/app/
-COPY apps /usr/src/app/apps
-COPY assets /usr/src/app/assets
-COPY docs /usr/src/app/docs
-COPY images /usr/src/app/images
-COPY static /usr/src/app/static
-
+COPY ./ /usr/src/app/
 
 # tell the port number the container should expose
 EXPOSE 8050
 
 # run the application
-WORKDIR /usr/src/app 
+WORKDIR /usr/src/app/EDA_miner
 CMD ["python", "app.py"]

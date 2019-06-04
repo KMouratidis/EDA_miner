@@ -12,8 +12,10 @@ warnings.filterwarnings("ignore")
 
 class TestTabs:
 
+    # Open a selenium webdriver and click over each tab
     def test_clicking(self):
         cmd = "cd ../EDA_miner && python app.py"
+        # Thanks: https://stackoverflow.com/a/4791612/6655150
         pro = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                shell=True, preexec_fn=os.setsid)
 
@@ -29,9 +31,6 @@ class TestTabs:
         chrome.get("http://127.0.0.1:8050")
         time.sleep(2)
 
-        # Login, if it exists
-        chrome.find_element_by_id("submit_login_choice").click()
-        time.sleep(2)
 
         # Get and iterate over the high-level and low-level tabs
         high_level_tab_menu = chrome.find_element_by_id("high_level_tabs")
@@ -48,8 +47,8 @@ class TestTabs:
                 llt.click()
                 time.sleep(1)
 
-        # re-run after checking the last element, because that
-        # might have broken the page
+        # re-run after checking the last element,
+        # because that might have broken the page
         llt.click()
         time.sleep(1)
 
