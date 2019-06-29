@@ -32,3 +32,4 @@ sympy==1.2
 pygraphviz==1.5
 pytest-cov==2.7.1
 selenium==3.141.0
+tableschema==1.5.4

@@ -19,7 +19,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from server import app
-from apps.data import Upload_Options, View_Options, API_Options
+from apps.data import Upload_Options, View_Options, API_Options, Schema_Options
 
 
 
@@ -32,6 +32,8 @@ layout = html.Div(children=[
                     id="api_data"),
             dcc.Tab(label='View Data', value='view_data',
                     id="view_data"),
+            dcc.Tab(label="Edit data schema", value="edit_schema",
+                    id="edit_schema")
         ]),
     ]),
     html.Div(id="data-content"),
@@ -65,3 +67,6 @@ def tab_subpages(tab, user_id):
     elif tab == "api_data":
         # TODO: This might need change when the login is implemented
         return API_Options
+
+    elif tab == "edit_schema":
+        return Schema_Options(user_id)

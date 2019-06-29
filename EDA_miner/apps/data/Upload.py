@@ -58,6 +58,7 @@ def parse_uploads(list_of_contents, list_of_names,
     """
 
 
+    # TODO: Handle initial schema here
     if list_of_contents is not None:
         response = [parse_contents(c, n, d, user_id) for c, n, d
                     in zip(list_of_contents, list_of_names, list_of_dates)]

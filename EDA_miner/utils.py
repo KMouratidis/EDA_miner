@@ -114,7 +114,7 @@ def create_dropdown(name, options, **kwargs):
         )]
 
 
-def create_table(df, table_id="table"):
+def create_table(df, table_id="table", columns=None):
     """
     Creates a `dash_table.DataTable` given a `pandas.DataFrame`.
 
@@ -122,14 +122,18 @@ def create_table(df, table_id="table"):
         df (`pandas.DataFrame`): the data.
         table_id (str, optional): id of the table element for usage \
                                   with dash callbacks.
+        columns (list(dict)): the column data passed to the data table.
 
     Returns:
         A `dash_table.DataTable` with pagination.
     """
 
+    if columns is None:
+        columns = [{"name": i, "id": i} for i in df.columns]
+
     return dash_table.DataTable(
         id=table_id,
-        columns=[{"name": i, "id": i} for i in df.columns],
+        columns=columns,
         data=df.to_dict("rows"),
         style_table={
             'maxHeight': '400',

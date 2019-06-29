@@ -142,10 +142,6 @@ def render_table(api_choice, user_id):
         list: A list of dash components.
     """
 
-    if user_id == "<registered_user>":
-        # if the user is a registered user, override their
-        # name for use within this function
-        user_id = current_user.username
 
     if api_choice is None:
         return [html.H4("Nothing selected.")]

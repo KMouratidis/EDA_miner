@@ -11,3 +11,4 @@ Some suggestions on what could be done:
 from apps.data.Upload import Upload_Options
 from apps.data.View import View_Options
 from apps.data.APIs import API_Options
+from apps.data.Schemata import Schema_Options

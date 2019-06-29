@@ -50,9 +50,9 @@ class TestGetData:
         index = [f"col_{x}" for x in range(dim[0])]
         df = pd.DataFrame(np.random.random(dim), columns=columns, index=index)
 
-        # Send values to Redis
-        self.r.set("userid_user_data_random", df.to_msgpack())
-        self.r.set("userid_gsheets_api_data", pickle.dumps(df))
+        # Send values to Redis and assert if they were received
+        assert self.r.set("userid_user_data_random", df.to_msgpack()) is True
+        assert self.r.set("userid_gsheets_api_data", pickle.dumps(df)) is True
 
         # test msgpack
         np.testing.assert_array_equal(df, get_data("user_data_random", "userid"))
