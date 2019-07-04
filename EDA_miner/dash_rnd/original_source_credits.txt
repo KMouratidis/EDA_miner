@@ -1,0 +1,1 @@
+Credits for the react component: https://github.com/bokuweb/react-rnd

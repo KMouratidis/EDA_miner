@@ -1,11 +1,11 @@
 matplotlib==2.2.3
 numpy==1.16.2
 pandas==0.23.4
-dash_table==3.6.0
 redis==2.10.6
-dash_html_components==0.15.0
-dash_core_components==0.46.0
-dash==0.41.0
+dash==1.0.0
+dash_table==4.0.0
+dash_html_components==1.0.0
+dash_core_components==1.0.0
 dash_callback_chain==0.0.2
 plotly==3.7.1
 scikit_learn==0.20.3

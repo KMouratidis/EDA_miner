@@ -13,3 +13,4 @@ from apps.exploration.Networks import Network_Options
 from apps.exploration.KPIs import KPI_Options
 from apps.exploration.PDF_report import PDF_report_options
 from apps.exploration.TextVisualizations import TextViz_Options
+from apps.exploration.DashboardMaker import Dashboard_Options

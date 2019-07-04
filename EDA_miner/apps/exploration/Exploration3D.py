@@ -27,6 +27,7 @@ Notes to others:
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 from server import app
 import layouts
@@ -132,6 +133,9 @@ def plot_graph_3d(xvars, yvars, zvars, user_id, dataset_choice_3d):
     Returns:
         dict: A dictionary holding a plotly figure including layout.
     """
+
+    if any(x is None for x in [xvars, yvars, zvars]):
+        raise PreventUpdate()
 
 
     df = get_data(dataset_choice_3d, user_id)

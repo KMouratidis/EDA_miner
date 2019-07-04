@@ -131,48 +131,52 @@ def create_table(df, table_id="table", columns=None):
     if columns is None:
         columns = [{"name": i, "id": i} for i in df.columns]
 
-    return dash_table.DataTable(
-        id=table_id,
-        columns=columns,
-        data=df.to_dict("rows"),
-        style_table={
-            'maxHeight': '400',
-            'overflowY': 'scroll'
-        },
-        sorting=True,
-        editable=True,
-        pagination_mode='fe',
-        pagination_settings={
-            "displayed_pages": 1,
-            "current_page": 0,
-            "page_size": 10,
-        },
-        navigation="page",
-        # n_fixed_rows=1,
-        style_cell={
-            'width': '150px',
-            'overflow': 'hidden',
-            'textOverflow': 'ellipsis',
-            'maxWidth': 0,
-            'paddingLeft': '15px',
-            # 'paddingRight': '15px',
-        },
-        style_cell_conditional=[
-            {
-                'if': {'row_index': 'odd'},
-                'backgroundColor': 'rgb(218, 218, 218)'
+    return html.Div([
+        dash_table.DataTable(
+            id=table_id,
+            columns=columns,
+            data=df.to_dict("rows"),
+            style_table={
+                'maxHeight': '450px',
             },
-            {
-                'if': {'row_index': 'even'},
-                'backgroundColor': 'rgb(248, 248, 248)'
+            sort_action="native",
+            sort_mode='multi',
+            editable=True,
+            page_action='native',
+            page_current=0,
+            page_size=10,
+            # n_fixed_rows=1,
+            style_cell={
+                'minWidth': '100px',
+                # 'maxWidth': '500px',
+                # 'overflow': 'hidden',
+                # 'textOverflow': 'ellipsis',
+                'paddingLeft': '15px',
+                "textAlign": "left",
+                # 'paddingRight': '15px',
             },
-        ],
-        style_header={
-            'backgroundColor': 'rgb(30, 30, 30)',
-            'color': 'rgb(230,230,230)',
-            "fontWeight": "bold",
-        },
-    )
+            style_data_conditional=[
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': 'rgb(218, 218, 218)'
+                },
+                {
+                    'if': {'row_index': 'even'},
+                    'backgroundColor': 'rgb(248, 248, 248)'
+                },
+            ],
+            style_header={
+                'backgroundColor': 'rgb(30, 30, 30)',
+                'color': 'rgb(230,230,230)',
+                "fontWeight": "bold",
+                "textAlign": "left",
+                "paddingLeft": "5px"
+            },
+        )
+    ], style={
+        "overflowX": "auto",
+        "overflowY": "hidden",
+    })
 
 
 def encode_image(image_path):
@@ -210,7 +214,7 @@ def get_data(api_choice, user_id):
 
     # uploaded data
     elif api_choice.startswith("user_data"):
-        df = pd.read_msgpack(r.get(f"{user_id}_{api_choice}"))
+        df = pickle.loads(r.get(f"{user_id}_{api_choice}"))
 
     elif api_choice.startswith("quandl_api"):
         df = pickle.loads(r.get(f"{user_id}_{api_choice}"))
@@ -294,7 +298,7 @@ def parse_contents(contents, filename, date, user_id):
 
     name = os.path.splitext(filename)[0]
     # Store to redis for caching
-    r.set(f"{user_id}_user_data_{name}", df.to_msgpack(compress='zlib'))
+    r.set(f"{user_id}_user_data_{name}", pickle.dumps(df))
 
     return html.Div([
         "Data uploaded successfully."

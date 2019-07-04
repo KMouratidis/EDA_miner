@@ -40,12 +40,16 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
 
 
-# All custom classes should subclass these ones.
-# This is done for checks down the line that
-# determine properties of nodes of the Graph
-# which in turn is useful for selecting dataset
-# and being able to create custom features or
-# handle outputs
+"""######## Custom classes ######## 
+
+All custom classes should subclass these ones.
+This is done for checks down the line that
+determine properties of nodes of the Graph
+which in turn is useful for selecting dataset
+and being able to create custom features or
+handle outputs
+"""
+
 
 class BaseInput(BaseEstimator, TransformerMixin):
     """
@@ -223,69 +227,19 @@ class SentimentAnalyzer(BaseEstimator, RegressorMixin):
             return np.array([TextBlob(x).polarity for x in X])
 
 
-# For EVERY model that is expected to have parametrization
-# you are expected to give its class a `modifiable_params`
-# dict with keys being the function argument and values the
-# allowed set of values (make it limited, i.e. few choices)
-# Also, the first is assumed to be the default value which
-# will be passed to the model upon the creation of pipelines.
+"""######## Prebuilt classes ########
 
-LinearRegression.modifiable_params = {
-    "fit_intercept": [True, False],
-}
+For EVERY model that is expected to have parametrization
+you are expected to give its class a `modifiable_params`
+dict with keys being the function argument and values the
+allowed set of values (make it limited, i.e. few choices)
+Also, the first is assumed to be the default value which
+will be passed to the model upon the creation of pipelines.
+And of course it must have `fit` and transform methods.
+"""
 
-LogisticRegression.modifiable_params = {
-    "penalty": ["l2", "l1"],
-    "fit_intercept": [True, False],
-    "C": [1, 0.1, 0.2, 0.5, 2, 5, 10],
-    "multi_class": ["ovr", "multinomial", "auto"],
-}
 
-Ridge.modifiable_params = {
-    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
-    "fit_intercept": [True, False],
-}
-
-Lasso.modifiable_params = {
-    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
-    "fit_intercept": [True, False],
-}
-
-SVR.modifiable_params = {
-    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
-    "kernel": ["rbf", "poly", "linear"],
-    "degree": [3, 1, 2, 5, 7, 10],
-    "C": [1, 0.1, 0.2, 0.5, 2, 5, 10],
-}
-
-DecisionTreeRegressor.modifiable_params = {
-    "max_depth": [None, 3, 5, 7, 9, 12],
-}
-
-DummyClassifier.modifiable_params = {
-    "strategy": ["stratified", "most_frequent", "prior", "uniform"],
-}
-
-DummyRegressor.modifiable_params = {
-    "strategy": ["mean", "median"],
-}
-
-KMeans.modifiable_params = {
-    "n_clusters": [8, 2, 3, 4, 5, 6, 7, 9, 10, 15, 20],
-}
-
-DBSCAN.modifiable_params = {
-    "eps": [0.5, 0.01, 0.05, 0.1, 0.2, 1, 2, 5],
-}
-
-Birch.modifiable_params = {
-    "threshold": [0.5, 0.1, 0.2, 0.75, 0.95],
-}
-
-AgglomerativeClustering.modifiable_params = {
-    "n_clusters": [2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20],
-    "linkage": ["ward", "complete", "average", "single"]
-}
+"""######## Transformers ######## """
 
 StandardScaler.modifiable_params = {
     "with_mean": [True, False],
@@ -295,26 +249,6 @@ StandardScaler.modifiable_params = {
 MinMaxScaler.modifiable_params = {}
 
 LabelBinarizer.modifiable_params = {}
-
-KNeighborsRegressor.modifiable_params = {
-    "n_neighbors": [5, 3, 7, 9]
-}
-
-KNeighborsClassifier.modifiable_params = {
-    "n_neighbors": [5, 3, 7, 9]
-}
-
-BernoulliNB.modifiable_params = {
-    "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
-}
-
-XGBClassifier.modifiable_params = {}
-
-GaussianNB.modifiable_params = {}
-
-MultinomialNB.modifiable_params = {
-    "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
-}
 
 SimpleImputer.modifiable_params = {
     "strategy": ["most_frequent", "mean", "median"]
@@ -351,14 +285,100 @@ TruncatedSVD.modifiable_params = {
     "n_components": [2, None, 3, 5, 10, 20, 50, 100, 300],
 }
 
+
+"""######## Regression ######## """
+
+LinearRegression.modifiable_params = {
+    "fit_intercept": [True, False],
+}
+
+Ridge.modifiable_params = {
+    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
+    "fit_intercept": [True, False],
+}
+
+Lasso.modifiable_params = {
+    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
+    "fit_intercept": [True, False],
+}
+
+SVR.modifiable_params = {
+    "alpha": [1, 0.1, 0.2, 0.5, 2, 5, 10],
+    "kernel": ["rbf", "poly", "linear"],
+    "degree": [3, 1, 2, 5, 7, 10],
+    "C": [1, 0.1, 0.2, 0.5, 2, 5, 10],
+}
+
+DecisionTreeRegressor.modifiable_params = {
+    "max_depth": [None, 3, 5, 7, 9, 12],
+}
+
+DummyRegressor.modifiable_params = {
+    "strategy": ["mean", "median"],
+}
+
+KNeighborsRegressor.modifiable_params = {
+    "n_neighbors": [5, 3, 7, 9]
+}
+
 RandomForestRegressor.modifiable_params = {
     "n_estimators": [10, 20, 50, 100, 200, 500],
     "max_depth": [None, 3, 5, 7, 9, 12, 15],
     "max_features": ["auto", 0.1, 0.2, 0.5, 0.7, 0.9, 1]
 }
 
+
+"""######## Classification ######## """
+
+LogisticRegression.modifiable_params = {
+    "penalty": ["l2", "l1"],
+    "fit_intercept": [True, False],
+    "C": [1, 0.1, 0.2, 0.5, 2, 5, 10],
+    "multi_class": ["ovr", "multinomial", "auto"],
+}
+
+DummyClassifier.modifiable_params = {
+    "strategy": ["stratified", "most_frequent", "prior", "uniform"],
+}
+
+KNeighborsClassifier.modifiable_params = {
+    "n_neighbors": [5, 3, 7, 9]
+}
+
+XGBClassifier.modifiable_params = {}
+
 RandomForestClassifier.modifiable_params = {
     "n_estimators": [10, 20, 50, 100, 200, 500],
     "max_depth": [None, 3, 5, 7, 9, 12, 15],
     "max_features": ["auto", 0.1, 0.2, 0.5, 0.7, 0.9, 1]
+}
+
+
+"""######## Clustering ######## """
+
+KMeans.modifiable_params = {
+    "n_clusters": [8, 2, 3, 4, 5, 6, 7, 9, 10, 15, 20],
+}
+
+DBSCAN.modifiable_params = {
+    "eps": [0.5, 0.01, 0.05, 0.1, 0.2, 1, 2, 5],
+}
+
+Birch.modifiable_params = {
+    "threshold": [0.5, 0.1, 0.2, 0.75, 0.95],
+}
+
+AgglomerativeClustering.modifiable_params = {
+    "n_clusters": [2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20],
+    "linkage": ["ward", "complete", "average", "single"]
+}
+
+BernoulliNB.modifiable_params = {
+    "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
+}
+
+GaussianNB.modifiable_params = {}
+
+MultinomialNB.modifiable_params = {
+    "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
 }

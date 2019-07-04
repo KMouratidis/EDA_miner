@@ -27,8 +27,8 @@ server = app.server
 
 # Any other configurations for the Dash/Flask server go here
 app.config['suppress_callback_exceptions'] = True
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+# app.config["TEMPLATES_AUTO_RELOAD"] = True
+# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # This is what the rendered html will look like
 app.index_string = '''

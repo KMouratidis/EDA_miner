@@ -51,7 +51,7 @@ class TestGetData:
         df = pd.DataFrame(np.random.random(dim), columns=columns, index=index)
 
         # Send values to Redis and assert if they were received
-        assert self.r.set("userid_user_data_random", df.to_msgpack()) is True
+        assert self.r.set("userid_user_data_random", pickle.dumps(df)) is True
         assert self.r.set("userid_gsheets_api_data", pickle.dumps(df)) is True
 
         # test msgpack

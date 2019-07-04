@@ -1,7 +1,21 @@
 /*#selected_subpage, #selected_subpage>div*/
 .app0, #react-entry-point, #react-entry-point>div, #_dash-app-content,
-#_dash-app-content>div, #main_content, #main_page, #selected_subpage>div {
+#_dash-app-content>div, #main_content, #main_page, #selected_subpage>div
+#_dash-global-error-container, #_dash-global-error-container>div,
+#_dash-global-error-container>div>div>div,
+#_dash-global-error-container>div>div:nth-child(2)
+{
     height: 100% !important;
+}
+
+ /*For disabling the extra div on development mode*/
+._dash-loading-callback {
+    height: 0 !important;
+    display: none !important;
+}
+
+div .dash-debug-menu, .dash-debug-menu--closed {
+    height: 64px !important;
 }
 
 button {

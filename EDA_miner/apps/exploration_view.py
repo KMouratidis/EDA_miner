@@ -19,8 +19,8 @@ import dash_html_components as html
 
 from server import app
 from utils import r
-from apps.exploration import TextViz_Options, PDF_report_options
-from apps.exploration import Exploration_Options, KPI_Options
+from apps.exploration import TextViz_Options, PDF_report_options, KPI_Options
+from apps.exploration import Exploration_Options, Dashboard_Options
 from apps.exploration import Exploration3D_Options, Network_Options
 from apps.data.View import get_available_choices
 
@@ -41,6 +41,8 @@ layout = html.Div(children=[
                     id="textviz"),
             dcc.Tab(label='PDF report', value='pdf_report',
                     id="pdf_report"),
+            dcc.Tab(label='Dashboard Maker', value='dashboard',
+                    id="dashboard"),
         ]),
     ]),
 
@@ -93,6 +95,9 @@ def tab_subpages(tab, user_id):
 
     elif tab == "pdf_report":
         return PDF_report_options()
+
+    elif tab == "dashboard":
+        return Dashboard_Options
 
     else:
         # In case someone messes with the underlying HTML/JS

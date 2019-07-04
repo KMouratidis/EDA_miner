@@ -159,7 +159,11 @@ def fit_clustering_model(xvars, yvars, n_clusters, algo_choice_clustering,
     model.fit(df[xvars])
 
     # TODO: Find a meaningful way (metric) to notify the user of model score.
-    layout = [[html.H4(f"Clustering model scored: {model.score(df[xvars])}")]]
+    try:
+        layout = [[html.H4(f"Clustering model scored: {model.score(df[xvars])}")]]
+    except AttributeError:
+        # model without a score function
+        layout = [[html.H4(f"No score for this method.")]]
 
     labels = model.labels_
     # TODO: If Y is given, visualize the (in)correctly grouped points.
