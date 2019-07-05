@@ -17,6 +17,7 @@ praw==6.1.1
 dash_bootstrap_components==0.5.0
 quandl==3.4.2
 spotipy==2.4.4
+visdcc==0.0.40
 dash-daq==0.1.4
 dill==0.2.9
 dash-cytoscape==0.0.5
