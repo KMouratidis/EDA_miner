@@ -17,12 +17,16 @@ class TestAPIs:
 
     r = Redis(host="localhost", port=6379, db=0)
 
-    cred_path = "/home/kmourat/Desktop/EDA_miner_dev_files/twitter_cred.json"
-    with open(cred_path) as f:
-        creds = json.loads(f.read())
+    creds = {
+        "consumer_key": os.environ["twitter_consumer_key"],
+        "consumer_secret": os.environ["twitter_consumer_secret"],
+        "access_token_key": os.environ["twitter_access_token_key"],
+        "access_token_secret": os.environ["twitter_access_token_secret"],
+    }
 
     def test_twitter_connect(self):
         api = api_connectors.twitter_connect(**self.creds)
+
         assert api.VerifyCredentials().id_str is not None
 
     # Test if tweets are returned

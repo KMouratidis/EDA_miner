@@ -20,7 +20,7 @@
     "jquery": "^3.4.1",
     "ramda": "^0.25.0",
     "react": "16.4.1",
-    "react-dom": "16.4.1",
+    "react-dom": "16.4.2",
     "react-rnd": "8.0.1",
     "react-scripts": "1.1.4"
   },

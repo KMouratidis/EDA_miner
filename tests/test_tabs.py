@@ -22,10 +22,15 @@ class TestTabs:
         # Wait till the server boots up
         time.sleep(10)
 
+        chromedriver = os.environ["CHROMEDRIVER"]
+
         # Make sure the window is maximized and start a webdriver
         chrome_options = options.Options()
-        chrome_options .add_argument("--start-maximized")
-        chrome = webdriver.WebDriver("./chromedriver", options=chrome_options)
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--window-size=1420,1080')
+        chrome_options.add_argument('--no-sandbox')
+        chrome = webdriver.WebDriver(chromedriver, options=chrome_options)
 
         # Navigate to the page
         chrome.get("http://127.0.0.1:8050")
@@ -52,6 +57,10 @@ class TestTabs:
         llt.click()
         time.sleep(1)
 
+        # Close the webdriver
+        chrome.quit()
+
         # kill the server
         # TODO: Does this indeed kill the server?
         os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+
