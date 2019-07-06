@@ -38,6 +38,7 @@ import dash_table
 import visdcc
 
 import uuid
+import pickle
 import pandas as pd
 import os
 
@@ -205,7 +206,7 @@ def serve_layout():
         if file.endswith("csv"):
             df = pd.read_csv("../data/" + file)
             r.set(f"{session_id}_user_data_example_{file[:-4]}",
-                  df.to_msgpack(compress='zlib'))
+                  pickle.dumps(df))
 
     return html.Div(children=[
 

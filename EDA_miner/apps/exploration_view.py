@@ -19,9 +19,10 @@ import dash_html_components as html
 
 from server import app
 from utils import r
-from apps.exploration import TextViz_Options, PDF_report_options, KPI_Options
+from apps.exploration import TextViz_Options, PDF_report_options
 from apps.exploration import Exploration_Options, Dashboard_Options
 from apps.exploration import Exploration3D_Options, Network_Options
+from apps.exploration import KPI_Options, Map_Options
 from apps.data.View import get_available_choices
 
 
@@ -35,6 +36,8 @@ layout = html.Div(children=[
                     id="kpi"),
             dcc.Tab(label='3D graphs', value='graphs3d',
                     id="graphs3d"),
+            dcc.Tab(label='Maps & Geoplotting', value='maps',
+                    id="maps"),
             dcc.Tab(label='Network graphs', value='networks',
                     id="networks"),
             dcc.Tab(label='Text visualizations', value='textviz',
@@ -44,10 +47,12 @@ layout = html.Div(children=[
             dcc.Tab(label='Dashboard Maker', value='dashboard',
                     id="dashboard"),
         ]),
+
+        # Placeholder div for actual contents
+        html.Div(id="visuals-content"),
     ]),
 
-    # Placeholder div for actual contents
-    html.Div(id="visuals-content"),
+
 ])
 
 
@@ -86,6 +91,9 @@ def tab_subpages(tab, user_id):
 
     elif tab == "graphs3d":
         return Exploration3D_Options(options)
+
+    elif tab == "maps":
+        return Map_Options(options)
 
     elif tab == "networks":
         return Network_Options(options)

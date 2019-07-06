@@ -35,8 +35,9 @@ layout = html.Div(children=[
             dcc.Tab(label="Edit data schema", value="edit_schema",
                     id="edit_schema")
         ]),
+
+        html.Div(id="data-content"),
     ]),
-    html.Div(id="data-content"),
 ])
 
 

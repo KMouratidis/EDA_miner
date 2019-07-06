@@ -42,8 +42,9 @@ layout = html.Div(children=[
             dcc.Tab(label='Econometrics', value='econometrics',
                     id="econometrics"),
         ]),
+
+        html.Div(id="model-content"),
     ]),
-    html.Div(id="model-content"),
 ])
 
 

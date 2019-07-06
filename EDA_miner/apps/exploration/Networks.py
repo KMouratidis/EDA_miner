@@ -161,7 +161,7 @@ def plot_network(in_node, out_node, layout_choice, user_id,
 
     if any(x is None for x in [in_node, out_node, layout_choice,
                                dataset_choice_network]):
-        raise PreventUpdate
+        raise PreventUpdate()
 
     # This doesn't seem to be able to handle more than 100
     # https://github.com/cytoscape/cytoscape.js/issues/858
