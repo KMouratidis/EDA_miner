@@ -23,21 +23,24 @@ from textblob import TextBlob
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from sklearn.base import RegressorMixin
-from xgboost import XGBClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.linear_model import Ridge, Lasso
-from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.cluster import KMeans, DBSCAN, Birch, AgglomerativeClustering
-from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, DBSCAN, Birch, AgglomerativeClustering, MeanShift
 from sklearn.decomposition import PCA, NMF, TruncatedSVD
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_selection import SelectKBest
 from sklearn.impute import SimpleImputer, MissingIndicator
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import Ridge, Lasso, SGDRegressor, SGDClassifier
 from sklearn.naive_bayes import BernoulliNB, GaussianNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-from sklearn.preprocessing import MinMaxScaler, LabelBinarizer
+from sklearn.preprocessing import MinMaxScaler, LabelBinarizer, Binarizer
+from sklearn.preprocessing import StandardScaler, MaxAbsScaler, Normalizer
+from sklearn.preprocessing import OneHotEncoder, PolynomialFeatures
+from sklearn.svm import SVR, SVC, LinearSVC, LinearSVR, NuSVC, NuSVR
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.tree import ExtraTreeRegressor, ExtraTreeClassifier
+from xgboost import XGBClassifier
 
 
 """######## Custom classes ######## 
@@ -248,7 +251,26 @@ StandardScaler.modifiable_params = {
 
 MinMaxScaler.modifiable_params = {}
 
+MaxAbsScaler.modifiable_params = {}
+
 LabelBinarizer.modifiable_params = {}
+
+# TODO: Add threshold as numeric input
+Binarizer.modifiable_params = {}
+
+Normalizer.modifiable_params = {
+    "norm": ["l2", "l1", "max"]
+}
+
+OneHotEncoder.modifiable_params = {
+    "drop": ["first", None]
+}
+
+PolynomialFeatures.modifiable_params = {
+    "degree": [2, 3, 4, 5],
+    "interaction_only": [False, True],
+    "include_bias": [True, False]
+}
 
 SimpleImputer.modifiable_params = {
     "strategy": ["most_frequent", "mean", "median"]
@@ -313,6 +335,10 @@ DecisionTreeRegressor.modifiable_params = {
     "max_depth": [None, 3, 5, 7, 9, 12],
 }
 
+ExtraTreeRegressor.modifiable_params = {
+    "max_depth": [None, 3, 5, 7, 9, 12],
+}
+
 DummyRegressor.modifiable_params = {
     "strategy": ["mean", "median"],
 }
@@ -325,6 +351,29 @@ RandomForestRegressor.modifiable_params = {
     "n_estimators": [10, 20, 50, 100, 200, 500],
     "max_depth": [None, 3, 5, 7, 9, 12, 15],
     "max_features": ["auto", 0.1, 0.2, 0.5, 0.7, 0.9, 1]
+}
+
+SGDRegressor.modifiable_params = {
+    "loss": ["squared_loss", "huber", "epsilon_insensitive",
+             "squared_epsilon_insensitive"],
+    "penalty": ["none", "l2", "l1", "elasticnet"],
+    "l1_ratio": [0.15, 0.01, 0.05, 0.1, 0.2, 0.5, 0.75, 0.9],
+    "learning_rate": ["optimal", "constant", "invscaling", "adaptive"]
+}
+
+LinearSVR.modifiable_params = {
+    "C": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "fit_intercept": [True, False],
+    "max_iter": [200, 50, 100, 500, 1000]
+}
+
+NuSVR.modifiable_params = {
+    "nu": [0.5, 0.01, 0.1, 0.2, 0.7, 0.85, 1],
+    "C": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "gamma": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "degree": [3, 1, 2, 5],
+    "kernel": ["rbf", "linear", "poly", "sigmoid"],
+    "max_iter": [200, 50, 100, 500, 1000]
 }
 
 
@@ -351,6 +400,45 @@ RandomForestClassifier.modifiable_params = {
     "n_estimators": [10, 20, 50, 100, 200, 500],
     "max_depth": [None, 3, 5, 7, 9, 12, 15],
     "max_features": ["auto", 0.1, 0.2, 0.5, 0.7, 0.9, 1]
+}
+
+SGDClassifier.modifiable_params = {
+    "loss": ["hinge", "log", "modified_huber",
+             "perceptron", "squared_loss", "huber"],
+    "penalty": ["none", "l2", "l1", "elasticnet"],
+    "l1_ratio": [0.15, 0.01, 0.05, 0.1, 0.2, 0.5, 0.75, 0.9],
+    "learning_rate": ["optimal", "constant", "invscaling", "adaptive"]
+}
+
+LinearSVC.modifiable_params = {
+    "penalty": ["l2", "l1"],
+    "C": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "fit_intercept": [True, False],
+    "max_iter": [200, 50, 100, 500, 1000],
+}
+
+SVC.modifiable_params = {
+    "gamma": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "degree": [3, 1, 2, 5],
+    "C": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "kernel": ["rbf", "poly", "sigmoid"],
+    "max_iter": [200, 50, 100, 500, 1000],
+}
+
+NuSVC.modifiable_params = {
+    "nu": [0.5, 0.01, 0.1, 0.2, 0.7, 0.85, 1],
+    "gamma": [1, 0.01, 0.1, 0.5, 2, 5, 10],
+    "degree": [3, 1, 2, 5],
+    "kernel": ["rbf", "linear", "poly", "sigmoid"],
+    "max_iter": [200, 50, 100, 500, 1000]
+}
+
+DecisionTreeClassifier.modifiable_params = {
+    "max_depth": [None, 3, 5, 7, 9, 12],
+}
+
+ExtraTreeClassifier.modifiable_params = {
+    "max_depth": [None, 3, 5, 7, 9, 12],
 }
 
 
@@ -381,4 +469,10 @@ GaussianNB.modifiable_params = {}
 
 MultinomialNB.modifiable_params = {
     "alpha": [1, 0.1, 0.2, 0.5, 0.7, 0.85],
+}
+
+MeanShift.modifiable_params = {
+    "bandwidth": [0.5, 0.05, 0.1, 0.2, 1, 2, 5, 10],
+    "min_bin_freq": [1, 2, 3, 5, 10, 20],
+    "cluster_all": [True, False]
 }

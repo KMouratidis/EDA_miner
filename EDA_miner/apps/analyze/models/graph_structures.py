@@ -77,6 +77,17 @@ ml_options = [
     {"label": "Label Binarizer", "node_type": "lbinarizer",
      "parent": "preprocessing", "func": pipeline_classes.LabelBinarizer},
 
+    {"label": "Max-Abs scaling", "node_type": "maxabs_scale",
+     "parent": "preprocessing", "func": pipeline_classes.MaxAbsScaler},
+    {"label": "Binarizer", "node_type": "binarizer",
+     "parent": "preprocessing", "func": pipeline_classes.Binarizer},
+    {"label": "Normalizer", "node_type": "normalizer",
+     "parent": "preprocessing", "func": pipeline_classes.Normalizer},
+    {"label": "One-Hot Encoding", "node_type": "ohe",
+     "parent": "preprocessing", "func": pipeline_classes.OneHotEncoder},
+    {"label": "Polynomial features", "node_type": "polyfeats",
+     "parent": "preprocessing", "func": pipeline_classes.PolynomialFeatures},
+
     # Decomposition / Dimensionality reduction
     {"label": "Principal Component Analysis", "node_type": "pca",
      "parent": "dim_red", "func": pipeline_classes.PCA},
@@ -109,6 +120,16 @@ ml_options = [
      "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/ridge_regression_zpshttczfhc.png"},
     {"label": "Lasso Regression", "node_type": "lasso",
      "parent": "models", "func": pipeline_classes.Lasso},
+    {"label": "SGD Regression", "node_type": "sgdreg",
+     "parent": "models", "func": pipeline_classes.SGDRegressor},
+    {"label": "Linear SVR Regression", "node_type": "lsvrreg",
+     "parent": "models", "func": pipeline_classes.LinearSVR},
+    {"label": "Nu-SVR", "node_type": "nusvrreg",
+     "parent": "models", "func": pipeline_classes.NuSVR},
+    {"label": "Extra Tree Regression", "node_type": "extrareg",
+     "parent": "models", "func": pipeline_classes.ExtraTreeRegressor},
+
+
     # Classification
     {"label": "Logistic Regression", "node_type": "logr",
      "parent": "models", "func": pipeline_classes.LogisticRegression,
@@ -124,6 +145,19 @@ ml_options = [
      "url": "https://i.imgur.com/x4mpozp.png"},
     {"label": "Dummy model: classification", "node_type": "dummyclf",
      "parent": "models", "func": pipeline_classes.DummyClassifier},
+    {"label": "SGD classifier", "node_type": "sgdclf",
+     "parent": "models", "func": pipeline_classes.SGDClassifier},
+    {"label": "Linear SVC", "node_type": "lsvcclf",
+     "parent": "models", "func": pipeline_classes.LinearSVC},
+    {"label": "Support Vector Classifier", "node_type": "svcclf",
+     "parent": "models", "func": pipeline_classes.SVC},
+    {"label": "Nu-SVC", "node_type": "nusvcclf",
+     "parent": "models", "func": pipeline_classes.NuSVC},
+    {"label": "Decision Tree Classifier", "node_type": "dtclf",
+     "parent": "models", "func": pipeline_classes.DecisionTreeClassifier},
+    {"label": "Extra Tree Classifier", "node_type": "extraclf",
+     "parent": "models", "func": pipeline_classes.ExtraTreeClassifier},
+
     # Clustering
     {"label": "K-Means Clustering", "node_type": "kmc",
      "parent": "models", "func": pipeline_classes.KMeans,
@@ -132,7 +166,9 @@ ml_options = [
      "parent": "models", "func": pipeline_classes.DBSCAN},
     {"label": "Birch Clustering", "node_type": "birch",
      "parent": "models", "func": pipeline_classes.Birch},
-    {"label": "Agglomerative Clustering", "node_type": "agglomerative",
+    {"label": "Birch Clustering", "node_type": "birch",
+     "parent": "models", "func": pipeline_classes.MeanShift},
+    {"label": "MeanShift Clustering", "node_type": "meanshift",
      "parent": "models", "func": pipeline_classes.AgglomerativeClustering,
      "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/hierarchical_clustering_zpsqgxjunmf.png"},
     # Naive Bayes models
