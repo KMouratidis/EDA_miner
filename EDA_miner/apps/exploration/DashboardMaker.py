@@ -38,19 +38,29 @@ Dashboard_Options = [
 def display_output(n_clicks, children):
     children.append(
         dash_rnd.ResizeDraggable(
-            id='some_id',
+            id=f'some_id_{len(children)}',
             children=[
-                html.H4("Hello"),
-                html.H5("This is still under active development."),
-                html.H5("This prototype has trouble with Dash graphs."),
+                dcc.Graph(
+                    id=f'example-graph_{len(children)}',
+                    figure={
+                        'data': [
+                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar',
+                             'name': u'Montréal'},
+                        ],
+                        'layout': {
+                            'title': 'Dash Data Visualization',
+                        }
+                    },
+                )
             ],
             label='mah cool label',
             style={"border": "3px dashed", "width": "200px",
                    "height": "200px"},
             x=20*len(children),
             y=20*len(children),
-            minWidth=100,
-            minHeight=100
+            minWidth=400,
+            minHeight=300
         ))
 
     return children

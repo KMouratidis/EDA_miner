@@ -145,3 +145,9 @@
 .card-body>button {
     margin: 1%;
 }
+
+/* This is for graphs to follow the Resize element */
+.main-svg, .svg-container, .plot-container, .js-plotly-plot {
+    height: inherit !important;
+    width: inherit !important;
+}
