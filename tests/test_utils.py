@@ -61,7 +61,8 @@ class TestGetData:
         # test non-implemented api
         assert get_data("non_existing_API", "userid") is None
 
-        #cleanup(self.r)
+        # TODO: correctly cleanup after tests
+        # cleanup(self.r)
 
 
 class TestHardCast:

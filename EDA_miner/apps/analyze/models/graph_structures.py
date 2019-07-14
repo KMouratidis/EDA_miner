@@ -47,15 +47,15 @@ ml_options = [
     # Inputs
     {"label": "Twitter API", "node_type": "twitter_api",
      "parent": "input", "func": pipeline_classes.TwitterAPI,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/new_name_zpsdifgtbpq.png"},
+     "url": "/assets/images/icons/new_name.png"},
     {"label": "Input file", "node_type": "input_file",
      "parent": "input", "func": pipeline_classes.InputFile,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/files_zpsfykrxcb6.png"},
+     "url": "/assets/images/icons/files.png"},
 
     # Cleaners
     {"label": "Data Cleaner", "node_type": "data_cleaner",
      "parent": "cleaning", "func": pipeline_classes.DataCleaner,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/Cleaning_zpss6odzhkw.png"},
+     "url": "/assets/images/icons/Cleaning.png"},
     {"label": "Fill missing: impute", "node_type": "simple_missing",
      "parent": "cleaning", "func": pipeline_classes.SimpleImputer},
     {"label": "Fill missing: indicator", "node_type": "ind_missing",
@@ -100,24 +100,24 @@ ml_options = [
     # Regression
     {"label": "Linear Regression", "node_type": "linr",
      "parent": "models", "func": pipeline_classes.LinearRegression,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/linear_regression_zpsdo0ngvwz.png"},
+     "url": "/assets/images/icons/linear_regression.png"},
     {"label": "SVM Regression", "node_type": "svr",
      "parent": "models", "func": pipeline_classes.SVR,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/svm_zpsq1mxdxbo.png"},
+     "url": "/assets/images/icons/svm.png"},
     {"label": "KNN Regression", "node_type": "knnr",
      "parent": "models", "func": pipeline_classes.KNeighborsRegressor,
      "url": "https://i.imgur.com/U9EFqYj.png"},
     {"label": "Decision Tree Regression", "node_type": "dtr",
      "parent": "models", "func": pipeline_classes.DecisionTreeRegressor,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/decision_tree_zpsuud1pf95.png"},
+     "url": "/assets/images/icons/decision_tree.png"},
     {"label": "Dummy model: regression", "node_type": "dummyreg",
      "parent": "models", "func": pipeline_classes.DummyRegressor},
     {"label": "Random Forests Regression", "node_type": "rfr",
      "parent": "models", "func": pipeline_classes.RandomForestRegressor,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/random_forests_zpsy5ixn5xw.png"},
+     "url": "/assets/images/icons/random_forests.png"},
     {"label": "Ridge Regression", "node_type": "ridge",
      "parent": "models", "func": pipeline_classes.Ridge,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/ridge_regression_zpshttczfhc.png"},
+     "url": "/assets/images/icons/ridge_regression.png"},
     {"label": "Lasso Regression", "node_type": "lasso",
      "parent": "models", "func": pipeline_classes.Lasso},
     {"label": "SGD Regression", "node_type": "sgdreg",
@@ -133,7 +133,7 @@ ml_options = [
     # Classification
     {"label": "Logistic Regression", "node_type": "logr",
      "parent": "models", "func": pipeline_classes.LogisticRegression,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/logistic_regression_zpsspczljjr.png"},
+     "url": "/assets/images/icons/logistic_regression.png"},
     {"label": "KNN Classifier", "node_type": "knnc",
      "parent": "models", "func": pipeline_classes.KNeighborsClassifier,
      "url": "https://i.imgur.com/U9EFqYj.png"},
@@ -161,7 +161,7 @@ ml_options = [
     # Clustering
     {"label": "K-Means Clustering", "node_type": "kmc",
      "parent": "models", "func": pipeline_classes.KMeans,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/knn_zps24j2lqvu.png"},
+     "url": "/assets/images/icons/knn.png"},
     {"label": "DBSCAN Clustering", "node_type": "dbscan",
      "parent": "models", "func": pipeline_classes.DBSCAN},
     {"label": "Birch Clustering", "node_type": "birch",
@@ -170,7 +170,7 @@ ml_options = [
      "parent": "models", "func": pipeline_classes.MeanShift},
     {"label": "MeanShift Clustering", "node_type": "meanshift",
      "parent": "models", "func": pipeline_classes.AgglomerativeClustering,
-     "url": "https://i261.photobucket.com/albums/ii47/kostasmouratidis/hierarchical_clustering_zpsqgxjunmf.png"},
+     "url": "/assets/images/icons/hierarchical_clustering.png"},
     # Naive Bayes models
     {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
      "parent": "models", "func": pipeline_classes.BernoulliNB},
@@ -227,7 +227,7 @@ class Node:
             raise ValueError("Something went wrong, and we need to investigate")
 
         self.url = node_options[options["node_type"]].get("url",
-                                            "https://i261.photobucket.com/albums/ii47/kostasmouratidis/layers_zps6k0vkthc.png")
+                                            "/assets/images/icons/layers.png")
 
         self.label = options["label"]
 
