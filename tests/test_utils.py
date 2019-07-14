@@ -40,7 +40,7 @@ class TestCleanup:
 
 # TODO: properly do set up / tear down & split function & rename
 class TestGetData:
-    r = Redis(host="localhost", port=6379, db=0)
+    r = Redis(port=6379, db=0)
 
     def test_get_data(self):
 
@@ -61,7 +61,7 @@ class TestGetData:
         # test non-implemented api
         assert get_data("non_existing_API", "userid") is None
 
-        cleanup(self.r)
+        #cleanup(self.r)
 
 
 class TestHardCast:
