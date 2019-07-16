@@ -17,10 +17,10 @@ class TestMenu:
     def test_sidebar_toggle(self):
         # TODO: This needs a better implementation, or at least a function
         assert (eval(button_toggle(5))["response"]["props"]["style"]["display"]
-                == "none")
+                == "block")
 
         assert (eval(button_toggle(4))["response"]["props"]["style"]["display"]
-                == "block")
+                == "none")
 
     # Test if at least 1 example dataset is uploaded
     def test_serve_datasets(self):

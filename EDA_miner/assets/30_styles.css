@@ -48,25 +48,6 @@
     margin-left: 20px;
 }
 
-#sidebar_collapsible_button>ul>li {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-#external_links_caret {
-    font-size: 24px;
-    vertical-align: middle;
-    padding-left: 5px;
-}
-
-#button_collapse>span {
-    color: #000;
-}
-
-#button_collapse, #dark_theme {
-    background-color: white;
-}
-
 .mb-3.dropdown {
     margin-top: 3px !important;
     margin-bottom: 2px !important;
@@ -150,4 +131,178 @@
 .main-svg, .svg-container, .plot-container, .js-plotly-plot {
     height: inherit !important;
     width: inherit !important;
+}
+
+
+/* SIDEMENU STUFF */
+
+/*               */
+/* Left sidemenu */
+/*               */
+
+#sidebar {
+    max-width: 250px;
+    min-width: 15%;
+    height: auto !important;
+    padding-right: 0;
+    padding-left: 0 !important;
+    background-image: linear-gradient(to left,
+    #004e92, #000428);
+}
+
+#sidebar_collapsible_button>ul>li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    margin-left: 15px;
+}
+
+#external_links_caret {
+    font-size: 24px;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+#button_collapse>span, #dark_theme, #open_drawer {
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif !important;
+    width: 100%;
+    text-align: left;
+}
+
+#button_collapse, #dark_theme, #open_drawer {
+    background-image: linear-gradient(to left,
+    #004e92, #000428);
+    color: white;
+    border: none;
+}
+
+#high_level_tabs, .tab {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    vertical-align: middle;
+}
+
+#high_level_tabs {
+    font-size: 18px;
+}
+
+#high_level_tabs, #high_level_tabs>div {
+    display: block;
+    /*float: left;*/
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: left;
+}
+
+
+#high_level_tabs>.tab {
+    padding-left: 25px;
+    background-image: linear-gradient(to left,
+    #004e92, #000428);
+    color: white;
+    border: none;
+}
+
+#high_level_tabs>.tab--selected {
+  background-image: linear-gradient(to left,
+    #ffffff, #ffffff);
+    color: black;
+}
+
+
+/*                   */
+/* Second level tabs */
+/*                   */
+
+#level2_tabs>.tab {
+    padding-top: 8px !important;
+    height: 60px !important;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif !important;
+    background-color: #004e92;
+    color: white;
+}
+
+#level2_tabs>.tab--selected {
+    background-color: #FFF;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+
+/*                      */
+/* Tab-specific submenu */
+/*                      */
+
+#drawer>div>div {
+    background-image: linear-gradient(to left,
+    #000428, #004e92);
+}
+
+#drawer>div>div>* {
+    color: white;
+    padding-left: 15px;
+}
+
+
+#low_level_tabs_submenu>div, #low_level_tabs_submenu>div>button {
+    color: white;
+    padding-left: 5px;
+    padding-right: 0;
+    font-family: 'Roboto', sans-serif !important;
+    text-align: left;
+}
+
+#low_level_tabs_submenu>div {
+    /*border: 1px solid white;*/
+    border: none;
+    width: 100%;
+}
+
+#low_level_tabs_submenu>div>* {
+    width: 85% !important;
+}
+
+.dropdown-toggle, .btn, .btn-secondary {
+    width: 100%;
+}
+
+#drawer>div>div {
+    float: right;
+}
+
+#main_content {
+    background-image: linear-gradient(to left,
+    #004e92, #000428);
+}
+
+#minimize {
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+#button_collapse_modify_node {
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    text-align: left !important;
+}
+
+
+/* Generic */
+
+#mainmenu {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    overflow: auto;
+    background-image: linear-gradient(to left,
+    #fff, #fff);
 }

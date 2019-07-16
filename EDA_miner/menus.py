@@ -27,14 +27,17 @@ Notes to others:
         - adding a new top-level menu tab, or other new feature.
 """
 
+import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table
 
 from server import app
 from utils import encode_image, r
 
-import dash_table
+import dash_bootstrap_components as dbc
+import sd_material_ui
 import visdcc
 
 import uuid
@@ -54,13 +57,14 @@ SideBar = [
     html.Br(),
 
     visdcc.Run_js(id='theme_javascript'),
-    html.Button('Dark/Light theme', id="dark_theme", n_clicks=0),
+    html.Div('Dark/Light theme', id="dark_theme", n_clicks=0,
+                className="jsx-2137964197 tab"),
 
     # Collapsible button with external links
-    html.Button([
+    html.Div([
         html.Span('External links'),
         html.I("", className="fa fa-caret-down", id="external_links_caret"),
-    ], id='button_collapse', n_clicks=0),
+    ], id='button_collapse', n_clicks=0, className="jsx-2137964197 tab"),
     # Stuff inside the collapsible
     html.Div(id='sidebar_collapsible_button', children=[
         html.Ul([
@@ -84,14 +88,13 @@ SideBar = [
                 target="_blank")),
         ])
     ]),
-]
 
-
-MainMenu = [
+    html.Br(),
 
     # Tabs, level-1
     html.Div(children=[
-        dcc.Tabs(id="high_level_tabs", value='data', children=[
+
+        dcc.Tabs(id="high_level_tabs", children=[
             dcc.Tab(label='Data view', value='data',
                     id="data"),
             dcc.Tab(label='Explore & Visualize', value='EDA',
@@ -101,6 +104,23 @@ MainMenu = [
         ]),
     ]),
 
+    html.Div(html.A([
+        html.Span("Tab menu  "),
+        html.I(className="fas fa-angle-double-right"),
+    ]), n_clicks=0, id="open_drawer", className="jsx-2137964197 tab")
+]
+
+
+@app.callback(Output("drawer", "open"),
+              [Input("open_drawer", "n_clicks"),
+               Input("minimize", "n_clicks")],
+              [State("drawer", "open")])
+def open_helper_menu(n_clicks, n_clicks2, is_open):
+    return not is_open
+
+
+MainMenu = [
+
     # Placeholder for level-2 tabs
     html.Div(id="selected_subpage"),
 
@@ -108,14 +128,21 @@ MainMenu = [
     # must be present in the first layout
     html.Div(id="table_container", children=[
         dash_table.DataTable(id='table',),
-    ], style={"display": "none"}),
+    ], style={"clear": "both"}),
 ]
 
 
 SideBar2 = [
     html.H3("Tab menu"),
+    html.Div(html.A([
+        html.Span("Close menu  "),
+        html.I(className="fas fa-angle-double-left"),
+    ]), id="minimize", n_clicks=0),
+
+    html.Br(),
+
     # Placeholder for low-level submenus, if needed
-    html.Div(children=[], id="low_level_tabs_submenu")
+    html.Div(children=[], id="low_level_tabs_submenu"),
 ]
 
 
@@ -185,7 +212,7 @@ def button_toggle(n_clicks):
         A style dict modifying the display CSS attribute.
     """
 
-    if n_clicks % 2 == 1:
+    if n_clicks % 2 == 0:
         return {'display': 'none'}
     else:
         return {'display': 'block'}
@@ -215,19 +242,21 @@ def serve_layout():
 
         html.Div([
             # Sidebar / menu
-            html.Div(children=SideBar, className="col-sm-2",
+            html.Div(children=SideBar, className="col-sm-4 col-md-3 col-xl-2",
                      id="sidebar",
                      style={"display": "inline-block"}),
 
             # main Div
-            html.Div(children=MainMenu, className="col-sm-9",
+            html.Div(children=MainMenu, className="col-sm-8  col-md-9 col-xl-10",
                      id="mainmenu",
                      style={"display": "inline-block"}),
 
             # Sidebar / menu
-            html.Div(children=SideBar2, className="col-sm-1",
-                     id="sidebar2",
-                     style={"display": "inline-block"}),
+            html.Div(children=[
+                sd_material_ui.Drawer(SideBar2, id="drawer", open=True),
+            ], className="",
+                id="sidebar2",
+                style={"display": "inline-block"}),
 
         ], className="row", id="main_content")
 

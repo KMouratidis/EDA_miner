@@ -40,6 +40,9 @@ from apps.exploration.graphs import graphs2d
 import plotly.graph_objs as go
 
 
+Sidebar = []
+
+
 def Exploration_Options(options):
     """
     Generate the layout of the dashboard.
@@ -113,7 +116,6 @@ Graphs_Export = [
     ], id="modal_export_graph"),
 ]
 
-Sidebar = []
 
 
 @app.callback([Output("xvars_2d", "options"),

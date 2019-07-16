@@ -32,6 +32,8 @@ from apps.analyze import Model_Builder
 
 app.layout = html.Div([
 
+    dcc.Location(id='url', refresh=False),
+
     # for exporting figures aimed at PDF report generation
     dcc.Graph(id="saved_graph_configs1", style={"display": "none"}),
     dcc.Graph(id="saved_graph_configs2", style={"display": "none"}),
@@ -43,7 +45,7 @@ app.layout = html.Div([
 
 
 # Input and Output defined in MainMenu
-@app.callback(Output('selected_subpage', 'children'),
+@app.callback(Output('url', 'pathname'),
               [Input('high_level_tabs', 'value')])
 def high_level_tabs(tab):
     """
@@ -57,13 +59,30 @@ def high_level_tabs(tab):
     """
 
     if tab == 'EDA':
-        return exploration_view.layout
+        return "/explore"
+
     elif tab == "modelling":
-        return analyze_view.layout
+        return "/analyze"
+
     elif tab == "data":
-        return data_view.layout
+        return "/data"
+
     else:
-        return []
+        return "/"
+
+
+@app.callback(Output('selected_subpage', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+
+    if pathname == "/data":
+        return data_view.layout
+    elif pathname == "/explore":
+        return exploration_view.layout
+    elif pathname == "/analyze":
+        return analyze_view.layout
+    else:
+        return [dcc.Location("redirect_to_main", pathname="/")]
 
 
 @app.callback(Output('low_level_tabs_submenu', 'children'),

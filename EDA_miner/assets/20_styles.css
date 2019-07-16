@@ -25,6 +25,12 @@ button {
     text-align: left;
 }
 
+#button_collapse {
+    width: 100%;
+    /*padding-left: 20px;*/
+    text-align: left;
+}
+
 li {
     padding-left: 30px;
     color: #FFF;
@@ -45,50 +51,13 @@ li>a:hover {
     color: #FFF;
 }
 
-#sidebar, #sidebar2 {
-    max-width: 230px;
-    min-width: 230px;
-    height: auto !important;
-}
 
-#sidebar2 {
-    margin-right: 0;
-    padding-right: 0;
-}
 
 #model-content, #visuals-content, #data-content {
     height: 100%;
     background-color: white;
 }
 
-#mainmenu {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-
-@media only screen and (max-width: 3050px) {
-    #main_page, #mainmenu {
-        max-width: 75%;
-        display: inline;
-    }
-}
-
-@media only screen and (max-width: 1550px) {
-    #main_page, #mainmenu {
-        max-width: 65%;
-        display: inline;
-    }
-}
-
-#sidebar {
-    background-color: #4a72c4 !important;
-    padding-left: 10px !important;
-}
-
-#sidebar>* {
-    margin-left: 10px !important;
-}
 
 #app_logo {
     margin-top: 10px;
@@ -99,23 +68,14 @@ li>a:hover {
 }
 
 
-#dark_theme, #external_links_caret {
-    color: #000;
-}
-
 body {
     font-family: 'Roboto', sans-serif !important;
+    /*min-width: 1100px;*/
 }
 
-#high_level_tabs, .tab {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    vertical-align: middle;
-}
+#menudiv {
 
-#high_level_tabs {
-    font-size: 22px;
-    max-height: 70px;
+    display: block;
 }
 
 .tab {
