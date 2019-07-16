@@ -128,7 +128,7 @@ MainMenu = [
     # must be present in the first layout
     html.Div(id="table_container", children=[
         dash_table.DataTable(id='table',),
-    ], style={"clear": "both"}),
+    ]),
 ]
 
 
@@ -261,5 +261,5 @@ def serve_layout():
         ], className="row", id="main_content")
 
 
-    ], className="container",
+    ], className="container", style={"display":"inline"},
                     id="main_page")
