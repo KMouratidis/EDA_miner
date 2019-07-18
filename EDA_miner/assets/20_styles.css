@@ -3,7 +3,8 @@
 #_dash-app-content>div, #main_content, #main_page, #selected_subpage>div
 #_dash-global-error-container, #_dash-global-error-container>div,
 #_dash-global-error-container>div>div>div,
-#_dash-global-error-container>div>div:nth-child(2)
+#_dash-global-error-container>div>div:nth-child(2),
+#selected_subpage, #selected_subpage>div
 {
     height: 100% !important;
 }

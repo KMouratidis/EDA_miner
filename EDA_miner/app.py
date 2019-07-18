@@ -16,7 +16,7 @@ Notes to others:
         - adding a new-high-level tab, or other new feature.
 """
 
-
+import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
@@ -46,8 +46,10 @@ app.layout = html.Div([
 
 # Input and Output defined in MainMenu
 @app.callback(Output('url', 'pathname'),
-              [Input('high_level_tabs', 'value')])
-def high_level_tabs(tab):
+              [Input('data_link', 'n_clicks'),
+               Input('explore_link', 'n_clicks'),
+               Input('analyze_link', 'n_clicks')])
+def high_level_tabs(data_clicks, explore_clicks, analyze_clicks):
     """
     On high-level tab selection, render the appropriate layout.
 
@@ -58,14 +60,16 @@ def high_level_tabs(tab):
         list: The appropriate layout, or an empty list.
     """
 
-    if tab == 'EDA':
+    triggered_id = dash.callback_context.triggered[0]["prop_id"].split(".")[0]
+
+    if triggered_id == 'data_link' and data_clicks:
+        return "/data"
+
+    elif triggered_id == "explore_link" and explore_clicks:
         return "/explore"
 
-    elif tab == "modelling":
+    elif triggered_id == "analyze_link" and analyze_clicks:
         return "/analyze"
-
-    elif tab == "data":
-        return "/data"
 
     else:
         return "/"

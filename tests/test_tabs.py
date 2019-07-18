@@ -38,8 +38,7 @@ class TestTabs:
 
 
         # Get and iterate over the high-level and low-level tabs
-        high_level_tab_menu = chrome.find_element_by_id("high_level_tabs")
-        high_level_tabs = high_level_tab_menu.find_elements_by_class_name("tab")
+        high_level_tabs = chrome.find_elements_by_class_name("nav_links")
         for hlt in high_level_tabs:
             hlt.click()
             time.sleep(1)

@@ -23,15 +23,15 @@ from utils import parse_contents
 
 
 Upload_Options = [
-    dcc.Upload(
+    html.A(dcc.Upload(
         id='upload_data_button',
         children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
+            html.I(className="fas fa-upload"),
+            '  Drag and Drop or Select Files'
         ]),
         # Allow multiple files to be uploaded
         multiple=True
-    ),
+    )),
     html.Div(id='output-data-upload'),
 ]
 

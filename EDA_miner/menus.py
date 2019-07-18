@@ -57,14 +57,14 @@ SideBar = [
     html.Br(),
 
     visdcc.Run_js(id='theme_javascript'),
-    html.Div('Dark/Light theme', id="dark_theme", n_clicks=0,
-                className="jsx-2137964197 tab"),
+    html.Div(html.A('Dark/Light theme'), id="dark_theme", n_clicks=0,
+             className="nav_item"),
 
     # Collapsible button with external links
-    html.Div([
+    html.Div(html.A([
         html.Span('External links'),
-        html.I("", className="fa fa-caret-down", id="external_links_caret"),
-    ], id='button_collapse', n_clicks=0, className="jsx-2137964197 tab"),
+        html.I(className="fa fa-caret-down", id="external_links_caret"),
+    ]), id='button_collapse', n_clicks=0, className="nav_item"),
     # Stuff inside the collapsible
     html.Div(id='sidebar_collapsible_button', children=[
         html.Ul([
@@ -94,20 +94,29 @@ SideBar = [
     # Tabs, level-1
     html.Div(children=[
 
-        dcc.Tabs(id="high_level_tabs", children=[
-            dcc.Tab(label='Data view', value='data',
-                    id="data"),
-            dcc.Tab(label='Explore & Visualize', value='EDA',
-                    id="EDA"),
-            dcc.Tab(label='Analyze & Predict', value='modelling',
-                    id="modelling"),
-        ]),
+        html.Div(html.A([
+            html.I(className="fas fa-database"),
+            html.Span("Data view"),
+        ]), n_clicks=0, id="data_link", className="nav_links"),
+
+        html.Div(html.A([
+            html.I(className="fas fa-eye"),
+            html.Span("Explore & Visualize"),
+        ]), n_clicks=0, id="explore_link", className="nav_links"),
+
+        html.Div(html.A([
+            html.I(className="fas fa-laptop-code"),
+            html.Span("Analyze & Predict"),
+        ]), n_clicks=0, id="analyze_link", className="nav_links")
+
     ]),
+
+    html.Br(),
 
     html.Div(html.A([
         html.Span("Tab menu  "),
         html.I(className="fas fa-angle-double-right"),
-    ]), n_clicks=0, id="open_drawer", className="jsx-2137964197 tab")
+    ]), n_clicks=0, id="open_drawer", className="nav_item")
 ]
 
 
@@ -253,7 +262,8 @@ def serve_layout():
 
             # Sidebar / menu
             html.Div(children=[
-                sd_material_ui.Drawer(SideBar2, id="drawer", open=True),
+                sd_material_ui.Drawer(SideBar2, id="drawer", open=True,
+                                      docked=True, openSecondary=True),
             ], className="",
                 id="sidebar2",
                 style={"display": "inline-block"}),
@@ -261,5 +271,4 @@ def serve_layout():
         ], className="row", id="main_content")
 
 
-    ], className="container", style={"display":"inline"},
-                    id="main_page")
+    ], className="container", style={"display": "inline"}, id="main_page")

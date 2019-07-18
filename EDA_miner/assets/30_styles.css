@@ -69,14 +69,33 @@
 }
 
 #upload_data_button {
-    width: 30%;
-    height: 60px;
+    width: 90%;
+    margin-top: 4%;
+    height: 300px;
+    display: flex;
+    align-items: center;
     line-height: 60px;
     border-width: 1px;
     border-style: dashed;
-    border-radius: 5px;
+    border-radius: 20px;
     text-align: center;
-    margin: 10px;
+    font-size: 18px;
+    background-color: #f5f5f5;
+}
+
+#upload_data_button>div {
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#upload_data_button>div>div {
+    vertical-align: middle;
+    margin: auto;
 }
 
 #wordcloud_img {
@@ -163,18 +182,20 @@
     padding-left: 10px;
 }
 
-#button_collapse>span, #dark_theme, #open_drawer {
+#button_collapse>span, .nav_item, .nav_links {
     font-size: 18px;
     font-family: 'Roboto', sans-serif !important;
     width: 100%;
     text-align: left;
+    padding-top: 10px;
 }
 
-#button_collapse, #dark_theme, #open_drawer {
+#button_collapse, .nav_item {
     background-image: linear-gradient(to left,
     #004e92, #000428);
     color: white;
     border: none;
+    padding-left: 25px;
 }
 
 #high_level_tabs, .tab {
@@ -211,6 +232,18 @@
     color: black;
 }
 
+.nav_links>*>* {
+    color: white;
+}
+
+.nav_links>*>i {
+    padding-left: 25px;
+    width: 50px;
+}
+
+.nav_links>*>span {
+    padding-left: 10px;
+}
 
 /*                   */
 /* Second level tabs */
@@ -239,6 +272,7 @@
 /* Tab-specific submenu */
 /*                      */
 
+/* if docked, use :nth-of-type(2) */
 #drawer>div>div {
     background-image: linear-gradient(to left,
     #000428, #004e92);
@@ -251,11 +285,15 @@
 
 
 #low_level_tabs_submenu>div, #low_level_tabs_submenu>div>button {
-    color: white;
+    color: #111111;
     padding-left: 5px;
     padding-right: 0;
     font-family: 'Roboto', sans-serif !important;
     text-align: left;
+}
+
+#low_level_tabs_submenu>div>button {
+    background-color: #eee;
 }
 
 #low_level_tabs_submenu>div {
@@ -270,6 +308,9 @@
 
 .dropdown-toggle, .btn, .btn-secondary {
     width: 100%;
+    color: black;
+    font-weight: 600;
+    background-color: #eee;
 }
 
 #drawer>div>div {
