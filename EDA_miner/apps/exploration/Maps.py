@@ -38,6 +38,12 @@ def Map_Options(options):
             html.Div(create_dropdown("Available datasets", options,
                                      multi=False, id="dataset_choice_maps"),
                      className="vertical_dropdowns"),
+            # Choose a map type
+            html.Div(create_dropdown("Map type", [
+                {"label": "Choropleth", "value": "agg_choropleth"},
+                {"label": "Simple geoscatter", "value": "geoscatter"}
+            ], multi=False, id="map_type_choice"),
+                     className="vertical_dropdowns"),
 
             # Available buttons and choices for plotting
             html.Div(create_dropdown("Latitude", options=[],
@@ -51,6 +57,17 @@ def Map_Options(options):
                                      multi=False,
                                      id="country"),
                      className="vertical_dropdowns"),
+            html.Div(create_dropdown("Z variable", options=[],
+                                     multi=False, id="z_var"),
+                     className="vertical_dropdowns"),
+            html.Div(create_dropdown("Choose aggregation type", options=[
+                {"label": "Sum", "value": "sum"},
+                {"label": "Average", "value": "mean"},
+                {"label": "Count", "value": "count"},
+                {"label": "Max", "value": "max"},
+                {"label": "Min", "value": "min"},
+            ], multi=False, id="aggregator_field", value="count"),
+                     className="vertical_dropdowns"),
         ], className="col-sm-3"),
 
         # The graph itself
@@ -60,11 +77,10 @@ def Map_Options(options):
     ], className="row")
 
 
-
-
 @app.callback([Output("lat_var", "options"),
                Output("lon_var", "options"),
-               Output("country", "options")],
+               Output("country", "options"),
+               Output("z_var", "options")],
               [Input("dataset_choice_maps", "value")],
               [State("user_id", "children")])
 def render_variable_choices_maps(dataset_choice, user_id):
@@ -90,7 +106,7 @@ def render_variable_choices_maps(dataset_choice, user_id):
 
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
-    return [options, options, options]
+    return [options, options, options, options]
 
 
 # TODO: This probably needs to interface with the schema
@@ -107,14 +123,27 @@ def country2code(value):
             return matched_country.alpha_3
 
 
+@app.callback([Output("aggregator_field", "disabled"),
+               Output("z_var", "disabled")],
+              [Input("map_type_choice", "value")])
+def show_hide_aggregator_dropdown(map_type):
+    if map_type == "agg_choropleth":
+        return False, False
+    else:
+        return True, True
+
 
 @app.callback(Output("map_graph", "figure"),
               [Input("lat_var", "value"),
                Input("lon_var", "value"),
-               Input("country", "value")],
+               Input("country", "value"),
+               Input("z_var", "value"),
+               Input("map_type_choice", "value"),
+               Input("aggregator_field", "value"),],
               [State("user_id", "children"),
                State("dataset_choice_maps", "value")])
-def plot_map(lat_var, lon_var, country, user_id, dataset_choice_maps):
+def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
+             user_id, dataset_choice_maps):
     """
     Plot the map according to user choices.
 
@@ -133,28 +162,45 @@ def plot_map(lat_var, lon_var, country, user_id, dataset_choice_maps):
     """
 
 
-    if any(x is None for x in [lat_var, lon_var, country,
+    if any(x is None for x in [lat_var, lon_var, country, map_type,
                                dataset_choice_maps]):
         raise PreventUpdate()
 
     df = get_data(dataset_choice_maps, user_id)
 
+    # Attempt conversion of the country column to country codes
     df["codes"] = df[country].apply(lambda x: country2code(x))
     countries = df["codes"].dropna().unique()
 
+    traces = [go.Scattergeo(
+        locationmode='country names',
+        lat=df[lat_var],
+        lon=df[lon_var],
+    )]
+
+    if "choropleth" in map_type:
+        if z_var is None:
+            raise PreventUpdate()
+
+        if aggregator_type is None:
+            aggregator_type = "count"
+
+        try:
+            # .loc is needed to correctly order the countries
+            z = df.groupby("codes").agg(aggregator_type).loc[countries,
+                                                    z_var].dropna().values
+        except KeyError as e:
+            print("Error! Probably bad z_var; usually due to incorrect "
+                  "aggregate operation. Error: ", e)
+
+            raise PreventUpdate()
+
+        traces.append(go.Choropleth(locations=countries, z=z,
+                                    colorscale='Reds'))
+
+
     return {
-        "data": [
-            go.Scattergeo(
-                locationmode='country names',
-                lat=df[lat_var],
-                lon=df[lon_var],
-            ),
-            go.Choropleth(
-                locations=countries,
-                # we need to mask the counts
-                z=df.groupby("codes").count().loc[countries, lat_var].dropna().values
-            )
-        ],
+        "data": traces,
         "layout": {
             'automargin': True,
             'margin': {
