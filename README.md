@@ -11,6 +11,8 @@ Also being worked on together with university staff for an E.U.-sponsored projec
 
 Want to contribute? Take a moment to review the [style and contributor guidelines](https://github.com/KMouratidis/EDA_miner_public/wiki/Style-guide-and-contributor-guidelines)
 
+Want to chat? Join us on <a href="https://join.slack.com/t/edaminer/shared_invite/enQtNzA5MDc1MTE3NDk0LTJmNGYyYTY4NDAwMGJkYTI5NDg2NzAyOWQ2OTcxYTU0NTc4NzEwMWQ0ZjAwYWFkYmUyYjJmZWFkZjM3OWZkYmY"><img src="https://img.shields.io/badge/chat-slack-blueviolet.svg"></a>
+
 Just looking around? Then you can either install locally or with docker.
 
 #### Locally:

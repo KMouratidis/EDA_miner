@@ -25,6 +25,7 @@ Notes to others:
     it in `graphs.graphs2d.py`).
 """
 
+import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
@@ -33,14 +34,51 @@ import dash_bootstrap_components as dbc
 
 from server import app
 import layouts
-from utils import create_dropdown
+from utils import create_dropdown, encode_image
 from apps.data.View import get_data
 from apps.exploration.graphs import graphs2d
 
 import plotly.graph_objs as go
+import os
 
 
 Sidebar = []
+
+# value, label
+available_graphs = {
+    "line_chart": "Line Graph",
+    "scatterplot": "Scatter Plot",
+    "histogram": "Histogram",
+    "heatmap": "Heatmap",
+    "bubble_chart": "Bubble chart",
+    "pie": "Pie chart",
+    "filledarea": "Filled Area",
+    "errorbar": "Error Bar",
+    "density2d": "2D Density",
+    "pairplot": "Pair-plot (matplotlib)"
+}
+
+buttons = []
+for graph_type in available_graphs.keys():
+    img_name = "static/images/graph_images/" + graph_type + ".png"
+
+    buttons.append(
+        html.Div([
+            html.P(available_graphs[graph_type],
+                   style={"marginBottom": "0",
+                          "textAlign": "center"}),
+            html.Button([
+                html.Img(src=encode_image(img_name),
+                         height=45, width=45)],
+                id=graph_type,
+                style={
+                    "margin": "10px",
+                    "height": "60px",
+                    "width": "70px"
+                })
+        ], style={"display": "inline-block",
+                  "margin": "10px"})
+    )
 
 
 def Exploration_Options(options):
@@ -61,20 +99,24 @@ def Exploration_Options(options):
                                  multi=False, id="dataset_choice_2d"),
                  className="horizontal_dropdowns"),
 
-        # Choose a graph
-        html.Div(create_dropdown("Choose graph type", options=[
-            {'label': 'Line Graph', 'value': 'line_chart'},
-            {'label': 'Scatter Plot', 'value': 'scatterplot'},
-            {'label': 'Histogram Graph', 'value': 'histogram'},
-            {'label': 'Correlation Graph', 'value': 'heatmap'},
-            {'label': 'Bubble Graph', 'value': 'bubble_chart'},
-            {'label': 'Pie Chart', 'value': 'pie'},
-            {'label': 'Filled Area Graph', 'value': 'filledarea'},
-            {'label': 'Error Bar Graph', 'value': 'errorbar'},
-            {'label': '2D Density Plot', 'value': 'density2d'},
-            {'label': 'PairPlot (matplotlib)', 'value': 'pairplot'},
-        ], multi=False, id="graph_choice_exploration"),
-                 className="horizontal_dropdowns"),
+        # Holds the name AND opens a modal for graph selection
+        html.Button(id="graph_choice_exploration", n_clicks=0),
+
+        # modal with buttons for graphs
+        html.Div([
+            dbc.Modal([
+                dbc.ModalHeader("Choose a graph type"),
+                dbc.ModalBody([
+                    "2D graphs: ",
+
+                    html.Div(buttons)
+
+                ]),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close_choose_graph", className="ml-auto")
+                )
+            ], id="modal_choose_graph")
+        ]),
 
         # Available buttons and choices for plotting
         html.Div(id="variable_choices_2d", children=[
@@ -91,6 +133,36 @@ def Exploration_Options(options):
         # The graph itself
         dcc.Graph(id="graph_2d"),
     ])
+
+
+
+@app.callback(Output("modal_choose_graph", "is_open"),
+              [Input("graph_choice_exploration", "n_clicks"),
+               Input("close_choose_graph", "n_clicks")] + [
+                  Input(graph_type, "n_clicks")
+                  for graph_type in available_graphs.keys()
+              ],
+              [State("modal_choose_graph", "is_open")])
+def toggle_modal(n1, n2, *rest):
+    *rest, is_open = rest
+
+    if n1 or n2:
+        return not is_open
+
+    return is_open
+
+
+# Every time a diagram button is clicked, update the
+# button children (text)
+@app.callback(Output("graph_choice_exploration", "children"),
+              [Input(graph_type, "n_clicks")
+               for graph_type in available_graphs.keys()])
+def render_plot(*inputs):
+    triggered = dash.callback_context.triggered[0]["prop_id"]
+    triggered_id = triggered.split(".")[0]
+
+    return triggered_id
+
 
 
 # Export graph config
@@ -120,9 +192,10 @@ Graphs_Export = [
 
 @app.callback([Output("xvars_2d", "options"),
                Output("yvars_2d", "options"),
-               Output("yvars_2d", "multi")],
+               Output("yvars_2d", "multi"),
+               Output("yvars_2d", "disabled")],
               [Input("dataset_choice_2d", "value"),
-               Input("graph_choice_exploration", "value")],
+               Input("graph_choice_exploration", "children")],
               [State("user_id", "children")])
 def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
                                user_id):
@@ -151,21 +224,20 @@ def render_variable_choices_2d(dataset_choice, graph_choice_exploration,
     # Make sure all variables have a value before returning choices
     if any(x is None for x in [df, dataset_choice,
                                graph_choice_exploration]):
-        return [[], [], False]
+        return [[], [], False, True]
 
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
-    
-    return [options, options if needs_yvar else [], allows_multi]
+
+    return [options, options if needs_yvar else [], allows_multi, not needs_yvar]
 
 
 @app.callback(
-    [Output("graph_2d", "figure"),
-     Output("yvars_2d", "disabled")],
+    Output("graph_2d", "figure"),
     [Input("xvars_2d", "value"),
      Input("yvars_2d", "value"),
-     Input("graph_choice_exploration", "value")],
+     Input("graph_choice_exploration", "children")],
     [State("user_id", "children"),
      State("dataset_choice_2d", "value")])
 def plot_graph_2d(xvars, yvars, graph_choice_exploration,
@@ -193,13 +265,13 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     # Make sure all variables have a value before moving further
     test_conditions = [xvars, df, dataset_choice, graph_choice_exploration]
     if any(x is None for x in test_conditions):
-        return [{}, True]
+        return {}
 
     needs_yvar, allows_multi = graphs2d.graph_configs[graph_choice_exploration]
 
     # Also, if we needs_yvar and they are empty, return.
     if needs_yvar and yvars is None:
-        return [{}, False]
+        return {}
 
     # Fix bugs occurring due to Dash not ordering callbacks
     if not allows_multi and isinstance(yvars, list):
@@ -228,7 +300,12 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
                   for yvar in yvars]
 
     elif graph_choice_exploration == 'pie':
-        traces = [go.Pie(labels=df[xvars], values=df[yvars])]
+
+        vals = df.groupby(xvars).count().iloc[:, 0]
+        labels = df[xvars].unique()
+
+
+        traces = [go.Pie(labels=labels, values=vals)]
 
     elif graph_choice_exploration == 'filledarea':
         traces = [graphs2d.filledarea(df[xvars], df[yvar], name=yvar)
@@ -251,10 +328,10 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
     else:
         traces = []
 
-    return [{
+    return {
         'data': traces,
         'layout': layouts.default_2d(xvars, ""),
-    }, not needs_yvar]
+    }
 
 
 @app.callback([Output("modal_export_graph", "is_open"),

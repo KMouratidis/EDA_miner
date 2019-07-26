@@ -1,5 +1,8 @@
 """
 TBW...
+
+TODO:
+    Implement https://plot.ly/python/choropleth-maps/#choropleth-inset-map
 """
 
 from dash.dependencies import Input, Output, State
@@ -15,6 +18,11 @@ from apps.data.View import get_data
 
 import plotly.graph_objs as go
 import pycountry
+
+
+colorscale_list = "Greys, YlGnBu, Greens, YlOrRd, Bluered, RdBu, Reds, " \
+                  "Blues, Picnic, Rainbow, Portland, Jet, Hot, Blackbody, " \
+                  "Earth, Electric, Viridis, Cividis".split(", ")
 
 
 Sidebar = []
@@ -46,6 +54,11 @@ def Map_Options(options):
                      className="vertical_dropdowns"),
 
             # Available buttons and choices for plotting
+            html.Div(create_dropdown("Colorscale", options=[
+                {"label": v, "value": v}
+                for v in colorscale_list
+            ], multi=False, id="colorscale", value="Jet"),
+                     className="vertical_dropdowns"),
             html.Div(create_dropdown("Latitude", options=[],
                                      multi=False, id="lat_var"),
                      className="vertical_dropdowns"),
@@ -68,6 +81,7 @@ def Map_Options(options):
                 {"label": "Min", "value": "min"},
             ], multi=False, id="aggregator_field", value="count"),
                      className="vertical_dropdowns"),
+
         ], className="col-sm-3"),
 
         # The graph itself
@@ -139,11 +153,12 @@ def show_hide_aggregator_dropdown(map_type):
                Input("country", "value"),
                Input("z_var", "value"),
                Input("map_type_choice", "value"),
-               Input("aggregator_field", "value"),],
+               Input("aggregator_field", "value"),
+               Input("colorscale", "value")],
               [State("user_id", "children"),
                State("dataset_choice_maps", "value")])
 def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
-             user_id, dataset_choice_maps):
+             colorscale, user_id, dataset_choice_maps):
     """
     Plot the map according to user choices.
 
@@ -165,6 +180,9 @@ def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
     if any(x is None for x in [lat_var, lon_var, country, map_type,
                                dataset_choice_maps]):
         raise PreventUpdate()
+
+    if colorscale is None:
+        colorscale = "Jet"
 
     df = get_data(dataset_choice_maps, user_id)
 
@@ -196,7 +214,8 @@ def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
             raise PreventUpdate()
 
         traces.append(go.Choropleth(locations=countries, z=z,
-                                    colorscale='Reds'))
+                                    colorscale=colorscale,
+                                    text=df[country]))
 
 
     return {
