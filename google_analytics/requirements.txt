@@ -1,0 +1,5 @@
+googleanalytics==0.26.0
+redis==2.10.6
+flask==1.1.1
+PyOpenSSL==19.0.0
+flask-caching==1.7.2
