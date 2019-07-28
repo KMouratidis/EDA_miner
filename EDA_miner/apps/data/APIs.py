@@ -26,7 +26,10 @@ from utils import r
 from apps.data.data_utils import api_connectors
 from apps.data.data_utils.api_layouts import logins_ui_mapping
 
+import requests
 import pickle
+import dill
+import json
 from inspect import getfullargspec
 
 
@@ -45,6 +48,8 @@ API_Options = html.Div(children=[
                     id="quandl_api"),
             dcc.Tab(label='Spotify', value='spotify',
                     id="spotify_api"),
+            dcc.Tab(label='Google Analytics', value='ganalytics',
+                    id="ganalytics_api"),
         ]),
     ]),
 
@@ -99,6 +104,7 @@ def get_users_tweets(n_clicks, acc_name, user_id):
 
 
     if n_clicks > 0:
+        # Get the API handle
         api = pickle.loads(r.get(f"{user_id}_twitter_api_handle"))
 
         # TODO: This is a cache so consider a better implementation.
@@ -114,6 +120,52 @@ def get_users_tweets(n_clicks, acc_name, user_id):
             query = pickle.loads(query)
 
         return [html.P(str(status.text)) for status in query]
+
+    else:
+        raise PreventUpdate()
+
+
+# Callback that handles what happens with the Google Analytics UI
+@app.callback(Output("ganalytics_results", "children"),
+              [Input("get_ganalytics_metrics", "n_clicks")],
+              [State("ganalytics_metrics", "value"),
+               State("user_id", "children")])
+def get_users_ganalytics(n_clicks, metrics, user_id):
+
+
+    if metrics is None:
+        raise PreventUpdate()
+
+    if n_clicks > 0:
+        # Get the API handle
+        requester = dill.loads(r.get(f"{user_id}_ganalytics_api_handle"))
+
+        if not isinstance(metrics, list):
+            metrics = [metrics]
+
+        # requests response object
+        response = requests.get(f"http://127.0.0.1:5000/{user_id}/{','.join(metrics)}")
+
+        # parse the results and reform them
+        results = json.loads(response.text)
+
+        for metric in metrics:
+
+            data = results["data"][metric[3:]]
+
+            # TODO: This signifies duplication of storage. The other
+            #       server already stores the results in a redis cache
+            #       but we cannot remove this because other parts of the
+            #       code depend on this storage. Consider reworking the
+            #       REST API, but using the same database for 2 servers
+            #       is an anti-pattern for micro-services architectures.
+            r.set(f"{user_id}_ganalytics_data_{metric}",
+                  pickle.dumps(data), ex=3600)
+
+        return [
+            html.Br(),
+            html.P(str(results))
+        ]
 
     else:
         raise PreventUpdate()

@@ -20,8 +20,9 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import spotipy
 from spotipy import util
-import pickle
 import quandl
+import requests
+import dill
 
 
 def twitter_connect(consumer_key, consumer_secret, access_token_key,
@@ -101,6 +102,22 @@ def quandl_connect(api_key):
     return quandl.get
 
 
+def ganalytics_connect(client_email, private_key, *, user_id=None):
+    """
+    Connect to a Google Analytics account.
+    """
+
+    response = requests.post("http://127.0.0.1:5000/", json={
+        "client_email": client_email,
+        "user_id": user_id,
+        "private_key": private_key
+    })
+
+    # Returns a function with saved user_id which only needs
+    # string for the metrics
+    return lambda metrics: requests.get(f"http://127.0.0.1:5000/{user_id}/{metrics}")
+
+
 def facebook_connect():
     raise NotImplementedError
 
@@ -115,6 +132,7 @@ connectors_mapping = {
     "twitter": twitter_connect,
     "gsheets": google_sheets_connect,
     "quandl": quandl_connect,
+    "ganalytics": ganalytics_connect
 }
 
 
@@ -141,16 +159,21 @@ def api_connect(api_choice, user_id, *args, **kwargs):
 
     func = connectors_mapping[api_choice]
 
+    if api_choice == "ganalytics":
+        # Google analytics needs the user_id too
+        kwargs.update({"user_id": user_id})
+
     try:
         api_handle = func(*args, **kwargs)
 
         # TODO: Maybe add a timeout here as well?
         # Store in Redis that the API connected, and its handle(s)
         r.set(f"{user_id}_{api_choice}_api", "true")
-        r.set(f"{user_id}_{api_choice}_api_handle", pickle.dumps(api_handle))
+        r.set(f"{user_id}_{api_choice}_api_handle", dill.dumps(api_handle))
 
         return True
 
     except Exception as e:
         print(e)
         return False
+

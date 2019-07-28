@@ -24,6 +24,8 @@ Notes to others:
 import dash_core_components as dcc
 import dash_html_components as html
 
+from apps.data.data_utils.ganalytics_metrics import metrics
+
 
 def success_message(api):
     """
@@ -136,6 +138,33 @@ quandl_login = [
     html.Div(id="quandl_UI"),
 ]
 
+ganalytics_login = [
+
+    html.Div(id="ganalytics_login_form", children=[
+        html.H5("Client email"),
+        dcc.Input(id="ganalytics_client_email", type="text"),
+
+        html.H5("Private key"),
+        dcc.Textarea(id="ganalytics_private_key"),
+
+        html.Button("Connect!", id="ganalytics_connect_button",
+                    style={"display": "inline"}, n_clicks=0)
+    ]),
+
+    html.Div(id="ganalytics_UI"),
+]
+
+ganalytics_success = [
+    html.Br(),
+    dcc.Dropdown(id="ganalytics_metrics", placeholder="Select metrics to fetch",
+                 options=[{"value": metric["id"], "label": metric["name"]}
+                          for metric in metrics["metrics"]],
+                 multi=True),
+    html.Button("Fetch metrics!", id="get_ganalytics_metrics", n_clicks=0),
+    html.Div(id="ganalytics_results"),
+]
+
+
 # API: [ Forms for login, UI after login ]
 logins_ui_mapping = {
     "twitter": [twitter_login, twitter_success],
@@ -143,4 +172,5 @@ logins_ui_mapping = {
     "reddit": [reddit_login, success_message("Reddit")],
     "quandl": [quandl_login, success_message("Quandl")],
     "spotify": [spotify_login, success_message("Spotify")],
+    "ganalytics": [ganalytics_login, ganalytics_success]
 }

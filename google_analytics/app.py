@@ -23,8 +23,11 @@ def ganalytics_connect(client_email, private_key):
     memoizable. Google throws `googleapiclient.errors.HttpError: 401`.
     """
 
+    # Redis/Python/I is/am stupid and backslashes are not interpreted as
+    # escape characters (which supposedly is bad) so we must fix it.
     accounts = ga.authenticate(client_email=client_email,
-                               private_key=private_key)
+                               private_key=private_key.replace("\\n", "\n"))
+
 
     # Queries are handled per profile, and we only need one (for now)
     profile = accounts[0].webproperties[0].profile
