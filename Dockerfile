@@ -1,5 +1,5 @@
 # our base image
-FROM python:3-onbuild
+FROM python:3.6-onbuild
 
 # Get the necessary dependencies for pygraphviz
 RUN apt-get update

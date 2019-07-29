@@ -250,4 +250,4 @@ def pairplot(x):
     plotly_fig = tls.mpl_to_plotly(fig)
     plt.clf()
 
-    return [plotly_fig]
+    return plotly_fig

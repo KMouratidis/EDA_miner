@@ -322,7 +322,7 @@ def plot_graph_2d(xvars, yvars, graph_choice_exploration,
         # We need more than 1 variable for a pairplot
         if len(yvars) >= 1:
             # This returns a whole figure, not a trace
-            return graphs2d.pairplot(df[[xvars]+yvars]) + [not needs_yvar]
+            return graphs2d.pairplot(df[[xvars]+yvars])
         else:
             traces = []
     else:
