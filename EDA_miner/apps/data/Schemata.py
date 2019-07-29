@@ -7,9 +7,14 @@ import dash_table
 from server import app
 from utils import r, get_data, pretty_print_tweets, create_table
 from apps.data.View import get_available_choices
+from apps.data.data_utils.schema_heuristics import infer_types
 
-from tableschema import Table
 from itertools import chain
+
+
+# TODO: WHEN IMPLEMENTING THIS DON'T FORGET TO KEEP TRACK OF DATASET
+#       DESCRIPTORS AS MENTIONED HERE:
+#       https://frictionlessdata.io/specs/table-schema/
 
 
 def Schema_Options(user_id):
@@ -43,42 +48,27 @@ def show_schema(api_choice, user_id):
     if df is None:
         return [html.H4("Nothing to display")]
 
-    df = df[df.columns[:10]]
+    sample = df.sample(n=50, replace=True).dropna()
 
-    # This mumbo-jumbo is needed because tableschema incorrectly
-    # infers numpy dtypes as "any/object" rather than the actual values
-    try:
-        # this will work if the data are numpy numeric dtypes
-        list_data = df[:10].values.data.tolist()
-    except NotImplementedError:
-        # this is called probably only for "string" or "object"
-        list_data = df[:10].values
-
-    # Get current schema for the graph
+    # Get current schema for the graph if it exists
     # TODO: Actually implement this, e.g.:
     #       `schema = r.get(f"{api_choice}_schema")`
-    # The code converts the dataframe to a list of lists
-    # because tableschema does not understand
-    table = Table(list(list(row) for row in chain([df.columns],
-                                                  list_data)))
-    schema = table.infer()
-    dtypes = [d["type"] for d in schema["fields"]]
 
-    # Mapping of types (strings) from tableschema to dash_table.
-    # See: https://frictionlessdata.io/specs/table-schema/
-    # and https://dash.plot.ly/datatable/typing
+    types, subtypes = infer_types(df, is_sample=True)
+
+    # Mapping of types (strings) from schema to dash_table.
+    # See: https://dash.plot.ly/datatable/typing
     dash_type = {
-        "string": "text",
-        "number": "numeric",
+        "float": "numeric",
         "integer": "numeric",
-        "boolean": "text",
+        "categorical": "text",
         "date": "datetime",
-        "any": "object"
+        "string": "text"
     }
 
     return [
         html.Br(),
-        create_table(df, columns=[{"name": [col, dtype], "id": col,
-                                   "type": dash_type[dtype]}
-                                  for (col, dtype) in zip(df.columns, dtypes)]),
+        create_table(df, columns=[{"name": [col, "Data type:" + types[col], "Sub-type:" + subtypes[col]], "id": col,
+                                   "type": dash_type[types[col]]}
+                                  for col in df.columns]),
     ]

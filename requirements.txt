@@ -33,6 +33,7 @@ sympy==1.2
 pygraphviz==1.5
 pytest-cov==2.7.1
 selenium==3.141.0
-tableschema==1.5.4
 pycountry==18.12.8
 sd_material_ui==3.1.2
+fuzzywuzzy==0.17.0
+python-Levenshtein==0.12.0

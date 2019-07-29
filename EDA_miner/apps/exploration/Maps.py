@@ -214,8 +214,7 @@ def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
             raise PreventUpdate()
 
         traces.append(go.Choropleth(locations=countries, z=z,
-                                    colorscale=colorscale,
-                                    text=df[country]))
+                                    colorscale=colorscale))
 
 
     return {
