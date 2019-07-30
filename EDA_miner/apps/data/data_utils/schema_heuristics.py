@@ -164,9 +164,9 @@ def infer_types(df, is_sample=False):
 
         # Int
         if column_name_match(col_name, int_words):
-            if (not np.issubdtype(sample[col_name], np.number)) and can_into_int(
-                    sample[col_name]):
-                lenient[col_name] = "int"
+            if (np.issubdtype(sample[col_name], np.number) or
+                    can_into_int(sample[col_name])):
+                lenient[col_name] = "integer"
 
                 # The outer IF might pass but the inner might fail,
                 # in which case, keep going
@@ -207,7 +207,6 @@ def infer_types(df, is_sample=False):
                 continue
 
         if dtype == "string":
-            print(sample[col_name])
             if all(mails.match(x) for x in sample[col_name]):
                 sub_categories[col_name] = "email"
                 continue

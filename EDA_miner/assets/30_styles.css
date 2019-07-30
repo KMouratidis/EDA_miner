@@ -347,3 +347,54 @@
     background-image: linear-gradient(to left,
     #fff, #fff);
 }
+
+/*                              */
+/* Table (schema) and dropdowns */
+/*                              */
+
+th {
+    min-width: 195px !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100;
+    background-color: #eeeeee;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+td {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.Select-control, .Select-input>input, .is-focused, .is-open,
+.Select-menu-outer, .Select-value, .Select-input, .Select-placeholder {
+    border: none;
+    background-color: #dfeaef;
+    border-radius: 13px;
+}
+
+.jsx-4017309047, .tab-container>* {
+    border-bottom-left-radius: 13px;
+    border-top-right-radius: 13px;
+}
+
+
+.jsx-4017309047>.tab {
+    background-color: white;
+    border-top: none;
+    border-right: none;
+}
+
+.jsx-4017309047>.tab:hover {
+    background-color: #eeeeee;
+}
+
+.jsx-4017309047>.tab--selected {
+    background-color: lightgray;
+}
+
+#table_schema {
+    overflow: scroll;
+    max-height: 700px;
+}

@@ -32,6 +32,62 @@ def Schema_Options(user_id):
         ]),
     ]
 
+all_datatypes_options = [
+    {"label": dtype, "value": dtype}
+    for dtype in "string float integer categorical date".split()
+]
+
+
+# TODO: Pagination
+def schema_table(df, types, subtypes):
+
+    subtype_options = {
+        "categorical": [
+            {"label": dtype, "value": dtype}
+            for dtype in "binary categorical".split()
+        ],
+        "integer": [{"label": "integer", "value": "integer"}],
+        "date": [{"label": "date", "value": "date"}],
+        "float": [
+            {"label": dtype, "value": dtype}
+            for dtype in "float longitude latitude".split()
+        ],
+        "string": [
+            {"label": dtype, "value": dtype}
+            for dtype in "email ipv4 ipv6 mac_address string".split()
+        ],
+    }
+
+    return html.Div([
+        html.Table([
+            html.Thead([
+                html.Th(col_name)
+                for col_name in df.columns
+            ]),
+
+            html.Tbody([
+                html.Tr([
+                    html.Td(dcc.Dropdown(
+                        options=all_datatypes_options,
+                        value=types[col_name]))
+                    for col_name in df.columns
+                ], id="row_type"),
+                html.Tr([
+                    html.Td(dcc.Dropdown(
+                        options=subtype_options[types[col_name]],
+                        value=subtypes[col_name]))
+                    for col_name in df.columns
+                ], id="row_subtype"),
+            ] + [
+                html.Tr([
+                    html.Td(item)
+                    for item in row
+                ])
+                for (i, row) in df.iterrows()
+            ])
+        ])
+    ])
+
 
 @app.callback(Output("table_schema", "children"),
               [Input("dataset_choice", "value")],
@@ -68,7 +124,6 @@ def show_schema(api_choice, user_id):
 
     return [
         html.Br(),
-        create_table(df, columns=[{"name": [col, "Data type:" + types[col], "Sub-type:" + subtypes[col]], "id": col,
-                                   "type": dash_type[types[col]]}
-                                  for col in df.columns]),
+
+        schema_table(df[:200], types, subtypes)
     ]

@@ -142,6 +142,7 @@ def create_table(df, table_id="table", columns=None):
             sort_action="native",
             sort_mode='multi',
             editable=True,
+            filter_action="native",
             page_action='native',
             page_current=0,
             page_size=10,
