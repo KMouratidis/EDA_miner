@@ -2,7 +2,7 @@
 
 # EDA_miner
 
-<badges> <img src="https://img.shields.io/badge/doc--coverage-73%25-green.svg"> <img src="https://img.shields.io/badge/code--coverage-45%25-yellow.svg"> <img src="https://img.shields.io/badge/tests-100%25-brightgreen.svg"> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a> <img src="https://img.shields.io/badge/docker%20build-passing-brightgreen.svg">  [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted%20(modified)-ff69b4.svg)](CODE_OF_CONDUCT.md)  </badges>
+<badges> <img src="https://img.shields.io/badge/doc--coverage-73%25-green.svg"> <img src="https://img.shields.io/badge/code--coverage-48%25-yellow.svg"> <img src="https://img.shields.io/badge/tests-100%25-brightgreen.svg"> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a> <img src="https://img.shields.io/badge/docker%20build-passing-brightgreen.svg">  [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted%20(modified)-ff69b4.svg)](CODE_OF_CONDUCT.md)  </badges>
 
 A visualization and analytics dashboard that is able to connect to APIs, receive your data,
 and allow you to run Machine Learning models from a server. Started as a university project, and will be deployed in their servers probably later this year.
@@ -34,6 +34,11 @@ Just looking around? Then you can either install locally or with docker.
 ### Example of Model Builder
 
 ![](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/ModelBuilder.png)
+
+### Example of the Schema Inference Tab:
+
+![Interface options 2](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Datatype_Inference.png)
+
 
 ### Example of the Explore & Visualize Tab:
 

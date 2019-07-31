@@ -100,7 +100,7 @@ def Exploration_Options(options):
                  className="horizontal_dropdowns"),
 
         # Holds the name AND opens a modal for graph selection
-        html.Button(id="graph_choice_exploration", n_clicks=0),
+        html.Button("Choose a graph...", id="graph_choice_exploration", n_clicks=0),
 
         # modal with buttons for graphs
         html.Div([

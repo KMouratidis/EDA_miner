@@ -4,12 +4,14 @@ import dash_html_components as html
 from dash.exceptions import PreventUpdate
 import dash_table
 
+import dash_bootstrap_components as dbc
+
 from server import app
 from utils import r, get_data, pretty_print_tweets, create_table
 from apps.data.View import get_available_choices
 from apps.data.data_utils.schema_heuristics import infer_types
 
-from itertools import chain
+import dill
 
 
 # TODO: WHEN IMPLEMENTING THIS DON'T FORGET TO KEEP TRACK OF DATASET
@@ -63,7 +65,7 @@ def schema_table(df, types, subtypes):
             html.Thead([
                 html.Th(col_name)
                 for col_name in df.columns
-            ]),
+            ], id="table_colnames"),
 
             html.Tbody([
                 html.Tr([
@@ -89,6 +91,63 @@ def schema_table(df, types, subtypes):
     ])
 
 
+@app.callback([Output("schema_confirmation", "message"),
+               Output("schema_confirmation", "displayed")],
+              [Input("update_schema", "n_clicks")],
+              [State("table_colnames", "children"),
+               State("row_type", "children"),
+               State("row_subtype", "children"),
+               State("dataset_choice", "value"),
+               State("user_id", "children")])
+def update_schema(n_clicks, table_colnames, row_types, row_subtypes,
+                  dataset_choice, user_id):
+    """
+    Update the dataset schema. This function takes the html elements \
+    from the table head (containing column names) and its first two \
+    rows (containing dropdowns with the data types/subtypes), parses \
+    them and stores them in redis.
+
+    Args:
+        n_clicks (int): Number of button clicks.
+        table_colnames (dict): The head (`html.Thead`) of the table, \
+                               as a Dash dict.
+        row_types (dict): The first table row (`html.Tr`) containing \
+                          the Dash dropdown dict with the data types.
+        row_subtypes (dict): The first table row (`html.Tr`) containing \
+                             the Dash dropdown dict with the data subtypes.
+        dataset_choice (str): Name of dataset.
+        user_id (str): Session/user id.
+
+    Returns:
+        list(str, bool): A message and a boolean for a browser alert.
+    """
+
+
+    types = {}
+    for col_name, col in zip(table_colnames, row_types):
+        dropdown = col["props"]["children"]
+        dropdown_value = dropdown["props"]["value"]
+        col_name = col_name["props"]["children"]
+
+        types[col_name ] = dropdown_value
+
+    subtypes = {}
+    for col_name, col in zip(table_colnames, row_subtypes):
+        dropdown = col["props"]["children"]
+        dropdown_value = dropdown["props"]["value"]
+        col_name = col_name["props"]["children"]
+
+        subtypes[col_name] = dropdown_value
+
+    r.set(f"{user_id}_{dataset_choice}_schema", dill.dumps({
+        "types": types,
+        "subtypes": subtypes
+    }))
+
+    return "Updated", True
+
+
+
 @app.callback(Output("table_schema", "children"),
               [Input("dataset_choice", "value")],
               [State("user_id", "children")])
@@ -104,13 +163,18 @@ def show_schema(api_choice, user_id):
     if df is None:
         return [html.H4("Nothing to display")]
 
-    sample = df.sample(n=50, replace=True).dropna()
+    schema = r.get(f"{user_id}_{api_choice}_schema")
+    if schema is None:
+        sample = df.sample(n=50, replace=True).dropna()
+        types, subtypes = infer_types(sample, is_sample=True)
+        r.set(f"{user_id}_{api_choice}_schema", dill.dumps({
+            "types": types,
+            "subtypes": subtypes
+        }))
 
-    # Get current schema for the graph if it exists
-    # TODO: Actually implement this, e.g.:
-    #       `schema = r.get(f"{api_choice}_schema")`
-
-    types, subtypes = infer_types(df, is_sample=True)
+    else:
+        schema = dill.loads(schema)
+        types, subtypes = schema["types"], schema["subtypes"]
 
     # Mapping of types (strings) from schema to dash_table.
     # See: https://dash.plot.ly/datatable/typing
@@ -124,6 +188,8 @@ def show_schema(api_choice, user_id):
 
     return [
         html.Br(),
+        dcc.ConfirmDialog(id="schema_confirmation"),
+        html.Button("Update schema", id="update_schema"),
 
         schema_table(df[:200], types, subtypes)
     ]
