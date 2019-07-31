@@ -107,7 +107,7 @@ def create_dropdown(name, options, **kwargs):
     """
 
     return [
-        html.H5(name+":"),
+        html.H6(name+":"),
         dcc.Dropdown(
             options=options,
             **kwargs

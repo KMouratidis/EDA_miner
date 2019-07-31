@@ -43,7 +43,8 @@ from sklearn.tree import ExtraTreeRegressor, ExtraTreeClassifier
 from xgboost import XGBClassifier
 
 
-"""######## Custom classes ######## 
+"""
+======== Custom classes ========
 
 All custom classes should subclass these ones.
 This is done for checks down the line that
@@ -169,10 +170,10 @@ class FeatureMaker(BaseEstimator, TransformerMixin):
     a mathematical function as text, using whatever is available to sympy.
 
     Args:
-        func_name:
-        cols:
-        dataset_choice:
-        user_id:
+        func_name (function): User-defined function.
+        cols (list(str)): Columns used by the transformer.
+        dataset_choice (str): Choice of dataset.
+        user_id: User/session id.
     """
 
     modifiable_params = {}
@@ -230,7 +231,8 @@ class SentimentAnalyzer(BaseEstimator, RegressorMixin):
             return np.array([TextBlob(x).polarity for x in X])
 
 
-"""######## Prebuilt classes ########
+"""
+======== Prebuilt classes ========
 
 For EVERY model that is expected to have parametrization
 you are expected to give its class a `modifiable_params`
@@ -242,7 +244,9 @@ And of course it must have `fit` and transform methods.
 """
 
 
-"""######## Transformers ######## """
+"""
+======== Transformers ========
+"""
 
 StandardScaler.modifiable_params = {
     "with_mean": [True, False],
@@ -308,7 +312,9 @@ TruncatedSVD.modifiable_params = {
 }
 
 
-"""######## Regression ######## """
+"""
+======== Regression ========
+"""
 
 LinearRegression.modifiable_params = {
     "fit_intercept": [True, False],
@@ -377,7 +383,9 @@ NuSVR.modifiable_params = {
 }
 
 
-"""######## Classification ######## """
+"""
+======== Classification ========
+"""
 
 LogisticRegression.modifiable_params = {
     "penalty": ["l2", "l1"],
@@ -442,7 +450,9 @@ ExtraTreeClassifier.modifiable_params = {
 }
 
 
-"""######## Clustering ######## """
+"""
+======== Clustering ========
+"""
 
 KMeans.modifiable_params = {
     "n_clusters": [8, 2, 3, 4, 5, 6, 7, 9, 10, 15, 20],

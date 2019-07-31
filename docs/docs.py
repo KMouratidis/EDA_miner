@@ -69,7 +69,7 @@ layouts["{folder}{file[:-3]}"] = html.Div([""")
                         line = " ".join(rd[j].strip() for j in range(correct_line, i))
                         
                         
-                    handler(f'html.Br(), html.H3("""{rd[correct_line].replace("class ", "").replace("def ", "").strip()}""", style={{"backgroundColor": "#AAA", "display": "inline"}}), ')
+                    handler(f'html.Br(), html.H3("""{rd[correct_line].replace("subclass", "TEMPTEMP").replace("class ", "").replace("TEMPTEMP", "subclass").replace("def ", "").strip()} """, style={{"backgroundColor": "#AAA", "display": "inline"}}), ')
                     handler("html.Div([")
 
                         
@@ -144,8 +144,6 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # Any other configurations for the Dash/Flask server go here
 app.config['suppress_callback_exceptions'] = True
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # This is what the rendered html will look like
 app.index_string = '''

@@ -49,7 +49,8 @@ def Map_Options(options):
             # Choose a map type
             html.Div(create_dropdown("Map type", [
                 {"label": "Choropleth", "value": "agg_choropleth"},
-                {"label": "Simple geoscatter", "value": "geoscatter"}
+                {"label": "Simple geoscatter", "value": "geoscatter"},
+                {"label": "Lines on map", "value": "maplines"},
             ], multi=False, id="map_type_choice"),
                      className="vertical_dropdowns"),
 
@@ -81,6 +82,20 @@ def Map_Options(options):
                 {"label": "Min", "value": "min"},
             ], multi=False, id="aggregator_field", value="count"),
                      className="vertical_dropdowns"),
+            html.Div(create_dropdown("Destination latitude", options=[],
+                                     multi=False, id="dest_lat"),
+                     className="vertical_dropdowns"),
+            html.Div(create_dropdown("Destination longitude", options=[],
+                                     multi=False, id="dest_long"),
+                     className="vertical_dropdowns"),
+            html.Div(create_dropdown("Map projection style", options=[
+                {"label": "Equirectangular", "value": "equirectangular"},
+                {"label": "Azimuthal equal area", "value": "azimuthal equal area"},
+                {"label": "Orthographic", "value": "orthographic"},
+
+            ],
+                                     multi=False, id="projection_type"),
+                     className="vertical_dropdowns"),
 
         ], className="col-sm-3"),
 
@@ -93,6 +108,8 @@ def Map_Options(options):
 
 @app.callback([Output("lat_var", "options"),
                Output("lon_var", "options"),
+               Output("dest_lat", "options"),
+               Output("dest_long", "options"),
                Output("country", "options"),
                Output("z_var", "options")],
               [Input("dataset_choice_maps", "value")],
@@ -120,7 +137,7 @@ def render_variable_choices_maps(dataset_choice, user_id):
 
     options = [{'label': col[:35], 'value': col} for col in df.columns]
 
-    return [options, options, options, options]
+    return [options] * 6
 
 
 # TODO: This probably needs to interface with the schema
@@ -138,13 +155,17 @@ def country2code(value):
 
 
 @app.callback([Output("aggregator_field", "disabled"),
-               Output("z_var", "disabled")],
+               Output("z_var", "disabled"),
+               Output("dest_lat", "disabled"),
+               Output("dest_long", "disabled")],
               [Input("map_type_choice", "value")])
 def show_hide_aggregator_dropdown(map_type):
     if map_type == "agg_choropleth":
-        return False, False
+        return False, False, True, True
+    elif map_type == "maplines":
+        return True, True, False, False
     else:
-        return True, True
+        return True, True, True, True
 
 
 @app.callback(Output("map_graph", "figure"),
@@ -154,31 +175,47 @@ def show_hide_aggregator_dropdown(map_type):
                Input("z_var", "value"),
                Input("map_type_choice", "value"),
                Input("aggregator_field", "value"),
-               Input("colorscale", "value")],
+               Input("dest_lat", "value"),
+               Input("dest_long", "value"),
+               Input("colorscale", "value"),
+               Input("projection_type", "value")],
               [State("user_id", "children"),
                State("dataset_choice_maps", "value")])
 def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
-             colorscale, user_id, dataset_choice_maps):
+             dest_lat, dest_long, colorscale, projection_type, user_id,
+             dataset_choice_maps):
     """
     Plot the map according to user choices.
 
     Args:
-        in_node (str): Column name containing the values of \
-                      nodes from where links start.
-        out_node (str): Column name for nodes where links end.
-        layout_choice (str): One of the layouts available in \
-                             Cytoscape.
+        lat_var (str): Column name for latitude.
+        lon_var (str): Column name for latitude.
+        country (str): Column name for the country. Accepted values \
+                       include 3-letter country codes and full names \
+                       or anything else pycountry can decode.
+        z_var (str): Column name for choropleth colors.
+        map_type (str): Type of math, one of three choices: Simple or \
+                        Aggregated Choropleth, or Lines on map.
+        aggregator_type (str): Type of aggregation to perform on the \
+                               data (e.g. mean, max).
+        dest_lat (str): Column name for destination latitude, if drawing \
+                        lines on map chart.
+        dest_long (str): Column name for destination longitude, if drawing \
+                        lines on map chart.
+        colorscale (str): Colorscale for the choropleth, one of several \
+                          as defined in plotly.
+        projection_type (str): Projection type, one of several as \
+                               defined by plotly.
         user_id (str): Session/user id.
         dataset_choice_maps (str): Name of dataset.
 
     Returns:
-        [list(dict), dict]: A list of elements (dicts for Cytoscape) \
-                            and the layout for the graph.
+        dict: The figure to draw.
     """
 
 
     if any(x is None for x in [lat_var, lon_var, country, map_type,
-                               dataset_choice_maps]):
+                               dataset_choice_maps, projection_type]):
         raise PreventUpdate()
 
     if colorscale is None:
@@ -190,11 +227,26 @@ def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
     df["codes"] = df[country].apply(lambda x: country2code(x))
     countries = df["codes"].dropna().unique()
 
-    traces = [go.Scattergeo(
-        locationmode='country names',
-        lat=df[lat_var],
-        lon=df[lon_var],
-    )]
+    if map_type == "maplines":
+
+        if dest_long is None or dest_long is None:
+            raise PreventUpdate()
+
+        # make visualizations lighter
+        df = df[:len(df)//2]
+
+        traces = [go.Scattergeo(
+            locationmode='country names',
+            lat=[df[lat_var][i], df[dest_lat][i]],
+            lon=[df[lon_var][i], df[dest_long][i]],
+            mode='lines',
+        ) for i in range(len(df))]
+    else:
+        traces = [go.Scattergeo(
+            locationmode='country names',
+            lat=df[lat_var],
+            lon=df[lon_var],
+        )]
 
     if "choropleth" in map_type:
         if z_var is None:
@@ -224,8 +276,10 @@ def plot_map(lat_var, lon_var, country, z_var, map_type, aggregator_type,
             'margin': {
                         'l': 10, 'r': 10, 'b': 0, 't': 40
                     },
-            "projection": {
-                "type": 'orthographic'
+            "geo": {
+                "projection": {
+                    "type": projection_type
+                }
             },
         }
     }

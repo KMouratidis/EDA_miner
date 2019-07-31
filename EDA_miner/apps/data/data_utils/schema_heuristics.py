@@ -6,29 +6,29 @@ from fuzzywuzzy import fuzz
 
 def can_into_date(col):
     """
-    # Can handle with various separators
-    # e.g.: "-" or "/" or " "
+    # Can handle with various separators \
+    # e.g.: "-" or "/" or " " \
     # (time MUST be separated with ":")
-        "YYYY"
-        "YYYY-MM"
-        "MM-YYYY"
-        "YYYY-MM-DD"
-        "MM-DD-YYYY"
-        "DD-MM-YYYY"
-        "DD-MM-YYYY-HRS:MIN"
-        "June 1995"
-        "03 June 1995"
-        "03 Jun 1995"
-        "03 June 1995 15:32"
-        "15:32 16 Jun 2015"
-        "15:32 16th Jun 2015"
-        "15:32 Jun 16th 2015"
+        YYYY
+        YYYY-MM
+        MM-YYYY
+        YYYY-MM-DD
+        MM-DD-YYYY
+        DD-MM-YYYY
+        DD-MM-YYYY-HRS:MIN
+        June 1995
+        03 June 1995
+        03 Jun 1995
+        03 June 1995 15:32
+        15:32 16 Jun 2015
+        15:32 16th Jun 2015
+        15:32 Jun 16th 2015
 
     # Partially handles
-        "15:32"  # assumed: Today
+        15:32  # assumed: Today
 
     # Cannot handle
-        "YYYY-DD-MM"
+        YYYY-DD-MM
 
     # Incorrectly handles
         int
@@ -44,8 +44,7 @@ def can_into_date(col):
 
 def can_into_categorical(col, threshold=None):
     """
-    Convert to categorical IF the unique values are
-    fewer than some threshold.
+    Convert to categorical IF the unique values are fewer than some threshold.
     """
 
     n_rows = col.shape[0]
