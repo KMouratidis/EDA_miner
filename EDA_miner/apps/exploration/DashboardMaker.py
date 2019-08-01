@@ -6,16 +6,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
-import dash_bootstrap_components as dbc
-
 from server import app
-import layouts
-from utils import create_dropdown
-from apps.data.View import get_data
-from apps.exploration.graphs import graphs2d
-
-import plotly.graph_objs as go
-
 import dash_rnd
 
 
@@ -36,6 +27,7 @@ Dashboard_Options = [
               [Input('add_dashboard_component', 'n_clicks')],
               [State('dashboard', 'children')])
 def display_output(n_clicks, children):
+
     children.append(
         dash_rnd.ResizeDraggable(
             id=f'some_id_{len(children)}',

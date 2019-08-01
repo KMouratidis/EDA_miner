@@ -29,7 +29,6 @@ import dash_html_components as html
 from server import app
 import layouts
 
-import dill
 import dash_daq as daq
 
 Sidebar = []

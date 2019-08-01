@@ -117,7 +117,7 @@ def infer_types(df, is_sample=False):
     time_words = ["year", "time", "date", "datetime", "date time", "date_time"]
     int_words = ["code", "age"]
     float_words = ["weight", "lat", "latitude", "lon", "long", "longitute", "distance",
-                   "length", "width"]
+                   "length", "width"]  # LGTM[useless-code]
     categorical_words = ["sex", "gender", "state", "country"]
 
     # Define some patters for regex matching for subtypes

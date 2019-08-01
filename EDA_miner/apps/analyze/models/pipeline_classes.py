@@ -11,8 +11,6 @@ Notes to others:
     remember to modify `ml_options` in `graph_structures.py`.
 """
 
-from dash.exceptions import PreventUpdate
-
 from utils import r, get_data
 
 import dill
@@ -28,7 +26,6 @@ from sklearn.decomposition import PCA, NMF, TruncatedSVD
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.feature_selection import SelectKBest
 from sklearn.impute import SimpleImputer, MissingIndicator
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.linear_model import Ridge, Lasso, SGDRegressor, SGDClassifier

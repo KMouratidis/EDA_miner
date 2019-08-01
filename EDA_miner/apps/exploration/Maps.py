@@ -10,10 +10,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
-import dash_cytoscape as cyto
-
 from server import app
-from utils import r, create_dropdown
+from utils import create_dropdown
 from apps.data.View import get_data
 
 import plotly.graph_objs as go

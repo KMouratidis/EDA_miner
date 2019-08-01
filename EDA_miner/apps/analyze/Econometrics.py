@@ -17,12 +17,12 @@ Notes to others:
 """
 
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import create_dropdown, get_data
+from apps.analyze.utils import render_variable_choices
 
 
 
@@ -59,45 +59,8 @@ def Econometrics_Options(options):
     ])
 
 
-@app.callback(Output("variable_choices_econometrics", "children"),
-              [Input("dataset_choice_econometrics", "value"),
-               Input("algo_choice_econometrics", "value")],
-              [State("user_id", "children")])
-def render_variable_choices_econometrics(dataset_choice,
-                                         algo_choice_econometrics,
-                                         user_id):
-    """
-    Create a menu of dcc components for the user to choose fitting options.
-
-    Args:
-        dataset_choice (str): Name of dataset.
-        algo_choice_econometrics (str): The choice of algorithm type.
-        user_id (str): Session/user id.
-
-    Returns:
-        list: Dash elements.
-    """
-
-
-    df = get_data(dataset_choice, user_id)
-
-    # Make sure all variables have a value before returning choices
-    if any(x is None for x in [df, dataset_choice, algo_choice_econometrics]):
-        return [html.H4("Select dataset and algorithm first.")]
-
-    # Truncate labels so they don't fill the whole dropdown
-    options = [{'label': col[:35], 'value': col} for col in df.columns]
-
-    layout = [
-        html.Div(create_dropdown("X variable(s)", options,
-                                 multi=True, id="xvars_econometrics"),
-                 className="horizontal_dropdowns"),
-        html.Div(create_dropdown("Target not applicable", options,
-                                 multi=False, id="yvars_econometrics"),
-                 className="horizontal_dropdowns"),
-    ]
-
-    return layout
+# Render dropdowns and other choices
+render_variable_choices("econometrics")
 
 
 @app.callback(

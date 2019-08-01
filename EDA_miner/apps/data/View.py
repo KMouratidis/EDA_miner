@@ -152,7 +152,8 @@ def render_table(api_choice, user_id):
         return pretty_print_tweets(api, 5)
 
     elif api_choice == "reddit_api":
-        api = r.get(f"{user_id}_{api_choice}_handle")
+        # No need to get the api here
+        # TODO: But maybe this change?
 
         return [
             html.H4("Write the name of a subreddit:"),

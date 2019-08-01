@@ -137,6 +137,7 @@ def get_users_ganalytics(n_clicks, metrics, user_id):
         raise PreventUpdate()
 
     if n_clicks > 0:
+        # TODO: Why have this requester here if below you do your own request?!
         # Get the API handle
         requester = dill.loads(r.get(f"{user_id}_ganalytics_api_handle"))
 

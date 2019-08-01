@@ -39,7 +39,6 @@ from apps.data.View import get_data
 from apps.exploration.graphs import graphs2d
 
 import plotly.graph_objs as go
-import os
 
 
 Sidebar = []

@@ -356,15 +356,23 @@ th {
     min-width: 195px !important;
     position: sticky !important;
     top: 0 !important;
-    z-index: 100;
+    z-index: 20;
     background-color: #eeeeee;
     padding-left: 5px !important;
     padding-right: 5px !important;
 }
 
+#dataset_choice>.Select {
+    z-index: 30;
+}
+
 td {
     padding-left: 5px !important;
     padding-right: 5px !important;
+}
+
+tr, tr>td>div>.Select {
+    z-index: 10;
 }
 
 .Select-control, .Select-input>input, .is-focused, .is-open,
@@ -373,6 +381,8 @@ td {
     background-color: #dfeaef;
     border-radius: 13px;
 }
+
+
 
 .jsx-4017309047, .tab-container>* {
     border-bottom-left-radius: 13px;

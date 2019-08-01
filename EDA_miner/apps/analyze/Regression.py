@@ -17,12 +17,12 @@ Notes to others:
 """
 
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
 from server import app
 from utils import create_dropdown, mapping, get_data
+from apps.analyze.utils import render_variable_choices
 
 
 
@@ -60,44 +60,9 @@ def Regression_Options(options):
     ])
 
 
-@app.callback(Output("variable_choices_regression", "children"),
-              [Input("dataset_choice_regression", "value"),
-               Input("algo_choice_regression", "value")],
-              [State("user_id", "children")])
-def render_variable_choices_regression(dataset_choice, algo_choice_regression,
-                                       user_id):
-    """
-    Create a menu of dcc components for the user to choose fitting options.
+# Render dropdowns and other choices
+render_variable_choices("regression")
 
-    Args:
-        dataset_choice (str): Name of dataset.
-        algo_choice_regression (str): The choice of algorithm type.
-        user_id (str): Session/user id.
-
-    Returns:
-        list: Dash elements.
-    """
-
-
-    df = get_data(dataset_choice, user_id)
-
-    # Make sure all variables have a value before returning choices
-    if any(x is None for x in [df, dataset_choice, algo_choice_regression]):
-        return [html.H4("Select dataset and algorithm first.")]
-
-    # Truncate labels so they don't fill the whole dropdown
-    options = [{'label': col[:35], 'value': col} for col in df.columns]
-
-    layout = [
-        html.Div(create_dropdown("X variable(s)", options,
-                                 multi=True, id="xvars_regression"),
-                 className="horizontal_dropdowns"),
-        html.Div(create_dropdown("Y variable", options,
-                                 multi=False, id="yvars_regression"),
-                 className="horizontal_dropdowns"),
-    ]
-
-    return layout
 
 
 @app.callback(

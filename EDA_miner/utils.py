@@ -239,7 +239,7 @@ def hard_cast_to_float(x):
 
     try:
         ret = np.float32(x)
-    except:
+    except ValueError:
         ret = 0.
 
     return ret

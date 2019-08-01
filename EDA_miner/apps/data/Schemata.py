@@ -1,13 +1,10 @@
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.exceptions import PreventUpdate
 import dash_table
 
-import dash_bootstrap_components as dbc
-
 from server import app
-from utils import r, get_data, pretty_print_tweets, create_table
+from utils import r, get_data, pretty_print_tweets
 from apps.data.View import get_available_choices
 from apps.data.data_utils.schema_heuristics import infer_types
 
@@ -33,6 +30,7 @@ def Schema_Options(user_id):
             dash_table.DataTable(id='table'),
         ]),
     ]
+
 
 all_datatypes_options = [
     {"label": dtype, "value": dtype}
@@ -176,20 +174,10 @@ def show_schema(api_choice, user_id):
         schema = dill.loads(schema)
         types, subtypes = schema["types"], schema["subtypes"]
 
-    # Mapping of types (strings) from schema to dash_table.
-    # See: https://dash.plot.ly/datatable/typing
-    dash_type = {
-        "float": "numeric",
-        "integer": "numeric",
-        "categorical": "text",
-        "date": "datetime",
-        "string": "text"
-    }
-
     return [
         html.Br(),
         dcc.ConfirmDialog(id="schema_confirmation"),
         html.Button("Update schema", id="update_schema"),
 
-        schema_table(df[:200], types, subtypes)
+        schema_table(df[:500], types, subtypes)
     ]

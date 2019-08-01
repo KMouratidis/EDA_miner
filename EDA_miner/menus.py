@@ -27,16 +27,13 @@ Notes to others:
         - adding a new top-level menu tab, or other new feature.
 """
 
-import dash
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
 
 from server import app
 from utils import encode_image, r
 
-import dash_bootstrap_components as dbc
 import sd_material_ui
 import visdcc
 
@@ -44,6 +41,7 @@ import uuid
 import pickle
 import pandas as pd
 import os
+
 
 
 static_dir = os.path.dirname(__file__)
@@ -171,7 +169,7 @@ def toggle_colors(n_clicks):
     if n_clicks % 2:
         change_color = "document.getElementsByTagName('body')[0].style.backgroundColor = 'black'"
     else:
-        change_color = change_color = "document.getElementsByTagName('body')[0].style.backgroundColor = 'white'"
+        change_color = "document.getElementsByTagName('body')[0].style.backgroundColor = 'white'"
 
     # https://stackoverflow.com/a/16239245/6655150
     return """

@@ -26,6 +26,7 @@ from server import app
 import layouts
 from utils import create_dropdown, mapping, get_data
 from apps.exploration.graphs.graphs2d import scatterplot
+from apps.analyze.utils import render_variable_choices
 
 import plotly.graph_objs as go
 import numpy as np
@@ -75,44 +76,8 @@ def Clustering_Options(options):
     ])
 
 
-@app.callback(Output("variable_choices_clustering", "children"),
-              [Input("dataset_choice_clustering", "value"),
-               Input("algo_choice_clustering", "value")],
-              [State("user_id", "children")])
-def render_variable_choices_clustering(dataset_choice, algo_choice_clustering,
-                                       user_id):
-    """
-    Create a menu of dcc components for the user to choose fitting options.
-
-    Args:
-        dataset_choice (str): Name of dataset.
-        algo_choice_clustering (str): The choice of algorithm type.
-        user_id (str): Session/user id.
-
-    Returns:
-        list: Dash elements.
-    """
-
-
-    df = get_data(dataset_choice, user_id)
-
-    # Make sure all variables have a value before returning choices
-    if any(x is None for x in [df, dataset_choice, algo_choice_clustering]):
-        return [html.H4("Select dataset and algorithm first.")]
-
-    # Truncate labels so they don't fill the whole dropdown
-    options = [{'label': col[:35], 'value': col} for col in df.columns]
-
-    layout = [
-        html.Div(create_dropdown("X variable(s)", options,
-                                 multi=True, id="xvars_clustering"),
-                 className="horizontal_dropdowns"),
-        html.Div(create_dropdown("Target not applicable", options,
-                                 multi=False, id="yvars_clustering"),
-                 className="horizontal_dropdowns"),
-    ]
-
-    return layout
+# Render dropdowns and other choices
+render_variable_choices("clustering")
 
 
 @app.callback(

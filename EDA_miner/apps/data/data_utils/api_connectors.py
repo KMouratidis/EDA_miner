@@ -13,13 +13,13 @@ Notes to others:
 """
 
 from utils import r
+from exceptions import UnexpectedResponse
 
 import twitter
 import praw
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import spotipy
-from spotipy import util
+from spotipy import util, Spotify
 import quandl
 import requests
 import dill
@@ -89,7 +89,7 @@ def spotify_connect(client_id, client_secret):
     creds = util.oauth2.SpotifyClientCredentials(client_id, client_secret)
     token = creds.get_access_token()
 
-    return spotipy.Spotify(auth=token)
+    return Spotify(auth=token)
 
 
 def quandl_connect(api_key):
@@ -112,6 +112,10 @@ def ganalytics_connect(client_email, private_key, *, user_id=None):
         "user_id": user_id,
         "private_key": private_key
     })
+
+    if response.status_code != 201:
+        raise UnexpectedResponse("Connection to Google Analytics failed with "
+                                 f"status code {response.status_code}")
 
     # Returns a function with saved user_id which only needs
     # string for the metrics
