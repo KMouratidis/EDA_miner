@@ -162,27 +162,26 @@ def infer_types(df, is_sample=False):
         # Float columns can be anything, so ignore for now
 
         # Int
-        if column_name_match(col_name, int_words):
-            if (np.issubdtype(sample[col_name], np.number) or
-                    can_into_int(sample[col_name])):
-                lenient[col_name] = "integer"
+        if column_name_match(col_name, int_words) and (
+                (np.issubdtype(sample[col_name], np.number) or
+                 can_into_int(sample[col_name]))):
 
-                # The outer IF might pass but the inner might fail,
-                # in which case, keep going
-                continue
+            lenient[col_name] = "integer"
 
         # Date
-        if column_name_match(col_name, time_words):
-            if can_into_date(df[col_name]):
-                lenient[col_name] = "date"
-                continue
+        elif (column_name_match(col_name, time_words) and
+                can_into_date(df[col_name])):
+
+            lenient[col_name] = "date"
 
         # Category
-        if column_name_match(col_name, categorical_words):
-            if can_into_categorical(df[col_name]):
-                lenient[col_name] = "categorical"
-                continue
+        elif (column_name_match(col_name, categorical_words) and
+                can_into_categorical(df[col_name])):
 
+            lenient[col_name] = "categorical"
+
+    # Update the unsafe assumption with the lenient one to form the
+    # base / high-level types
     high_level_types = unsafe.copy()
     high_level_types.update(lenient)
 
@@ -191,38 +190,28 @@ def infer_types(df, is_sample=False):
     for col_name in df.columns:
         dtype = high_level_types[col_name]
 
-        if dtype == "categorical":
-            if df[col_name].nunique() == 2:
-                sub_categories[col_name] = "binary"
-                continue
+        # Initialize subtype to high-level type
+        sub_categories[col_name] = dtype
 
-        if dtype == "float":
+        # Try to update to more specific
+
+        if dtype == "categorical" and df[col_name].nunique() == 2:
+            sub_categories[col_name] = "binary"
+
+        elif dtype == "float":
             if col_name in ["lat", "latitude"]:
                 sub_categories[col_name] = "latitude"
-                continue
 
             elif col_name in ["lon", "long", "longitute"]:
                 sub_categories[col_name] = "longitude"
-                continue
 
-        if dtype == "string":
-            if all(mails.match(x) for x in sample[col_name]):
-                sub_categories[col_name] = "email"
-                continue
-
-            if all(ipv4.match(x) for x in sample[col_name]):
-                sub_categories[col_name] = "ipv4"
-                continue
-
-            if all(ipv6.match(x) for x in sample[col_name]):
-                sub_categories[col_name] = "ipv6"
-                continue
-
-            if all(mac_address.match(x) for x in sample[col_name]):
-                sub_categories[col_name] = "mac_address"
-                continue
-
-        # Else...
-        sub_categories[col_name] = dtype
+        elif dtype == "string":
+            # Check every pattern
+            for pattern, subtype in zip([mails, ipv4, ipv6, mac_addr],
+                                        ["email", "ipv4", "ipv6", "mac_addr"]):
+            
+                # If all the rows in the sample match, assume the subtype
+                if all(pattern.match(x) for x in sample[col_name]):
+                    sub_categories[col_name] = subtype
 
     return [high_level_types, sub_categories]
