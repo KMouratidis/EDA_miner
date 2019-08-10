@@ -3,6 +3,7 @@
 # to json or similar (e.g. ganalytics_metrics)
 
 exclude_patterns:
-  - "EDA_miner/docs/"
+  - "**/docs/"
   - "**/ganalytics_metrics.py"
   - "**/templates/"
+  - "**/tests/"
