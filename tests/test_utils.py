@@ -1,68 +1,50 @@
+from .testing_utils import RedisTest
+
 import sys
 import os
 import warnings
-import base64
 import numpy as np
 import pandas as pd
-import pickle
+import dill
 from redis import Redis
 
 sys.path.insert(0, os.path.abspath("../EDA_miner"))
 warnings.filterwarnings("ignore")
 
-from utils import cleanup, get_data, hard_cast_to_float, parse_contents, redis_startup
+from utils import cleanup, hard_cast_to_float, redis_startup
 
 
-class TestCleanup:
-    r = Redis(host="localhost", port=6379, db=0)
-
-    def test_cleanup_images(self):
-        # create an empty file
-        with open("../EDA_miner/static/images/python_generated_ssid_file.txt", "w") as f:
-            f.write("hello")
-
-        cleanup(self.r)
-
-        # get all files
-        images = os.listdir(os.path.abspath("../EDA_miner/static/images"))
-        # keep only files that belong to non-registered users
-        non_user_images = [img for img in images
-                           if "python_generated_ssid" in img]
-
-        assert len(non_user_images) == 0
+class TestCleanup(RedisTest):
 
     def test_cleanup_redis(self):
+        self.redis_conn.set("mykey", 5)
+        cleanup(self.redis_conn)
 
-        self.r.set("mykey", 5)
-        cleanup(self.r)
-        assert len(self.r.keys("*")) == 0
+        # Correctly flushes Redis
+        assert self.redis_conn.get("mykey") is None
+        # Correctly saves data to a pickle
+        assert os.path.exists("redisData.pkl")
 
 
 # TODO: properly do set up / tear down & split function & rename
-class TestGetData:
-    r = Redis(port=6379, db=0)
+class TestGetData(RedisTest):
 
     def test_get_data(self):
 
         # Create a dataframe
-        dim = (3,5)
+        dim = (3, 5)
         columns = [f"col_{x}" for x in range(dim[1])]
         index = [f"col_{x}" for x in range(dim[0])]
         df = pd.DataFrame(np.random.random(dim), columns=columns, index=index)
 
         # Send values to Redis and assert if they were received
-        assert self.r.set("userid_user_data_random", pickle.dumps(df)) is True
-        assert self.r.set("userid_gsheets_api_data", pickle.dumps(df)) is True
+        assert (self.redis_conn.set("userid_data_userdata_random",
+                                    dill.dumps(df)) is True)
 
-        # test msgpack
-        np.testing.assert_array_equal(df, get_data("user_data_random", "userid"))
-        # test pickle
-        np.testing.assert_array_equal(df, get_data("gsheets_api", "userid"))
-        # test non-implemented api
-        assert get_data("non_existing_API", "userid") is None
-
-        # TODO: correctly cleanup after tests
-        # cleanup(self.r)
+        # Get data from redis and decode
+        user_data = dill.loads(self.redis_conn.get("userid_data_userdata_random"))
+        # Test correct decoding
+        np.testing.assert_array_equal(df, user_data)
 
 
 class TestHardCast:
@@ -81,5 +63,8 @@ class TestHardCast:
 class TestStartup:
 
     def test_startup(self):
-        r = redis_startup()
-        assert isinstance(r, Redis)
+        redis_conn = redis_startup()
+        assert isinstance(redis_conn, Redis)
+
+        cleanup(redis_conn)
+        os.remove("redisData.pkl")

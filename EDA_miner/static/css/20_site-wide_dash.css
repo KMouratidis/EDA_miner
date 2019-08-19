@@ -1,0 +1,235 @@
+/*                                         */
+/* (UN)COMMENT IF YOU NEED TO DEBUG LAYOUT */
+/*                                         */
+
+/*
+.js-plotly-plot, .plot-container {
+    outline: 2px solid black !important;
+    background-color: #cbce9b;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+    outline: 1px dashed black;
+}
+*/
+
+
+/*                   */
+/* Generics for DASH */
+/*                   */
+
+/*#selected_subpage, #selected_subpage>div*/
+.app0, #react-entry-point, #react-entry-point>div, #_dash-app-content,
+#_dash-app-content>div, #main_content, #main_page, #selected_subpage>div
+#_dash-global-error-container, #_dash-global-error-container>div,
+#_dash-global-error-container>div>div>div,
+#_dash-global-error-container>div>div:nth-child(2),
+#selected_subpage, #selected_subpage>div
+{
+    height: 100% !important;
+}
+
+ /*For disabling the extra div on development mode*/
+._dash-loading-callback {
+    height: 0 !important;
+    display: none !important;
+}
+
+div .dash-debug-menu, .dash-debug-menu--closed {
+    height: 64px !important;
+}
+
+._dash-undo-redo {
+    display: none;
+}
+
+/*                    */
+/* Site wide generics */
+/*                    */
+
+button {
+    width: 185px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+body {
+    font-family: 'Roboto', sans-serif !important;
+    /*min-width: 1100px;*/
+}
+
+/*           */
+/* Dropdowns */
+/*           */
+
+.vertical_dropdowns {
+    display: block;
+    margin: 10px;
+    vertical-align: bottom;
+    z-index: 30 !important;
+}
+
+.horizontal_dropdowns>div>.Select {
+    display: inline-block;
+    margin: 10px;
+    vertical-align: bottom;
+    width: 30%;
+    z-index: 30 !important;
+}
+
+.Select-control, .Select-input>input, .is-focused, .is-open,
+.Select-input, .Select-placeholder,
+.Select-multi-value-wrapper {
+    border: none;
+    background-color: #dfeaef !important;
+    border-radius: 13px;
+}
+
+/* Dropdowns with multiple selection */
+.Select--multi .Select-value-label, .Select-value-icon {
+    background-color: #004e92;
+    color: white;
+}
+
+.Select-clear {
+    color: black;
+    font-weight: 900;
+}
+
+.Select-arrow-zone {
+    background-color: #004e92;
+}
+.Select-arrow {
+    border-color: #FFF transparent transparent !important;
+}
+
+/*                           */
+/* Dash app main div content */
+/*                           */
+
+#visuals-content, #data-content, #model-content {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 100%;
+    background-color: white;
+}
+
+/*                      */
+/* Plotly graphs (????) */
+/*                      */
+
+.svg-container {
+    margin-right: 10px !important;
+}
+
+/* This is for graphs to follow the Resize element */
+/*.main-svg, .svg-container, .plot-container, .js-plotly-plot {*/
+/*    height: inherit !important;*/
+/*    width: inherit !important;*/
+/*}*/
+
+/*                 */
+/* Dash apps' tabs */
+/*                 */
+
+#level2_tabs>.tab {
+    padding-top: 8px !important;
+    padding-bottom: 14px !important;
+    height: 60px !important;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif !important;
+    background-color: #004e92;
+    color: white;
+}
+
+#level2_tabs>.tab--selected {
+    background-color: #FFF;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.jsx-4017309047, .tab-container>* {
+    border-bottom-left-radius: 13px;
+    border-top-right-radius: 13px;
+}
+
+
+.jsx-4017309047>.tab {
+    background-color: white;
+    border-top: none;
+    border-right: none;
+}
+
+.jsx-4017309047>.tab:hover {
+    background-color: #eeeeee;
+}
+
+.jsx-4017309047>.tab--selected {
+    background-color: lightgray;
+}
+
+
+/* TODO: Inspect and update these old rules */
+/*                           */
+/* Tab-specific side-submenu */
+/*                           */
+
+/* if docked, use :nth-of-type(2) */
+#drawer>div>div {
+    background-image: linear-gradient(to left,
+    #000428, #004e92);
+    float: right;
+}
+
+#drawer>div>div>* {
+    color: white;
+    padding-left: 15px;
+}
+
+#low_level_tabs_submenu>div, #low_level_tabs_submenu>div>button {
+    color: #111111;
+    padding-left: 5px;
+    padding-right: 0;
+    font-family: 'Roboto', sans-serif !important;
+    text-align: left;
+}
+
+#low_level_tabs_submenu>div>button {
+    background-color: #eee;
+}
+
+#low_level_tabs_submenu>div {
+    /*border: 1px solid white;*/
+    border: none;
+    width: 100%;
+}
+
+#low_level_tabs_submenu>div>* {
+    width: 85% !important;
+}
+
+.dropdown-toggle, .btn, .btn-secondary {
+    width: 100%;
+    color: black;
+    font-weight: 600;
+    background-color: #eee;
+}
+
+.btn-secondary {
+    text-align: left !important;
+}
+
+/*         */
+/* UNKNOWN */
+/*         */
+
+#menudiv {
+    display: block;
+}

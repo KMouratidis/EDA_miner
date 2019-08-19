@@ -1,0 +1,94 @@
+/* Consider moving this to the /modeling folder */
+
+
+/*              */
+/* ModelBuilder */
+/*              */
+
+.mb-3.dropdown {
+    margin-top: 3px !important;
+    margin-bottom: 2px !important;
+}
+
+#modal, #modal_export_graph {
+    min-width: 600px !important;
+}
+
+#cytoscape-graph {
+    overflow: hidden;
+    outline: 2px solid black !important;
+    background-color: #b0cecb;
+}
+
+/* ModelBuilder sidemenu */
+
+.dropdown-menu {
+    width: 270px !important;
+    left: -160px !important;
+}
+
+#add_nodes_submenu, #connect_nodes_submenu,
+#remove_node_submenu, #modify_nodes_submenu,
+#load_pipeline_submenu {
+    margin-top: 13px !important;
+}
+
+#delete_options, #pipeline_options {
+    width: 185px;
+}
+
+#button_collapse_modify_node {
+    margin-top: 20px;
+}
+
+/*                      */
+/* Single Model options */
+/*                      */
+
+#dataset_choice>.Select {
+    z-index: 60 !important;
+}
+#problem_type>.Select {
+    z-index: 50 !important;
+}
+#algo_choice>.Select {
+    z-index: 40 !important;
+}
+#xvars>.Select {
+    z-index: 30 !important;
+}
+#yvars>.Select {
+    z-index: 20 !important;
+}
+
+#training_results_div {
+    padding-left: 35px;
+}
+
+/*#training_results_div .tab-content {*/
+/*    border: 1px solid black;*/
+/*    min-height: 650px;*/
+/*}*/
+
+#training_results_viz {
+    min-height: 650px;
+}
+
+#training_results_div .nav-link {
+    color: black;
+}
+
+.parameterMenu {
+    margin-top: 20px;
+    background-color: lightgrey;
+}
+
+.parameterMenu .Select, .parameterMenu button {
+    width: 250px;
+}
+
+.parameterMenu button {
+    background-image: linear-gradient(to left, #004e92, #000428);
+    color: white;
+    font-weight: bold;
+}

@@ -1,0 +1,149 @@
+/* https://www.w3schools.com/howto/howto_js_sidenav.asp */
+
+.row {
+    margin-right: 0;
+}
+
+/* The side navigation menu */
+.sidenav, .sidenav2, .sidenav_static {
+    height: 100%; /* 100% Full-height */
+    top: 0; /* Stay at the top */
+    left: 0;
+    /*background-color: #111; !* Black*!*/
+    background-image: linear-gradient(to left, #004e92, #000428);
+    color: white;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 15px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    z-index: 200; /* Stay on top */
+    margin-right: 0;
+    position: fixed; /* Stay in place */
+}
+
+.sidenav2 {
+    width: 0; /* 0 width - change this with JavaScript */
+}
+
+/* start with open navbar */
+.sidenav {
+    width: 220px;
+}
+
+.navbar_static, .navbar_static>* {
+    display: inline-block;
+}
+
+.sidenav2 {
+    left: 220px;
+    background-image: linear-gradient(to left, #000428, #004e92);
+}
+
+/* The navigation menu links */
+.sidenav .nav_links, .sidenav2 a, .sidenav_static a {
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif !important;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 35px;
+    color: white;
+    font-weight: 500;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .sidenav2 a:hover, .sidenav_static a:hover {
+    color: #999999;
+}
+
+/* Distance between icon and text */
+.nav_links>i>span {
+    padding-left: 10px;
+}
+
+.nav_links2 {
+    font-size: 16px;
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+    font-family: 'Roboto', sans-serif !important;
+    width: 100%;
+    text-align: left;
+    padding-left: 50px;
+    color: white;
+    font-weight: 500;
+    padding-top: 5px;
+}
+
+#collapseOne {
+    margin-top: 5px;
+}
+
+#accordion {
+    margin-top: 25px;
+}
+
+.fa-caret-square-down {
+    margin-left: 5px;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav2 .closebtn2, .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 26px;
+    margin-left: 50px;
+    color: white;
+}
+
+.sidenav2 .closebtn2 {
+    padding-left: 95%;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#dash_content {
+    transition: margin-left 0.5s;
+    /* initial margin */
+    margin-left: 220px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.open_menu {
+    position: absolute;
+    color: white;
+    background-color: black;
+    z-index: 10;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    font-size: 22px;
+}
+
+.open_menu2 {
+    position: absolute;
+    background-color: black;
+    color: white;
+    z-index: 15;
+    top: 0;
+    left: 220px;
+    display: none;
+    font-size: 22px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+}
+
+#app_logo {
+    margin-top: 10px;
+    height: 150px;
+    width: 200px;
+    display: block;
+    margin-left: 0 !important;
+}
+

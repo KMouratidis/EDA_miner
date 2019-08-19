@@ -23,6 +23,7 @@ matrix:
         - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.6.7/bin/
         - sudo chmod +x /home/travis/virtualenv/python3.6.7/bin/chromedriver
         - export CHROMEDRIVER=/home/travis/virtualenv/python3.6.7/bin/chromedriver
+        - cd EDA_miner && python users_mgt.py && cd ..
       script:
         - cd tests && py.test .
 

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    {% if user %}
+
+        <h4>{{user.username}}</h4>
+        <h4>{{user.email}}</h4>
+
+        <br>
+        Want to <a href="/change_password">change your password?</a>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,46 @@
+.filename {
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.section {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.funcParam {
+    list-style:disc outside none;
+    display:list-item;
+    margin-left: 3%;
+}
+
+.folderMenu, .folderMenu:focus {
+    background-image: linear-gradient(to left, #000428, #004e92);
+    padding-left: 15px;
+    color: white;
+    font-size: 15px;
+    transition: transform .3s;
+}
+
+.folderMenu:hover {
+    color: white;
+    transform: scale(1.1);
+    background-image: linear-gradient(to right, #010838, #015ea2);
+}
+
+.folderMenu, .collapsibleMenu {
+    width: 235px;
+}
+
+.collapsibleMenu a {
+    padding-left: 15px;
+    list-style:disc outside none;
+    display:list-item;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#page-content {
+    margin-left: 20px;
+}

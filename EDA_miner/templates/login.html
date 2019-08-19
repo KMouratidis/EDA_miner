@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    {% if current_user.is_authenticated %}
+
+        <h4>Already logged in</h4>
+
+    {% else %}
+        <form action="{{ url_for('login') }}" method="POST">
+            {{ form.username.label }} {{ form.username }}
+            <br>
+            {{ form.password.label }} {{ form.password }}
+            <br>
+            {{ form.submit.label }} {{ form.submit}}
+            <br>
+            {{ form.csrf_token }}
+        </form>
+
+        Forgot your password? <a href="/forgot_password">Reset</a>
+
+    {% endif %}
+
+{% endblock %}
