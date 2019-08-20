@@ -28,11 +28,11 @@ Just looking around? Then you can either install locally or with docker.
 7. Run `python users_mgt.py` to create a dummy database and user (u: admin, pw: admin)
 8. Run the app, e.g. with gunicorn: `gunicorn wsgi:application`.
 9. If you want to work with Google Analytics:
-  - Navigate to `/EDA_miner/google_analytics`.
-  - Start the app with either:
-    - Run `pip install -r requirements.txt` and `python app.py`
+    - Navigate to `/EDA_miner/google_analytics`.
+    - Start the app with either:
+      - Run `pip install -r requirements.txt` and `python app.py`
     or
-    - `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
+      - `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
 10. Go to your browser, `http://127.0.0.1:8000/`.
 
 #### Docker:
