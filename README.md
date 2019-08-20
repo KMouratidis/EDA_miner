@@ -22,16 +22,28 @@ Just looking around? Then you can either install locally or with docker.
 1. Get Python3.6+, optionally with Anaconda. You might want to set up a [virtual environment](https://stackoverflow.com/questions/41972261/what-is-a-virtualenv-and-why-should-i-use-one)
 2. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
 3. You'll need [redis](https://redis.io) (if on Windows, you might also need [this](https://github.com/dmajkic/redis/downloads)) and [graphviz](https://www.graphviz.org/) (for pygraphviz)
-4. Run `pip install -r requirements.txt`
-5. Run `python app.py`
-6. Go to your browser, `http://127.0.0.1:8050`
+4. Run `pip install -r requirements.txt`.
+5. Navigate to the `/EDA_miner` folder.
+6. Create a `.env` file with your credentials, according to the given template.
+7. Run `python users_mgt.py` to create a dummy database and user (u: admin, pw: admin)
+8. Run the app, e.g. with gunicorn: `gunicorn wsgi:application`.
+9. If you want to work with Google Analytics:
+  - Navigate to `/EDA_miner/google_analytics`.
+  - Start the app with either:
+    - Run `pip install -r requirements.txt` and `python app.py`
+    or
+    - `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
+10. Go to your browser, `http://127.0.0.1:8000/`.
 
 #### Docker:
 1. Download (either via `git clone https://github.com/KMouratidis/EDA_miner_public` or as a zip)
 2. Get Redis in Docker, start a server, and publish port 6379, by running: `sudo docker run --name=redis-devel --publish=6379:6379 --hostname=redis --restart=on-failure --detach redis:latest`
 3. Navigate to the EDA Miner folder and run this to build the docker container: `sudo docker build -t kmouratidis/eda_miner .`
 4. Run the app container: `sudo docker run --network host kmouratidis/eda_miner`
-5. Go to http://127.0.0.1:8050/
+5. If you want to work with Google Analytics:
+  - Navigate to `/EDA_miner/google_analytics`.
+  - Run `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
+6. Go to http://127.0.0.1:8000/.
 <br>
 
 ### Example of Model Builder
