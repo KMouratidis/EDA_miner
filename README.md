@@ -41,8 +41,8 @@ Just looking around? Then you can either install locally or with docker.
 3. Navigate to the EDA Miner folder and run this to build the docker container: `sudo docker build -t kmouratidis/eda_miner .`
 4. Run the app container: `sudo docker run --network host kmouratidis/eda_miner`
 5. If you want to work with Google Analytics:
-  - Navigate to `/EDA_miner/google_analytics`.
-  - Run `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
+    - Navigate to `/EDA_miner/google_analytics`.
+    - Run `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
 6. Go to http://127.0.0.1:8000/.
 <br>
 
