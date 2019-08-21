@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")
 from utils import cleanup
 
 chromedriver = os.environ.get("CHROMEDRIVER", "chromedriver")
-SLEEP_DELAY = float(os.environ.get("SLEEP_DELAY", 2))
+SLEEP_DELAY = float(os.environ.get("SLEEP_DELAY", 3))
 
 
 class SeleniumTest:
@@ -44,6 +44,8 @@ class SeleniumTest:
 
     def login(self):
         self.chrome.get("http://127.0.0.1:8000/login")
+        # Wait for potential redirects.
+        time.sleep(SLEEP_DELAY)
 
         username = self.chrome.find_element_by_id("username")
         password = self.chrome.find_element_by_id("password")
@@ -54,8 +56,14 @@ class SeleniumTest:
         password.send_keys("admin")
         submit.submit()
 
+        # Wait for potential redirects.
+        time.sleep(SLEEP_DELAY)
+
     def logout(self):
         self.chrome.get("http://127.0.0.1:8000/logout")
+
+        # Wait for potential redirects.
+        time.sleep(SLEEP_DELAY)
 
 
 class RedisTest:

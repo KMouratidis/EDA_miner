@@ -9,6 +9,7 @@ from flask import current_app, redirect, request
 from flask_login import UserMixin, LoginManager, login_user
 from flask_sqlalchemy import SQLAlchemy
 import os
+from config import env_config_get
 
 # Initialize the database extension
 db = SQLAlchemy()
@@ -49,7 +50,7 @@ def unauthorized():
 
     path = "/login"
 
-    if os.getenv("MODE") in ["DEBUG", "DEV"]:
+    if env_config_get("MODE") in ["DEBUG", "DEV"]:
         user = User.query.filter_by(username="admin").first()
         login_user(user)
         path = "/"

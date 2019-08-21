@@ -1,32 +1,32 @@
 language: python
 dist: xenial
 sudo: required
+
 cache:
   pip: true
+
 branches:
   only:
   - master
+
 addons:
   chrome: stable
+  apt:
+    packages:
+      - gcc
+      - libgraphviz-dev
+      - graphviz
+      - chromium-browser
+      - libglib2.0-0
+      - libnss3
+      - libgconf-2-4
+      - libfontconfig1
 
 matrix:
   fast_finish: true
   include:
-    - python: '3.6.7'
-      before_script:
-        - sudo apt-get update
-        - sudo apt-get install gcc libgraphviz-dev graphviz -y --fix-missing
-        - sudo redis-server /etc/redis/redis.conf --port 6379
-        - sudo apt-get install -y chromium-browser
-        - sudo apt-get install -y libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1
-        - wget http://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
-        - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.6.7/bin/
-        - sudo chmod +x /home/travis/virtualenv/python3.6.7/bin/chromedriver
-        - export CHROMEDRIVER=/home/travis/virtualenv/python3.6.7/bin/chromedriver
-        - cd EDA_miner && python users_mgt.py && cd ..
-      script:
-        - cd tests && py.test .
-
+    - python: '3.6'
+    - python: '3.7'
 
 before_install:
   - set -e
@@ -34,5 +34,14 @@ before_install:
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - sudo redis-server /etc/redis/redis.conf --port 6379
+  - wget http://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.6.7/bin/
+  - sudo chmod +x /home/travis/virtualenv/python3.6.7/bin/chromedriver
+  - export CHROMEDRIVER=/home/travis/virtualenv/python3.6.7/bin/chromedriver
+  - cd EDA_miner && cp env_template.py env.py && python users_mgt.py && cd ..
+
 script:
-  - cd tests && py.test .
+  - cd tests && py.test . && cd ..
+  - sudo docker build -t kmouratidis/eda_miner . && sudo docker run --rm --network host kmouratidis/eda_miner

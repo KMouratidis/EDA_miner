@@ -73,6 +73,11 @@ html.Div([
 
 
 
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/env"] = html.Div([
+], className='file_container')
+
+
+
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/users_mgt"] = html.Div([
 html.H2("""users_mgt.py""", className="filename"), 
 html.Div([
@@ -126,6 +131,11 @@ html.Div([
     html.P("""Dummy script, supposed to run the standalone docs app """, className="funcParam"),
 ], className="func_docstring"),
 
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/env_template"] = html.Div([
 ], className='file_container')
 
 

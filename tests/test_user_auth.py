@@ -37,9 +37,6 @@ class TestUserAuth(SeleniumTest):
         self.login()
         self.logout()
 
-        # Wait for potential redirects.
-        time.sleep(SLEEP_DELAY)
-
         # Logout redirection is correct
         assert self.chrome.current_url.endswith("/")
 

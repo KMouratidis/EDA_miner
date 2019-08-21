@@ -4,9 +4,10 @@ and defining actions for user management.
 """
 
 import os
+import config
 from sqlalchemy.sql import select
 from werkzeug.security import generate_password_hash
-from config import engine
+from config import engine, env_config_get
 from models import db, User
 
 
@@ -95,5 +96,6 @@ def update_password(user_id, password):
 
 if __name__ == "__main__":
     # Create the user
-    User.metadata.create_all(engine)
-    add_user("admin", "admin", os.getenv("MAIL_USERNAME"))
+    if not os.path.exists("users.db"):
+        User.metadata.create_all(engine)
+        add_user("admin", "admin", env_config_get("MAIL_USERNAME"))
