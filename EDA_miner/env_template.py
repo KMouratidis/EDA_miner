@@ -12,7 +12,9 @@ top_level_dir = os.path.abspath(os.curdir)
 var_configs = {
     'MAIL_USERNAME': "k.mouratidis@hotmail.com",
     'MAIL_PASSWORD': "************",
-    'DATABASE_URI': f"sqlite:///{top_level_dir}/users.db", 'MODE': "TEST",
+    'DATABASE_URI': f"sqlite:///{top_level_dir}/users.db",
+    'MODE': "TEST",
+
     'GOOGLE_CLIENT_ID': "************", 'GOOGLE_PROJECT_ID': "************",
     'GOOGLE_AUTH_URI': "https://accounts.google.com/o/oauth2/auth",
     'GOOGLE_TOKEN_URI': "https://oauth2.googleapis.com/token",

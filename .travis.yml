@@ -44,4 +44,10 @@ before_script:
 
 script:
   - cd tests && py.test . && cd ..
-  - sudo docker build -t kmouratidis/eda_miner . && sudo docker run --rm --network host kmouratidis/eda_miner
+  - sudo bash tests/test_docker.sh kmouratidis/eda_miner .
+  - sudo bash tests/test_docker.sh kmouratidis/ganalytics EDA_miner/google_analytics/
+
+
+notifications:
+  email:
+    - k.mouratidis@hotmail.com

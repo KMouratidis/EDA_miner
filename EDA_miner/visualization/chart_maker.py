@@ -41,6 +41,7 @@ from .graphs.graphs2d import graph2d_configs
 from .graphs.utils import create_button
 
 import dill
+from flask_login import current_user
 
 
 Sidebar = []
@@ -140,6 +141,12 @@ def Exploration_Options(options):
             html.Button("Add trace", id="add_trace", n_clicks=0),
             html.Button("Remove trace", id="remove_trace", n_clicks=0),
 
+            html.Br(),
+            html.Br(),
+            dcc.Input(id="export_graph_name", placeholder="Graph name..."),
+            html.Button("Export graph as...", id="export_graph", n_clicks=0),
+            html.Div(id="export_throwaway_div", style={"display": "none"}),
+
             html.Div(modals, id="modals"),
 
             # Choose a dataset
@@ -170,6 +177,19 @@ def Exploration_Options(options):
             dcc.Graph(id="graph"),
         ], className="col-sm-9"),
     ], className="row")
+
+
+@app.callback(Output("export_throwaway_div", "children"),
+              [Input("export_graph", "n_clicks")],
+              [State("export_graph_name", "value"),
+               State("graph", "figure")])
+def export_graph(n_clicks, name, figure):
+    if not (name and figure):
+        raise PreventUpdate()
+
+    redis_conn.set(f"{current_user.username}_figure_{name}", dill.dumps(figure))
+
+    return [f"Graph {name} exported successfully"]
 
 
 # For as many traces as are allowed, create their respective callbacks

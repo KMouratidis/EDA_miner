@@ -70,4 +70,4 @@ class ForgotPassword(FlaskForm):
     """
 
     username = StringField("Username", validators=[validators.DataRequired()])
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Send link')

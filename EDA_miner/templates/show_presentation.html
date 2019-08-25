@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block full_page %}
+
+
+    <div id="carouselExampleControls" class="carousel slide"
+         data-ride="carousel" data-interval="false"
+         style="background-color: slategray; height: 700px;">
+
+          <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="{{0}}"
+                  class="active pagers"></li>
+
+                  {% for graph in graph_links[1:] %}
+                      <li data-target="#carouselExampleIndicators"
+                          data-slide-to="{{loop.index}}" class="pagers"></li>
+                  {% endfor %}
+          </ol>
+
+        <div class="carousel-inner" style="height: 100%;">
+            <div class="carousel-item active" style="height: 100%;">
+                <iframe src="{{graph_links[0]}}" id="slide_0" width="81%" height="85%"
+                  style="display:block; margin-left: 9%; margin-top: 2%"></iframe>
+            </div>
+
+            {% for graph in graph_links[1:] %}
+                <div class="carousel-item" style="height: 100%;">
+                    <iframe src="{{graph}}" id="slide_{{loop.index}}" width="81%" height="85%"
+                      style="display:block; margin-left: 9%; margin-top: 2%"></iframe>
+                </div>
+
+            {% endfor %}
+            
+        </div>
+
+        <a class="carousel-control-prev" id="change1" href="#carouselExampleControls"
+           role="button" data-slide="prev" style="width: 5%;">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" id="change2" href="#carouselExampleControls"
+           role="button" data-slide="next" style="width: 5%;">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <script>
+        // Hack to make Plotly resize after loading because it has a bug
+        // that makes legend labels not size appropriately when not in the
+        // initial layout.
+
+        // Tie the reload function to the buttons that change the slides
+        var change1 =  document.getElementById("change1");
+        var change2 =  document.getElementById("change2");
+        function reload() {
+
+            // Do it with a small delay
+            setTimeout(function(){
+
+                // to find which iframe to reload we need to find which
+                // of the li elements of the slide are active
+                var current_page = null;
+                var pagers = document.getElementsByClassName("pagers");
+                for (var i = 0; i < pagers.length; i++){
+                    if (pagers[i].classList.contains("active")){
+                        current_page = pagers[i].dataset.slideTo;
+                    }
+                }
+
+                // This is a bit hacky but it works. The second answer
+                // doesn't; it gets blocked.
+                // https://stackoverflow.com/a/2064863/6655150
+                var iframe = document.getElementById("slide_"+current_page);
+                iframe.src = iframe.src;
+
+            }, 100);
+        }
+
+        change1.onclick = reload;
+        change2.onclick = reload;
+
+    </script>
+
+
+{% endblock %}

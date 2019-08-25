@@ -144,3 +144,16 @@ def reset_password(username, random_key):
                 return redirect(f"/user/{username}")
 
         return "Something went wrong. Not matching passwords?"
+
+
+@flask_app.route("/presentation/show/")
+def show_presentation():
+    graph_links = [f"/graphs/{graph}" for graph in range(1, 4)
+                   ] + ["/graphs/admin_figure_three_vars"]
+
+    return render_template("show_presentation.html", graph_links=graph_links)
+
+
+@flask_app.route("/presentation/create/")
+def create_presentation():
+    return render_template("create_presentation.html")

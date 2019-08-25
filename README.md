@@ -2,10 +2,11 @@
 
 # EDA_miner
 
-<badges> <img src="https://img.shields.io/badge/doc--coverage-78%25-brightgreen.svg"> <img src="https://img.shields.io/badge/code--coverage-63%25-green.svg"> <img src="https://img.shields.io/badge/tests-100%25-brightgreen.svg"> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a> <img src="https://img.shields.io/badge/docker%20build-passing-brightgreen.svg">  [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted%20(modified)-ff69b4.svg)](CODE_OF_CONDUCT.md)  </badges>
+<badges> <img src="https://img.shields.io/badge/doc--coverage-77%25-brightgreen.svg"> <img src="https://img.shields.io/badge/code--coverage-62%25-green.svg"> <img src="https://img.shields.io/badge/tests-100%25-brightgreen.svg"> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a> <img src="https://img.shields.io/badge/docker%20build-passing-brightgreen.svg">  [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted%20(modified)-ff69b4.svg)](CODE_OF_CONDUCT.md)  </badges>
 <a href="https://lgtm.com/projects/g/KMouratidis/EDA_miner_public/context:javascript"><img alt="Language grade: JavaScript" src="https://img.shields.io/lgtm/grade/javascript/g/KMouratidis/EDA_miner_public.svg?logo=lgtm&logoWidth=18"/></a>
 <a href="https://lgtm.com/projects/g/KMouratidis/EDA_miner_public/context:python"><img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/KMouratidis/EDA_miner_public.svg?logo=lgtm&logoWidth=18"/></a>
 <a href="https://codeclimate.com/github/KMouratidis/EDA_miner_public/maintainability"><img src="https://api.codeclimate.com/v1/badges/63c6e2c44862a35e148e/maintainability" height=20 /></a>
+[![Build Status](https://travis-ci.com/KMouratidis/EDA_miner_public.svg?branch=master)](https://travis-ci.com/KMouratidis/EDA_miner_public)
 
 A visualization and analytics dashboard that is able to connect to APIs, receive your data,
 and allow you to run Machine Learning models from a server. Started as a university project, and will be deployed in their servers probably later this year.
@@ -24,7 +25,7 @@ Just looking around? Then you can either install locally or with docker.
 3. You'll need [redis](https://redis.io) (if on Windows, you might also need [this](https://github.com/dmajkic/redis/downloads)) and [graphviz](https://www.graphviz.org/) (for pygraphviz)
 4. Run `pip install -r requirements.txt`.
 5. Navigate to the `/EDA_miner` folder.
-6. Create a `.env` file with your credentials, according to the given template.
+6. Create an `env.py` file with your credentials, according to the given template (`env_template.py`) or simply rename it (some functionality will not work).
 7. Run `python users_mgt.py` to create a dummy database and user (u: admin, pw: admin)
 8. Run the app, e.g. with gunicorn: `gunicorn wsgi:application`.
 9. If you want to work with Google Analytics:
@@ -43,7 +44,7 @@ Just looking around? Then you can either install locally or with docker.
 5. If you want to work with Google Analytics:
     - Navigate to `/EDA_miner/google_analytics`.
     - Run `sudo docker build --rm -t kmouratidis/ganalytics .` and `sudo docker run --rm --network host kmouratidis/ganalytics`
-6. Go to http://127.0.0.1:8000/.
+6. Go to `http://127.0.0.1:8000/`.
 <br>
 
 ### Example of Model Builder
@@ -72,3 +73,4 @@ Just looking around? Then you can either install locally or with docker.
 ### Example of previewing data:
 
 ![Interface options 7](https://raw.githubusercontent.com/KMouratidis/EDA_miner_public/master/images/screenshots/Preview_Data.png)
+

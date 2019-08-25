@@ -1,4 +1,5 @@
 googleanalytics==0.26.0
+gunicorn==19.9.0
 redis==3.3.8
 flask==1.1.1
 PyOpenSSL==19.0.0

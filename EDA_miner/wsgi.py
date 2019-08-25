@@ -14,6 +14,7 @@ from data_server import app as data_app
 from viz_server import app as viz_app
 from model_server import app as model_app
 from docs_server import app as docs_app
+from presentation_server import app as presentation_app
 
 from app_extensions import mail, login_manager, db
 
@@ -38,14 +39,13 @@ viz_app.index_string = base_dash.dash_appstring
 model_app.index_string = base_dash.dash_appstring
 docs_app.index_string = base_dash.dash_appstring
 
-
 # STEP 1
 # Update each app's server configurations
 flask_app.config.update(config)
 data_app.server.config.update(config)
 viz_app.server.config.update(config)
 model_app.server.config.update(config)
-
+presentation_app.server.config.update(config)
 
 # STEP 2
 # Initialize extensions for the apps to use
@@ -57,6 +57,7 @@ login_manager.init_app(flask_app)
 login_manager.init_app(data_app.server)
 login_manager.init_app(viz_app.server)
 login_manager.init_app(model_app.server)
+login_manager.init_app(presentation_app.server)
 
 # STEP 2.2
 # Initialize the database extension
@@ -64,6 +65,7 @@ db.init_app(flask_app)
 db.init_app(data_app.server)
 db.init_app(viz_app.server)
 db.init_app(model_app.server)
+db.init_app(presentation_app.server)
 
 # STEP 2.3
 # Initialize the mail extension for the apps that use it
@@ -84,5 +86,6 @@ application = DispatcherMiddleware(flask_app, {
     "/viz": viz_app.server,
     "/modeling": model_app.server,
     "/docs": docs_app.server,
+    "/graphs": presentation_app.server
     # "/metrics": make_wsgi_app()
 })

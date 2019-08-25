@@ -8,13 +8,13 @@
 
     {% else %}
         <form action="{{ url_for('login') }}" method="POST">
-            {{ form.username.label }} {{ form.username }}
+            <h3>{{ form.username.label }} {{ form.username }}</h3>
             <br>
-            {{ form.password.label }} {{ form.password }}
+            <h3>{{ form.password.label }} {{ form.password }}</h3>
             <br>
-            {{ form.submit.label }} {{ form.submit}}
+            <h3>{{ form.submit}}</h3>
             <br>
-            {{ form.csrf_token }}
+            <h3>{{ form.csrf_token }}</h3>
         </form>
 
         Forgot your password? <a href="/forgot_password">Reset</a>

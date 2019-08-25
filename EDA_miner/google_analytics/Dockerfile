@@ -6,4 +6,5 @@ COPY ./ /usr/src/app/
 
 # run the application
 WORKDIR /usr/src/app/
-CMD ["python3", "app.py"]
+
+CMD ["gunicorn", "-b", "127.0.0.1:5000","app:app"]

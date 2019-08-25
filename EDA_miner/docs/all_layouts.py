@@ -11,6 +11,16 @@ layouts = {}
 
 
 
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation_server"] = html.Div([
+html.H2("""presentation_server.py""", className="filename"), 
+html.Div([
+    html.P("""Dummy script, supposed to run the standalone presentation app """, className="funcParam"),
+], className="func_docstring"),
+
+], className='file_container')
+
+
+
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/models"] = html.Div([
 html.H2("""models.py""", className="filename"), 
 html.Div([
@@ -464,6 +474,16 @@ html.Div([
     html.P("""Connect to a Google Analytics account. Doesn't seem to be    memoizable. Google throws `googleapiclient.errors.HttpError: 401` """, className="funcParam"),
 ], className="func_docstring"),
 
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation/app"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation/__init__"] = html.Div([
 ], className='file_container')
 
 

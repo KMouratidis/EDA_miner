@@ -28,4 +28,4 @@ WORKDIR /usr/src/app/EDA_miner
 # Create a user database
 RUN python users_mgt.py
 
-# CMD ["gunicorn", "wsgi:application"]
+CMD ["gunicorn", "wsgi:application"]
