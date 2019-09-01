@@ -10,7 +10,7 @@ import os
 top_level_dir = os.path.abspath(os.curdir)
 
 var_configs = {
-    'MAIL_USERNAME': "example@example.com",
+    'MAIL_USERNAME': "admin@example.com",
     'MAIL_PASSWORD': "************",
     'DATABASE_URI': f"sqlite:///{top_level_dir}/users.db",
     'MODE': "TEST",
