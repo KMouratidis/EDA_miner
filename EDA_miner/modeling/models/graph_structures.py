@@ -370,6 +370,8 @@ class NodeCollection:
                 if ((to_be_removed.id != edge.src_node.id) and
                     (to_be_removed.id != edge.dest_node.id))]
 
+            return to_be_removed
+
     def render(self):
         # Render nodes and remove parents without children
         return [node.render() for node in self.nodes] + [
@@ -551,8 +553,8 @@ class Graph:
         elif new_node.parent == "models":
             self.output_nodes.append(new_node)
 
-    def remove(self, old_node):
-        self.graph.node_collection.remove_node(old_node)
+    def remove(self, old_node_name):
+        old_node = self.graph.node_collection.remove_node(old_node_name)
 
         # Also remove the node from any other categories it was before
         if old_node.parent == "input":

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    {% if user and apps %}
+
+        <h1>I want to...</h1>
+
+        <div id="carouselExampleControls" class="carousel slide"
+             data-ride="carousel">
+              <div class="carousel-inner">
+
+                  <ol class="carousel-indicators">
+                    {% for app in apps %}
+                        <li data-target="#carouselExampleControls"
+                            data-slide-to="{{loop.index-1}}"></li>
+                    {% endfor %}
+                  </ol>
+
+                  <div class="carousel-item active">
+                    <a href="/{{apps[0]}}">
+                          {% include 'apps/'+apps[0]+'.html' %}
+                      </a>
+                  </div>
+
+                  {% for app in apps[1:] %}
+                      <div class="carousel-item">
+                        <a href="/{{app}}">
+                          {% include 'apps/'+app+'.html' %}
+                        </a>
+                      </div>
+                  {% endfor %}
+
+            </div>
+
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
+
+        <style>
+
+.carousel-inner {
+    height: 500px;
+    background-color: #333333;
+    top: 30px;
+}
+
+.carousel-caption {
+    top: 380px;
+    color: white;
+    background-color: rgba(50,50,50, 0.8);
+    width: 100%;
+    left: 0;
+}
+
+.carousel-caption h1 {
+    font-size: 28px;
+}
+.carousel-caption h3 {
+    font-size: 22px;
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    background-color: black;
+    height: 35px;
+    width: 35px;
+    border-radius: 12px;
+}
+.carousel-control-next, .carousel-control-prev {
+    opacity: 0.75;
+    width: 5%;
+}
+
+.carousel-parent {
+    height: 630px;
+    background-color: rgba(33,33,33, 1);
+    padding: 30px;
+}
+
+        </style>
+
+
+    {% endif %}
+
+{% endblock %}

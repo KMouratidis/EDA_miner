@@ -61,6 +61,8 @@ def Model_Builder_Layout():
             html.Div(id="model_choices", children=[
 
                 # Add a node
+                # TODO: Split this in 2 chained dropdowns. Use the first to
+                #       select type and the second to select the actual node.
                 html.Div([
                     # We need a button because the user might want to
                     # add multiple nodes of the same type, and it also
@@ -76,7 +78,7 @@ def Model_Builder_Layout():
                     # We need to update the delete options when nodes
                     # are added or deleted, and since it cannot be both
                     # Input and Output we need the button as an middle step
-                    dcc.Dropdown(multi=False, id="remove_old_node",
+                    dcc.Dropdown(multi=False, id="remove_old_node_name",
                                  options=removal_options),
                     html.Button("Remove node", id="remove_nodes"),
 

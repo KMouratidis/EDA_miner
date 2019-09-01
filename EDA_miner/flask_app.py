@@ -18,7 +18,8 @@ flask_app = Flask(__name__)
 
 @flask_app.route("/")
 def index():
-    return render_template("base.html")
+    apps = ["data", "viz", "modeling"]
+    return render_template("index.html", apps=apps)
 
 
 @flask_app.route("/login/", methods=["GET", "POST"])
@@ -33,7 +34,7 @@ def login():
             if check_password_hash(user.password, password):
                 login_user(user)
 
-                return redirect(f"/user/{username}")
+                return redirect(f"/user/{username}/my_apps/")
 
     return render_template("login.html", form=form)
 
@@ -43,6 +44,14 @@ def login():
 def user_profile(username):
     user = User.query.filter_by(username=username).first()
     return render_template("profile.html", user=user)
+
+
+@flask_app.route("/user/<string:username>/my_apps/")
+@login_required
+def user_apps(username):
+    user = User.query.filter_by(username=username).first()
+    apps = ["data", "viz", "modeling"]
+    return render_template("user_apps.html", user=user, apps=apps)
 
 
 @flask_app.route("/logout/")

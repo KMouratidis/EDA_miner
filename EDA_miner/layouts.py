@@ -65,21 +65,3 @@ def default_3d(xvars, yvars, zvars):
     """
 
     return default_2d(xvars, yvars)
-
-
-def default_kpi(xvars, yvars):
-    """
-    Default `go.Layout` for KPI graphs. Currently same as default_2d.
-
-    Args:
-        xvars: str, title of the x-axis.
-        yvars: str, title of the y-axis.
-
-    Returns:
-        A `go.Layout` instance.
-
-    Todo:
-        This might need a better implementation
-    """
-
-    return default_2d(xvars, yvars)

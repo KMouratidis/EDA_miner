@@ -28,11 +28,10 @@ class SeleniumTest:
                                       shell=True, preexec_fn=os.setsid)
         time.sleep(7)
 
-        # Make sure the window is maximized and start a webdriver
+        # Start a webdriver
         chrome_options = options.Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--window-size=1420,1080')
         chrome_options.add_argument('--no-sandbox')
         cls.chrome = webdriver.WebDriver(chromedriver, options=chrome_options)
 

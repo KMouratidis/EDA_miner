@@ -24,15 +24,17 @@ app.layout = html.Div(children=[
 @app.callback(Output("main_app", "children"),
               [Input("url", "pathname")])
 def render_graph(pathname):
-    pathname = pathname.replace("/graphs/", "")
-    pathname = pathname.replace("__", " ").replace('---', '#')
-    redis_data = redis_conn.get(f"{pathname}")
 
     if pathname == "/Lunch break":
         return [html.Div(html.Img(src="https://ssl-static.libsyn.com/p/assets/f/9/b/e"
                                       "/f9be4c0c8437f1aa/LunchBreakLogo.jpg"),
                          style={"textAlign": "center"})]
 
+    elif pathname is not None:
+        pathname = pathname.replace("/graphs/", "")
+        pathname = pathname.replace("__", " ").replace('---', '#')
+
+    redis_data = redis_conn.get(f"{pathname}")
     if redis_data is not None:
         figure = dill.loads(redis_data)
 
@@ -46,7 +48,6 @@ def render_graph(pathname):
                 'title': 'Dash Data Visualization',
             }
         }
-
 
     return [
         html.H1(children=f'Hello Dash, {pathname}'),

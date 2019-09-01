@@ -1,0 +1,36 @@
+.carousel-inner {
+    height: 500px;
+    background-color: #333333;
+    top: 30px;
+}
+
+.carousel-caption {
+    top: 380px;
+    color: white;
+    background-color: rgba(50,50,50, 0.8);
+    width: 100%;
+    left: 0;
+}
+
+.carousel-caption h1 {
+    font-size: 28px;
+}
+.carousel-caption h3 {
+    font-size: 22px;
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    background-color: black;
+    height: 35px;
+    width: 35px;
+    border-radius: 12px;
+}
+.carousel-control-next, .carousel-control-prev {
+    opacity: 0.75;
+    width: 5%;
+}
+
+.carousel-parent {
+    height: 630px;
+    background-color: rgba(33,33,33, 1);
+    padding: 30px;
+}

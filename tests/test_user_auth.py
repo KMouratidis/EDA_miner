@@ -17,7 +17,7 @@ class TestUserAuth(SeleniumTest):
         # Wait for potential redirects.
         time.sleep(SLEEP_DELAY)
         # Login redirection successful
-        assert self.chrome.current_url.endswith("/user/admin/")
+        assert self.chrome.current_url.endswith("/user/admin/my_apps/")
 
         # Try to access the apps that need login
         for app in ["data", "viz", "modeling"]:

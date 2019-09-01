@@ -20,6 +20,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
+import dash_bootstrap_components as dbc
+
 from .server import app, redis_conn
 from utils import create_dropdown, get_data_schema
 from .models import pipeline_classes
@@ -32,6 +34,7 @@ import dill
 from flask_login import current_user
 from sklearn.metrics import confusion_matrix
 import plotly.graph_objs as go
+from sklearn.base import ClusterMixin, ClassifierMixin, RegressorMixin
 
 
 def Pipeline_Options(options):
@@ -79,6 +82,12 @@ def Pipeline_Options(options):
                      style={"display": "none"}),
             html.Div(id="hidden_results_visualizations_pipeline",
                      style={"display": "none"}),
+
+            # A modal for exporting the model
+            dbc.Modal([
+                dbc.ModalHeader("Graph successfully updated."),
+                dbc.ModalBody(id="modal_body")
+            ], id=f"export_model_modal", is_open=False),
 
             # The fitting results (target of the tab menu)
             html.Div(id="fitting_report_pipeline")
@@ -154,7 +163,7 @@ def render_variable_choices_pipeline(pipeline_choice):
     for input_node in model.input_nodes:
         dataset = input_node.params["dataset"]
 
-        # Prepend the input_node.id to the keys in case of columns
+        # Append the input_node.id to the keys in case of columns
         # with the same name.
         cols = list(f"{key}_{input_node.id}"
                     for key in get_data_schema(dataset, redis_conn)["types"].keys())
@@ -187,12 +196,18 @@ def render_variable_choices_pipeline(pipeline_choice):
                                  options=var_options,
                                  multi=False, id="yvars_pipeline",
                                  disabled=disabled_y)),
+
+        html.Div([
+            html.H6("Export trained model..."),
+            html.Button("Export!", id="export_model_button"),
+        ])
     ])
 
 
 @app.callback(
     [Output("hidden_results_metrics_pipeline", "children"),
-     Output("hidden_results_visualizations_pipeline", "children")],
+     Output("hidden_results_visualizations_pipeline", "children"),
+     Output("export_model_as_name", "is_disabled")],
     [Input("xvars_pipeline", "value"),
      Input("yvars_pipeline", "value")],
     [State('pipeline_choice', "value")])
@@ -214,6 +229,10 @@ def fit_model(xvars, yvars, pipeline_choice):
                     and parameters for plotting a graph.
     """
 
+    # Make sure all variables have a value before fitting
+    if any(x is None for x in [xvars, pipeline_choice]):
+        raise PreventUpdate()
+
     user_id = current_user.username
 
     pipeline = dill.loads(redis_conn.get(pipeline_choice))
@@ -223,24 +242,40 @@ def fit_model(xvars, yvars, pipeline_choice):
     output_node_id = "_".join(pipeline_choice.split("_")[-2:])
     output_node = model.graph.node_collection[output_node_id]
 
+    if not isinstance(output_node.model_class(), ClusterMixin):
+        # Test if yvars was provided
+        if yvars is None:
+            raise PreventUpdate()
+
+    # Initialize the clean version of yvars.
+    # The clean versions are used for pandas indexing.
+    # The original versions MIGHT be used during the
+    # deployment stage when given different datasets.
+    clean_yvars = yvars
+
     datasets = []
     for input_node in model.input_nodes:
         dataset = input_node.params["dataset"]
         columns = list(get_data_schema(dataset, redis_conn)["types"].keys())
         columns.extend(columns)
 
+        # Remove the node id from the yvars
+        # -1 because of the extra underscore
+        if yvars.endswith(input_node.id):
+            clean_yvars = yvars[:len(yvars)-len(input_node.id)-1]
+
+        # same for xvars
+        clean_xvars = [xvar[:len(xvar)-len(input_node.id)-1]
+                       if xvar.endswith(input_node.id) else xvar
+                       for xvar in xvars]
+
         df = dill.loads(redis_conn.get(dataset))
-        # Skip the first characters as they are the input_node's id
-        df = df.loc[:, [col[len(input_node.id):]
-                        for col in df.columns
-                        if (col in xvars+[yvars])]]
+        # Skip the last characters as they are the input_node's id
+        df = df.loc[:, [col for col in df.columns
+                        if (col in clean_xvars+[clean_yvars])]]
 
         # Join the datasets
         datasets.append(df)
-
-    # Make sure all variables have a value before fitting
-    if any(x is None for x in [xvars, yvars, pipeline_choice]):
-        raise PreventUpdate()
 
     # FIXME: We're selecting the first because of one input during
     #        development but we also need to handle for multi-input.
@@ -250,16 +285,27 @@ def fit_model(xvars, yvars, pipeline_choice):
     if yvars not in xvars:
         # Someone might want to intentionally pass the Yvar to the model
         # probably for demonstration purposes. Who are we to judge?
-        X = X.drop(yvars, axis=1)
+        X = X.drop(clean_yvars, axis=1)
 
     # Only one is needed
-    Y = datasets[0][yvars]
+    # This might also need fixing as Y might exist in only one dataset
+    Y = datasets[0][clean_yvars]
 
     # If we have a classification problem...
-    if isinstance(output_node.model_class(), pipeline_classes.ClassifierMixin):
+    if isinstance(output_node.model_class(), ClassifierMixin):
         Y = pd.factorize(Y)[0]
 
     pipeline.fit(X, Y)
+
+    # Save the fitted model for 1 hour. If the users want, they can save it
+    # in the next step.
+    redis_conn.set(f"{user_id}_trainedModel_{name}",
+                   dill.dumps(pipeline),
+                   ex=3600)
+    redis_conn.set(f"{user_id}_trainedModelParams_{name}",
+                   dill.dumps({"xvars": xvars,
+                               "yvars": yvars}),
+                   ex=3600)
 
     predictions = pipeline.predict(X)
     score = pipeline.score(X, Y)
@@ -267,22 +313,23 @@ def fit_model(xvars, yvars, pipeline_choice):
     # TODO: EVERYTHING below here is the same as in single_model.
     #       Consider refactoring.
     metrics = []
-    if isinstance(output_node.model_class(), pipeline_classes.RegressorMixin):
+    if isinstance(output_node.model_class(), RegressorMixin):
         metrics.append(html.H4(f"Mean Squared Error: {score:.3f}"))
 
-    elif isinstance(output_node.model_class(), pipeline_classes.ClassifierMixin):
+    elif isinstance(output_node.model_class(), ClassifierMixin):
         metrics.append(html.H4(f"Accuracy: {100*score:.3f} %"))
         metrics.append(html.H4("Confusion matrix:"))
 
-        classes = datasets[0][yvars].unique()
+        classes = datasets[0][clean_yvars].unique()
 
         confusion = confusion_matrix(Y, predictions)
         metrics.append(html.Table([
-            html.Thead([html.Th(cls) for cls in classes]),
+            html.Thead([html.Th(" ")] + [html.Th(cls) for cls in classes]),
 
             html.Tbody([
-               html.Tr([html.Td(item) for item in row])
-               for row in confusion
+               html.Tr([html.Td(html.B(cls))]+[
+                   html.Td(item) for item in row
+               ]) for (cls, row) in zip(classes, confusion)
             ])
         ]))
 
@@ -293,9 +340,9 @@ def fit_model(xvars, yvars, pipeline_choice):
     # If we have >=2 variables, visualize the classification
     if len(xvars) >= 3:
 
-        trace1 = go.Scatter3d(x=X[xvars[0]],
-                              y=X[xvars[1]],
-                              z=X[xvars[2]],
+        trace1 = go.Scatter3d(x=X[clean_xvars[0]],
+                              y=X[clean_xvars[1]],
+                              z=X[clean_xvars[2]],
                               showlegend=False,
                               mode='markers',
                               marker={
@@ -305,18 +352,18 @@ def fit_model(xvars, yvars, pipeline_choice):
 
         figure = {
             'data': [trace1],
-            'layout': layouts.default_2d(xvars[0], yvars[0])
+            'layout': layouts.default_2d(clean_xvars[0], clean_yvars)
         }
 
     elif len(xvars) == 2:
-        traces = scatterplot(X[xvars[0]], X[xvars[1]],
+        traces = scatterplot(X[clean_xvars[0]], X[clean_xvars[1]],
                              marker={'color': predictions.astype(np.float)})
 
         figure = {
             'data': [traces],
             'layout': go.Layout(
-                xaxis={'title': xvars[0]},
-                yaxis={'title': yvars[0]},
+                xaxis={'title': clean_xvars[0]},
+                yaxis={'title': clean_xvars[1]},
                 legend={'x': 0, 'y': 1},
                 hovermode='closest'
             )
@@ -325,4 +372,32 @@ def fit_model(xvars, yvars, pipeline_choice):
     else:
         figure = {}
 
-    return metrics, figure
+    return metrics, figure, False
+
+
+@app.callback([Output("export_model_modal", "is_open"),
+               Output("modal_body", "children")],
+              [Input("export_model_button", "n_clicks")],
+              [State('pipeline_choice', "value")])
+def export_model_as(n_clicks, pipeline_choice):
+    if not n_clicks:
+        raise PreventUpdate()
+
+    user_id = current_user.username
+    name = pipeline_choice.split("_")[2]
+
+    # Check how many models the user has saved. If they are at
+    # their limit, then don't save this model.
+    total_permanent_models = 0
+    for key in redis_conn.keys(f"{user_id}_trainedModel*"):
+        if redis_conn.ttl(key) == -1:
+            total_permanent_models += 1
+
+    if total_permanent_models >= 3:
+        return True, html.Div("Delete an existing model before saving "
+                              "a new one, or contact the admin for favors.")
+
+    # Permanently save the model.
+    redis_conn.persist(f"{user_id}_trainedModel_{name}")
+
+    return True, html.Div(f"Saved model {name} successfully")

@@ -1,17 +1,10 @@
 """
-This module is responsible for creating the database storing the users, \
-and defining actions for user management.
+This module is responsible for defining actions/helpers for user management.
 """
 
-import os
-import config
-from sqlalchemy.sql import select
+import config  # LGTM [py/unused-import]
 from werkzeug.security import generate_password_hash
-from config import engine, env_config_get
 from models import db, User
-
-
-User_table = db.Table('user', User.metadata)
 
 
 def add_user(username, password, email):
@@ -29,12 +22,9 @@ def add_user(username, password, email):
 
     hashed_password = generate_password_hash(password, method='sha256')
 
-    ins = User_table.insert().values(
-        username=username, password=hashed_password, email=email)
-
-    conn = engine.connect()
-    conn.execute(ins)
-    conn.close()
+    new_user = User(username=username, password=hashed_password, email=email)
+    db.session.add(new_user)
+    db.session.commit()
 
 
 def del_user(username):
@@ -48,11 +38,9 @@ def del_user(username):
         None
     """
 
-    delete = User_table.delete().where(User_table.c.username == username)
-
-    conn = engine.connect()
-    conn.execute(delete)
-    conn.close()
+    user = User.query.filter_by(username=username).first()
+    db.session.delete(user)
+    db.session.commit()
 
 
 def show_users():
@@ -63,15 +51,9 @@ def show_users():
         None
     """
 
-    select_st = select([User_table.c.username, User_table.c.email])
-
-    conn = engine.connect()
-    rs = conn.execute(select_st)
-
-    for row in rs:
-        print(row)
-
-    conn.close()
+    users = User.query.all()
+    for user in users:
+        print(f"{user.username} ({user.email})")
 
 
 def update_password(user_id, password):
@@ -86,16 +68,6 @@ def update_password(user_id, password):
         None
     """
 
-    update = (User_table.update().where(User_table.c.id == 1)
-              .values(password=password))
-
-    conn = engine.connect()
-    conn.execute(update)
-    conn.close()
-
-
-if __name__ == "__main__":
-    # Create the user
-    if not os.path.exists("users.db"):
-        User.metadata.create_all(engine)
-        add_user("admin", "admin", env_config_get("MAIL_USERNAME"))
+    user = User.query.get(user_id)
+    user.password = password
+    db.session.commit()

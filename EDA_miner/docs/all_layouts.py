@@ -11,6 +11,16 @@ layouts = {}
 
 
 
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/initialize_project"] = html.Div([
+html.H2("""initialize_project.py""", className="filename"), 
+html.Div([
+    html.P("""A dummy script to generate the database, a dummy user, and do any otherinitialization action needed to fire up the project """, className="funcParam"),
+], className="func_docstring"),
+
+], className='file_container')
+
+
+
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation_server"] = html.Div([
 html.H2("""presentation_server.py""", className="filename"), 
 html.Div([
@@ -91,7 +101,7 @@ layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/env"] = html.Div([
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/users_mgt"] = html.Div([
 html.H2("""users_mgt.py""", className="filename"), 
 html.Div([
-    html.P("""This module is responsible for creating the database storing the users,and defining actions for user management """, className="funcParam"),
+    html.P("""This module is responsible for defining actions/helpers for user management """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""add_user(username, password, email): """, className="docstring-contents"), 
@@ -141,6 +151,11 @@ html.Div([
     html.P("""Dummy script, supposed to run the standalone docs app """, className="funcParam"),
 ], className="func_docstring"),
 
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks_server"] = html.Div([
 ], className='file_container')
 
 
@@ -290,7 +305,7 @@ html.Div([
     html.P("""elem2.onclick = function(){closeNav2()} """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""save_schema(key, types, subtypes, head, redis_conn, redis_kwargs={}): """, className="docstring-contents"), 
+html.Br(), html.H3("""save_schema(key, types, subtypes, head, redis_conn, user_id, """, className="docstring-contents"), 
 html.Div([
     html.P("""Save the schema including a preview for the data """, className="funcParam"),
     html.P("""Args: """, className="section"),
@@ -298,10 +313,11 @@ html.Div([
     html.P("""types (dict): Mapping of columns to data types """, className="funcParam"),
     html.P("""subtypes (dict): Mapping of columns to secondary data types """, className="funcParam"),
     html.P("""head (`pd.DataFrame`): The first 5 rows of the data """, className="funcParam"),
+    html.P("""redis_conn (`redis.Redis`): The connection to the desired database """, className="funcParam"),
+    html.P("""user_id (str): The user for whom to fetch data """, className="funcParam"),
+    html.P("""schema_status (str): Whether the schema was inferred or ifthe user explicitly changed it. Can be                             "ground_truth" or "inferred" """, className="funcParam"),
     html.P("""Returns: """, className="section"),
     html.P("""bool: Whether Redis successfully stored the key """, className="funcParam"),
-    html.P("""TODO: This can probably be dumped to a regular SQL databas """, className="funcParam"),
-    html.P("""or a document storage database (i.e. MongoDB) """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""parse_contents(contents, filename, date, user_id, redis_conn): """, className="docstring-contents"), 
@@ -400,18 +416,6 @@ html.Div([
     html.P("""A `go.Layout` instance """, className="funcParam"),
     html.P("""Todo: """, className="section"),
     html.P("""This needs a better implementatio """, className="funcParam"),
-], className="func_docstring"),
-
-html.Br(), html.H3("""default_kpi(xvars, yvars): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Default `go.Layout` for KPI graphs. Currently same as default_2d """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""xvars: str, title of the x-axis """, className="funcParam"),
-    html.P("""yvars: str, title of the y-axis """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""A `go.Layout` instance """, className="funcParam"),
-    html.P("""Todo: """, className="section"),
-    html.P("""This might need a better implementatio """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -521,6 +525,32 @@ layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/dash_rnd/__init__"] = h
 
 
 
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/server"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/app"] = html.Div([
+html.Br(), html.H3("""parse_uploads(content, name, date): """, className="docstring-contents"), 
+html.Div([
+    html.P("""Load and store the uploaded data """, className="funcParam"),
+    html.P("""Args: """, className="section"),
+    html.P("""list_of_contents (list(bytes)): The file contents that need to                                        be parsed """, className="funcParam"),
+    html.P("""list_of_names (list(str)): The original filenames """, className="funcParam"),
+    html.P("""list_of_dates (list(str)): The modification (?) dates of files """, className="funcParam"),
+    html.P("""Returns: """, className="section"),
+    html.P("""list: A list of dash components """, className="funcParam"),
+], className="func_docstring"),
+
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/__init__"] = html.Div([
+], className='file_container')
+
+
+
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/view"] = html.Div([
 html.H2("""view.py""", className="filename"), 
 html.Div([
@@ -598,22 +628,13 @@ html.Div([
 
 
 layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/app"] = html.Div([
-html.Br(), html.H3("""render_sidemenu(tab): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Render the menu in the side-navbar """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
-], className="func_docstring"),
-
 html.Br(), html.H3("""tab_subpages(tab): """, className="docstring-contents"), 
 html.Div([
-    html.P("""Given the low-level tab choice, render the appropriate view """, className="funcParam"),
+    html.P("""Given the low-level tab choice, render the appropriate view and    side-navbar """, className="funcParam"),
     html.P("""Args: """, className="section"),
     html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
     html.P("""Returns: """, className="section"),
-    html.P("""A list of HTML-dash components, usually within a div """, className="funcParam"),
+    html.P("""A list of lists of HTML-dash components, usually within a div """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -703,6 +724,15 @@ html.Div([
     html.P("""A Dash element containing the table """, className="funcParam"),
 ], className="func_docstring"),
 
+html.Br(), html.H3("""show_schema(dataset_choice): """, className="docstring-contents"), 
+html.Div([
+    html.P("""Show the schema for the dataset and allow the user to modify it """, className="funcParam"),
+    html.P("""Args: """, className="section"),
+    html.P("""dataset_choice (str): Name of dataset """, className="funcParam"),
+    html.P("""Returns: """, className="section"),
+    html.P("""list: A list of dash components. The custom table """, className="funcParam"),
+], className="func_docstring"),
+
 html.Br(), html.H3("""update_schema(n_clicks, table_colnames, row_types, row_subtypes, """, className="docstring-contents"), 
 html.Div([
     html.P("""Update the dataset schema. This function takes the html elementsfrom the table head (containing column names) and its first tworows (containing dropdowns with the data types/subtypes), parses    them and stores them in redis """, className="funcParam"),
@@ -714,15 +744,6 @@ html.Div([
     html.P("""dataset_choice (str): Name of dataset """, className="funcParam"),
     html.P("""Returns: """, className="section"),
     html.P("""list(str, bool): A message and a boolean for a browser alert """, className="funcParam"),
-], className="func_docstring"),
-
-html.Br(), html.H3("""show_schema(dataset_choice): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Show the schema for the dataset and allow the user to modify it """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""dataset_choice (str): Name of dataset """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""list: A list of dash components. The custom table """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -1026,8 +1047,6 @@ html.Div([
     html.P("""is_sample (`bool`): If True then df will be treated as being a sample """, className="funcParam"),
     html.P("""Returns: """, className="section"),
     html.P("""list(dict): Types and subtypes. Each dictionary has the column                    names as keys and the types as values """, className="funcParam"),
-    html.P("""Todo: """, className="section"),
-    html.P("""When saving these make sure that the 1st and 2nd are marked as        inferred while the 3rd is marked as "ground truth" """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -1158,22 +1177,13 @@ html.Div([
     html.P("""You should probably not write code here, unless you are defininga new level-2 tab. Here you can find all visuals-generatingfunctionality. Implementations go to their own modules down the    package hierarchy, in `apps.exploration """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""render_sidemenu(tab): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Render the menu in the side-navbar """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
-], className="func_docstring"),
-
 html.Br(), html.H3("""tab_subpages(tab): """, className="docstring-contents"), 
 html.Div([
     html.P("""Given the low-level tab choice, render the appropriate view """, className="funcParam"),
     html.P("""Args: """, className="section"),
     html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
     html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
+    html.P("""A list of lists of HTML-dash components, usually within a div """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -1868,22 +1878,13 @@ html.Div([
     html.P("""You should probably not write code here, unless you are defininga new level-2 tab. Here you can find functionality to define ortrain ML / NN models. Implementations go to their own modules    down the package hierarchy, in `apps.analyze` """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""render_sidemenu(tab): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Render the menu in the side-navbar """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
-], className="func_docstring"),
-
 html.Br(), html.H3("""tab_subpages(tab): """, className="docstring-contents"), 
 html.Div([
     html.P("""Given the low-level tab choice, render the appropriate view """, className="funcParam"),
     html.P("""Args: """, className="section"),
     html.P("""tab (str): The tab the user is currently on """, className="funcParam"),
     html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
+    html.P("""A list of lists of HTML-dash components, usually within a div """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -2004,16 +2005,6 @@ html.Div([
 html.Br(), html.H3("""InputFile(BaseEstimator, TransformerMixin): """, className="docstring-contents"), 
 html.Div([
     html.P("""An input node used for selecting a user-uploaded dataset """, className="funcParam"),
-], className="func_docstring"),
-
-html.Br(), html.H3("""FeatureMaker(BaseEstimator, TransformerMixin): """, className="docstring-contents"), 
-html.Div([
-    html.P("""A node that helps the user create combinations and transformationsof features by selecting columns from the input dataset and writing    a mathematical function as text, using whatever is available to sympy """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""func_name (function): User-defined function """, className="funcParam"),
-    html.P("""cols (list(str)): Columns used by the transformer """, className="funcParam"),
-    html.P("""dataset_choice (str): Choice of dataset """, className="funcParam"),
-    html.P("""user_id: User/session id """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""predict(self, X): """, className="docstring-contents"), 

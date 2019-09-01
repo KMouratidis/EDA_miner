@@ -11,7 +11,7 @@ from redis import Redis
 sys.path.insert(0, os.path.abspath("../EDA_miner"))
 warnings.filterwarnings("ignore")
 
-from utils import cleanup, hard_cast_to_float, redis_startup
+from utils import cleanup, hard_cast_to_float
 
 
 class TestCleanup(RedisTest):
@@ -58,13 +58,3 @@ class TestHardCast:
         assert isinstance(hard_cast_to_float(3.31).item(), float)
         assert isinstance(hard_cast_to_float("3").item(), float)
         assert isinstance(hard_cast_to_float("x"), float)
-
-
-class TestStartup:
-
-    def test_startup(self):
-        redis_conn = redis_startup()
-        assert isinstance(redis_conn, Redis)
-
-        cleanup(redis_conn)
-        os.remove("redisData.pkl")

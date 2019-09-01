@@ -10,6 +10,7 @@ Notes to others:
 
 from flask_app import flask_app
 from config import config
+from utils import redis_startup
 from data_server import app as data_app
 from viz_server import app as viz_app
 from model_server import app as model_app
@@ -79,6 +80,11 @@ mail.init_app(flask_app)
 # register_metrics(data_app.server, app_version="v0.1.2", app_config="staging")
 
 
+# Initialize the Redis server with some datasets
+with flask_app.app_context() as ctx:
+    redis_conn = redis_startup()
+
+
 # STEP 3
 # Give them a sub-domain to use
 application = DispatcherMiddleware(flask_app, {
@@ -86,6 +92,6 @@ application = DispatcherMiddleware(flask_app, {
     "/viz": viz_app.server,
     "/modeling": model_app.server,
     "/docs": docs_app.server,
-    "/graphs": presentation_app.server
+    "/graphs": presentation_app.server,
     # "/metrics": make_wsgi_app()
 })

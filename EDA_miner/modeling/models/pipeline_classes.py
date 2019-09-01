@@ -90,68 +90,6 @@ class CustomClassifier(BaseEstimator, ClassifierMixin):
         return np.ones(X.shape[0])
 
 
-# parameters to be used for eval and exec statements later on
-sympy_funcs = {f"{f}": eval(f"sympy.{f}") for f in dir(sympy)}
-global_scope = {"sympy": sympy, "__builtins__": None}
-
-
-class FeatureMaker(BaseEstimator, TransformerMixin):
-    """
-    A node that helps the user create combinations and transformations \
-    of features by selecting columns from the input dataset and writing \
-    a mathematical function as text, using whatever is available to sympy.
-
-    Args:
-        func_name (function): User-defined function.
-        cols (list(str)): Columns used by the transformer.
-        dataset_choice (str): Choice of dataset.
-        user_id: User/session id.
-    """
-
-    modifiable_params = {}
-
-    def __init__(self, func_name="", cols=None, dataset_choice=None,
-                 user_id=None):
-        self.query = redis_conn.get(func_name)
-        self.cols = cols
-        self.func = lambda x: x
-        self.dataset_choice = dataset_choice
-        self.user_id = user_id
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        if self.cols is None:
-            return self.func(X)
-
-        else:
-            # Evaluate the user-defined function
-            if self.query is not None:
-                # http: // lybniz2.sourceforge.net / safeeval.html
-                symbols, f, func = dill.loads(self.query)
-
-                exec(symbols, global_scope,
-                     sympy_funcs)
-                exec(f, global_scope, sympy_funcs)
-                self.func = eval(func, global_scope,
-                                 sympy_funcs)
-
-            try:
-                # TODO: This needs a better implementation than re-loading
-                #       the whole dataset from Redis. Can probably be fixed
-                #       if edge params are implemented.
-                # Overwrite X with the original DataFrame
-                X = dill.loads(redis_conn.get(self.dataset_choice))
-                cols = [X[col] for col in self.cols]
-
-            except IndexError as e:
-                raise IndexError((str(e)+", probably incorrect input cols: " +
-                                  str(self.cols)))
-
-            return self.func(*cols).values.reshape((-1, 1))
-
-
 # TODO: do an actual implementation
 class SentimentAnalyzer(BaseEstimator, RegressorMixin):
     modifiable_params = {}

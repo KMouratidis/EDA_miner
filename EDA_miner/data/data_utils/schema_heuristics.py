@@ -113,17 +113,13 @@ def infer_types(df, is_sample=False):
     Returns:
         list(dict): Types and subtypes. Each dictionary has the column \
                     names as keys and the types as values.
-
-    Todo:
-        When saving these make sure that the 1st and 2nd are marked as \
-        inferred while the 3rd is marked as "ground truth".
     """
 
     # Don't include "month", "day" etc because they cannot be parsed as time on their own
     time_words = ["year", "time", "date", "datetime", "date time", "date_time"]
     int_words = ["code", "age"]
-    float_words = ["weight", "lat", "latitude", "lon", "long", "longitude", "distance",
-                   "length", "width"]  # LGTM [py/unused-local-variable]
+    float_words = ["weight", "lat", "latitude",  # LGTM [py/unused-local-variable]
+                   "lon", "long", "longitude", "distance", "length", "width"]
     categorical_words = ["sex", "gender", "state", "country"]
 
     # Define some patters for regex matching for subtypes

@@ -26,6 +26,6 @@ EXPOSE 8000
 WORKDIR /usr/src/app/EDA_miner
 
 # Create a user database
-RUN python users_mgt.py
+RUN python initialize_project.py
 
 CMD ["gunicorn", "wsgi:application"]

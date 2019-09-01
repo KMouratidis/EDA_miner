@@ -12,9 +12,9 @@ set -eo pipefail
 [ "$DEBUG" ] && set -x
 
 # build the image anew
-sudo docker build --rm -t $dockerImageName $dockerImagePath
+sudo docker build --rm --network host -t $dockerImageName $dockerImagePath
 
 # Run the container and bootup the server
-sudo docker run --rm $dockerImageName sleep 5
+sudo docker run --rm --network host $dockerImageName sleep 5
 
 echo "Testing successful."

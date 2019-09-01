@@ -38,9 +38,11 @@ import dash_table
 import visdcc
 
 from data.data_utils.schema_heuristics import infer_types
+from models import User, DataSchemas, db
 
 from flask_login import current_user
 from itertools import chain
+from datetime import datetime
 import pandas as pd
 import numpy as np
 import dill
@@ -347,7 +349,8 @@ def interactive_menu(output_elem_id):
     ]
 
 
-def save_schema(key, types, subtypes, head, redis_conn, redis_kwargs={}):
+def save_schema(key, types, subtypes, head, redis_conn, user_id,
+                schema_status, redis_kwargs={}):
     """
     Save the schema including a preview for the data.
 
@@ -356,12 +359,14 @@ def save_schema(key, types, subtypes, head, redis_conn, redis_kwargs={}):
         types (dict): Mapping of columns to data types.
         subtypes (dict): Mapping of columns to secondary data types.
         head (`pd.DataFrame`): The first 5 rows of the data.
+        redis_conn (`redis.Redis`): The connection to the desired database.
+        user_id (str): The user for whom to fetch data.
+        schema_status (str): Whether the schema was inferred or if \
+                             the user explicitly changed it. Can be \
+                             "ground_truth" or "inferred".
 
     Returns:
         bool: Whether Redis successfully stored the key.
-
-    TODO: This can probably be dumped to a regular SQL database
-          or a document storage database (i.e. MongoDB).
     """
 
     if not isinstance(head, pd.DataFrame):
@@ -370,11 +375,21 @@ def save_schema(key, types, subtypes, head, redis_conn, redis_kwargs={}):
     if len(head) > 5:
         head = head[:5]
 
-    ret = redis_conn.set(key, dill.dumps({
+    schema = {
         "types": types,
         "subtypes": subtypes,
         "head": head
-    }), **redis_kwargs)
+    }
+
+    # Save it in Redis
+    ret = redis_conn.set(key, dill.dumps(schema), **redis_kwargs)
+
+    # Also save to SQL.
+    user = User.query.filter_by(username=user_id).first()
+    new_schema = DataSchemas(user_id=user.id, timestamp=datetime.now(),
+                             schema=schema, schema_status=schema_status)
+    db.session.add(new_schema)
+    db.session.commit()
 
     return ret
 
@@ -445,7 +460,9 @@ def parse_contents(contents, filename, date, user_id, redis_conn):
     save_schema(key=f"{user_id}_schema_userdata_{name}",
                 types=types, subtypes=subtypes,
                 head=sample.head(),
-                redis_conn=redis_conn)
+                redis_conn=redis_conn,
+                user_id=user_id,
+                schema_status="inferred")
 
     return html.Div([
         "Data uploaded successfully."
@@ -496,9 +513,9 @@ def redis_startup():
             save_schema(key=f"example_schema_{name}",
                         types=types, subtypes=subtypes,
                         head=sample.head(),
+                        user_id="example",
+                        schema_status="inferred",
                         redis_conn=redis_conn)
 
     return redis_conn
 
-
-redis_conn = redis_startup()

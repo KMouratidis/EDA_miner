@@ -5,9 +5,10 @@ import dash_table
 
 from .server import app, redis_conn
 from .view import get_dataset_options
-from utils import get_data_schema
+from utils import get_data_schema, save_schema
 
 import dill
+from flask_login import current_user
 
 
 def Schema_Options():
@@ -104,60 +105,6 @@ def schema_table(df, types, subtypes):
     ])
 
 
-@app.callback([Output("schema_confirmation", "message"),
-               Output("schema_confirmation", "displayed")],
-              [Input("update_schema", "n_clicks")],
-              [State("table_colnames", "children"),
-               State("row_type", "children"),
-               State("row_subtype", "children"),
-               State("dataset_choice", "value")])
-def update_schema(n_clicks, table_colnames, row_types, row_subtypes,
-                  dataset_choice):
-    """
-    Update the dataset schema. This function takes the html elements \
-    from the table head (containing column names) and its first two \
-    rows (containing dropdowns with the data types/subtypes), parses \
-    them and stores them in redis.
-
-    Args:
-        n_clicks (int): Number of button clicks.
-        table_colnames (dict): The head (`html.Thead`) of the table, \
-                               as a Dash dict.
-        row_types (dict): The first table row (`html.Tr`) containing \
-                          the Dash dropdown dict with the data types.
-        row_subtypes (dict): The first table row (`html.Tr`) containing \
-                             the Dash dropdown dict with the data subtypes.
-        dataset_choice (str): Name of dataset.
-
-    Returns:
-        list(str, bool): A message and a boolean for a browser alert.
-    """
-
-    types = {}
-    for col_name, col in zip(table_colnames, row_types):
-        dropdown = col["props"]["children"]
-        dropdown_value = dropdown["props"]["value"]
-        col_name = col_name["props"]["children"]
-
-        types[col_name] = dropdown_value
-
-    subtypes = {}
-    for col_name, col in zip(table_colnames, row_subtypes):
-        dropdown = col["props"]["children"]
-        dropdown_value = dropdown["props"]["value"]
-        col_name = col_name["props"]["children"]
-
-        subtypes[col_name] = dropdown_value
-
-    schema_key = dataset_choice.replace("_data_", "_schema_")
-    redis_conn.set(schema_key, dill.dumps({
-        "types": types,
-        "subtypes": subtypes
-    }))
-
-    return "Updated", True
-
-
 @app.callback(Output("table_schema", "children"),
               [Input("dataset_choice", "value")])
 def show_schema(dataset_choice):
@@ -193,3 +140,63 @@ def show_schema(dataset_choice):
 
         schema_table(df[:200], types, subtypes)
     ]
+
+
+@app.callback([Output("schema_confirmation", "message"),
+               Output("schema_confirmation", "displayed")],
+              [Input("update_schema", "n_clicks")],
+              [State("table_colnames", "children"),
+               State("row_type", "children"),
+               State("row_subtype", "children"),
+               State("dataset_choice", "value")])
+def update_schema(n_clicks, table_colnames, row_types, row_subtypes,
+                  dataset_choice):
+    """
+    Update the dataset schema. This function takes the html elements \
+    from the table head (containing column names) and its first two \
+    rows (containing dropdowns with the data types/subtypes), parses \
+    them and stores them in redis.
+
+    Args:
+        n_clicks (int): Number of button clicks.
+        table_colnames (dict): The head (`html.Thead`) of the table, \
+                               as a Dash dict.
+        row_types (dict): The first table row (`html.Tr`) containing \
+                          the Dash dropdown dict with the data types.
+        row_subtypes (dict): The first table row (`html.Tr`) containing \
+                             the Dash dropdown dict with the data subtypes.
+        dataset_choice (str): Name of dataset.
+
+    Returns:
+        list(str, bool): A message and a boolean for a browser alert.
+    """
+
+    old_schema = get_data_schema(dataset_choice, redis_conn)
+    user_id = current_user.username
+
+    types = {}
+    for col_name, col in zip(table_colnames, row_types):
+        dropdown = col["props"]["children"]
+        dropdown_value = dropdown["props"]["value"]
+        col_name = col_name["props"]["children"]
+
+        types[col_name] = dropdown_value
+
+    subtypes = {}
+    for col_name, col in zip(table_colnames, row_subtypes):
+        dropdown = col["props"]["children"]
+        dropdown_value = dropdown["props"]["value"]
+        col_name = col_name["props"]["children"]
+
+        subtypes[col_name] = dropdown_value
+
+    schema_key = dataset_choice.replace("_data_", "_schema_")
+    save_schema(key=schema_key,
+                types=types, subtypes=subtypes,
+                head=old_schema["head"],
+                redis_conn=redis_conn,
+                user_id=user_id,
+                schema_status="ground_truth")
+
+    return "Updated", True
+
