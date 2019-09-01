@@ -49,42 +49,35 @@ def KPI_Options(options):
         A Dash element or list of elements.
     """
 
-    return html.Div(children=[
+    return [
 
+        # The main content
+        html.Div(dcc.Graph(id="graph_kpi"), className="main-content-graph"),
+
+        # The tab menu
         html.Div([
             # Choose a dataset
             html.Div(create_dropdown("Available datasets", options,
-                                     multi=False, id="dataset_choice_kpi"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="dataset_choice_kpi")),
 
             # TODO: use this for kpi/graph selection ?
             html.Div(create_dropdown("Choose graph type", options,
                                      multi=False, id="graph_choice_kpi",
-                                     disabled=True),
-                     className="vertical_dropdowns"),
+                                     disabled=True)),
 
             # Available buttons and choices for plotting
             html.Div(id="variable_choices_kpi", children=[
                 html.Div(create_dropdown("X variables", options=[],
-                                         multi=False, id="xvars_kpi"),
-                         className="vertical_dropdowns"),
+                                         multi=False, id="xvars_kpi")),
 
                 html.Div(create_dropdown("Y variable", options=[],
-                                         multi=True, id="yvars_kpi"),
-                         className="vertical_dropdowns"),
+                                         multi=True, id="yvars_kpi")),
 
                 html.Div(create_dropdown("Bar Chart variable", options=[],
-                                         multi=False, id="secondary_yvars_kpi"),
-                         className="vertical_dropdowns"),
+                                         multi=False, id="secondary_yvars_kpi")),
             ])
-        ], className="col-sm-3"),
-
-        # The graph itself
-        html.Div([
-            dcc.Graph(id="graph_kpi", style={"minHeight": "650px"})
-        ], className="col-sm-9"),
-
-    ], className="row")
+        ], id="kpi_menu"),
+    ]
 
 
 @app.callback([Output("xvars_kpi", "options"),

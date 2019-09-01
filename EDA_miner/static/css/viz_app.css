@@ -31,6 +31,10 @@
     margin: 1%;
 }
 
+.main-content-graph .js-plotly-plot {
+    height: 700px;
+}
+
 
 /*                       */
 /* PDF Report generation */
@@ -55,4 +59,59 @@
 
 #graph {
     min-height: 750px;
+}
+
+/*        */
+/* Traces */
+/*        */
+
+.traces-list {
+    display: block;
+    vertical-align: middle;
+    width: 250px;
+    margin-top: 10px;
+}
+
+.trace-title {
+    border: 1px solid black;
+    vertical-align: middle;
+    background-color: #103fa9;
+    border-radius: 7px 7px 0 0;
+}
+
+.trace-title-text {
+    font-size: 17px;
+    color: white;
+    padding-top: 1px;
+    padding-left: 5px;
+}
+
+.trace-variable-name {
+    display: inline-block;
+    width: 40px;
+    padding-top: 10px;
+    vertical-align: top;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+.plot-menu-input-div {
+    display: inline-block;
+}
+
+.plot-menu-input-div .Select, .plot-menu-input-button {
+    width: 190px !important;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.plot-menu-input-button {
+    text-align: center;
+}
+
+.trace-container {
+    background-color: #021735;
+    vertical-align: middle;
+    margin-top: 10px;
+    border-radius: 7px;
 }

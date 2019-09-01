@@ -11,7 +11,7 @@ layouts = {}
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/initialize_project"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/initialize_project"] = html.Div([
 html.H2("""initialize_project.py""", className="filename"), 
 html.Div([
     html.P("""A dummy script to generate the database, a dummy user, and do any otherinitialization action needed to fire up the project """, className="funcParam"),
@@ -21,7 +21,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/presentation_server"] = html.Div([
 html.H2("""presentation_server.py""", className="filename"), 
 html.Div([
     html.P("""Dummy script, supposed to run the standalone presentation app """, className="funcParam"),
@@ -31,7 +31,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/models"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/models"] = html.Div([
 html.H2("""models.py""", className="filename"), 
 html.Div([
     html.P("""This module collects / defines the various models. It also initializes thelogin manager since if we were to put it into app_extensions it would causecircular dependencies (or we would have to take our User model code there) """, className="funcParam"),
@@ -58,7 +58,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/exceptions"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/exceptions"] = html.Div([
 html.H2("""exceptions.py""", className="filename"), 
 html.Div([
     html.P("""This module contains custom exceptions, simply to help with debugging andlogging. This is still experimental """, className="funcParam"),
@@ -73,7 +73,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/model_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/model_server"] = html.Div([
 html.H2("""model_server.py""", className="filename"), 
 html.Div([
     html.P("""Dummy script, supposed to run the standalone modeling app """, className="funcParam"),
@@ -83,7 +83,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/viz_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/viz_server"] = html.Div([
 html.H2("""viz_server.py""", className="filename"), 
 html.Div([
     html.P("""Dummy script, supposed to run the standalone visualization app """, className="funcParam"),
@@ -93,12 +93,12 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/env"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/env"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/users_mgt"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/users_mgt"] = html.Div([
 html.H2("""users_mgt.py""", className="filename"), 
 html.Div([
     html.P("""This module is responsible for defining actions/helpers for user management """, className="funcParam"),
@@ -145,7 +145,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/docs_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/docs_server"] = html.Div([
 html.H2("""docs_server.py""", className="filename"), 
 html.Div([
     html.P("""Dummy script, supposed to run the standalone docs app """, className="funcParam"),
@@ -155,17 +155,17 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/tasks_server"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/env_template"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/env_template"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/app_extensions"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/app_extensions"] = html.Div([
 html.H2("""app_extensions.py""", className="filename"), 
 html.Div([
     html.P("""Use this module to collect all the extensions used. These can be defined inother modules, but do import them here and then from here to `wsgi.py` """, className="funcParam"),
@@ -175,7 +175,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/utils"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/utils"] = html.Div([
 html.H2("""utils.py""", className="filename"), 
 html.Div([
     html.P("""This module provides utilities, functions, and other code that ismeant to be used across the app. This may undergo changes soon """, className="funcParam"),
@@ -303,6 +303,8 @@ html.Div([
     html.P("""// do the same for the close butto """, className="funcParam"),
     html.P("""var elem2 = document.getElementById("closebtn2") """, className="funcParam"),
     html.P("""elem2.onclick = function(){closeNav2()} """, className="funcParam"),
+    html.P("""// Open nav2 with animatio """, className="funcParam"),
+    html.P("""openNav2() """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""save_schema(key, types, subtypes, head, redis_conn, user_id, """, className="docstring-contents"), 
@@ -346,7 +348,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/forms"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/forms"] = html.Div([
 html.H2("""forms.py""", className="filename"), 
 html.Div([
     html.P("""This module collects the forms of the site that need at least some degreeof serious implementation (e.g. for security concerns), like the logins.Even if you can, don't try to create forms for Dash forms; unless you arealso willing to teach us : """, className="funcParam"),
@@ -381,7 +383,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/layouts"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/layouts"] = html.Div([
 html.H2("""layouts.py""", className="filename"), 
 html.Div([
     html.P("""Similar to `styles.py`, this module is mean as a collection of layoutsto be used across the dash app. A layout is about what components existin any view (e.g. html elements) whereas a style is about... styling!Styles are implemented as functions to allow use with different parameters """, className="funcParam"),
@@ -422,7 +424,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/__init__"] = html.Div([
 html.H2("""EDA_miner""", className="filename"), 
 html.Div([
     html.P("""Welcome to EDA Miner """, className="funcParam"),
@@ -445,7 +447,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/wsgi"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/wsgi"] = html.Div([
 html.H2("""wsgi.py""", className="filename"), 
 html.Div([
     html.P("""This is the main application from which to run EDA Miner. Use a commandlike `gunicorn wsgi:application`. It is also here where you can add new apps """, className="funcParam"),
@@ -457,7 +459,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data_server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data_server"] = html.Div([
 html.H2("""data_server.py""", className="filename"), 
 html.Div([
     html.P("""Dummy script, supposed to run the standalone data app """, className="funcParam"),
@@ -467,7 +469,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/google_analytics/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/google_analytics/app"] = html.Div([
 html.H2("""app.py""", className="filename"), 
 html.Div([
     html.P("""TBW.. """, className="funcParam"),
@@ -482,22 +484,22 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/presentation/app"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/presentation/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/presentation/__init__"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/dash_rnd/_imports_"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/dash_rnd/_imports_"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/dash_rnd/ResizeDraggable"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/dash_rnd/ResizeDraggable"] = html.Div([
 html.Br(), html.H3("""ResizeDraggable(Component): """, className="docstring-contents"), 
 html.Div([
     html.P("""ExampleComponent is an example component """, className="funcParam"),
@@ -520,17 +522,17 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/dash_rnd/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/dash_rnd/__init__"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/tasks/server"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/tasks/app"] = html.Div([
 html.Br(), html.H3("""parse_uploads(content, name, date): """, className="docstring-contents"), 
 html.Div([
     html.P("""Load and store the uploaded data """, className="funcParam"),
@@ -546,12 +548,12 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/tasks/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/tasks/__init__"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/view"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/view"] = html.Div([
 html.H2("""view.py""", className="filename"), 
 html.Div([
     html.P("""This module provides views for the data (tables, lists of tweets, etc) """, className="funcParam"),
@@ -587,7 +589,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/server"] = html.Div([
 html.H2("""server.py""", className="filename"), 
 html.Div([
     html.P("""This module is only here because of the Dash app spanning multiple files.General configurations of the underlying app and server go here as well """, className="funcParam"),
@@ -600,7 +602,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/upload"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/upload"] = html.Div([
 html.H2("""upload.py""", className="filename"), 
 html.Div([
     html.P("""This module provides an interface for uploading and handling of files """, className="funcParam"),
@@ -627,7 +629,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/app"] = html.Div([
 html.Br(), html.H3("""tab_subpages(tab): """, className="docstring-contents"), 
 html.Div([
     html.P("""Given the low-level tab choice, render the appropriate view and    side-navbar """, className="funcParam"),
@@ -641,7 +643,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/apis"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/apis"] = html.Div([
 html.H2("""apis.py""", className="filename"), 
 html.Div([
     html.P("""This module defines the interface for connecting to APIs.It renders the appropriate layout according to the tab chosen """, className="funcParam"),
@@ -690,7 +692,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/__init__"] = html.Div([
 html.H2("""data""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -705,7 +707,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/schemata"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/schemata"] = html.Div([
 html.Br(), html.H3("""Schema_Options(): """, className="docstring-contents"), 
 html.Div([
     html.P("""Generate the layout of the dashboard """, className="funcParam"),
@@ -750,7 +752,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/data_utils/api_layouts"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/data_utils/api_layouts"] = html.Div([
 html.H2("""api_layouts.py""", className="filename"), 
 html.Div([
     html.P("""This module collects the layouts for connecting to the various APIs """, className="funcParam"),
@@ -992,7 +994,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/data_utils/schema_heuristics"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/data_utils/schema_heuristics"] = html.Div([
 html.Br(), html.H3("""can_into_date(col): """, className="docstring-contents"), 
 html.Div([
     html.P("""# Can handle with various separators# e.g.: "-" or "/" or " "    # (time MUST be separated with ":" """, className="funcParam"),
@@ -1053,7 +1055,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/data_utils/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/data_utils/__init__"] = html.Div([
 html.H2("""data_utils""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -1069,7 +1071,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/data_utils/api_connectors"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/data_utils/api_connectors"] = html.Div([
 html.H2("""api_connectors.py""", className="filename"), 
 html.Div([
     html.P("""This module collects the layouts for connecting to the various APIs """, className="funcParam"),
@@ -1097,12 +1099,12 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/data/data_utils/ganalytics_metrics"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/data/data_utils/ganalytics_metrics"] = html.Div([
 ], className='file_container')
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/server"] = html.Div([
 html.H2("""server.py""", className="filename"), 
 html.Div([
     html.P("""This module is only here because of the Dash app spanning multiple files.General configurations of the underlying app and server go here as well """, className="funcParam"),
@@ -1115,7 +1117,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/kpis"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/kpis"] = html.Div([
 html.H2("""kpis.py""", className="filename"), 
 html.Div([
     html.P("""This module is about building and viewing KPIs. The user should beable to view more advanced graphs and also create their own indicators """, className="funcParam"),
@@ -1166,7 +1168,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/app"] = html.Div([
 html.H2("""app.py""", className="filename"), 
 html.Div([
     html.P("""This module takes care of the menu and choices provided when the"Explore & Visualize" high-level tab is selected """, className="funcParam"),
@@ -1190,7 +1192,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/dashboard_maker"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/dashboard_maker"] = html.Div([
 html.H2("""dashboard_maker.py""", className="filename"), 
 html.Div([
     html.P("""This module *will* contain the DashboardMaker, a tool that helps you makeyour own dashboards, or at least get graphs and text in, move them aroundand resize them """, className="funcParam"),
@@ -1216,7 +1218,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/__init__"] = html.Div([
 html.H2("""visualization""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -1230,7 +1232,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/chart_maker"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/chart_maker"] = html.Div([
 html.H2("""chart_maker.py""", className="filename"), 
 html.Div([
     html.P("""This module defines the available graphs and creates the interfacefor the 2D dashboard """, className="funcParam"),
@@ -1266,7 +1268,7 @@ html.Div([
     html.P("""Args: """, className="section"),
     html.P("""options (list(dict)): Available datasets as options for `dcc.Dropdown` """, className="funcParam"),
     html.P("""Returns: """, className="section"),
-    html.P("""A Dash element or list of elements """, className="funcParam"),
+    html.P("""Two divs with Dash elements or lists of elements """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""toggle_modal(n1, n2, *rest): """, className="docstring-contents"), 
@@ -1335,7 +1337,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/text_viz"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/text_viz"] = html.Div([
 html.H2("""text_viz.py""", className="filename"), 
 html.Div([
     html.P("""This module is about visualizing text data """, className="funcParam"),
@@ -1373,7 +1375,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/networks"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/networks"] = html.Div([
 html.H2("""networks.py""", className="filename"), 
 html.Div([
     html.P("""This module is about viewing network data """, className="funcParam"),
@@ -1422,7 +1424,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/maps"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/maps"] = html.Div([
 html.H2("""maps.py""", className="filename"), 
 html.Div([
     html.P("""This module handles map plotting. Currently only 3 types of map types aresupported (aggregated choropleth, geo-scatterplot, and lines on map) """, className="funcParam"),
@@ -1497,7 +1499,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/graphs/kpis"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/graphs/kpis"] = html.Div([
 html.H2("""kpis.py""", className="filename"), 
 html.Div([
     html.P("""This module collects functions and utilities for KPI visualizationbut may also be used to add other options and core implementation logic """, className="funcParam"),
@@ -1539,7 +1541,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/graphs/utils"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/graphs/utils"] = html.Div([
 html.H2("""utils.py""", className="filename"), 
 html.Div([
     html.P("""Utilities for the visualization app. This file might later be merged withanother; it is still in active development """, className="funcParam"),
@@ -1562,7 +1564,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/graphs/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/graphs/__init__"] = html.Div([
 html.H2("""graphs""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -1578,7 +1580,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/graphs/graphs2d"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/graphs/graphs2d"] = html.Div([
 html.H2("""graphs2d.py""", className="filename"), 
 html.Div([
     html.P("""This module contains the implementations of graphing functions.I skipped adding docstrings for every function since most of themare one-liners anyway and should be pretty obvious """, className="funcParam"),
@@ -1750,7 +1752,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/visualization/graphs/textviz"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization/graphs/textviz"] = html.Div([
 html.H2("""textviz.py""", className="filename"), 
 html.Div([
     html.P("""This module collects functions and utilities for text visualizations """, className="funcParam"),
@@ -1780,7 +1782,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/server"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/server"] = html.Div([
 html.H2("""server.py""", className="filename"), 
 html.Div([
     html.P("""This module is only here because of the Dash app spanning multiple files.General configurations of the underlying app and server go here as well """, className="funcParam"),
@@ -1793,7 +1795,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/styles"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/styles"] = html.Div([
 html.H2("""styles.py""", className="filename"), 
 html.Div([
     html.P("""This module is meant as a collection of styles that cannot be definedin the CSS (e.g. due to JS/Dash libraries' rendered elements not beingviewable in inspection, or some overriding) """, className="funcParam"),
@@ -1805,7 +1807,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/single_model"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/single_model"] = html.Div([
 html.H2("""single_model.py""", className="filename"), 
 html.Div([
     html.P("""This module defines the interface for fitting simple models for thethree main machine learning tasks (regression, classification, andclustering. It also reports fitting metrics and a graph """, className="funcParam"),
@@ -1867,7 +1869,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/app"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/app"] = html.Div([
 html.H2("""app.py""", className="filename"), 
 html.Div([
     html.P("""This module takes care of the menu and choices provided when the"Analyze & Predict" high-level tab is selected """, className="funcParam"),
@@ -1891,7 +1893,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/model_builder"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/model_builder"] = html.Div([
 html.H2("""model_builder.py""", className="filename"), 
 html.Div([
     html.P("""This module will be used to graphically create models.RapidMiner, Weka, Orange, etc, ain't got sh!t on us : """, className="funcParam"),
@@ -1907,7 +1909,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/__init__"] = html.Div([
 html.H2("""modeling""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -1923,7 +1925,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/pipelines"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/pipelines"] = html.Div([
 html.H2("""pipelines.py""", className="filename"), 
 html.Div([
     html.P("""This module defines the interface for fitting (pre)defined pipelines """, className="funcParam"),
@@ -1983,7 +1985,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/models/pipeline_classes"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/models/pipeline_classes"] = html.Div([
 html.H2("""pipeline_classes.py""", className="filename"), 
 html.Div([
     html.P("""This module collects every model class, including input and transformers """, className="funcParam"),
@@ -2043,7 +2045,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/models/__init__"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/models/__init__"] = html.Div([
 html.H2("""models""", className="filename"), 
 html.Div([
     html.P("""Developer notes: """, className="section"),
@@ -2057,7 +2059,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/models/graph_structures"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/models/graph_structures"] = html.Div([
 html.H2("""graph_structures.py""", className="filename"), 
 html.Div([
     html.P("""This module collects function to traverse the ModelBuilder graph """, className="funcParam"),
@@ -2140,7 +2142,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner_public/EDA_miner/modeling/models/pipeline_creator"] = html.Div([
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/modeling/models/pipeline_creator"] = html.Div([
 html.H2("""pipeline_creator.py""", className="filename"), 
 html.Div([
     html.P("""This module collects function to traverse the ModelBuilder graph """, className="funcParam"),

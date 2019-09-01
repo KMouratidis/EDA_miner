@@ -48,26 +48,10 @@ def single_model_options(options):
         A Dash element or list of elements.
     """
 
-    return html.Div([
+    return [
 
-        # The left side with the options
-        html.Div(id="model_choices", children=[
-            # Choose a dataset
-            html.Div(create_dropdown("Available datasets", options,
-                                     multi=False, id="dataset_choice")),
-
-            # Choose problem learning type
-            html.Div(create_dropdown("Choose problem learning type", options=[
-                {'label': 'Regression', 'value': 'regression'},
-                {'label': 'Classification', 'value': 'classification'},
-                {'label': 'Clustering', 'value': 'clustering'},
-            ], multi=False, id="problem_type")),
-
-            html.Div(id="variable_choices"),
-        ], className="col-sm-3"),
-
-        # The right side with the results
-        html.Div(id="training_results_div", children=[
+        # The main content
+        html.Div(children=[
 
             # Choose type of metric to display
             dcc.Tabs(id="results_tabs", value='metrics', children=[
@@ -83,9 +67,24 @@ def single_model_options(options):
 
             # The fitting results (target of the tab menu)
             html.Div(id="fitting_report")
+        ], id="training_results_div"),
 
-        ], className="col-sm-9"),
-    ], className="row")
+        # The tab menu
+        html.Div([
+            # Choose a dataset
+            html.Div(create_dropdown("Available datasets", options,
+                                     multi=False, id="dataset_choice")),
+
+            # Choose problem learning type
+            html.Div(create_dropdown("Choose problem learning type", options=[
+                {'label': 'Regression', 'value': 'regression'},
+                {'label': 'Classification', 'value': 'classification'},
+                {'label': 'Clustering', 'value': 'clustering'},
+            ], multi=False, id="problem_type")),
+
+            html.Div(id="variable_choices"),
+        ], id="single_model_menu"),
+    ]
 
 
 @app.callback(Output("fitting_report", "children"),

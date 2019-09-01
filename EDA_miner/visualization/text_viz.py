@@ -46,8 +46,9 @@ def TextViz_Options():
         A Dash element or list of elements.
     """
 
-    return html.Div(children=[
+    return [
 
+        # The main content
         html.Div([
             html.Div([
                 dcc.Textarea(id="text_area"),
@@ -58,9 +59,12 @@ def TextViz_Options():
                 # The graph itself
                 html.Img(id='wordcloud_img',
                          src="/static/images/default_wordcloud.png"),
-            ], className="col-sm-7")
+            ], className="col-sm-8")
         ], className="row"),
-    ])
+
+        # The tab menu
+        html.H4("No menu yet", id="textviz_menu")
+    ]
 
 
 @app.callback(

@@ -49,39 +49,9 @@ def Network_Options(options):
         A Dash element or list of elements.
     """
 
-    return html.Div(children=[
+    return [
 
-        html.Div([
-            # Choose a dataset
-            html.Div(create_dropdown("Available datasets", options,
-                                     multi=False, id="dataset_choice_network"),
-                     className="vertical_dropdowns"),
-
-            # Available buttons and choices for plotting
-            html.Div(create_dropdown("In-node", options=[],
-                                     multi=False, id="in_node"),
-                     className="vertical_dropdowns"),
-
-            html.Div(create_dropdown("Out-node", options=[],
-                                     multi=False,
-                                     id="out_node"),
-                     className="vertical_dropdowns"),
-
-            html.Div(create_dropdown("Layout", id='dropdown-callbacks-1',
-                                     value='grid', multi=False,
-                                     clearable=False,
-                                     options=[
-                                         {'label': name.capitalize(),
-                                          'value': name}
-                                         for name in ['grid', 'random',
-                                                      'circle', 'concentric',
-                                                      'cose']
-                                     ]),
-                     className="vertical_dropdowns")
-
-        ], className="col-sm-3"),
-
-        # The graph itself
+        # The main content
         html.Div([
             cyto.Cytoscape(
                 id='cytoscape_network_graph',
@@ -96,8 +66,34 @@ def Network_Options(options):
                 ]
             ),
 
-        ], className="col-sm-9"),
-    ], className="row")
+        ], className="main-content-graph"),
+
+        # The tab menu
+        html.Div([
+            # Choose a dataset
+            html.Div(create_dropdown("Available datasets", options,
+                                     multi=False, id="dataset_choice_network")),
+
+            # Available buttons and choices for plotting
+            html.Div(create_dropdown("In-node", options=[],
+                                     multi=False, id="in_node")),
+
+            html.Div(create_dropdown("Out-node", options=[],
+                                     multi=False,
+                                     id="out_node")),
+
+            html.Div(create_dropdown("Layout", id='dropdown-callbacks-1',
+                                     value='grid', multi=False,
+                                     clearable=False,
+                                     options=[
+                                         {'label': name.capitalize(),
+                                          'value': name}
+                                         for name in ['grid', 'random',
+                                                      'circle', 'concentric',
+                                                      'cose']
+                                     ]))
+        ], id="network_menu"),
+    ]
 
 
 @app.callback([Output("in_node", "options"),

@@ -47,26 +47,8 @@ app.layout = html.Div(children=[
 ])
 
 
-# TODO: Any sidemenus, if any, should be added here.
-# TODO: This probably needs to become one with the next callback.
-@app.callback(Output("sidenav2_contents", "children"),
-              [Input('level2_tabs', 'value')])
-def render_sidemenu(tab):
-    """
-    Render the menu in the side-navbar.
-
-    Args:
-        tab (str): The tab the user is currently on.
-
-    Returns:
-        A Dash element or list of elements.
-    """
-
-    return html.H4(tab)
-
-
-# Subtabs
-@app.callback(Output('model-content', 'children'),
+@app.callback([Output('model-content', 'children'),
+               Output("sidenav2_contents", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
 def tab_subpages(tab):
@@ -77,7 +59,7 @@ def tab_subpages(tab):
         tab (str): The tab the user is currently on.
 
     Returns:
-        A Dash element or list of elements.
+        A list of lists of HTML-dash components, usually within a div.
     """
 
     # Check whether the user has uploaded data
@@ -93,7 +75,7 @@ def tab_subpages(tab):
         return single_model_options(dataset_options)
 
     else:
-        return [html.H4("Click on a subtab...")]
+        return [html.H4("Click on a subtab...")], html.H4(tab)
 
 
 if __name__ == "__main__":

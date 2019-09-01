@@ -1,3 +1,3 @@
 numeric: doc-coverage: 75%
-numeric: code-coverage: 62%
+numeric: code-coverage: 63%
 numeric: tests: 100%

@@ -147,3 +147,20 @@
     margin-left: 0 !important;
 }
 
+/*                             */
+/* Contents of the side-navbar */
+/*                             */
+
+.sidenav2 button {
+    background-color: white;
+    color: black;
+    font-size: 13px !important;
+}
+
+.sidenav2 input, .sidenav2 .Select, .sidenav2 button {
+    width: 250px;
+}
+
+#sidenav2_contents {
+    margin-top: 50px;
+}

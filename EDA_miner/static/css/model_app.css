@@ -20,7 +20,9 @@
     background-color: #b0cecb;
 }
 
+/*                       */
 /* ModelBuilder sidemenu */
+/*                       */
 
 .dropdown-menu {
     width: 270px !important;
@@ -65,11 +67,6 @@
     padding-left: 35px;
 }
 
-/*#training_results_div .tab-content {*/
-/*    border: 1px solid black;*/
-/*    min-height: 650px;*/
-/*}*/
-
 #training_results_viz {
     min-height: 650px;
 }
@@ -80,7 +77,6 @@
 
 .parameterMenu {
     margin-top: 20px;
-    background-color: lightgrey;
 }
 
 .parameterMenu .Select, .parameterMenu button {

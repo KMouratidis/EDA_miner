@@ -86,36 +86,34 @@ def make_trace_menu(n):
 
         # Menu header
         html.Div([
-            html.P(f"trace {n}", style={"fontSize": "16px", "color": "white"}),
-        ], style={"border": "1px solid black", "verticalAlign": "middle",
-                  "backgroundColor": "blue"}),
+            html.P(f"trace {n}", className="trace-title-text"),
+        ], className="trace-title"),
 
         # Available buttons and choices for plotting
         # Holds the name AND opens a modal for graph selection
         html.Div([
-            html.Div(html.P("Type"),
-                     style={"display": "inline-block",
-                            "width": "25%"}),
-            html.Div([
-                html.Button("Scatterplot", value="scatterplot",
-                            id=f"graph_choice_{n}", n_clicks=0,
-                            style={"display": "inline-block", "width": "100%"}),
-            ], style={"display": "inline-block", "width": "70%"}),
-        ], style={"border": "1px solid black", "verticalAlign": "middle"}),
+            html.Div("Type", className="trace-variable-name"),
+            html.Button("Scatterplot", value="scatterplot",
+                        id=f"graph_choice_{n}", n_clicks=0,
+                        className="plot-menu-input-button"),
+        ], className="trace-menu-row"),
 
         # Available variable choices
         html.Div(create_trace_dropdown("X", options=[],
-                                 multi=False, id=f"xvars_{n}")),
+                                       multi=False, id=f"xvars_{n}"),
+                 className="plot-menu-input-div"),
 
         html.Div(create_trace_dropdown("Y", options=[],
-                                 multi=False, id=f"yvars_{n}")),
+                                       multi=False, id=f"yvars_{n}"),
+                 className="plot-menu-input-div"),
 
         # Z-vars are not always needed, so keep them disabled and hidden
         html.Div(create_trace_dropdown("Z", options=[], disabled=True,
-                                 multi=False, id=f"zvars_{n}"),
+                                       multi=False, id=f"zvars_{n}"),
+                 className="plot-menu-input-div",
                  style={"display": "none"}, id=f"z_vars_div_{n}"),
 
-    ], style={"display": "none"}, id=f"trace_{n}")
+    ], style={"display": "none"}, id=f"trace_{n}", className="trace-container")
 
     return modal, div
 
@@ -128,55 +126,48 @@ def Exploration_Options(options):
         options (list(dict)): Available datasets as options for `dcc.Dropdown`.
 
     Returns:
-        A Dash element or list of elements.
+        Two divs with Dash elements or lists of elements.
     """
 
     modals, divs = list(zip(*[make_trace_menu(x)
-                              for x in range(max_traces)]))
+                              for x in range(1, max_traces+1)]))
 
-    return html.Div(children=[
+    return [
+        # The main content
+        html.Div(dcc.Graph(id="graph"), className="main-content-graph"),
 
+        # The tab menu
         html.Div([
 
-            html.Button("Add trace", id="add_trace", n_clicks=0),
-            html.Button("Remove trace", id="remove_trace", n_clicks=0),
-
-            html.Br(),
-            html.Br(),
-            dcc.Input(id="export_graph_name", placeholder="Graph name..."),
-            html.Button("Export graph as...", id="export_graph", n_clicks=0),
-            html.Div(id="export_throwaway_div", style={"display": "none"}),
-
-            html.Div(modals, id="modals"),
-
-            # Choose a dataset
-            html.Div(create_dropdown("Available datasets", options,
-                                     multi=False, id="dataset_choice"),
-                     className="vertical_dropdowns"),
-
-
-            # The variable choices
             html.Div([
-                *divs
-            ], id="traces", style={
-                "backgroundColor": "gray",
-                "display": "block",
-                "verticalAlign": "middle",
-                "margin": "5px"
-            }),
 
-            html.Div(id="traces_maker"),
-            # This is here to count the children
-            html.Div(0, id="hidden_div", style={"display": "none"}),
+                html.Button("Add trace", id="add_trace", n_clicks=0),
+                html.Button("Remove trace", id="remove_trace", n_clicks=0),
 
-        ], className="col-sm-3"),
+                html.Br(),
+                html.Br(),
+                dcc.Input(id="export_graph_name", placeholder="Graph name..."),
+                html.Button("Export graph as...", id="export_graph", n_clicks=0),
+                html.Div(id="export_throwaway_div", style={"display": "none"}),
 
+                html.Div(modals, id="modals"),
 
-        html.Div([
-            # The graph itself
-            dcc.Graph(id="graph"),
-        ], className="col-sm-9"),
-    ], className="row")
+                # Choose a dataset
+                html.Div(create_dropdown("Available datasets", options,
+                                         multi=False, id="dataset_choice")),
+
+                # The variable choices
+                html.Div([
+                    *divs
+                ], id="traces", className="traces-list"),
+
+                html.Div(id="traces_maker"),
+                # This is here to count the children
+                html.Div(0, id="hidden_div", style={"display": "none"}),
+
+            ], id="chartmaker_menu")
+        ])
+    ]
 
 
 @app.callback(Output("export_throwaway_div", "children"),
@@ -193,7 +184,7 @@ def export_graph(n_clicks, name, figure):
 
 
 # For as many traces as are allowed, create their respective callbacks
-for n in range(max_traces):
+for n in range(1, max_traces+1):
 
     # When the button (or graph buttons) is clicked, open/close the modal
     @app.callback(Output(f"modal_choose_graph_{n}", "is_open"),
@@ -287,7 +278,7 @@ for n in range(max_traces):
 
 
 @app.callback([Output(f"trace_{n}", "style")
-               for n in range(max_traces)] + [
+               for n in range(1, max_traces+1)] + [
                 Output("hidden_div", "children")],
               [Input("add_trace", "n_clicks"),
                Input("remove_trace", "n_clicks")],
@@ -314,16 +305,10 @@ def dummy_add_trace(add_trace, remove_trace, n_children):
 
     if add_trace > 0:
         styles = []
-        for _ in range(n_children + 1):
-            styles.append({
-                "display": "block",
-                "backgroundColor": "lightgray",
-                "padding": "10px",
-                "verticalAlign": "middle",
-                "margin": "20px"
-            })
+        for _ in range(1, n_children + 2):
+            styles.append({"display": "block"})
 
-        for _ in range(n_children + 1, max_traces):
+        for _ in range(n_children + 2, max_traces+1):
             styles.append({"display": "none"})
 
         if len(styles) > max_traces:
@@ -339,13 +324,13 @@ def dummy_add_trace(add_trace, remove_trace, n_children):
 @app.callback(Output("graph", "figure"),
               [Input("hidden_div", "children")]+[
                Input(f"graph_choice_{n}", "value")
-               for n in range(max_traces)]+[
+               for n in range(1, max_traces+1)]+[
                   Input(f"xvars_{n}", "value")
-                  for n in range(max_traces)]+[
+                  for n in range(1, max_traces+1)]+[
                   Input(f"yvars_{n}", "value")
-                  for n in range(max_traces)]+[
+                  for n in range(1, max_traces+1)]+[
                   Input(f"zvars_{n}", "value")
-                  for n in range(max_traces)]+[
+                  for n in range(1, max_traces+1)]+[
                   Input("dataset_choice", "value")])
 def plot(*params):
     """

@@ -54,46 +54,42 @@ def Map_Options(options):
         A Dash element or list of elements.
     """
 
-    return html.Div(children=[
+    return [
+
+        # The main content
+        html.Div(dcc.Graph(id="map_graph"), className="main-content-graph"),
 
         html.Div([
             # Choose a dataset
             html.Div(create_dropdown("Available datasets", options,
-                                     multi=False, id="dataset_choice_maps"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="dataset_choice_maps")),
 
-            # Choose a map type
+            # The tab menu
             html.Div(create_dropdown("Map type", [
                 {"label": "Choropleth", "value": "agg_choropleth"},
                 {"label": "Simple geoscatter", "value": "geoscatter"},
                 {"label": "Lines on map", "value": "maplines"},
-            ], multi=False, id="map_type_choice"),
-                     className="vertical_dropdowns"),
+            ], multi=False, id="map_type_choice")),
 
             # Available buttons and choices for plotting
             html.Div(create_dropdown("Colorscale", options=[
                 {"label": v, "value": v}
                 for v in colorscale_list
-            ], multi=False, id="colorscale", value="Jet"),
-                     className="vertical_dropdowns"),
+            ], multi=False, id="colorscale", value="Jet")),
 
             html.Div(create_dropdown("Latitude", options=[],
-                                     multi=False, id="lat_var"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="lat_var")),
 
             html.Div(create_dropdown("Longitude", options=[],
                                      multi=False,
-                                     id="lon_var"),
-                     className="vertical_dropdowns"),
+                                     id="lon_var")),
 
             html.Div(create_dropdown("Country", options=[],
                                      multi=False,
-                                     id="country"),
-                     className="vertical_dropdowns"),
+                                     id="country")),
 
             html.Div(create_dropdown("Z variable", options=[],
-                                     multi=False, id="z_var"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="z_var")),
 
             # Relevant for `agg_choropleth`
             html.Div(create_dropdown("Choose aggregation type", options=[
@@ -102,35 +98,24 @@ def Map_Options(options):
                 {"label": "Count", "value": "count"},
                 {"label": "Max", "value": "max"},
                 {"label": "Min", "value": "min"},
-            ], multi=False, id="aggregator_field", value="count"),
-                     className="vertical_dropdowns"),
+            ], multi=False, id="aggregator_field", value="count")),
 
             # Relevant for `maplines`
             html.Div(create_dropdown("Destination latitude", options=[],
                                      multi=False, id="dest_lat"),
                      className="vertical_dropdowns"),
             html.Div(create_dropdown("Destination longitude", options=[],
-                                     multi=False, id="dest_long"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="dest_long")),
 
             # How to draw the map and represent distances
             html.Div(create_dropdown("Map projection style", options=[
                 {"label": "Equirectangular", "value": "equirectangular"},
                 {"label": "Azimuthal equal area", "value": "azimuthal equal area"},
                 {"label": "Orthographic", "value": "orthographic"},
+            ], multi=False, id="projection_type")),
 
-            ],
-                                     multi=False, id="projection_type"),
-                     className="vertical_dropdowns"),
-
-        ], className="col-sm-3"),
-
-        # The graph itself
-        html.Div([
-            dcc.Graph(id="map_graph", style={"minHeight": "650px"})
-        ], className="col-sm-9"),
-
-    ], className="row")
+        ], id="map_menu"),
+    ]
 
 
 @app.callback([Output("lat_var", "options"),

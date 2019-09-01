@@ -80,6 +80,10 @@ body {
     z-index: 30 !important;
 }
 
+.Select-menu-outer>* {
+    color: black !important;
+}
+
 .Select-control, .Select-input>input, .is-focused, .is-open,
 .Select-input, .Select-placeholder,
 .Select-multi-value-wrapper {

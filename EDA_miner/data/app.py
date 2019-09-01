@@ -16,7 +16,8 @@ from flask_login import login_required
 
 app.layout = html.Div(children=[
 
-    *interactive_menu(output_elem_id="sidenav2_contents"),
+    # See below
+    html.Div(id="dummy_redirect"),
 
     html.Div(children=[
         dcc.Tabs(id="level2_tabs", value='upload_data', children=[
@@ -37,52 +38,36 @@ app.layout = html.Div(children=[
 ])
 
 
-# TODO: Any sidemenus, if any, should be added here. If none, delete.
-# TODO: This probably needs to become one with the next callback.
-@app.callback(Output("sidenav2_contents", "children"),
-              [Input('level2_tabs', 'value')])
-def render_sidemenu(tab):
-    """
-    Render the menu in the side-navbar.
-
-    Args:
-        tab (str): The tab the user is currently on.
-
-    Returns:
-        A Dash element or list of elements.
-    """
-
-    return html.H4(tab)
-
-
-@app.callback(Output('data-content', 'children'),
+# Although we do not need (not yet at least) the menu here,
+# The login manager will still return two elements since the
+# other apps expect that. We handle it here with a dummy.
+@app.callback([Output('data-content', 'children'),
+               Output("dummy_redirect", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
 def tab_subpages(tab):
     """
-    Given the low-level tab choice, render the appropriate view.
+    Given the low-level tab choice, render the appropriate view and \
+    side-navbar.
 
     Args:
         tab (str): The tab the user is currently on.
 
     Returns:
-        A list of HTML-dash components, usually within a div.
+        A list of lists of HTML-dash components, usually within a div.
     """
 
     if tab == 'upload_data':
-        # TODO: This might need change, depending on whether we specify
-        #       different privileges for logged-in users.
-        return Upload_Options
+        return Upload_Options, html.H4(tab)
 
     elif tab == "view_data":
-        return View_Options()
+        return View_Options(), html.H4(tab)
 
     elif tab == "api_data":
-        # TODO: This might need change when the login is implemented
-        return API_Options
+        return API_Options, html.H4(tab)
 
     elif tab == "edit_schema":
-        return Schema_Options()
+        return Schema_Options(), html.H4(tab)
 
 
 if __name__ == "__main__":

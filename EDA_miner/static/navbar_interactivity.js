@@ -35,9 +35,9 @@ function closeNav() {
 /* Set the width of the side navigation to 250px and the left
 margin of the page content to 250px */
 function openNav2() {
-    dash_content.style.marginLeft = "470px";
+    dash_content.style.marginLeft = "490px";
     closebtn.style.display = "none";
-    document.getElementById("sidenav2").style.width = "250px";
+    document.getElementById("sidenav2").style.width = "270px";
     document.getElementById("open_menu2").style.opacity = "0";
 
     setTimeout(function(){

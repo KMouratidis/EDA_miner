@@ -120,12 +120,11 @@ def create_trace_dropdown(name, options, **kwargs):
         list: an H5 and the Dropdown.
     """
     return html.Div([
-        html.Div(html.P(name), style={"display": "inline-block",
-                                      "width": "25%"}),
-        html.Div([
-            dcc.Dropdown(options=options, **kwargs)
-        ], style={"display": "inline-block", "width": "70%"}),
-    ], style={"border": "1px solid black", "verticalAlign": "middle"})
+        html.Div(name, className="trace-variable-name"),
+        html.Div(dcc.Dropdown(options=options, **kwargs,
+                              className="plot-menu-input"),
+                 className="plot-menu-input-div"),
+    ], className="trace-menu-row")
 
 
 def create_table(df, table_id="table", columns=None):
@@ -255,11 +254,10 @@ def get_data_schema(dataset_key, redis_conn):
 
     schema_key = dataset_key.replace("_data_", "_schema_")
 
-    schema = redis_conn.get(schema_key)
-    if schema is not None:
-        schema = dill.loads(schema)
+    if redis_conn.exists(schema_key):
+        return dill.loads(redis_conn.get(schema_key))
 
-    return schema
+    return None
 
 
 def get_variable_options(dataset_key, redis_conn):
@@ -339,12 +337,16 @@ def interactive_menu(output_elem_id):
             // show the button for opening the submenu
             var elem = document.getElementById("open_menu2");
             elem.style.display = "inline-block";
+            
             // and bind the appropriate function to it
             elem.onclick = function(){openNav2()};
     
             // do the same for the close button
             var elem2 = document.getElementById("closebtn2");
             elem2.onclick = function(){closeNav2()};
+            
+            // Open nav2 with animation
+            openNav2();
         """)
     ]
 

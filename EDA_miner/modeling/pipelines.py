@@ -53,23 +53,10 @@ def Pipeline_Options(options):
     available_pipelines = {k.decode(): redis_conn.get(k)
                            for k in redis_conn.keys(f'{user_id}_pipeline_*')}
 
-    return html.Div([
-
-        # The left side with the options
-        html.Div(id="pipeline_choices", children=[
-
-            # Choose a dataset
-            html.Div(create_dropdown("Available pipelines", options=[
-                {'label': f'Pipeline --> {pipe_name}', 'value': pipe_name}
-                for pipe_name in available_pipelines
-            ], multi=False, id="pipeline_choice")),
-
-            html.Div(id="variable_choices_pipeline")
-            ,
-        ], className="col-sm-3"),
+    return [
 
         # The right side with the results
-        html.Div(id="training_results_div", children=[
+        html.Div([
 
             # Choose type of metric to display
             dcc.Tabs(id="results_tabs_pipeline", value='metrics', children=[
@@ -91,9 +78,21 @@ def Pipeline_Options(options):
 
             # The fitting results (target of the tab menu)
             html.Div(id="fitting_report_pipeline")
+        ], id="training_results_div"),
 
-        ], className="col-sm-9"),
-    ], className="row")
+        # The tab menu
+        html.Div([
+
+            # Choose a dataset
+            html.Div(create_dropdown("Available pipelines", options=[
+                {'label': f'Pipeline --> {pipe_name}', 'value': pipe_name}
+                for pipe_name in available_pipelines
+            ], multi=False, id="pipeline_choice")),
+
+            html.Div(id="variable_choices_pipeline"),
+
+        ], id="pipelines_menu"),
+    ]
 
 
 # TODO: This is exactly the same as in single_model so you might

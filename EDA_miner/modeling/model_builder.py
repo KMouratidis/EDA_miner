@@ -54,108 +54,105 @@ def Model_Builder_Layout():
     redis_conn.set(f"{user_id}_graph_current", dill.dumps(initial_graph))
     removal_options = initial_graph.available_nodes_for_removal()
 
-    return html.Div([
+    return [
+
+        # The main content
         html.Div([
+            cyto.Cytoscape(
+                id='cytoscape-graph',
+                layout={'name': "preset"},
+                style={"height": "600px"},
+                elements=initial_graph.render(),
+                stylesheet=cyto_stylesheet,
+            )
+        ]),
 
-            # The left side with the options
-            html.Div(id="model_choices", children=[
+        # The tab menu
+        html.Div(children=[
 
-                # Add a node
-                # TODO: Split this in 2 chained dropdowns. Use the first to
-                #       select type and the second to select the actual node.
-                html.Div([
-                    # We need a button because the user might want to
-                    # add multiple nodes of the same type, and it also
-                    # makes sense for most cases, I guess
-                    dcc.Dropdown(options=add_node_options, multi=False,
-                                 id="add_new_node_type"),
-                    html.Button("Add a node", id="add_nodes"),
-
-                ], className="parameterMenu"),
-
-                # Remove node
-                html.Div([
-                    # We need to update the delete options when nodes
-                    # are added or deleted, and since it cannot be both
-                    # Input and Output we need the button as an middle step
-                    dcc.Dropdown(multi=False, id="remove_old_node_name",
-                                 options=removal_options),
-                    html.Button("Remove node", id="remove_nodes"),
-
-                ], className="parameterMenu"),
-
-                # Update a node / modify params
-                html.Div([
-                    # Divs that will contain the dropdown & radio buttons
-                    # for the user choices of parameters. Update is kinda
-                    # special because you need to tap a node and get input
-                    # from Cytoscape.
-                    html.Div(id="parameters_dropdown"),
-                    html.Div(id="parameter_values_div"),
-
-                    html.Button("Update node parameters", id="update_nodes"),
-
-                ], className="parameterMenu"),
-
-                # Choose prebuilt graph
-                html.Div([
-                    dcc.Dropdown(multi=False, id="prebuilt_model_choice",
-                                 options=[
-                                     {"value": k, "label": k}
-                                     for (k, v) in prebuilt_graphs.items()
-                                 ]),
-                    html.Button("Load prebuilt graph", id="prebuilt_nodes"),
-
-                ], className="parameterMenu"),
-
-                # Connect selected nodes
-                html.Div([
-                    html.Button("Connect selected nodes", id="connect_nodes"),
-                ], className="parameterMenu"),
-
-                html.Div([
-                    dcc.Input(id="graph_name", placeholder="Graph name..."),
-                    html.Button("Save graph and export pipelines",
-                                id="save_graph"),
-                ], className="parameterMenu"),
-
-            ], className="col-sm-2"),
-
-            # The network graph
+            # Add a node
+            # TODO: Split this in 2 chained dropdowns. Use the first to
+            #       select type and the second to select the actual node.
             html.Div([
-                cyto.Cytoscape(
-                    id='cytoscape-graph',
-                    layout={'name': "preset"},
-                    style={"height": "600px"},
-                    elements=initial_graph.render(),
-                    stylesheet=cyto_stylesheet,
-                )
-            ], className="col-sm-10"),
+                # We need a button because the user might want to
+                # add multiple nodes of the same type, and it also
+                # makes sense for most cases, I guess
+                dcc.Dropdown(options=add_node_options, multi=False,
+                             id="add_new_node_type"),
+                html.Button("Add a node", id="add_nodes"),
 
-        ], className="row"),
+            ], className="parameterMenu"),
 
-        # A hidden div to get the outputs of all the graph operations.
-        # Mainly used as a convenience for separating callbacks.
-        html.Div([
+            # Remove node
+            html.Div([
+                # We need to update the delete options when nodes
+                # are added or deleted, and since it cannot be both
+                # Input and Output we need the button as an middle step
+                dcc.Dropdown(multi=False, id="remove_old_node_name",
+                             options=removal_options),
+                html.Button("Remove node", id="remove_nodes"),
 
-            # Divs for the callbacks to work.
-            # These might be removed later on if we decide to use
-            # modals as the outputs of callbacks instead of divs.
-            *[html.Div(id=f"{action}_div")
-              for action in actions],
+            ], className="parameterMenu"),
 
-            # Likewise, but for modals
-            *[dbc.Modal([
-                dbc.ModalHeader("Graph successfully updated."),
-                dbc.ModalBody(id=f"{action}_modal_new_values")
-            ], id=f"{action}_modal", is_open=False)
-                for action in actions+["graph"]],
+            # Update a node / modify params
+            html.Div([
+                # Divs that will contain the dropdown & radio buttons
+                # for the user choices of parameters. Update is kinda
+                # special because you need to tap a node and get input
+                # from Cytoscape.
+                html.Div(id="parameters_dropdown"),
+                html.Div(id="parameter_values_div"),
 
-            # And another for exporting graphs
-            html.Div(id="graph_div"),
+                html.Button("Update node parameters", id="update_nodes"),
 
-        ], id="hidden_div", style={"display": "none"}),
-    ])
+            ], className="parameterMenu"),
+
+            # Choose prebuilt graph
+            html.Div([
+                dcc.Dropdown(multi=False, id="prebuilt_model_choice",
+                             options=[
+                                 {"value": k, "label": k}
+                                 for (k, v) in prebuilt_graphs.items()
+                             ]),
+                html.Button("Load prebuilt graph", id="prebuilt_nodes"),
+
+            ], className="parameterMenu"),
+
+            # Connect selected nodes
+            html.Div([
+                html.Button("Connect selected nodes", id="connect_nodes"),
+            ], className="parameterMenu"),
+
+            html.Div([
+                dcc.Input(id="graph_name", placeholder="Graph name..."),
+                html.Button("Save graph and export pipelines",
+                            id="save_graph"),
+            ], className="parameterMenu"),
+
+            # A hidden div to get the outputs of all the graph operations.
+            # Mainly used as a convenience for separating callbacks.
+            html.Div([
+
+                # Divs for the callbacks to work.
+                # These might be removed later on if we decide to use
+                # modals as the outputs of callbacks instead of divs.
+                *[html.Div(id=f"{action}_div")
+                  for action in actions],
+
+                # Likewise, but for modals
+                *[dbc.Modal([
+                    dbc.ModalHeader("Graph successfully updated."),
+                    dbc.ModalBody(id=f"{action}_modal_new_values")
+                ], id=f"{action}_modal", is_open=False)
+                    for action in actions + ["graph"]],
+
+                # And another for exporting graphs
+                html.Div(id="graph_div"),
+
+            ], id="hidden_div", style={"display": "none"}),
+
+        ], id="modelbuilder_menu"),
+    ]
 
 
 # Get the signatures from the generic Graph class

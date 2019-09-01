@@ -56,25 +56,8 @@ app.layout = html.Div(children=[
 ])
 
 
-# TODO: Any sidemenus, if any, should be added here.
-# TODO: This probably needs to become one with the next callback.
-@app.callback(Output("sidenav2_contents", "children"),
-              [Input('level2_tabs', 'value')])
-def render_sidemenu(tab):
-    """
-    Render the menu in the side-navbar.
-
-    Args:
-        tab (str): The tab the user is currently on.
-
-    Returns:
-        A Dash element or list of elements.
-    """
-
-    return html.H4(tab)
-
-
-@app.callback(Output('visuals-content', 'children'),
+@app.callback([Output('visuals-content', 'children'),
+               Output("sidenav2_contents", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
 def tab_subpages(tab):
@@ -85,7 +68,7 @@ def tab_subpages(tab):
         tab (str): The tab the user is currently on.
 
     Returns:
-        A Dash element or list of elements.
+        A list of lists of HTML-dash components, usually within a div.
     """
 
     options = get_dataset_options(redis_conn)
@@ -108,12 +91,12 @@ def tab_subpages(tab):
         return TextViz_Options()
 
     elif tab == "dashboard":
-        return Dashboard_Options
+        return Dashboard_Options, html.H4(tab)
 
     else:
         # In case someone messes with the underlying HTML/JS
         # and chooses a non-allowed tab
-        return [html.H4("Invalid choice")]
+        return [html.H4("Invalid choice")], html.H4(tab)
 
 
 if __name__ == "__main__":
