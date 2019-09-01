@@ -85,7 +85,7 @@ def Pipeline_Options(options):
 
             # A modal for exporting the model
             dbc.Modal([
-                dbc.ModalHeader("Graph successfully updated."),
+                dbc.ModalHeader("Trained model export report."),
                 dbc.ModalBody(id="modal_body")
             ], id=f"export_model_modal", is_open=False),
 

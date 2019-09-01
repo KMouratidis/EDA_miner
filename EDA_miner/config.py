@@ -5,14 +5,23 @@ This module is for loading and creating application-wide configurations.
 import os
 from sqlalchemy import create_engine
 
-try:
+
+CURRENT_DIR = os.path.dirname(__file__)
+
+if os.path.exists("env.py"):
+    # If the env file exists, load it
     import env
     env_config_get = env.var_configs.get
 
-except ModuleNotFoundError:
+elif os.environ.get("DATABASE_URI") is not None:
+    # If not, try to get the variables from the environment
+    # by first testing if at least one of them is defined
     env_config_get = os.environ.get
 
-CURRENT_DIR = os.path.dirname(__file__)
+else:
+    # Else, get the dummy values from the template
+    import env_template
+    env_config_get = env_template.var_configs.get
 
 # Create a connection to the database
 engine = create_engine(env_config_get("DATABASE_URI"))
@@ -49,7 +58,7 @@ client_config = {
 }
 
 
-if env_config_get("MODE") == "DEBUG":
+if env_config_get("MODE") in ["DEBUG", "DEV"]:
 
     # These are good for development so CSS is not saved,
     # but not for production, I guess.

@@ -11,14 +11,15 @@ import os
 
 
 if __name__ == "__main__":
-    if not os.path.exists("users.db"):
+    if os.path.exists("users.db"):
+        os.remove("users.db")
 
-        flask_app.config.update(config)
-        db.init_app(flask_app)
-        with flask_app.app_context() as ctx:
-            # Create the database
-            db.create_all()
+    flask_app.config.update(config)
+    db.init_app(flask_app)
+    with flask_app.app_context() as ctx:
+        # Create the database
+        db.create_all()
 
-            # Add dummy users
-            add_user("admin", "admin", env_config_get("MAIL_USERNAME"))
-            add_user("example", "example", "example@example.com")
+        # Add dummy users
+        add_user("admin", "admin", env_config_get("MAIL_USERNAME"))
+        add_user("example", "example", "example@example.com")
