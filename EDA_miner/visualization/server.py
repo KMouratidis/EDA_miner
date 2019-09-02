@@ -14,7 +14,7 @@ from redis import Redis
 
 redis_conn = Redis()
 
-app = Dash(__name__, requests_pathname_prefix="/viz/",
+app = Dash(__name__, requests_pathname_prefix="/visualization/",
            assets_external_path="http://127.0.0.1:8000/static/")
 
 app.config["suppress_callback_exceptions"] = True
