@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    {% if current_user.is_authenticated %}
+
+        <h4>Already have an account.</h4>
+
+    {% else %}
+        <form action="{{ url_for('register') }}" method="POST">
+            <h3>{{ form.username.label }} {{ form.username }}</h3>
+            <br>
+            <h3>{{ form.email.label }} {{ form.email }}</h3>
+            <br>
+            <h3>{{ form.password.label }} {{ form.password }}</h3>
+            <br>
+            <h3>{{ form.confirm_password.label }} {{ form.confirm_password }}</h3>
+            <br>
+            <h3>{{ form.submit}}</h3>
+            <br>
+            <h3>{{ form.csrf_token }}</h3>
+        </form>
+
+        <h4>Important note</h4><h5>After registering you have 1 day to verify
+            your email, or your account will get locked. In that case,
+            contact the administration</h5>
+
+    {% endif %}
+
+{% endblock %}

@@ -18,7 +18,7 @@ class TestTabs(SeleniumTest):
         # Wait for potential redirects.
         time.sleep(SLEEP_DELAY)
         # Try to access the apps that need login
-        for app in ["data", "viz", "modeling"]:
+        for app in ["data", "visualization", "modeling"]:
             self.chrome.get(f"http://127.0.0.1:8000/{app}/")
 
             time.sleep(SLEEP_DELAY)

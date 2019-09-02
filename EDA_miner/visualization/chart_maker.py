@@ -36,7 +36,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 
 from .server import app, redis_conn
-from utils import create_dropdown, get_variable_options, create_trace_dropdown
+from utils import create_dropdown, get_variable_options
 from .graphs.graphs2d import graph2d_configs
 from .graphs.utils import create_button
 
@@ -99,17 +99,17 @@ def make_trace_menu(n):
         ], className="trace-menu-row"),
 
         # Available variable choices
-        html.Div(create_trace_dropdown("X", options=[],
-                                       multi=False, id=f"xvars_{n}"),
+        html.Div(create_dropdown("X", options=[], type_="trace",
+                                 multi=False, id=f"xvars_{n}"),
                  className="plot-menu-input-div"),
 
-        html.Div(create_trace_dropdown("Y", options=[],
-                                       multi=False, id=f"yvars_{n}"),
+        html.Div(create_dropdown("Y", options=[],  type_="trace",
+                                 multi=False, id=f"yvars_{n}"),
                  className="plot-menu-input-div"),
 
         # Z-vars are not always needed, so keep them disabled and hidden
-        html.Div(create_trace_dropdown("Z", options=[], disabled=True,
-                                       multi=False, id=f"zvars_{n}"),
+        html.Div(create_dropdown("Z", options=[], disabled=True, type_="trace",
+                                 multi=False, id=f"zvars_{n}"),
                  className="plot-menu-input-div",
                  style={"display": "none"}, id=f"z_vars_div_{n}"),
 

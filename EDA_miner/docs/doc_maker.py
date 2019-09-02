@@ -70,7 +70,7 @@ def is_private_or_comment(line):
 # because the views don't really need documentation
 ignore_files = ["reportapp", "printable_layout", "users.db",
                 "coverage", "cache", "base_dash.py", "temp_",
-                "flask_app", "config", ".env"]
+                "flask_app", "config", ".env", "devops"]
 
 # Same, but for whole folders. This folder and the templates folder
 # don't really need to be in the docs.

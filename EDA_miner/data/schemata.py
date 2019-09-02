@@ -138,7 +138,7 @@ def show_schema(dataset_choice):
         dcc.ConfirmDialog(id="schema_confirmation"),
         html.Button("Update schema", id="update_schema"),
 
-        schema_table(df[:200], types, subtypes)
+        schema_table(df[:100], types, subtypes)
     ]
 
 

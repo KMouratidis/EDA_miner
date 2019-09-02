@@ -12,6 +12,7 @@ function openNav() {
     dash_content.style.marginLeft = "220px";
     sidenav.style.width = "220px";
     open_menu.style.display = "none";
+    closebtn.style.display = "inline-block";
     document.getElementById("open_menu2").style.opacity = "1";
 
     setTimeout(function(){

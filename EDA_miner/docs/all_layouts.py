@@ -83,16 +83,6 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/viz_server"] = html.Div([
-html.H2("""viz_server.py""", className="filename"), 
-html.Div([
-    html.P("""Dummy script, supposed to run the standalone visualization app """, className="funcParam"),
-], className="func_docstring"),
-
-], className='file_container')
-
-
-
 layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/env"] = html.Div([
 ], className='file_container')
 
@@ -104,7 +94,7 @@ html.Div([
     html.P("""This module is responsible for defining actions/helpers for user management """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""add_user(username, password, email): """, className="docstring-contents"), 
+html.Br(), html.H3("""add_user(username, password, email, superuser=False): """, className="docstring-contents"), 
 html.Div([
     html.P("""Create new user in the database """, className="funcParam"),
     html.P("""Args: """, className="section"),
@@ -139,6 +129,11 @@ html.Div([
     html.P("""password (str): The HASHED password """, className="funcParam"),
     html.P("""Returns: """, className="section"),
     html.P("""Non """, className="funcParam"),
+], className="func_docstring"),
+
+html.Br(), html.H3("""permit_user_app(username, app_name): """, className="docstring-contents"), 
+html.Div([
+    html.P("""Allow user to access an app """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -199,6 +194,11 @@ html.Div([
     html.P("""You should probably not write code here, unless you are addingfunctions aimed at being used by many lower-level modules.Some of the functions here will later be moved to lower-level    modules (e.g. `pretty_print_tweets`) """, className="funcParam"),
 ], className="func_docstring"),
 
+html.Br(), html.H3("""check_user_access(app_name): """, className="docstring-contents"), 
+html.Div([
+    html.P("""A decorator that handles the case where a user is not permitted to    access a certain app """, className="funcParam"),
+], className="func_docstring"),
+
 html.Br(), html.H3("""cleanup(redis_conn): """, className="docstring-contents"), 
 html.Div([
     html.P("""Clean up after the Dash app exits """, className="funcParam"),
@@ -208,20 +208,9 @@ html.Div([
     html.P("""Flush every key stored in the Redis database. If thereare users that have logged in and uploaded data, store        those on disk """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""create_dropdown(name, options, **kwargs): """, className="docstring-contents"), 
+html.Br(), html.H3("""create_dropdown(name, options, type_="regular", **kwargs): """, className="docstring-contents"), 
 html.Div([
     html.P("""Create a dropdown with a title """, className="funcParam"),
-    html.P("""Args: """, className="section"),
-    html.P("""name (str): the title above the dropdown """, className="funcParam"),
-    html.P("""options (list(dict)): dictionaries should contain keys at least                             the keys (label, value) """, className="funcParam"),
-    html.P("""**kwargs: keyword-value pairs. Accepts any keyword-arguments                  that can be passed to `dcc.Dropdown` """, className="funcParam"),
-    html.P("""Returns: """, className="section"),
-    html.P("""list: an H5 and the Dropdown """, className="funcParam"),
-], className="func_docstring"),
-
-html.Br(), html.H3("""create_trace_dropdown(name, options, **kwargs): """, className="docstring-contents"), 
-html.Div([
-    html.P("""Create a menu item for traces. Same as above, but different style """, className="funcParam"),
     html.P("""Args: """, className="section"),
     html.P("""name (str): the title above the dropdown """, className="funcParam"),
     html.P("""options (list(dict)): dictionaries should contain keys at least                             the keys (label, value) """, className="funcParam"),
@@ -303,8 +292,6 @@ html.Div([
     html.P("""// do the same for the close butto """, className="funcParam"),
     html.P("""var elem2 = document.getElementById("closebtn2") """, className="funcParam"),
     html.P("""elem2.onclick = function(){closeNav2()} """, className="funcParam"),
-    html.P("""// Open nav2 with animatio """, className="funcParam"),
-    html.P("""openNav2() """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""save_schema(key, types, subtypes, head, redis_conn, user_id, """, className="docstring-contents"), 
@@ -342,6 +329,16 @@ html.Div([
     html.P("""`redis.Redis`: a connection to a Redis server """, className="funcParam"),
     html.P("""Further details: """, className="section"),
     html.P("""Connects to a Redis server on its default port (6379) and isalso responsible for any other startup operations needed such        as reading the data from the previous use """, className="funcParam"),
+], className="func_docstring"),
+
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/visualization_server"] = html.Div([
+html.H2("""visualization_server.py""", className="filename"), 
+html.Div([
+    html.P("""Dummy script, supposed to run the standalone visualization app """, className="funcParam"),
 ], className="func_docstring"),
 
 ], className='file_container')
@@ -2175,4 +2172,29 @@ html.Div([
     html.P("""The node of type `GOAL`, if found, else `None` """, className="funcParam"),
 ], className="func_docstring"),
 
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/view"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/server"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/upload"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/app"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/__init__"] = html.Div([
 ], className='file_container')

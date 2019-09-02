@@ -22,7 +22,7 @@ from .server import app, redis_conn
 from .single_model import single_model_options
 from .model_builder import Model_Builder_Layout
 from .pipelines import Pipeline_Options
-from utils import interactive_menu, get_dataset_options
+from utils import interactive_menu, get_dataset_options, check_user_access
 
 from flask_login import login_required
 
@@ -51,6 +51,7 @@ app.layout = html.Div(children=[
                Output("sidenav2_contents", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
+@check_user_access("modeling")
 def tab_subpages(tab):
     """
     Given the low-level tab choice, render the appropriate view.

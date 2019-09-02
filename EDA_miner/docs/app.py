@@ -40,7 +40,7 @@ for folder, folders, files in os.walk("../EDA_miner/"):
         file for file in files if file.endswith(".py") and (
             not any(x in file for x in ["reportapp", "printable_layout",
                                         "users.db", "coverage", "cache",
-                                        "base_dash.py", "temp_",])
+                                        "base_dash.py", "temp_", "devops"])
     )]
 
     if not len(children) or ("dash_rnd" in folder):

@@ -41,7 +41,7 @@ class TestUserAuth(SeleniumTest):
         assert self.chrome.current_url.endswith("/")
 
         # Try to access the apps that need login
-        for app in ["data", "viz", "modeling"]:
+        for app in ["data", "visualization", "modeling"]:
             self.chrome.get(f"http://127.0.0.1:8000/{app}/")
 
             # Wait for potential redirects.

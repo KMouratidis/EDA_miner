@@ -11,10 +11,6 @@ Notes to others:
     remember to modify `ml_options` in `graph_structures.py`.
 """
 
-from ..server import redis_conn
-
-import dill
-import sympy
 import numpy as np
 from textblob import TextBlob
 

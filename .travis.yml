@@ -40,7 +40,7 @@ before_script:
   - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.6.7/bin/
   - sudo chmod +x /home/travis/virtualenv/python3.6.7/bin/chromedriver
   - export CHROMEDRIVER=/home/travis/virtualenv/python3.6.7/bin/chromedriver
-  - cd EDA_miner && cp env_template.py env.py && python users_mgt.py && cd ..
+  - cd EDA_miner && python initialize_project.py && cd ..
 
 script:
   - cd tests && py.test . && cd ..

@@ -102,8 +102,7 @@ def Map_Options(options):
 
             # Relevant for `maplines`
             html.Div(create_dropdown("Destination latitude", options=[],
-                                     multi=False, id="dest_lat"),
-                     className="vertical_dropdowns"),
+                                     multi=False, id="dest_lat")),
             html.Div(create_dropdown("Destination longitude", options=[],
                                      multi=False, id="dest_long")),
 

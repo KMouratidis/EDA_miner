@@ -3,13 +3,12 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 
-
-from utils import interactive_menu
 from .server import app
 from .upload import Upload_Options
 from .view import View_Options
 from .apis import API_Options
 from .schemata import Schema_Options
+from utils import check_user_access
 
 from flask_login import login_required
 
@@ -45,6 +44,7 @@ app.layout = html.Div(children=[
                Output("dummy_redirect", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
+@check_user_access("data")
 def tab_subpages(tab):
     """
     Given the low-level tab choice, render the appropriate view and \
@@ -58,16 +58,16 @@ def tab_subpages(tab):
     """
 
     if tab == 'upload_data':
-        return Upload_Options, html.H4(tab)
+        return Upload_Options, html.Div(style={"display": "hidden"})
 
     elif tab == "view_data":
-        return View_Options(), html.H4(tab)
+        return View_Options(), html.Div(style={"display": "hidden"})
 
     elif tab == "api_data":
-        return API_Options, html.H4(tab)
+        return API_Options, html.Div(style={"display": "hidden"})
 
     elif tab == "edit_schema":
-        return Schema_Options(), html.H4(tab)
+        return Schema_Options(), html.Div(style={"display": "hidden"})
 
 
 if __name__ == "__main__":

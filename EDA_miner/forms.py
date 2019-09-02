@@ -37,7 +37,7 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField("Confirm password",
                                      validators=[validators.DataRequired()])
 
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Register!')
 
 
 class ResetPassword(FlaskForm):

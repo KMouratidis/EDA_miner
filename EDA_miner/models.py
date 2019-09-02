@@ -5,7 +5,7 @@ circular dependencies (or we would have to take our User model code there).
 """
 
 import dash_core_components as dcc
-from flask import current_app, redirect
+from flask import current_app, redirect, g
 from flask_login import UserMixin, LoginManager, login_user
 from flask_sqlalchemy import SQLAlchemy
 from config import env_config_get
@@ -25,6 +25,12 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True)
+    superuser = db.Column(db.Boolean, nullable=False, default=False)
+    api_token = db.Column(db.String(36), nullable=False, unique=True)
+    verified_email = db.Column(db.Boolean, nullable=False, default=False)
+
+    # Connections to other models
+    user_apps = db.relationship('UserApps', backref='user', lazy=True)
 
     # Connections to other models
     data_schemas = db.relationship('DataSchemas', backref='user', lazy=True)
@@ -88,3 +94,15 @@ class DataSchemas(db.Model):
     def validate_schema_status(self, _, value):
         assert value in ["inferred", "ground_truth"]
         return value
+
+
+class UserApps(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    app_name = db.Column(db.String(50), nullable=False)
+
+    # Create a line for every app a user is permitted to use.
+    # Each user may
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'app_name', name='one_line_per_app'),
+    )

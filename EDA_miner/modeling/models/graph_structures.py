@@ -305,7 +305,6 @@ class NodeCollection:
     def __init__(self, graph):
         # node_max is a dictionary to keep track of the maximum
         # id per node_type (so ids don't grow arbitrarily large)
-        # TODO: Is that a bad thing?
         self.node_max_id = {node_type: f"{node_type}_000"
                             for node_type in node_options}
         self.nodes = []

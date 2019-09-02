@@ -25,7 +25,7 @@ from .maps import Map_Options
 from .kpis import KPI_Options
 from .text_viz import TextViz_Options
 from .dashboard_maker import Dashboard_Options
-from utils import interactive_menu, get_dataset_options
+from utils import interactive_menu, get_dataset_options, check_user_access
 
 from flask_login import login_required
 
@@ -60,6 +60,7 @@ app.layout = html.Div(children=[
                Output("sidenav2_contents", "children")],
               [Input('level2_tabs', 'value')])
 @login_required
+@check_user_access("visualization")
 def tab_subpages(tab):
     """
     Given the low-level tab choice, render the appropriate view.

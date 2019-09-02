@@ -99,17 +99,17 @@
                 <div class="dropdown-menu"
                      aria-labelledby="navbarDropdownMenuLink">
 
-                        <a class="dropdown-item" href="/data">
+                        <a class="dropdown-item" href="/data/">
                             <i class="fas fa-database">
                               <span>Data</span>
                             </i>
                         </a>
-                        <a class="dropdown-item" href="/viz">
+                        <a class="dropdown-item" href="/visualization/">
                             <i class="fas fa-eye">
                                 <span>Visualization</span>
                             </i>
                         </a>
-                        <a class="dropdown-item" href="/modeling">
+                        <a class="dropdown-item" href="/modeling/">
                             <i class="fas fa-laptop-code">
                                 <span>Modeling</span>
                             </i>
@@ -142,7 +142,7 @@
                             <span class="fas"> Dash docs </span>
                         </i>
                     </a>
-                    <a class="dropdown-item" href="/docs">
+                    <a class="dropdown-item" href="/docs/">
                         <i class="fas fa-laptop-code">
                             <span> Our docs </span>
                         </i>
@@ -154,14 +154,14 @@
     <ul class="navbar-nav justify-content-end">
       {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="/user/{{current_user.username}}">
+            <a class="nav-link" href="/user/{{current_user.username}}/">
                 <i class="fas fa-user">
                   <span>{{current_user.username}}</span>
                 </i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/logout">
+            <a class="nav-link" href="/logout/">
                 <i class="fas fa-sign-out-alt">
                   <span>Logout</span>
                 </i>
@@ -169,14 +169,14 @@
           </li>
       {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="/signup">
+            <a class="nav-link" href="/register/">
                 <i class="fas fa-user-plus">
                   <span>Sign up</span>
                 </i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/login">
+            <a class="nav-link" href="/login/">
                 <i class="fas fa-user">
                   <span>Login</span>
                 </i>

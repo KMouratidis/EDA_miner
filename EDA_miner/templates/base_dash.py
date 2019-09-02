@@ -78,17 +78,17 @@ dash_appstring = """
                         <span>Home</span>
                     </i>
                 </a>
-                <a href="/data" class="nav_links">
+                <a href="/data/" class="nav_links">
                     <i class="fas fa-database">
                         <span> Data</span>
                     </i>
                 </a>
-                <a href="/viz" class="nav_links">
+                <a href="/visualization/" class="nav_links">
                     <i class="fas fa-eye">
                         <span>Visualization</span>
                     </i>
                 </a>
-                <a href="/modeling" class="nav_links">
+                <a href="/modeling/" class="nav_links">
                     <i class="fas fa-laptop-code">
                         <span>Modeling</span>
                     </i>

@@ -20,10 +20,6 @@
     position: fixed; /* Stay in place */
 }
 
-.sidenav2 {
-    width: 0; /* 0 width - change this with JavaScript */
-}
-
 /* start with open navbar */
 .sidenav {
     width: 220px;
@@ -34,6 +30,7 @@
 }
 
 .sidenav2 {
+    width: 270px; /* change this with JavaScript */
     left: 220px;
     background-image: linear-gradient(to left, #000428, #004e92);
 }
@@ -102,11 +99,15 @@
     padding-left: 95%;
 }
 
+#closebtn {
+    display: none;
+}
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #dash_content {
     transition: margin-left 0.5s;
     /* initial margin */
-    margin-left: 220px;
+    margin-left: 490px;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */

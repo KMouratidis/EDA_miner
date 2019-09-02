@@ -12,7 +12,7 @@ from flask_app import flask_app
 from config import config
 from utils import redis_startup
 from data_server import app as data_app
-from viz_server import app as viz_app
+from visualization_server import app as visualization_app
 from model_server import app as model_app
 from docs_server import app as docs_app
 from presentation_server import app as presentation_app
@@ -36,7 +36,7 @@ flask_app.config.update(config)
 # index strings. This one is responsible for the menus.
 # Flask apps don't need this (nor can they use it).
 data_app.index_string = base_dash.dash_appstring
-viz_app.index_string = base_dash.dash_appstring
+visualization_app.index_string = base_dash.dash_appstring
 model_app.index_string = base_dash.dash_appstring
 docs_app.index_string = base_dash.dash_appstring
 
@@ -44,7 +44,7 @@ docs_app.index_string = base_dash.dash_appstring
 # Update each app's server configurations
 flask_app.config.update(config)
 data_app.server.config.update(config)
-viz_app.server.config.update(config)
+visualization_app.server.config.update(config)
 model_app.server.config.update(config)
 presentation_app.server.config.update(config)
 
@@ -56,7 +56,7 @@ presentation_app.server.config.update(config)
 # Initialize the login manager for each of the apps
 login_manager.init_app(flask_app)
 login_manager.init_app(data_app.server)
-login_manager.init_app(viz_app.server)
+login_manager.init_app(visualization_app.server)
 login_manager.init_app(model_app.server)
 login_manager.init_app(presentation_app.server)
 
@@ -64,7 +64,7 @@ login_manager.init_app(presentation_app.server)
 # Initialize the database extension
 db.init_app(flask_app)
 db.init_app(data_app.server)
-db.init_app(viz_app.server)
+db.init_app(visualization_app.server)
 db.init_app(model_app.server)
 db.init_app(presentation_app.server)
 
@@ -89,7 +89,7 @@ with flask_app.app_context() as ctx:
 # Give them a sub-domain to use
 application = DispatcherMiddleware(flask_app, {
     "/data": data_app.server,
-    "/viz": viz_app.server,
+    "/visualization": visualization_app.server,
     "/modeling": model_app.server,
     "/docs": docs_app.server,
     "/graphs": presentation_app.server,

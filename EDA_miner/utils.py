@@ -39,9 +39,11 @@ import visdcc
 
 from data.data_utils.schema_heuristics import infer_types
 from models import User, DataSchemas, db
+from users_mgt import show_apps
 
 from flask_login import current_user
 from itertools import chain
+from functools import wraps
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -53,6 +55,36 @@ import io
 import redis
 import os
 import tempfile
+
+
+def check_user_access(app_name):
+    """
+    A decorator that handles the case where a user is not permitted to \
+    access a certain app.
+    """
+
+    def decorator_func(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Get the list of apps for the current user
+            user_apps = []
+            if current_user.is_authenticated:
+                user = User.query.get(current_user.id)
+                user_apps = show_apps(user)
+
+            # Inform the user that they have no access to the app
+            if app_name not in user_apps:
+                return [html.Div([
+                    html.H3("You do not have access to this app. If you "
+                            "require access, contact an administrator.")
+                ]), []]
+
+            # Or return the normal output
+            else:
+                return func(*args, **kwargs)
+
+        return wrapper
+    return decorator_func
 
 
 def cleanup(redis_conn):
@@ -80,7 +112,7 @@ def cleanup(redis_conn):
     redis_conn.flushdb()
 
 
-def create_dropdown(name, options, **kwargs):
+def create_dropdown(name, options, type_="regular", **kwargs):
     """
     Create a dropdown with a title.
 
@@ -95,36 +127,21 @@ def create_dropdown(name, options, **kwargs):
         list: an H5 and the Dropdown.
     """
 
-    return [
-        html.H6(name+":"),
-        dcc.Dropdown(
-            options=options,
-            **kwargs
-        )]
+    if type_ == "regular":
+        return [
+            html.H6(name+":"),
+            dcc.Dropdown(
+                options=options,
+                **kwargs
+            )]
 
-
-# TODO: Refactor this and the one above to accept a `className`
-#       parameter and be styled accordingly in the CSS
-def create_trace_dropdown(name, options, **kwargs):
-    """
-    Create a menu item for traces. Same as above, but different style.
-
-    Args:
-        name (str): the title above the dropdown.
-        options (list(dict)): dictionaries should contain keys at least \
-                             the keys (label, value).
-        **kwargs: keyword-value pairs. Accepts any keyword-arguments \
-                  that can be passed to `dcc.Dropdown`.
-
-    Returns:
-        list: an H5 and the Dropdown.
-    """
-    return html.Div([
-        html.Div(name, className="trace-variable-name"),
-        html.Div(dcc.Dropdown(options=options, **kwargs,
-                              className="plot-menu-input"),
-                 className="plot-menu-input-div"),
-    ], className="trace-menu-row")
+    else:
+        return html.Div([
+            html.Div(name, className="trace-variable-name"),
+            html.Div(dcc.Dropdown(options=options, **kwargs,
+                                  className="plot-menu-input"),
+                     className="plot-menu-input-div"),
+        ], className="trace-menu-row")
 
 
 def create_table(df, table_id="table", columns=None):
@@ -344,9 +361,6 @@ def interactive_menu(output_elem_id):
             // do the same for the close button
             var elem2 = document.getElementById("closebtn2");
             elem2.onclick = function(){closeNav2()};
-            
-            // Open nav2 with animation
-            openNav2();
         """)
     ]
 
