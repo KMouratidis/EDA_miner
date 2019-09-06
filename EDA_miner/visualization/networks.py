@@ -25,6 +25,7 @@ Notes to others:
 
 from dash.dependencies import Input, Output, State
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 import dash_cytoscape as cyto
 
@@ -146,7 +147,7 @@ def plot_network(in_node, out_node, layout_choice, dataset_choice):
     # Conditions necessary to do any plotting
     conditions = [in_node, out_node, layout_choice, dataset_choice]
     if any(var is None for var in conditions):
-        return [], []
+        raise PreventUpdate()
 
     # This doesn't seem to be able to handle more than 100
     # https://github.com/cytoscape/cytoscape.js/issues/858

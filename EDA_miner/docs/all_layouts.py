@@ -2128,7 +2128,7 @@ html.Div([
     html.P("""A Graph to hold collections of nodes and edges and perform functions    on them. INTERNAL REPRESENTATION """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""render_graph(self): """, className="docstring-contents"), 
+html.Br(), html.H3("""render(self): """, className="docstring-contents"), 
 html.Div([
     html.P("""Calculates positions for all nodes in the graph and render it """, className="funcParam"),
     html.P("""Returns: """, className="section"),

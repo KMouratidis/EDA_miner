@@ -1,4 +1,8 @@
-/* Consider moving this to the /data folder */
+/* Data app has no sidemenu so overwrite the default */
+#dash_content {
+    margin-left: 220px;
+}
+
 
 #upload_data_button {
     width: 90%;

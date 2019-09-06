@@ -1,0 +1,130 @@
+.
+├── dash_rnd
+│   ├── dash_rnd.dev.js
+│   ├── dash_rnd.min.js
+│   ├── _imports_.py
+│   ├── __init__.py
+│   ├── metadata.json
+│   ├── original_source_credits.txt
+│   ├── package.json
+│   └── ResizeDraggable.py
+├── data
+│   ├── assets
+│   ├── data_utils
+│   │   ├── api_connectors.py
+│   │   ├── api_layouts.py
+│   │   ├── ganalytics_metrics.py
+│   │   ├── __init__.py
+│   │   └── schema_heuristics.py
+│   ├── apis.py
+│   ├── app.py
+│   ├── __init__.py
+│   ├── schemata.py
+│   ├── server.py
+│   ├── upload.py
+│   ├── users.db -> ../users.db
+│   └── view.py
+├── devops
+│   ├── app.py
+│   ├── __init__.py
+│   ├── server.py
+│   ├── upload.py
+│   └── view.py
+├── docs
+│   ├── all_layouts.py
+│   ├── app.py
+│   ├── doc_maker.py
+│   └── __init__.py
+├── google_analytics
+│   ├── app.py
+│   ├── Dockerfile
+│   ├── README.md
+│   └── requirements.txt
+├── modeling
+│   ├── models
+│   │   ├── graph_structures.py
+│   │   ├── __init__.py
+│   │   ├── pipeline_classes.py
+│   │   └── pipeline_creator.py
+│   ├── app.py
+│   ├── __init__.py
+│   ├── model_builder.py
+│   ├── pipelines.py
+│   ├── server.py
+│   ├── single_model.py
+│   ├── styles.py
+│   └── users.db -> ../users.db
+├── presentation
+│   ├── app.py
+│   └── __init__.py
+├── static
+│   ├── css
+│   ├── images
+│   │   ├── graph_images
+│   │   └── icons
+│   ├── favicon.ico
+│   └── navbar_interactivity.js
+├── tasks
+│   ├── assets
+│   ├── app.py
+│   ├── __init__.py
+│   └── server.py
+├── templates
+│   ├── apps
+│   │   ├── data.html
+│   │   ├── modeling.html
+│   │   └── visualization.html
+│   ├── base_dash.py
+│   ├── base.html
+│   ├── change_password.html
+│   ├── create_presentation.html
+│   ├── forgot_password.html
+│   ├── index.html
+│   ├── login.html
+│   ├── profile.html
+│   ├── register.html
+│   ├── reset_password.html
+│   ├── show_presentation.html
+│   └── user_apps.html
+├── visualization
+│   ├── graphs
+│   │   ├── graphs2d.py
+│   │   ├── __init__.py
+│   │   ├── kpis.py
+│   │   ├── textviz.py
+│   │   └── utils.py
+│   ├── app.py
+│   ├── chart_maker.py
+│   ├── dashboard_maker.py
+│   ├── __init__.py
+│   ├── kpis.py
+│   ├── maps.py
+│   ├── networks.py
+│   ├── server.py
+│   ├── text_viz.py
+│   └── users.db -> ../users.db
+├── app_extensions.py
+├── config.py
+├── data_server.py
+├── devops_server.py
+├── docs_server.py
+├── env.py
+├── env_template.py
+├── exceptions.py
+├── flask_app.py
+├── forms.py
+├── initialize_project.py
+├── __init__.py
+├── layouts.py
+├── model_server.py
+├── models.py
+├── presentation_server.py
+├── tasks_server.py
+├── users.db
+├── users_mgt.py
+├── utils.py
+├── visualization_server.py
+└── wsgi.py
+
+21 directories, 105 files
+

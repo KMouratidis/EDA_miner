@@ -46,12 +46,12 @@ ml_options = [
     # Inputs
     {"label": "Input file", "node_type": "input_file",
      "parent": "input", "model_class": pipeline_classes.InputFile,
-     "url": "/assets/images/icons/files.png"},
+     "url": "/static/images/icons/files.png"},
 
     # Cleaners
     {"label": "Data Cleaner", "node_type": "data_cleaner",
      "parent": "cleaning", "model_class": pipeline_classes.DataCleaner,
-     "url": "/assets/images/icons/Cleaning.png"},
+     "url": "/static/images/icons/Cleaning.png"},
     {"label": "Fill missing: impute", "node_type": "simple_missing",
      "parent": "cleaning", "model_class": pipeline_classes.SimpleImputer},
     {"label": "Fill missing: indicator", "node_type": "ind_missing",
@@ -92,30 +92,30 @@ ml_options = [
     # Regression
     {"label": "Linear Regression", "node_type": "linr",
      "parent": "models", "model_class": pipeline_classes.LinearRegression,
-     "url": "/assets/images/icons/linear_regression.png",
+     "url": "/static/images/icons/linear_regression.png",
      "problem": "regression"},
     {"label": "SVM Regression", "node_type": "svr",
      "parent": "models", "model_class": pipeline_classes.SVR,
-     "url": "/assets/images/icons/svm.png",
+     "url": "/static/images/icons/svm.png",
      "problem": "regression"},
     {"label": "KNN Regression", "node_type": "knnr",
      "parent": "models", "model_class": pipeline_classes.KNeighborsRegressor,
-     "url": "https://i.imgur.com/U9EFqYj.png",
+     "url": "/static/images/icons/knn.png",
      "problem": "regression"},
     {"label": "Decision Tree Regression", "node_type": "dtr",
      "parent": "models", "model_class": pipeline_classes.DecisionTreeRegressor,
-     "url": "/assets/images/icons/decision_tree.png",
+     "url": "/static/images/icons/decision_tree.png",
      "problem": "regression"},
     {"label": "Dummy model: regression", "node_type": "dummyreg",
      "parent": "models", "model_class": pipeline_classes.DummyRegressor,
      "problem": "regression"},
     {"label": "Random Forests Regression", "node_type": "rfr",
      "parent": "models", "model_class": pipeline_classes.RandomForestRegressor,
-     "url": "/assets/images/icons/random_forests.png",
+     "url": "/static/images/icons/random_forests.png",
      "problem": "regression"},
     {"label": "Ridge Regression", "node_type": "ridge",
      "parent": "models", "model_class": pipeline_classes.Ridge,
-     "url": "/assets/images/icons/ridge_regression.png",
+     "url": "/static/images/icons/ridge_regression.png",
      "problem": "regression"},
     {"label": "Lasso Regression", "node_type": "lasso",
      "parent": "models", "model_class": pipeline_classes.Lasso,
@@ -137,7 +137,7 @@ ml_options = [
     # Classification
     {"label": "Logistic Regression", "node_type": "logr",
      "parent": "models", "model_class": pipeline_classes.LogisticRegression,
-     "url": "/assets/images/icons/logistic_regression.png",
+     "url": "/static/images/icons/logistic_regression.png",
      "problem": "classification"},
     {"label": "KNN Classifier", "node_type": "knnc",
      "parent": "models", "model_class": pipeline_classes.KNeighborsClassifier,
@@ -149,7 +149,7 @@ ml_options = [
      "problem": "classification"},
     {"label": "Random Forest Classifier", "node_type": "rfc",
      "parent": "models", "model_class": pipeline_classes.RandomForestClassifier,
-     "url": "https://i.imgur.com/x4mpozp.png",
+     "url": "/static/images/icons/random_forests",
      "problem": "classification"},
     {"label": "Dummy model: classification", "node_type": "dummyclf",
      "parent": "models", "model_class": pipeline_classes.DummyClassifier,
@@ -176,7 +176,7 @@ ml_options = [
     # Clustering
     {"label": "K-Means Clustering", "node_type": "kmc",
      "parent": "models", "model_class": pipeline_classes.KMeans,
-     "url": "/assets/images/icons/knn.png",
+     "url": "/static/images/icons/knn.png",
      "problem": "clustering"},
     {"label": "DBSCAN Clustering", "node_type": "dbscan",
      "parent": "models", "model_class": pipeline_classes.DBSCAN,
@@ -189,7 +189,7 @@ ml_options = [
      "problem": "clustering"},
     {"label": "MeanShift Clustering", "node_type": "meanshift",
      "parent": "models", "model_class": pipeline_classes.AgglomerativeClustering,
-     "url": "/assets/images/icons/hierarchical_clustering.png",
+     "url": "/static/images/icons/hierarchical_clustering.png",
      "problem": "clustering"},
     # Naive Bayes models
     {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
@@ -461,7 +461,7 @@ class _Graph:
         self.node_collection = NodeCollection(self)
         self.edge_collection = EdgeCollection(self)
 
-    def render_graph(self):
+    def render(self):
         """
         Calculates positions for all nodes in the graph and render it.
 
@@ -561,9 +561,9 @@ class Graph:
         elif old_node.parent == "models":
             self.output_nodes.remove(old_node)
 
-    def update(self, parameters, parameter_values, *, tapped_node):
+    def update(self, parameter, parameter_value, *, tapped_node):
         node_id = tapped_node["id"]
-        new_params = {parameters: parameter_values}
+        new_params = {parameter: parameter_value}
         self.graph.node_collection[node_id].params.update(new_params)
 
     def prebuilt(self, model_choice):
@@ -597,7 +597,7 @@ class Graph:
                 for node in self.graph.node_collection.nodes]
 
     def render(self):
-        return self.graph.render_graph()
+        return self.graph.render()
 
 
 # A class for no reason other than it looks simplest to me.

@@ -6,8 +6,6 @@
     <link rel="stylesheet" type="text/css"
         href="/static/css/index.css" />
 
-    {% if apps %}
-
         <div class="carousel-parent">
             <h1 style="color: white;">EDA Miner can help you...</h1>
 
@@ -16,21 +14,23 @@
                   <div class="carousel-inner">
 
                       <ol class="carousel-indicators">
-                        {% for app in apps %}
                             <li data-target="#carouselExampleControls"
-                                data-slide-to="{{loop.index-1}}"></li>
-                        {% endfor %}
+                                data-slide-to="0"></li>
+                            <li data-target="#carouselExampleControls"
+                                data-slide-to="1"></li>
+                            <li data-target="#carouselExampleControls"
+                                data-slide-to="2"></li>
                       </ol>
 
                       <div class="carousel-item active">
-                              {% include 'apps/'+apps[0]+'.html' %}
+                              {% include 'apps/data.html' %}
                       </div>
-
-                      {% for app in apps[1:] %}
-                          <div class="carousel-item">
-                              {% include 'apps/'+app+'.html' %}
-                          </div>
-                      {% endfor %}
+                      <div class="carousel-item">
+                              {% include 'apps/visualization.html' %}
+                      </div>
+                      <div class="carousel-item">
+                              {% include 'apps/modeling.html' %}
+                      </div>
 
                 </div>
 
@@ -45,7 +45,5 @@
             </div>
 
         </div>
-
-    {% endif %}
 
 {% endblock %}
