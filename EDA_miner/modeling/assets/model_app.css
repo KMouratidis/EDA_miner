@@ -88,3 +88,8 @@
     color: white;
     font-weight: bold;
 }
+
+#fitting_report_pipeline{
+    border: 1px solid lightgray;
+    min-height: 670px;
+}

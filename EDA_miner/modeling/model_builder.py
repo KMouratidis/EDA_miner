@@ -27,9 +27,8 @@ from inspect import getfullargspec
 from .server import app, redis_conn
 from utils import get_dataset_options
 from .styles import cyto_stylesheet
-from .models.graph_structures import Graph
-from .models.graph_structures import node_options, ml_options
-from .models.graph_structures import prebuilt_graphs
+from .models.graph_structures import Graph, node_options, prebuilt_graphs
+from .models.pipeline_classes import all_classes
 from .models import pipeline_creator
 
 import dill
@@ -39,8 +38,8 @@ from flask_login import current_user
 SideBar_modelBuilder = []
 
 add_node_options = [
-    {"label": model['label'], "value": model['node_type']}
-    for model in ml_options
+    {"label": model.label, "value": model.node_type}
+    for model in all_classes
 ]
 
 actions = ["add", "remove", "update", "prebuilt", "connect"]
@@ -196,13 +195,13 @@ for action, func in zip(actions, [Graph.add, Graph.remove, Graph.update,
                                       f"{', '.join(str(x) for x in values)}")
 
 
-# We get the divs as input just we need to trigger an update via
-# callback. The graph is actually rendered in python and after
+# We get the divs as input just because we need to trigger an update
+# via callback. The graph is actually rendered in python and after
 # each independent action. Also, the remove nodes dropdown is a
 # special case. Since we can only remove nodes that exist in the
 # graph, it needs to be updated as soon as the graph is update.
 @app.callback([Output("cytoscape-graph", "elements"),
-               Output("remove_old_node", "options")],
+               Output("remove_old_node_name", "options")],
               [Input(f"{action}_div", "children")
                for action in actions])
 def update_nodes(*n_clicks):
@@ -227,11 +226,12 @@ def show_configurable_parameters(tap_node):
 
     # Default value
     options = [{"label": "No options available", "value": "none"}]
-    if tap_node is not None:
+    if (tap_node is not None) and (tap_node.get("classes") != "parents"):
+
         # e.g. lin_reg003 -> lin_reg
         model_type = tap_node["id"][:-4]
 
-        model_class = node_options[model_type]["model_class"]
+        model_class = node_options[model_type]
         parameters = list(model_class.modifiable_params.keys())
 
         # If the new options are empty, keep the old ones
@@ -250,7 +250,7 @@ def show_parameter_values(parameter, tap_node):
 
     try:
         model_type = tap_node["id"][:-4]
-        model_class = node_options[model_type]["model_class"]
+        model_class = node_options[model_type]
 
         if model_type == "input_file":
             options = get_dataset_options(redis_conn)

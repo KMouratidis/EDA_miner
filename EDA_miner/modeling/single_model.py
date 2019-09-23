@@ -24,7 +24,8 @@ import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
 from .server import app, redis_conn
-from .models.graph_structures import ml_options, node_options
+from .models.graph_structures import node_options
+from .models.pipeline_classes import all_classes
 import layouts
 from utils import create_dropdown, get_data_schema
 from visualization.graphs.graphs2d import scatterplot
@@ -153,7 +154,7 @@ def render_choices(problem_type, dataset_choice):
         disabled_y = False
         algo_options = [
             {'label': estimator["label"], 'value': estimator["node_type"]}
-            for estimator in ml_options
+            for estimator in all_classes
             if (estimator["parent"] == "models" and
                 estimator["problem"] == problem_type)
         ]

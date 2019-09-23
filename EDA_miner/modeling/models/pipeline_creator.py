@@ -27,7 +27,6 @@ def _traverse_graph(curr_node, G, mapper):
     if len(parents) == 0:
         return mapper[curr_node]
     else:
-        # TODO: Maybe skip the FeatureUnion if `len(parents)==1` ?
         return Pipeline([
             ("union", FeatureUnion([
                 (f"{name}", _traverse_graph(name, G, mapper))

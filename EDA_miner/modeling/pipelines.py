@@ -24,7 +24,6 @@ import dash_bootstrap_components as dbc
 
 from .server import app, redis_conn
 from utils import create_dropdown, get_data_schema
-from .models import pipeline_classes
 from visualization.graphs.graphs2d import scatterplot
 import layouts
 
@@ -177,8 +176,7 @@ def render_variable_choices_pipeline(pipeline_choice):
 
     # Depending on the problem type, dis/allow for a Y variable
     if any(isinstance(output_node.model_class(), base)
-           for base in [pipeline_classes.ClassifierMixin,
-                        pipeline_classes.RegressorMixin]):
+           for base in [ClassifierMixin, RegressorMixin]):
 
         # Supervised
         disabled_y = False
@@ -273,22 +271,35 @@ def fit_model(xvars, yvars, pipeline_choice):
         df = df.loc[:, [col for col in df.columns
                         if (col in clean_xvars+[clean_yvars])]]
 
+        # since the datasets are concatenated, add the node id again
+        df.columns = [f"{col}_{input_node.id}" for col in df.columns]
+
         # Join the datasets
         datasets.append(df)
 
     # FIXME: We're selecting the first because of one input during
     #        development but we also need to handle for multi-input.
-    X = datasets[0]
+    if (all(dataset.shape[0] == datasets[0].shape[0]
+            for dataset in datasets[1:])):
+        X = pd.concat(datasets, axis=1)
+
+    elif (all(dataset.shape[1] == datasets[0].shape[1]
+            for dataset in datasets[1:])):
+        X = pd.concat(datasets, axis=0)
+
+    else:
+        print([dataset.shape for dataset in datasets])
+        raise Exception("CANNOT CONCAT")
+
+    # Only one is needed
+    # This might also need fixing as Y might exist in only one dataset
+    Y = X[yvars]
 
     # The datasets contain the yvars, so drop them, unless...
     if yvars not in xvars:
         # Someone might want to intentionally pass the Yvar to the model
         # probably for demonstration purposes. Who are we to judge?
-        X = X.drop(clean_yvars, axis=1)
-
-    # Only one is needed
-    # This might also need fixing as Y might exist in only one dataset
-    Y = datasets[0][clean_yvars]
+        X = X.drop(yvars, axis=1)
 
     # If we have a classification problem...
     if isinstance(output_node.model_class(), ClassifierMixin):
@@ -321,7 +332,7 @@ def fit_model(xvars, yvars, pipeline_choice):
         metrics.append(html.H4(f"Accuracy: {100*score:.3f} %"))
         metrics.append(html.H4("Confusion matrix:"))
 
-        classes = datasets[0][clean_yvars].unique()
+        classes = X[yvars].unique()
 
         confusion = confusion_matrix(Y, predictions)
         metrics.append(html.Table([
@@ -341,9 +352,9 @@ def fit_model(xvars, yvars, pipeline_choice):
     # If we have >=2 variables, visualize the classification
     if len(xvars) >= 3:
 
-        trace1 = go.Scatter3d(x=X[clean_xvars[0]],
-                              y=X[clean_xvars[1]],
-                              z=X[clean_xvars[2]],
+        trace1 = go.Scatter3d(x=X[xvars[0]],
+                              y=X[xvars[1]],
+                              z=X[xvars[2]],
                               showlegend=False,
                               mode='markers',
                               marker={
@@ -353,20 +364,32 @@ def fit_model(xvars, yvars, pipeline_choice):
 
         figure = {
             'data': [trace1],
-            'layout': layouts.default_2d(clean_xvars[0], clean_yvars)
+            'layout': go.Layout(
+                scene={
+                    "xaxis_title": xvars[0].split("_input_file")[0],
+                    "yaxis_title": xvars[1].split("_input_file")[0],
+                    "zaxis_title": xvars[2].split("_input_file")[0],
+                },
+                legend={'x': 0, 'y': 1},
+                hovermode='closest',
+                height=650
+            )
         }
 
     elif len(xvars) == 2:
-        traces = scatterplot(X[clean_xvars[0]], X[clean_xvars[1]],
+        traces = scatterplot(X[xvars[0]], X[xvars[1]],
                              marker={'color': predictions.astype(np.float)})
 
         figure = {
             'data': [traces],
             'layout': go.Layout(
-                xaxis={'title': clean_xvars[0]},
-                yaxis={'title': clean_xvars[1]},
+                scene={
+                    "xaxis_title": xvars[0].split("_input_file")[0],
+                    "yaxis_title": xvars[1].split("_input_file")[0],
+                },
                 legend={'x': 0, 'y': 1},
-                hovermode='closest'
+                hovermode='closest',
+                height=650
             )
         }
 

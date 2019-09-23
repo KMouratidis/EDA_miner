@@ -1988,7 +1988,9 @@ html.H2("""pipeline_classes.py""", className="filename"),
 html.Div([
     html.P("""This module collects every model class, including input and transformers """, className="funcParam"),
     html.P("""Notes to others: """, className="section"),
-    html.P("""Feel free to tamper with anything or add your own models and classes.Everything should implement an sklearn-like API providing a fit and(more importantly) a transform method. It should also have a`modifiable_params` dictionary with the names of attributes that canbe modified and a list of possible values (keep them limited, for now).Input classes should subclass `GenericInput`. If you add new classes    remember to modify `ml_options` in `graph_structures.py` """, className="funcParam"),
+    html.P("""Feel free to tamper with anything or add your own models and classes.Everything should implement an sklearn-like API providing a fit and(more importantly) a transform method. It should also have a`modifiable_params` dictionary with the names of attributes that canbe modified and a list of possible values (keep them limited, for now).Input classes should subclass `GenericInput`. If you add new classesremember to modify `ml_options` in `graph_structures.py`.    DO NOT ADD NEURAL NETWORK MODELS YET """, className="funcParam"),
+    html.P("""TODO: """, className="section"),
+    html.P("""Add ensemble models as last-step models (voting, ensembles, etc) """, className="funcParam"),
 ], className="func_docstring"),
 
 html.Br(), html.H3("""Input classes should subclass `GenericInput`. If you add new classes \ """, className="docstring-contents"), 
@@ -2002,7 +2004,7 @@ html.Div([
     html.P("""handle output """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""InputFile(BaseEstimator, TransformerMixin): """, className="docstring-contents"), 
+html.Br(), html.H3("""InputFile(base.BaseEstimator, base.TransformerMixin): """, className="docstring-contents"), 
 html.Div([
     html.P("""An input node used for selecting a user-uploaded dataset """, className="funcParam"),
 ], className="func_docstring"),
@@ -2021,20 +2023,30 @@ html.Div([
 
 html.Br(), html.H3("""you are expected to give its a `modifiable_params` """, className="docstring-contents"), 
 html.Div([
-    html.P("""======== Transformers ======= """, className="funcParam"),
+    html.P("""======== Cleaners ======= """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""you are expected to give its a `modifiable_params` """, className="docstring-contents"), 
+html.Br(), html.H3("""MissingIndicator(impute.MissingIndicator): """, className="docstring-contents"), 
+html.Div([
+    html.P("""======== Transformers / preprocessors ======= """, className="funcParam"),
+], className="func_docstring"),
+
+html.Br(), html.H3("""TfidfVectorizer(text.TfidfVectorizer): """, className="docstring-contents"), 
+html.Div([
+    html.P("""======== Dimensionality reducers ======= """, className="funcParam"),
+], className="func_docstring"),
+
+html.Br(), html.H3("""TruncatedSVD(decomposition.TruncatedSVD): """, className="docstring-contents"), 
 html.Div([
     html.P("""======== Regression ======= """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""you are expected to give its a `modifiable_params` """, className="docstring-contents"), 
+html.Br(), html.H3("""NuSVR(svm.NuSVR): """, className="docstring-contents"), 
 html.Div([
     html.P("""======== Classification ======= """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""you are expected to give its a `modifiable_params` """, className="docstring-contents"), 
+html.Br(), html.H3("""ExtraTreeClassifier(tree.ExtraTreeClassifier): """, className="docstring-contents"), 
 html.Div([
     html.P("""======== Clustering ======= """, className="funcParam"),
 ], className="func_docstring"),
@@ -2079,7 +2091,6 @@ html.Div([
     html.P("""A class to hold data for a node. Validation and advanced functionality    may be added later """, className="funcParam"),
     html.P("""Create the node either by supplying `options` or `node_type` and    a `note_id` """, className="funcParam"),
     html.P("""Args: """, className="section"),
-    html.P("""options (dict): A cytoscape element """, className="funcParam"),
     html.P("""node_type (str): One of the keys of node_options """, className="funcParam"),
     html.P("""node_id (str): Unique node identifier """, className="funcParam"),
 ], className="func_docstring"),

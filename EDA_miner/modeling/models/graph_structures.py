@@ -40,176 +40,7 @@ orders = {
     "models": 4,
 }
 
-# TODO: add ensemble models as last-step models (voting, ensembles, etc)
-# DO NOT ADD NEURAL NETWORK MODELS YET
-ml_options = [
-    # Inputs
-    {"label": "Input file", "node_type": "input_file",
-     "parent": "input", "model_class": pipeline_classes.InputFile,
-     "url": "/static/images/icons/files.png"},
-
-    # Cleaners
-    {"label": "Data Cleaner", "node_type": "data_cleaner",
-     "parent": "cleaning", "model_class": pipeline_classes.DataCleaner,
-     "url": "/static/images/icons/Cleaning.png"},
-    {"label": "Fill missing: impute", "node_type": "simple_missing",
-     "parent": "cleaning", "model_class": pipeline_classes.SimpleImputer},
-    {"label": "Fill missing: indicator", "node_type": "ind_missing",
-     "parent": "cleaning", "model_class": pipeline_classes.MissingIndicator},
-
-    # Preprocessors
-    {"label": "Standardization", "node_type": "stdsc",
-     "parent": "preprocessing", "model_class": pipeline_classes.StandardScaler},
-    {"label": "Bag of Words", "node_type": "bow",
-     "parent": "preprocessing", "model_class": pipeline_classes.CountVectorizer},
-    {"label": "TF-IDF", "node_type": "tfidf",
-     "parent": "preprocessing", "model_class": pipeline_classes.TfidfVectorizer},
-    {"label": "Min-Max scaling", "node_type": "minmax_scale",
-     "parent": "preprocessing", "model_class": pipeline_classes.MinMaxScaler},
-    {"label": "Label Binarizer", "node_type": "lbinarizer",
-     "parent": "preprocessing", "model_class": pipeline_classes.LabelBinarizer},
-
-    {"label": "Max-Abs scaling", "node_type": "maxabs_scale",
-     "parent": "preprocessing", "model_class": pipeline_classes.MaxAbsScaler},
-    {"label": "Binarizer", "node_type": "binarizer",
-     "parent": "preprocessing", "model_class": pipeline_classes.Binarizer},
-    {"label": "Normalizer", "node_type": "normalizer",
-     "parent": "preprocessing", "model_class": pipeline_classes.Normalizer},
-    {"label": "One-Hot Encoding", "node_type": "ohe",
-     "parent": "preprocessing", "model_class": pipeline_classes.OneHotEncoder},
-    {"label": "Polynomial features", "node_type": "polyfeats",
-     "parent": "preprocessing", "model_class": pipeline_classes.PolynomialFeatures},
-
-    # Decomposition / Dimensionality reduction
-    {"label": "Principal Component Analysis", "node_type": "pca",
-     "parent": "dim_red", "model_class": pipeline_classes.PCA},
-    {"label": "Non-negative Matrix Factorization", "node_type": "nmf",
-     "parent": "dim_red", "model_class": pipeline_classes.NMF},
-    {"label": "Truncated SVD", "node_type": "tsvd",
-     "parent": "dim_red", "model_class": pipeline_classes.TruncatedSVD},
-
-    # models
-    # Regression
-    {"label": "Linear Regression", "node_type": "linr",
-     "parent": "models", "model_class": pipeline_classes.LinearRegression,
-     "url": "/static/images/icons/linear_regression.png",
-     "problem": "regression"},
-    {"label": "SVM Regression", "node_type": "svr",
-     "parent": "models", "model_class": pipeline_classes.SVR,
-     "url": "/static/images/icons/svm.png",
-     "problem": "regression"},
-    {"label": "KNN Regression", "node_type": "knnr",
-     "parent": "models", "model_class": pipeline_classes.KNeighborsRegressor,
-     "url": "/static/images/icons/knn.png",
-     "problem": "regression"},
-    {"label": "Decision Tree Regression", "node_type": "dtr",
-     "parent": "models", "model_class": pipeline_classes.DecisionTreeRegressor,
-     "url": "/static/images/icons/decision_tree.png",
-     "problem": "regression"},
-    {"label": "Dummy model: regression", "node_type": "dummyreg",
-     "parent": "models", "model_class": pipeline_classes.DummyRegressor,
-     "problem": "regression"},
-    {"label": "Random Forests Regression", "node_type": "rfr",
-     "parent": "models", "model_class": pipeline_classes.RandomForestRegressor,
-     "url": "/static/images/icons/random_forests.png",
-     "problem": "regression"},
-    {"label": "Ridge Regression", "node_type": "ridge",
-     "parent": "models", "model_class": pipeline_classes.Ridge,
-     "url": "/static/images/icons/ridge_regression.png",
-     "problem": "regression"},
-    {"label": "Lasso Regression", "node_type": "lasso",
-     "parent": "models", "model_class": pipeline_classes.Lasso,
-     "problem": "regression"},
-    {"label": "SGD Regression", "node_type": "sgdreg",
-     "parent": "models", "model_class": pipeline_classes.SGDRegressor,
-     "problem": "regression"},
-    {"label": "Linear SVR Regression", "node_type": "lsvrreg",
-     "parent": "models", "model_class": pipeline_classes.LinearSVR,
-     "problem": "regression"},
-    {"label": "Nu-SVR", "node_type": "nusvrreg",
-     "parent": "models", "model_class": pipeline_classes.NuSVR,
-     "problem": "regression"},
-    {"label": "Extra Tree Regression", "node_type": "extrareg",
-     "parent": "models", "model_class": pipeline_classes.ExtraTreeRegressor,
-     "problem": "regression"},
-
-
-    # Classification
-    {"label": "Logistic Regression", "node_type": "logr",
-     "parent": "models", "model_class": pipeline_classes.LogisticRegression,
-     "url": "/static/images/icons/logistic_regression.png",
-     "problem": "classification"},
-    {"label": "KNN Classifier", "node_type": "knnc",
-     "parent": "models", "model_class": pipeline_classes.KNeighborsClassifier,
-     "url": "https://i.imgur.com/U9EFqYj.png",
-     "problem": "classification"},
-    {"label": "XGBoost Classifier", "node_type": "xgb",
-     "parent": "models", "model_class": pipeline_classes.XGBClassifier,
-     "url": "https://i.imgur.com/x4mpozp.png",
-     "problem": "classification"},
-    {"label": "Random Forest Classifier", "node_type": "rfc",
-     "parent": "models", "model_class": pipeline_classes.RandomForestClassifier,
-     "url": "/static/images/icons/random_forests",
-     "problem": "classification"},
-    {"label": "Dummy model: classification", "node_type": "dummyclf",
-     "parent": "models", "model_class": pipeline_classes.DummyClassifier,
-     "problem": "classification"},
-    {"label": "SGD classifier", "node_type": "sgdclf",
-     "parent": "models", "model_class": pipeline_classes.SGDClassifier,
-     "problem": "classification"},
-    {"label": "Linear SVC", "node_type": "lsvcclf",
-     "parent": "models", "model_class": pipeline_classes.LinearSVC,
-     "problem": "classification"},
-    {"label": "Support Vector Classifier", "node_type": "svcclf",
-     "parent": "models", "model_class": pipeline_classes.SVC,
-     "problem": "classification"},
-    {"label": "Nu-SVC", "node_type": "nusvcclf",
-     "parent": "models", "model_class": pipeline_classes.NuSVC,
-     "problem": "classification"},
-    {"label": "Decision Tree Classifier", "node_type": "dtclf",
-     "parent": "models", "model_class": pipeline_classes.DecisionTreeClassifier,
-     "problem": "classification"},
-    {"label": "Extra Tree Classifier", "node_type": "extraclf",
-     "parent": "models", "model_class": pipeline_classes.ExtraTreeClassifier,
-     "problem": "classification"},
-
-    # Clustering
-    {"label": "K-Means Clustering", "node_type": "kmc",
-     "parent": "models", "model_class": pipeline_classes.KMeans,
-     "url": "/static/images/icons/knn.png",
-     "problem": "clustering"},
-    {"label": "DBSCAN Clustering", "node_type": "dbscan",
-     "parent": "models", "model_class": pipeline_classes.DBSCAN,
-     "problem": "clustering"},
-    {"label": "Birch Clustering", "node_type": "birch",
-     "parent": "models", "model_class": pipeline_classes.Birch,
-     "problem": "clustering"},
-    {"label": "Birch Clustering", "node_type": "birch",
-     "parent": "models", "model_class": pipeline_classes.MeanShift,
-     "problem": "clustering"},
-    {"label": "MeanShift Clustering", "node_type": "meanshift",
-     "parent": "models", "model_class": pipeline_classes.AgglomerativeClustering,
-     "url": "/static/images/icons/hierarchical_clustering.png",
-     "problem": "clustering"},
-    # Naive Bayes models
-    {"label": "Naive Bayes: Bernoulli", "node_type": "bernoulli_nb",
-     "parent": "models", "model_class": pipeline_classes.BernoulliNB,
-     "problem": "clustering"},
-    {"label": "Naive Bayes: Gaussian", "node_type": "gauss_nb",
-     "parent": "models", "model_class": pipeline_classes.GaussianNB,
-     "problem": "clustering"},
-    {"label": "Naive Bayes: Multinomial", "node_type": "multi_nb",
-     "parent": "models", "model_class": pipeline_classes.MultinomialNB,
-     "problem": "clustering"},
-    # Others
-    {"label": "Sentiment Analysis", "node_type": "sentiment",
-     "parent": "models", "model_class": pipeline_classes.SentimentAnalyzer,
-     "problem": "clustering"},
-
-]
-
-node_options = {options["node_type"]: options
-                for options in ml_options}
+node_options = {cls.node_type: cls for cls in pipeline_classes.all_classes}
 
 
 class Node:
@@ -221,7 +52,6 @@ class Node:
     a `note_id`.
 
         Args:
-            options (dict): A cytoscape element.
             node_type (str): One of the keys of node_options.
             node_id (str): Unique node identifier.
     """
@@ -235,12 +65,11 @@ class Node:
 
         # The Model Class and the parent can be retrieved from the
         # node_options dictionary. Same for the other parameters
-        self.model_class = node_options[node_type]["model_class"]
-        self.parent = node_options[node_type]["parent"]
-        self.url = node_options[node_type].get("url", "/static/images"
-                                                      "/icons/layers.png")
-        self.label = node_options[node_type]["label"]
-        self.problem = node_options[node_type].get("problem", "none")
+        self.model_class = node_options[node_type]
+        self.parent = self.model_class.parent
+        self.url = self.model_class.url
+        self.label = self.model_class.label
+        self.problem = getattr(self.model_class, "problem", "none")
 
         # The order signifies the precedence in a pipeline
         self.order = orders[self.parent]
