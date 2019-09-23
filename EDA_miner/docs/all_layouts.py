@@ -309,7 +309,7 @@ html.Div([
     html.P("""bool: Whether Redis successfully stored the key """, className="funcParam"),
 ], className="func_docstring"),
 
-html.Br(), html.H3("""parse_contents(contents, filename, date, user_id, redis_conn): """, className="docstring-contents"), 
+html.Br(), html.H3("""parse_contents(contents, filename, date, user_id, redis_conn, save=True): """, className="docstring-contents"), 
 html.Div([
     html.P("""Decode uploaded files and store them in Redis """, className="funcParam"),
     html.P("""Args: """, className="section"),
@@ -318,6 +318,7 @@ html.Div([
     html.P("""date (str): (modification?) date of the file """, className="funcParam"),
     html.P("""user_id (str): The user for whom to fetch data """, className="funcParam"),
     html.P("""redis_conn (`redis.Redis`): The connection to the desired database """, className="funcParam"),
+    html.P("""save (bool): Whether to save the data to Redis or just return the df """, className="funcParam"),
     html.P("""Further details: """, className="section"),
     html.P("""After decoding the uploaded file, handle any remainingoperations here. This was stolen from the dash docs. Currently        it only supports csv, xls(x), json, and feather file types """, className="funcParam"),
 ], className="func_docstring"),
@@ -2176,17 +2177,7 @@ html.Div([
 
 
 
-layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/view"] = html.Div([
-], className='file_container')
-
-
-
 layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/server"] = html.Div([
-], className='file_container')
-
-
-
-layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/upload"] = html.Div([
 ], className='file_container')
 
 
@@ -2196,5 +2187,37 @@ layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/app"] = html.Div([
 
 
 
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/test_api"] = html.Div([
+html.Br(), html.H3("""test_api_layout(): """, className="docstring-contents"), 
+html.Div([
+    html.P(""""hello": 5 """, className="funcParam"),
+    html.P(""""array": [1,2,3,4] """, className="funcParam"),
+], className="func_docstring"),
+
+html.Br(), html.H3("""render_request_menu(request_type, request_url): """, className="docstring-contents"), 
+html.Div([
+    html.P(""""variable": "greeting" """, className="funcParam"),
+    html.P(""""data": [2, 4, 6, 8 """, className="funcParam"),
+], className="func_docstring"),
+
+], className='file_container')
+
+
+
 layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/__init__"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops/manage_models"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops_rest_api/app"] = html.Div([
+], className='file_container')
+
+
+
+layouts["/home/kmourat/GitHub/EDA_miner/EDA_miner/devops_rest_api/__init__"] = html.Div([
 ], className='file_container')

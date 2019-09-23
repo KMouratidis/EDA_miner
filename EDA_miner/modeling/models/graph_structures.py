@@ -227,7 +227,7 @@ class Node:
     """
 
     __slots__ = ('id', 'node_type', 'model_class', 'parent', 'url',
-                 'label', 'order', 'params', 'xpos', 'ypos')
+                 'label', 'order', 'params', 'xpos', 'ypos', 'problem')
 
     def __init__(self, node_type, node_id):
         self.id = node_id
@@ -240,6 +240,7 @@ class Node:
         self.url = node_options[node_type].get("url", "/static/images"
                                                       "/icons/layers.png")
         self.label = node_options[node_type]["label"]
+        self.problem = node_options[node_type].get("problem", "none")
 
         # The order signifies the precedence in a pipeline
         self.order = orders[self.parent]

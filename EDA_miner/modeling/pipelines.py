@@ -303,7 +303,9 @@ def fit_model(xvars, yvars, pipeline_choice):
                    ex=3600)
     redis_conn.set(f"{user_id}_trainedModelParams_{name}",
                    dill.dumps({"xvars": xvars,
-                               "yvars": yvars}),
+                               "yvars": yvars,
+                               "problem_type": output_node.problem,
+                               "node_type": output_node.node_type}),
                    ex=3600)
 
     predictions = pipeline.predict(X)
@@ -396,7 +398,8 @@ def export_model_as(n_clicks, pipeline_choice):
         return True, html.Div("Delete an existing model before saving "
                               "a new one, or contact the admin for favors.")
 
-    # Permanently save the model.
+    # Permanently save the model & params.
     redis_conn.persist(f"{user_id}_trainedModel_{name}")
+    redis_conn.persist(f"{user_id}_trainedModelParams_{name}")
 
     return True, html.Div(f"Saved model {name} successfully")

@@ -411,7 +411,7 @@ def save_schema(key, types, subtypes, head, redis_conn, user_id,
 
 
 # TODO: better user feedback on error.
-def parse_contents(contents, filename, date, user_id, redis_conn):
+def parse_contents(contents, filename, date, user_id, redis_conn, save=True):
     """
     Decode uploaded files and store them in Redis.
 
@@ -421,6 +421,7 @@ def parse_contents(contents, filename, date, user_id, redis_conn):
         date (str): (modification?) date of the file.
         user_id (str): The user for whom to fetch data.
         redis_conn (`redis.Redis`): The connection to the desired database.
+        save (bool): Whether to save the data to Redis or just return the df.
 
     Further details:
         After decoding the uploaded file, handle any remaining \
@@ -462,6 +463,9 @@ def parse_contents(contents, filename, date, user_id, redis_conn):
     except Exception as e:
         print(e)
         return html.Div(['There was an error processing this file.'])
+
+    if not save:
+        return df
 
     # Store to redis.
     # IMPORTANT: Follow this key naming schema:

@@ -238,13 +238,13 @@ def show_configurable_parameters(tap_node):
         options = [{"label": arg, "value": arg}
                    for arg in parameters] or options
 
-    return dcc.Dropdown(multi=False, id="update_parameters", clearable=False,
+    return dcc.Dropdown(multi=False, id="update_parameter", clearable=False,
                         options=options, value=options[0]["value"]),
 
 
 # According to the choice of parameter, render the choices for its values
 @app.callback(Output("parameter_values_div", "children"),
-              [Input("update_parameters", "value")],
+              [Input("update_parameter", "value")],
               [State("cytoscape-graph", "tapNodeData")])
 def show_parameter_values(parameter, tap_node):
 
@@ -262,7 +262,7 @@ def show_parameter_values(parameter, tap_node):
         default_value = options[0]["value"]
 
         return dcc.RadioItems(value=default_value, options=options,
-                              id="update_parameter_values",
+                              id="update_parameter_value",
                               labelStyle={'display': 'inline-block',
                                           'margin': '5px'})
 
